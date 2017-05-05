@@ -1,1 +1,0 @@
-<option class="option-{lastChoice}" val="{value}" {#checked}selected{/checked}><span class="choice-label">{title}</span></option>

@@ -119,7 +119,7 @@
                     <li class="header">MAINTAINANCE</li>
                     <li id="mi" class="treeview">
                         <a>
-                            <i class="fa fa-files-o"></i>
+                            <i class="fa fa-cart-arrow-down"></i>
                             <span>Inventory</span>
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
@@ -128,6 +128,20 @@
                             <li id="mType"><a href="{{url('/type')}}"><i class="fa fa-circle-o"></i> Product Type</a></li>
                             <li id="mBrand"><a href="{{url('/brand')}}"><i class="fa fa-circle-o"></i> Product Brand</a></li>
                             <li id="mUnit"><a href="{{url('/unit')}}"><i class="fa fa-circle-o"></i> Product Unit</a></li>
+                            <li id="mVariance"><a href="{{url('/variance')}}"><i class="fa fa-circle-o"></i> Product Variance</a></li>
+                            <li id="mProduct"><a href="{{url('/product')}}"><i class="fa fa-circle-o"></i> Product</a></li>
+                        </ul>
+                    </li>
+                    <li id="ms" class="treeview">
+                        <a>
+                            <i class="fa fa-wrench"></i>
+                            <span>Service</span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li id="mCategory"><a href="{{url('/category')}}"><i class="fa fa-circle-o"></i> Service Category</a></li>
+                            <li id="mService"><a href="{{url('/service')}}"><i class="fa fa-circle-o"></i> Service</a></li>
+                            <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -150,9 +164,6 @@
             <!-- /.content -->
         </div>
         <footer class="main-footer">
-            <div class="pull-right hidden-xs">
-            <b>Version</b> 2.3.8
-            </div>
             <strong>Copyright © 2017 <a href="facebook.com">Rapide</a>.</strong> All rights reserved.
         </footer>
     </div>
@@ -171,6 +182,25 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
+    <script>
+    $(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+        //Red color scheme for iCheck
+        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+            checkboxClass: 'icheckbox_minimal-red',
+            radioClass: 'iradio_minimal-red'
+        });
+        //Flat red color scheme for iCheck
+        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+            checkboxClass: 'icheckbox_flat-green',
+            radioClass: 'iradio_flat-green'
+        });
+    });
+    </script>
     @yield('script')
 </body>
 </html>

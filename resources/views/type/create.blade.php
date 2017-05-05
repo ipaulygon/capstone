@@ -37,16 +37,33 @@
                 </div>
             </div>
             <div id="brands" class="box-body">
-                <div id="brand" class="form-group">
-                    {!! Form::label('brand', 'Brand') !!}<span>*</span>
-                    {!! Form::input('text','brand',null,[
-                        'class' => 'form-control autocomplete',
-                        'name' => 'brand[]',
-                        'placeholder'=>'Name',
-                        'maxlength'=>'50',
-                        'required'])
-                    !!}
-                </div>
+                {{-- For retrieving input --}}
+                @if(old('brand'))
+                    @foreach(old('brand') as $brand)
+                        <div id="brand" class="form-group">
+                            {!! Form::label('brand', 'Brand') !!}<span>*</span>
+                            {!! Form::input('text',null,$brand,[
+                                'class' => 'form-control autocomplete',
+                                'name' => 'brand[]',
+                                'placeholder'=>'Name',
+                                'maxlength'=>'50',
+                                'required'])
+                            !!}
+                        </div>
+                    @endforeach
+                {{-- starting/load page --}}
+                @else
+                    <div id="brand" class="form-group">
+                        {!! Form::label('brand', 'Brand') !!}<span>*</span>
+                        {!! Form::input('text',null,null,[
+                            'class' => 'form-control autocomplete',
+                            'name' => 'brand[]',
+                            'placeholder'=>'Name',
+                            'maxlength'=>'50',
+                            'required'])
+                        !!}
+                    </div>
+                @endif 
             </div>
             <div class="box-footer">
                 <button id="addBrand" type="button" class="btn btn-sm btn-primary pull-right">

@@ -46,16 +46,33 @@
                 </div>
             </div>
             <div id="persons" class="box-body">
-                <div id="person" class="form-group">
-                    {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
-                    {!! Form::input('text','spName',null,[
-                        'class' => 'form-control',
-                        'name' => 'spName[]',
-                        'placeholder'=>'Name',
-                        'maxlength'=>'100',
-                        'required'])
-                    !!}
-                </div>
+                {{-- For retrieving input --}}
+                @if(old('spName'))
+                    @foreach(old('spName') as $spName)
+                        <div id="person" class="form-group">
+                            {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
+                            {!! Form::input('text',null,$spName,[
+                                'class' => 'form-control',
+                                'name' => 'spName[]',
+                                'placeholder'=>'Name',
+                                'maxlength'=>'100',
+                                'required'])
+                            !!}
+                        </div>
+                    @endforeach
+                {{-- starting/load page --}}
+                @else
+                    <div id="person" class="form-group">
+                        {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
+                        {!! Form::input('text',null,null,[
+                            'class' => 'form-control',
+                            'name' => 'spName[]',
+                            'placeholder'=>'Name',
+                            'maxlength'=>'100',
+                            'required'])
+                        !!}
+                    </div>
+                @endif
             </div>
             <div class="box-footer">
                 <button id="addPerson" type="button" class="btn btn-sm btn-primary pull-right">
@@ -72,16 +89,33 @@
                 </div>
             </div>
             <div id="numbers" class="box-body">
-                <div id="number" class="form-group">
-                    {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
-                    {!! Form::input('text','scNo',null,[
-                        'class' => 'form-control',
-                        'name' => 'scNo[]',
-                        'placeholder'=>'Number',
-                        'maxlength'=>'100',
-                        'required'])
-                    !!}
-                </div>
+                {{-- For retrieving input --}}
+                @if(old('scNo'))
+                    @foreach(old('scNo') as $scNo)
+                        <div id="number" class="form-group">
+                            {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
+                            {!! Form::input('text',null,$scNo,[
+                                'class' => 'form-control',
+                                'name' => 'scNo[]',
+                                'placeholder'=>'Number',
+                                'maxlength'=>'100',
+                                'required'])
+                            !!}
+                        </div>
+                    @endforeach
+                {{-- starting/load page --}}
+                @else
+                    <div id="number" class="form-group">
+                        {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
+                        {!! Form::input('text',null,null,[
+                            'class' => 'form-control',
+                            'name' => 'scNo[]',
+                            'placeholder'=>'Number',
+                            'maxlength'=>'100',
+                            'required'])
+                        !!}
+                    </div>
+                @endif
             </div>
             <div class="box-footer">
                 <button id="addNumber" type="button" class="btn btn-sm btn-primary pull-right">

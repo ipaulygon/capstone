@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('unit','ProductUnitController');
 	Route::resource('variance','ProductVarianceController');
 	Route::resource('product','ProductController');
-	Route::post('product/type','ProductController@type');
+	Route::get('product/type/{id}','ProductController@type');
 	Route::resource('category','ServiceCategoryController');
 	Route::resource('service','ServiceController');
 	Route::resource('inspection','InspectionController');

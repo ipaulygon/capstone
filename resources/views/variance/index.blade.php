@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Supplier"}}
+    {{"Product Variance"}}
 @stop
 
 @section('style')
@@ -15,7 +15,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ URL::to('/supplier/create') }}" class="btn btn-success btn-md">
+                    <a href="{{ URL::to('/variance/create') }}" class="btn btn-success btn-md">
                     <i class="glyphicon glyphicon-plus"></i> Add New</a>
                 </div>
             </div>
@@ -23,36 +23,28 @@
                 <table id="list" class="table table-striped responsive">
                     <thead>
                         <tr>
-                            <th>Supplier</th>
-                            <th>Contact Person(s)</th>
-                            <th class="text-right">Contact Number(s)</th>
-                            <th>Address</th>
+                            <th>Product Variance</th>
+                            <th>Belongs to Type(s)</th>
                             <th class="pull-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($suppliers as $supplier)
+                        @foreach($variances as $variance)
                             <tr>
-                                <td>{{$supplier->name}}</td>
+                                <td>{{$variance->name}}</td>
                                 <td>
-                                    @foreach($supplier->person as $person)
-                                        <li>{{$person->spName}}</li>
+                                    @foreach($variance->tv as $tv)
+                                        <li>{{$tv->type->name}}</li>
                                     @endforeach
                                 </td>
-                                <td class="text-right">
-                                    @foreach($supplier->number as $number)
-                                        <li>{{$number->scNo}}</li>
-                                    @endforeach
-                                </td>
-                                <td>{{$supplier->address}}</td>
                                 <td class="pull-right">
-                                    <a href="{{url('/supplier/'.$supplier->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                    <a href="{{url('/variance/'.$variance->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <button onclick="showModal({{$supplier->id}})"type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate record">
+                                    <button onclick="showModal({{$variance->id}})"type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate record">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </button>
-                                    {!! Form::open(['method'=>'delete','action' => ['SupplierController@destroy',$supplier->id],'id'=>'del'.$supplier->id]) !!}
+                                    {!! Form::open(['method'=>'delete','action' => ['ProductVarianceController@destroy',$variance->id],'id'=>'del'.$variance->id]) !!}
                                     {!! Form::close() !!}
                                 </td>
                             </tr>
@@ -96,7 +88,7 @@
                 responsive: true,
             });
             $('#mi').attr('class','treeview active');
-            $('#mSupplier').attr('class','active');
+            $('#mVariance').attr('class','active');
         });
         function showModal(id){
 			deactivate = id;

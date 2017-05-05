@@ -59,7 +59,7 @@ class ProductTypeController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput($request->except('brand'));
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
@@ -142,7 +142,7 @@ class ProductTypeController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect::back()->withErrors($validator);
         }
         else{
             try{

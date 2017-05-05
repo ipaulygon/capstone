@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Supplier;
-use App\SupplierPerson;
-use App\SupplierContact;
+use App\ServiceCategory;
 use Validator;
 use Redirect;
 use Session;
 use DB;
 use Illuminate\Validation\Rule;
 
-class SupplierController extends Controller
+class ServiceCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,8 +18,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::where('isActive',1)->get();
-        return View('supplier.index', compact('suppliers'));
+        $categories = ServiceCategory::where('isActive',1)->get();
+        return View('category.index',compact('categories'));
     }
 
     /**
@@ -31,7 +29,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        return View('supplier.create');
+        return View('layouts.404');
     }
 
     /**
@@ -43,10 +41,8 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:supplier|max:75',
-            'address' => 'required|max:140',
-            'spName.*' => 'required|max:100',
-            'scNo.*' => 'required|max:20'
+            'name' => 'required|unique:service_category|max:50',
+            'description' => 'max:50',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -54,10 +50,8 @@ class SupplierController extends Controller
             'max' => 'The :attribute field must be no longer than :max characters.'
         ];
         $niceNames = [
-            'name' => 'Supplier',
-            'address' => 'Address',
-            'spName.*' => 'Contact Person',
-            'scNo.*' => 'Contact Number',
+            'name' => 'Service Category',
+            'description' => 'Description',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -67,26 +61,11 @@ class SupplierController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Supplier::create([
+                ServiceCategory::create([
                     'name' => trim($request->name),
-                    'address' => trim($request->address),
+                    'description' => trim($request->description),
                     'isActive' => 1
                 ]);
-                $supplier = Supplier::all()->last();
-                $persons = $request->spName;
-                $contacts = $request->scNo;
-                foreach ($persons as $person) {
-                    SupplierPerson::create([
-                        'spId' => $supplier->id,
-                        'spName' => $person,
-                    ]);
-                }
-                foreach ($contacts as $contact) {
-                    SupplierContact::create([
-                        'scId' => $supplier->id,
-                        'scNo' => $contact,
-                    ]);
-                }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -117,10 +96,8 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $persons = SupplierPerson::where('spId',$id)->get();
-        $numbers = SupplierContact::where('scId',$id)->get();
-        return View('supplier.edit',compact('supplier','persons','numbers'));
+        $category = ServiceCategory::findOrFail($id);
+        return response()->json(['category'=>$category]);
     }
 
     /**
@@ -130,53 +107,33 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $rules = [
-            'name' => ['required','max:75',Rule::unique('supplier')->ignore($id)],
-            'address' => 'required|max:140',
-            'spName.*' => 'required|max:100',
-            'scNo.*' => 'required|max:20',
+            'name' => ['required','max:50',Rule::unique('service_category')->ignore($request->id)],
+            'description' => 'max:50',
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.'
         ];
         $niceNames = [
-            'name' => 'Supplier',
-            'address' => 'Address',
-            'spName.*' => 'Contact Person',
-            'scNo.*' => 'Contact Number',
+            'name' => 'Service Category',
+            'description' => 'Description',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
-        $validator->setAttributeNames($niceNames);
+        $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
                 DB::beginTransaction();
-                $supplier = Supplier::findOrFail($id);
-                $supplier->update([
+                $category = ServiceCategory::findOrFail($request->id);
+                $category->update([
                     'name' => trim($request->name),
-                    'address' => trim($request->address),
+                    'description' => trim($request->description),
                 ]);
-                SupplierPerson::where('spId',$id)->delete();
-                SupplierContact::where('scId',$id)->delete();
-                $persons = $request->spName;
-                $contacts = $request->scNo;
-                foreach ($persons as $person) {
-                    SupplierPerson::create([
-                        'spId' => $id,
-                        'spName' => $person,
-                    ]);
-                }
-                foreach ($contacts as $contact) {
-                    SupplierContact::create([
-                        'scId' => $id,
-                        'scNo' => $contact,
-                    ]);
-                }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -194,10 +151,10 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->update([
+        $category = ServiceCategory::findOrFail($id);
+        $category->update([
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
