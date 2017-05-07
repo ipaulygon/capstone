@@ -12,31 +12,53 @@
 @section('content')
     <div class="col-md-12">
         {!! Form::open(['url' => 'inspection']) !!}
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title">Inspection Form</h3>
                 </div>
-                <div class="box-body">
-                    
+                <div id="items" class="box-body">
+                    <div class="form-group">
+                        {!! Form::label('name', 'Inspection Type') !!}<span>*</span>
+                        {!! Form::input('text',null,null,[
+                            'class' => 'form-control autocomplete',
+                            'name' => 'name',
+                            'placeholder'=>'Name',
+                            'maxlength'=>'50',
+                            'required'])
+                        !!}
+                    </div>
+                    <div id="item" class="form-group">
+                        {!! Form::label('name', 'Inspection Items') !!}<span>*</span>
+                        <textarea class="hidden" name="inspectionForm[]" id="inspectionForm"></textarea>
+                        {!! Form::input('text',null,null,[
+                            'class' => 'form-control ',
+                            'name'=>'item[]',
+                            'placeholder'=>'Inspection Item',
+                            'maxlength'=>'50',
+                            'required']) 
+                        !!}
+                    </div>
                 </div>
                 <div class="box-footer">
                     <button type="button" id="save" class="btn btn-primary">Save</button>
+                    <button id="addItem" type="button" class="btn btn-md btn-primary pull-right">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="box">
+        <div id="forms" class="col-md-8">
+            <div id="form" class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"></h3>
+                    <h3 class="box-title">Item Components</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                         <i class="fa fa-minus"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
-                    <textarea class="hidden" name="inspectionForm" id="inspectionForm"></textarea>
-                    <div id="build-wrap"></div>
+                    <div class="build-wrap" id="build-wrap"></div>
                 </div>
             </div>
         </div>
@@ -47,6 +69,7 @@
 @section('script')
     <script src="{{ URL::asset('assets/formbuilder/form-builder.min.js') }}"></script>
     <script src="{{ URL::asset('assets/formbuilder/form-render.min.js') }}"></script>
+    <script src="{{ URL::asset('js/inspection.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#ms').attr('class','treeview active');
@@ -57,10 +80,7 @@
                 disabledActionButtons: ['clear','save','data'],
                 editOnAdd: true,
             }
-            var formBuilder = $('#build-wrap').formBuilder(options);
-            $('#save').on('click', function(){
-                $('#inspectionForm').text(formBuilder.actions.getData('json'));
-            });
+            $('#build-wrap').formBuilder(options);
         });
     </script>
 @stop
