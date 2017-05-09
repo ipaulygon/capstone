@@ -27,8 +27,8 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mBrand').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mBrand').addClass('active');
         });
     </script>
 @stop

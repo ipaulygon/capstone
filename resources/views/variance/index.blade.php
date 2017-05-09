@@ -87,8 +87,8 @@
             $('#list').DataTable({
                 responsive: true,
             });
-            $('#mi').attr('class','treeview active');
-            $('#mVariance').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mVariance').addClass('active');
         });
         function showModal(id){
 			deactivate = id;

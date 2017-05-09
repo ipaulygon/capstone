@@ -10,7 +10,6 @@ class InspectionType extends Model
     public $timestamps = false;
     protected $fillable = [
     	'name',
-    	'description',
     	'isActive'  	
     ];
 

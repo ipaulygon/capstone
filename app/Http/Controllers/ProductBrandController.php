@@ -20,13 +20,7 @@ class ProductBrandController extends Controller
      */
     public function index()
     {
-        //$brands = ProductBrand::where('isActive',1)->get();
-        $brands = DB::table('product_brand')
-        ->join('type_brand','type_brand.brandId','product_brand.id')
-        ->join('product_type','type_brand.typeId','product_type.id')
-        ->where('product_brand.isActive',1)
-        ->distinct()
-        ->select('product_brand.*','product_type.name as types')->get();
+        $brands = ProductBrand::where('isActive',1)->get();
         return View('brand.index', compact('brands'));
     }
 

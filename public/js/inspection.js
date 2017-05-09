@@ -1,19 +1,86 @@
+var textarea = $('#inspectionForm').first();
+var form;
 $(document).on("click", "#addItem", function (){
     var value = $("#item").clone().prepend(
         '<button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
-        '</button>').appendTo('#items');
+        '</button>'
+    ).appendTo('#items');
     $(value).find("input").val("");
     $(value).find("textarea").text("");
-    $('#form').clone().appendTo('#forms');
-    options = {
-        dataType: 'json',
-        disabledActionButtons: ['clear','save','data'],
-        editOnAdd: true,
+});
+
+$(document).on("click", "#addItemUpdate", function (){
+    var value = $("#item").clone().appendTo('#items');
+    $(value).find("input").val("");
+    $(value).find("textarea").text("");
+});
+
+$(document).on('click', '#pushItem', function (){
+    if($('#form').length){
+        var data = form.actions.getData('json');
+        $(textarea).text(data);
     }
-    $('#build-wrap').formBuilder();
+    textarea = $(this).parent().find('#inspectionForm');
+    if(textarea.text()!=''){
+        var formData = textarea.text();
+        options = {
+            dataType: 'json',
+            disabledActionButtons: ['clear','save','data'],
+            editOnAdd: true,
+            formData: formData
+        }
+    }else{
+        options = {
+            dataType: 'json',
+            disabledActionButtons: ['clear','save','data'],
+            editOnAdd: true,
+            defaultFields: [
+                {//radio
+                    "type": "radio-group",
+                    "required": true,
+                    "label": "Rating",
+                    "inline": true,
+                    "className": "flat-red",
+                    "name": "rating",
+                    "values": [
+                        {"label": "😃","value": "1"},
+                        {"label": "😐","value": "2"},
+                        {"label": "☹️","value": "3"}
+                    ]
+                },//end of radio
+                {
+                    "type": "text",
+                    "label": "Remarks",
+                    "placeholder": "Remarks",
+                    "className": "form-control",
+                    "name": "remarks",
+                    "subtype": "text",
+                    "maxlength": "50"
+                },
+                {
+                    "type": "text",
+                    "label": "Condition",
+                    "placeholder": "Condition",
+                    "className": "form-control",
+                    "name": "condition",
+                    "subtype": "text",
+                    "maxlength": "100"
+                }
+            ]//end of defaultFields
+        }
+    }
+    $('#form').remove();
+    $('#body').append('<div id="form"></div>');
+    form = $('#form').formBuilder(options);
 });
 
 $(document).on("click", "#removeItem", function (){
     $(this).parent().remove();
+});
+
+$(document).on('click', '#save', function (){
+    var data = form.actions.getData('json');
+    $(textarea).text(data);
+    $('#submit').submit();
 });

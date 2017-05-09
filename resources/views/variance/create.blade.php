@@ -90,6 +90,7 @@
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('js/variance.js') }}"></script>
     <script>
+        $(".select2").select2();
         var activeTypes = [
             @if(old('type'))
                 @foreach(old('type') as $type)
@@ -98,13 +99,14 @@
             @endif
         ];
         $("#pt").val(activeTypes);
-        $("#isOriginal[value={{old('isOriginal')}}]").prop('checked',true);
-        $(".select2").select2();
+        @if(old('isOriginal'))
+            $("#isOriginal[value={{old('isOriginal')}}]").prop('checked',true);
+        @endif
     </script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mVariance').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mVariance').addClass('active');
         });
     </script>
 @stop

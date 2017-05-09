@@ -76,8 +76,8 @@
             ]
         }
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mType').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mType').addClass('active');
         });
         $(document).on("focus", ".autocomplete", function (){
             $(this).autocomplete(options);

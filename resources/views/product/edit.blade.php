@@ -35,8 +35,8 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mProduct').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mProduct').addClass('active');
         });
     </script>
 @stop

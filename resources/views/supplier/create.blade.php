@@ -50,6 +50,11 @@
                 @if(old('spName'))
                     @foreach(old('spName') as $spName)
                         <div id="person" class="form-group">
+                            @if($loop->index!=0)
+                                <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
                             {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
                             {!! Form::input('text',null,$spName,[
                                 'class' => 'form-control',
@@ -93,6 +98,11 @@
                 @if(old('scNo'))
                     @foreach(old('scNo') as $scNo)
                         <div id="number" class="form-group">
+                            @if($loop->index!=0)
+                                <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
                             {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
                             {!! Form::input('text',null,$scNo,[
                                 'class' => 'form-control',
@@ -131,8 +141,8 @@
     <script src="{{ URL::asset('js/supplier.js') }}"></script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mSupplier').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mSupplier').addClass('active');
         });
     </script>
 @stop

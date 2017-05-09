@@ -168,8 +168,8 @@
             $('#list').DataTable({
                 responsive: true,
             });
-            $('#ms').attr('class','treeview active');
-            $('#mCategory').attr('class','active');
+            $('#ms').addClass('active');
+            $('#mCategory').addClass('active');
         });
         function showModal(id){
 			deactivate = id;

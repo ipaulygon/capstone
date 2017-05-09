@@ -33,7 +33,9 @@
                             <tr>
                                 <td>{{$brand->name}}</td>
                                 <td>
-                                    
+                                    @foreach($brand->tb as $tb)
+                                        <li>{{$tb->type->name}}</li>
+                                    @endforeach
                                 </td>
                                 <td class="pull-right">
                                     <a href="{{url('/brand/'.$brand->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
@@ -85,8 +87,8 @@
             $('#list').DataTable({
                 responsive: true,
             });
-            $('#mi').attr('class','treeview active');
-            $('#mBrand').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mBrand').addClass('active');
         });
         function showModal(id){
 			deactivate = id;

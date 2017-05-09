@@ -17,7 +17,6 @@ class CreateInspectionTypeTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name', 50);
-            $table->text('description');
             $table->boolean('isActive');
         });
     }

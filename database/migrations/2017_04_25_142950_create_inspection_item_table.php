@@ -17,6 +17,7 @@ class CreateInspectionItemTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name', 50);
+            $table->text('form');
             $table->unsignedInteger('typeId');
             $table->boolean('isActive');
             $table->foreign('typeId')

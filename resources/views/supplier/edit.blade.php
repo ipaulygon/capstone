@@ -111,8 +111,8 @@
     <script src="{{ URL::asset('js/supplier.js') }}"></script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mSupplier').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mSupplier').addClass('active');
         });
     </script>
 @stop

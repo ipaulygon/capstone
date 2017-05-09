@@ -5,82 +5,97 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
 @stop
 
 @section('content')
     <div class="col-md-12">
-        {!! Form::open(['url' => 'inspection']) !!}
-        <div class="col-md-4">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Inspection Form</h3>
-                </div>
-                <div id="items" class="box-body">
-                    <div class="form-group">
-                        {!! Form::label('name', 'Inspection Type') !!}<span>*</span>
-                        {!! Form::input('text',null,null,[
-                            'class' => 'form-control autocomplete',
-                            'name' => 'name',
-                            'placeholder'=>'Name',
-                            'maxlength'=>'50',
-                            'required'])
-                        !!}
-                    </div>
-                    <div id="item" class="form-group">
-                        {!! Form::label('name', 'Inspection Items') !!}<span>*</span>
-                        <textarea class="hidden" name="inspectionForm[]" id="inspectionForm"></textarea>
-                        {!! Form::input('text',null,null,[
-                            'class' => 'form-control ',
-                            'name'=>'item[]',
-                            'placeholder'=>'Inspection Item',
-                            'maxlength'=>'50',
-                            'required']) 
-                        !!}
-                    </div>
-                </div>
-                <div class="box-footer">
-                    <button type="button" id="save" class="btn btn-primary">Save</button>
-                    <button id="addItem" type="button" class="btn btn-md btn-primary pull-right">
-                        <i class="glyphicon glyphicon-plus"></i>
-                    </button>
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"></h3>
+                <div class="box-tools pull-right">
+                    <a href="{{ URL::to('/inspection/create') }}" class="btn btn-success btn-md">
+                    <i class="glyphicon glyphicon-plus"></i> Add New</a>
                 </div>
             </div>
-        </div>
-        <div id="forms" class="col-md-8">
-            <div id="form" class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Item Components</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                        <i class="fa fa-minus"></i></button>
+            <div class="box-body dataTable_wrapper">
+                <table id="list" class="table table-striped responsive">
+                    <thead>
+                        <tr>
+                            <th>Inspection</th>
+                            <th>Item(s)</th>
+                            <th class="pull-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($inspections as $inspection)
+                            <tr>
+                                <td>{{$inspection->name}}</td>
+                                <td>
+                                    @foreach($inspection->item as $item)
+                                        <li>{{$item->name}}</li>
+                                    @endforeach
+                                </td>
+                                <td class="pull-right">
+                                    <a href="{{url('/inspection/'.$inspection->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                    <button onclick="showModal({{$inspection->id}})" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate record">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                    {!! Form::open(['method'=>'delete','action' => ['InspectionController@destroy',$inspection->id],'id'=>'del'.$inspection->id]) !!}
+                                    {!! Form::close() !!}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div id="deactivateModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span></button>
+                                <h4 class="modal-title">Deactivate</h4>
+                            </div>
+                            <div class="modal-body" style="text-align:center">
+                                Are you sure you want to deactivate this record?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                <button id="deactivate" type="button" class="btn btn-danger">Deactivate</button>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
                     </div>
+                <!-- /.modal-dialog -->
                 </div>
-                <div class="box-body">
-                    <div class="build-wrap" id="build-wrap"></div>
-                </div>
+                <!-- /.modal -->
             </div>
         </div>
-        {!! Form::close() !!}
     </div>
 @stop
 
 @section('script')
-    <script src="{{ URL::asset('assets/formbuilder/form-builder.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/formbuilder/form-render.min.js') }}"></script>
-    <script src="{{ URL::asset('js/inspection.js') }}"></script>
+    <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
     <script>
+        var deactivate = null;
         $(document).ready(function (){
-            $('#ms').attr('class','treeview active');
-            $('#mInspection').attr('class','active');
-            //formBuilder
-            options = {
-                dataType: 'json',
-                disabledActionButtons: ['clear','save','data'],
-                editOnAdd: true,
-            }
-            $('#build-wrap').formBuilder(options);
+            $('#list').DataTable({
+                responsive: true,
+            });
+            $('#ms').addClass('active');
+            $('#mInspection').addClass('active');
         });
+        function showModal(id){
+			deactivate = id;
+			$('#deactivateModal').modal('show');
+		}
+		$('#deactivate').on('click', function (){
+			$('#del'+deactivate).submit();
+		});
     </script>
 @stop

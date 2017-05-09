@@ -83,8 +83,8 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mVariance').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mVariance').addClass('active');
         });
     </script>
 @stop

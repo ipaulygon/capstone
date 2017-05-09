@@ -41,6 +41,11 @@
                 @if(old('brand'))
                     @foreach(old('brand') as $brand)
                         <div id="brand" class="form-group">
+                            @if($loop->index!=0)
+                                <button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
                             {!! Form::label('brand', 'Brand') !!}<span>*</span>
                             {!! Form::input('text',null,$brand,[
                                 'class' => 'form-control autocomplete',
@@ -86,8 +91,8 @@
             ]
         }
         $(document).ready(function (){
-            $('#mi').attr('class','treeview active');
-            $('#mType').attr('class','active');
+            $('#mi').addClass('active');
+            $('#mType').addClass('active');
         });
         $(document).on("focus", ".autocomplete", function (){
             $(this).autocomplete(options);
