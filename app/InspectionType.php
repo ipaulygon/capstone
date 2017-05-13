@@ -9,7 +9,7 @@ class InspectionType extends Model
     protected $table = 'inspection_type';
     public $timestamps = false;
     protected $fillable = [
-    	'name',
+    	'type',
     	'isActive'  	
     ];
 

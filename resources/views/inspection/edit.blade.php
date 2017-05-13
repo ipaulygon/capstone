@@ -19,8 +19,8 @@
                 </div>
                 <div id="items" class="box-body">
                     <div class="form-group">
-                        {!! Form::label('name', 'Inspection Type') !!}<span>*</span>
-                        {!! Form::input('text','name',null,[
+                        {!! Form::label('type', 'Inspection Type') !!}<span>*</span>
+                        {!! Form::input('text','type',null,[
                             'class' => 'form-control',
                             'placeholder'=>'Name',
                             'maxlength'=>'50',

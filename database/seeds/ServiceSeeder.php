@@ -12,7 +12,7 @@ class ServiceSeeder extends Seeder
     public function run()
     {
         DB::table('service')->insert([
-            'name' => 'Change Oil - Sedan',
+            'name' => 'Change Oil',
             'price' => 300.25,
             'size' => 'Sedan',
             'categoryId' => 1,

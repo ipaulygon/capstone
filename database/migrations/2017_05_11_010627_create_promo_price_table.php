@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServiceTable extends Migration
+class CreatePromoPriceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('service', function (Blueprint $table) {
+        Schema::create('promo_price', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-            $table->increments('id');
-            $table->string('name', 50);
+            $table->unsignedInteger('promoId');
             $table->double('price', 15,2);
-            $table->string('size', 20);
-            $table->unsignedInteger('categoryId');
-            $table->boolean('isActive');
-            $table->unique(['name', 'size']);
-            $table->foreign('categoryId')
-                  ->references('id')->on('service_category')
+            $table->timestamps();
+            $table->foreign('promoId')
+                  ->references('id')->on('promo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -36,6 +32,6 @@ class CreateServiceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service');
+        Schema::dropIfExists('promo_price');
     }
 }

@@ -33,4 +33,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('package','PackageController');
 	Route::get('package/product/{id}','PackageController@product');
 	Route::get('package/service/{id}','PackageController@service');
+	Route::resource('promo','PromoController');
+	Route::get('promo/product/{id}','PromoController@product');
+	Route::get('promo/service/{id}','PromoController@service');
 });

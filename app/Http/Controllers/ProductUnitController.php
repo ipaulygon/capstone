@@ -18,7 +18,9 @@ class ProductUnitController extends Controller
      */
     public function index()
     {
-        $units = ProductUnit::where('isActive',1)->get();
+        $units = DB::table('product_unit')
+            ->where('isActive',1)
+            ->get();
         return View('unit.index', compact('units'));
     }
 

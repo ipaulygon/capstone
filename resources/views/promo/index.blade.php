@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Product"}}
+    {{"Promo"}}
 @stop
 
 @section('style')
@@ -15,7 +15,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ URL::to('/product/create') }}" class="btn btn-success btn-md">
+                    <a href="{{ URL::to('/promo/create') }}" class="btn btn-success btn-md">
                     <i class="glyphicon glyphicon-plus"></i> Add New</a>
                 </div>
             </div>
@@ -23,34 +23,46 @@
                 <table id="list" class="table table-striped responsive">
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Description</th>
-                            <th class="text-right">Price (PhP)</th>
+                            <th>Promo</th>
+                            <th>Products</th>
+                            <th>Services</th>
                             <th class="pull-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
+                        @foreach($promos as $promo)
                             <tr>
-                                <td>{{$product->brand}} - {{$product->name}}</td>
+                                <td>{{$promo->name}}</td>
                                 <td>
-                                    <li>Type: {{$product->type}}</li>
-                                    <li>Size: {{$product->variance}}</li>
-                                    @if($product->description!=null || $product->description!="")
-                                        <li>{{$product->description}}</li>
+                                    @foreach($promo->product as $product)
+                                        <li>{{$product->product->brand->name}} - {{$product->product->name}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
+                                    @endforeach
+                                    @if($promo->freeProduct->isNotEmpty())
+                                    <b>Free:</b>
                                     @endif
+                                    @foreach($promo->freeProduct as $product)
+                                        <li>{{$product->product->brand->name}} - {{$product->product->name}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
+                                    @endforeach
                                 </td>
-                                <td class="text-right">
-                                    {{number_format($product->price,2)}}
+                                <td>
+                                    @foreach($promo->service as $service)
+                                        <li>{{$service->service->name}} - {{$service->service->size}}</li>
+                                    @endforeach
+                                    @if($promo->freeService->isNotEmpty())
+                                    <b>Free:</b>
+                                    @endif
+                                    @foreach($promo->freeService as $service)
+                                        <li>{{$service->service->name}} - {{$service->service->size}}</li>
+                                    @endforeach
                                 </td>
                                 <td class="pull-right">
-                                    <a href="{{url('/product/'.$product->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                    <a href="{{url('/promo/'.$promo->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <button onclick="showModal({{$product->id}})"type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate record">
+                                    <button onclick="showModal({{$promo->id}})" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Deactivate record">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </button>
-                                    {!! Form::open(['method'=>'delete','action' => ['ProductController@destroy',$product->id],'id'=>'del'.$product->id]) !!}
+                                    {!! Form::open(['method'=>'delete','action' => ['PromoController@destroy',$promo->id],'id'=>'del'.$promo->id]) !!}
                                     {!! Form::close() !!}
                                 </td>
                             </tr>
@@ -93,8 +105,7 @@
             $('#list').DataTable({
                 responsive: true,
             });
-            $('#mi').addClass('active');
-            $('#mProduct').addClass('active');
+            $('#mPromo').addClass('active');
         });
         function showModal(id){
 			deactivate = id;

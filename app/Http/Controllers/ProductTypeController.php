@@ -78,7 +78,7 @@ class ProductTypeController extends Controller
                         ]
                     );
                     $branded = ProductBrand::where('name',$brand)->first();
-                    TypeBrand::create([
+                    TypeBrand::firstOrCreate([
                         'typeId' => $type->id,
                         'brandId' => $branded->id
                     ]);
@@ -161,7 +161,7 @@ class ProductTypeController extends Controller
                         ]
                     );
                     $branded = ProductBrand::where('name',$brand)->first();
-                    TypeBrand::create([
+                    TypeBrand::firstOrCreate([
                         'typeId' => $id,
                         'brandId' => $branded->id
                     ]);

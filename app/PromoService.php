@@ -4,13 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PackageService extends Model
+class PromoService extends Model
 {
-    protected $table = 'package_service';
+    protected $table = 'promo_service';
     public $timestamps = false;
     protected $fillable = [
-    	'packageId',
+    	'promoId',
     	'serviceId',
+        'isFree',
     	'isActive'  	
     ];
 
@@ -18,7 +19,7 @@ class PackageService extends Model
         return $this->belongsTo('App\Service','serviceId')->where('isActive',1);
     }
 
-    public function package(){
-        return $this->belongsTo('App\Package','packageId')->where('isActive',1);
+    public function promo(){
+        return $this->belongsTo('App\Promo','promoId')->where('isActive',1);
     }
 }

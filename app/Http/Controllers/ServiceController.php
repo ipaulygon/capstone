@@ -45,13 +45,12 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:service|max:50',
+            'name' => 'required|max:50',
             'categoryId' => 'required',
-            'size' => 'required',
+            'size' => 'required|unique:service,size,null,id,name,'.$request->name,
             'price' => 'required|numeric|between:0,10000'
         ];
         $messages = [
-            'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'numeric' => 'The :attribute field must be a valid number.',
@@ -127,9 +126,9 @@ class ServiceController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('service')->ignore($id)],
+            'name' => 'required|max:50',
             'categoryId' => 'required',
-            'size' => 'required',
+            'size' => 'required|unique:service,size,'.$id.',id,name,'.$request->name,
             'price' => 'required|numeric|between:0,10000'
         ];
         $messages = [

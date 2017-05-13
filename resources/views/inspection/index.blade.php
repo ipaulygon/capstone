@@ -31,7 +31,7 @@
                     <tbody>
                         @foreach($inspections as $inspection)
                             <tr>
-                                <td>{{$inspection->name}}</td>
+                                <td>{{$inspection->type}}</td>
                                 <td>
                                     @foreach($inspection->item as $item)
                                         <li>{{$item->name}}</li>

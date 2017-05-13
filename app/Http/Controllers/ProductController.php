@@ -24,7 +24,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('isActive',1)->get();
+        $products = DB::table('product as p')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
         return View('product.index',compact('products'));
     }
 
@@ -58,7 +64,7 @@ class ProductController extends Controller
             'name' => 'required|unique:product|max:50',
             'description' => 'max:50',
             'price' => 'required|numeric|between:0,10000',
-            'reorder' => 'required|numeric|between:0,100',
+            'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
             'varianceId' => 'required',
@@ -156,7 +162,7 @@ class ProductController extends Controller
             'name' => ['required','max:50',Rule::unique('product')->ignore($id)],
             'description' => 'max:50',
             'price' => 'required|numeric|between:0,10000',
-            'reorder' => 'required|numeric|between:0,100',
+            'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
             'varianceId' => 'required',

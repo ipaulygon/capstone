@@ -15,6 +15,7 @@ class CreatePackageServiceTable extends Migration
     {
         Schema::create('package_service', function (Blueprint $table) {
             $table->engine = 'InnoDB';
+            $table->increments('id');
             $table->unsignedInteger('packageId');
             $table->unsignedInteger('serviceId');
             $table->boolean('isActive');

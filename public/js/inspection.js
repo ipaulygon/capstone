@@ -51,15 +51,6 @@ $(document).on('click', '#pushItem', function (){
                 },//end of radio
                 {
                     "type": "text",
-                    "label": "Remarks",
-                    "placeholder": "Remarks",
-                    "className": "form-control",
-                    "name": "remarks",
-                    "subtype": "text",
-                    "maxlength": "50"
-                },
-                {
-                    "type": "text",
                     "label": "Condition",
                     "placeholder": "Condition",
                     "className": "form-control",

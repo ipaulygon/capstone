@@ -30,6 +30,7 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+    @yield('headScript')
 </head>
 <body class="hold-transition skin-yellow sidebar-mini">
     <div class="wrapper">
@@ -59,14 +60,18 @@
                             <ul class="dropdown-menu">
                                 <li class="header">You have 10 notifications</li>
                                 <li>
-                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
-                                            <li>
-                                                <a href="#">
-                                                <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                                </a>
-                                            </li>
-                                        <div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;"></div>
-                                        <div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;">
+                                        <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                                                <li>
+                                                    <a href="#">
+                                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                                    </a>
+                                                </li>
+                                            <div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;">
+                                            </div>
+                                            <div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
+                                            </div>
+                                        </ul>
                                     </div>
                                 </li>
                                 <li class="footer"><a href="#">View all</a></li>
@@ -117,9 +122,10 @@
                         </a>
                     </li>
                     <li class="header">MAINTAINANCE</li>
+                    {{-- START INVENTORY --}}
                     <li id="mi" class="treeview">
                         <a>
-                            <i class="fa fa-cart-arrow-down"></i>
+                            <i class="fa fa-shopping-cart"></i>
                             <span>Inventory</span>
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
@@ -132,6 +138,7 @@
                             <li id="mProduct"><a href="{{url('/product')}}"><i class="fa fa-circle-o"></i> Product</a></li>
                         </ul>
                     </li>
+                    {{-- END INVENTORY/START SERVICE --}}
                     <li id="ms" class="treeview">
                         <a>
                             <i class="fa fa-wrench"></i>
@@ -144,6 +151,9 @@
                             <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
                         </ul>
                     </li>
+                    {{-- END SERVICE START INDIVIDUAL --}}
+                    <li id="mPackage"><a href="{{url('/package')}}"><i class="fa fa-gift"></i> <span>Package</span></a></li>
+                    <li id="mPromo"><a href="{{url('/promo')}}"><i class="fa fa-bookmark"></i> <span>Promo</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->

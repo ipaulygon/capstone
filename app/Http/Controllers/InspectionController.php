@@ -43,7 +43,7 @@ class InspectionController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:inspection_type|max:50',
+            'type' => 'required|unique:inspection_type|max:50',
             'item.*' => 'required|max:50',
             'inspectionForm.*' => 'required'
         ];
@@ -53,7 +53,7 @@ class InspectionController extends Controller
             'max' => 'The :attribute field must be no longer than :max characters.'
         ];
         $niceNames = [
-            'name' => 'Type',
+            'type' => 'Type',
             'item.*' => 'Item',
             'inspectionForm.*'=>'Form'
         ];
@@ -66,7 +66,7 @@ class InspectionController extends Controller
             try{
                 DB::beginTransaction();
                 InspectionType::create([
-                    'name' => trim($request->type),
+                    'type' => trim($request->type),
                     'isActive' => 1
                 ]);
                 $type = InspectionType::all()->last();
@@ -124,7 +124,7 @@ class InspectionController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('inspection_type')->ignore($id)],
+            'type' => ['required','max:50',Rule::unique('inspection_type')->ignore($id)],
             'item.*' => 'required|max:50',
             'inspectionForm.*' => 'required'
         ];
@@ -134,7 +134,7 @@ class InspectionController extends Controller
             'max' => 'The :attribute field must be no longer than :max characters.'
         ];
         $niceNames = [
-            'name' => 'Type',
+            'type' => 'Type',
             'item.*' => 'Item',
             'inspectionForm.*'=>'Form'
         ];
@@ -148,7 +148,7 @@ class InspectionController extends Controller
                 DB::beginTransaction();
                 $type = InspectionType::findOrFail($id);
                 $type->update([
-                    'name' => trim($request->type),
+                    'type' => trim($request->type),
                 ]);
                 InspectionItem::where('typeId',$id)->update(['isActive'=>0]);
                 $items = $request->item;
@@ -156,7 +156,7 @@ class InspectionController extends Controller
                 foreach ($items as $key=>$item) {
                     InspectionItem::updateOrCreate(
                         ['name' => $item,'typeId' => $type->id],
-                        ['name'=> $item,'form'=>$forms[$key],'typeId'=>$type->id,'isActive' => 1]
+                        ['form'=>$forms[$key],'isActive' => 1]
                     );
                 }
                 DB::commit();
@@ -176,8 +176,13 @@ class InspectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $type = InspectionType::findOrFail($id);
+        $type->update([
+            'isActive' => 0
+        ]);
+        $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
     }
 }

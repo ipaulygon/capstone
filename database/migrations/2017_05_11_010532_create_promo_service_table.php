@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePackageProductTable extends Migration
+class CreatePromoServiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,19 @@ class CreatePackageProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('package_product', function (Blueprint $table) {
+        Schema::create('promo_service', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('packageId');
-            $table->unsignedInteger('productId');
-            $table->integer('quantity');
+            $table->unsignedInteger('promoId');
+            $table->unsignedInteger('serviceId');
+            $table->boolean('isFree');
             $table->boolean('isActive');
-            $table->foreign('packageId')
-                  ->references('id')->on('package')
+            $table->foreign('promoId')
+                  ->references('id')->on('promo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('productId')
-                  ->references('id')->on('product')
+            $table->foreign('serviceId')
+                  ->references('id')->on('service')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -38,6 +38,6 @@ class CreatePackageProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package_product');
+        Schema::dropIfExists('promo_service');
     }
 }
