@@ -61,8 +61,8 @@
                             <span class="input-group-addon">PhP</span>
                             {!! Form::input('text','price',null,[
                                 'class' => 'form-control',
+                                'id' => 'price',
                                 'placeholder'=>'Price',
-                                'maxlength'=>'8',
                                 'required']) 
                             !!}
                         </div>
@@ -71,8 +71,8 @@
                         {!! Form::label('reorder', 'Reorder Level') !!}<span>*</span>
                         {!! Form::input('text','reorder',null,[
                             'class' => 'form-control',
+                            'id' => 'reorder',
                             'placeholder'=>'Reorder Level',
-                            'maxlength'=>'3',
                             'required']) 
                         !!}
                     </div>

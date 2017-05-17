@@ -63,7 +63,7 @@ class ProductController extends Controller
         $rules = [
             'name' => 'required|unique:product|max:50',
             'description' => 'max:50',
-            'price' => 'required|numeric|between:0,10000',
+            'price' => 'required|between:0,500000',
             'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
@@ -73,7 +73,6 @@ class ProductController extends Controller
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
         ];
         $niceNames = [
             'name' => 'Product',
@@ -96,7 +95,7 @@ class ProductController extends Controller
                 Product::create([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'reorder' => trim($request->reorder),
                     'typeId' => $request->typeId,
                     'brandId' => $request->brandId,
@@ -106,7 +105,7 @@ class ProductController extends Controller
                 $product = Product::all()->last();
                 ProductPrice::create([
                     'productId' => $product->id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 Inventory::create([
                     'productId' => $product->id,
@@ -161,7 +160,7 @@ class ProductController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('product')->ignore($id)],
             'description' => 'max:50',
-            'price' => 'required|numeric|between:0,10000',
+            'price' => 'required|between:0,500000',
             'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
@@ -170,7 +169,6 @@ class ProductController extends Controller
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
         ];
         $niceNames = [
             'name' => 'Product',
@@ -185,7 +183,7 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect::back()->withErrors($validator);
         }
         else{
             try{
@@ -194,7 +192,7 @@ class ProductController extends Controller
                 $product->update([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'reorder' => trim($request->reorder),
                     'typeId' => $request->typeId,
                     'brandId' => $request->brandId,
@@ -203,7 +201,7 @@ class ProductController extends Controller
                 ]);
                 ProductPrice::create([
                     'productId' => $id,
-                    'price' => $request->price
+                    'price' => str_replace(',','',$request->price)
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

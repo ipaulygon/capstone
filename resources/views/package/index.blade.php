@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>Package</th>
+                            <th class="text-right">Price (PhP)</th>
                             <th>Products</th>
                             <th>Services</th>
                             <th class="pull-right">Action</th>
@@ -33,6 +34,7 @@
                         @foreach($packages as $package)
                             <tr>
                                 <td>{{$package->name}}</td>
+                                <td class="text-right">{{number_format($package->price,2)}}</td>
                                 <td>
                                     @foreach($package->product as $product)
                                         <li>{{$product->product->brand->name}} - {{$product->product->name}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>

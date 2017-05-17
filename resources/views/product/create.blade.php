@@ -17,6 +17,10 @@
 
 @section('script')
     <script src="{{ URL::asset('js/product.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script>
@@ -37,6 +41,21 @@
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mProduct').addClass('active');
+            $("#price").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 500000,
+            });
+            $("#reorder").inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 0,
+                max: 100,
+            });
         });
     </script>
 @stop

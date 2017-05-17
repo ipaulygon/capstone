@@ -118,9 +118,7 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $supplier = Supplier::findOrFail($id);
-        $persons = SupplierPerson::where('spId',$id)->get();
-        $numbers = SupplierContact::where('scId',$id)->get();
-        return View('supplier.edit',compact('supplier','persons','numbers'));
+        return View('supplier.edit',compact('supplier'));
     }
 
     /**

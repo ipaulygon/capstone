@@ -17,8 +17,7 @@
                     {!! Form::input('text','name',null,[
                         'class' => 'form-control',
                         'placeholder'=>'Name',
-                        'maxlength'=>'75',
-                        'required']) 
+                        'maxlength'=>'75']) 
                     !!}
                 </div>
                 <div class="form-group">
@@ -105,10 +104,9 @@
                             @endif
                             {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
                             {!! Form::input('text',null,$scNo,[
-                                'class' => 'form-control',
+                                'class' => 'form-control contact',
                                 'name' => 'scNo[]',
                                 'placeholder'=>'Number',
-                                'maxlength'=>'100',
                                 'required'])
                             !!}
                         </div>
@@ -118,10 +116,9 @@
                     <div id="number" class="form-group">
                         {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
                         {!! Form::input('text',null,null,[
-                            'class' => 'form-control',
+                            'class' => 'form-control contact',
                             'name' => 'scNo[]',
                             'placeholder'=>'Number',
-                            'maxlength'=>'100',
                             'required'])
                         !!}
                     </div>
@@ -138,11 +135,16 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('js/supplier.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
+            $(".contact").inputmask("(+639)99-9999-999");
         });
     </script>
 @stop

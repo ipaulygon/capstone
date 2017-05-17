@@ -61,8 +61,8 @@ class PackageController extends Controller
         
         $rules = [
             'name' => 'required|unique:package|max:50',
-            'price' => 'required|numeric|between:0,10000',
-            'qty.*' => 'sometimes|required|integer|max:3|between:0,100',
+            'price' => 'required|between:0,1000000',
+            'qty.*' => 'sometimes|required|integer|between:0,100',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -85,7 +85,7 @@ class PackageController extends Controller
                 DB::beginTransaction();
                 Package::create([
                     'name' => trim($request->name),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'isActive' => 1
                 ]);
                 $package = Package::all()->last();
@@ -113,7 +113,7 @@ class PackageController extends Controller
                 }
                 PackagePrice::create([
                     'packageId' => $package->id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -172,8 +172,8 @@ class PackageController extends Controller
     {
         $rules = [
             'name' => ['required','max:50',Rule::unique('package')->ignore($id)],
-            'price' => 'required|numeric|between:0,10000',
-            'qty.*' => 'sometimes|required|integer|max:3|between:0,100',
+            'price' => 'required|between:0,1000000',
+            'qty.*' => 'sometimes|required|integer|between:0,100',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -197,7 +197,7 @@ class PackageController extends Controller
                 $package = Package::findOrFail($id);
                 $package->update([
                     'name' => trim($request->name),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                 ]);
                 $products = $request->product;
                 $qty = $request->qty;
@@ -228,7 +228,7 @@ class PackageController extends Controller
                 }
                 PackagePrice::create([
                     'packageId' => $id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

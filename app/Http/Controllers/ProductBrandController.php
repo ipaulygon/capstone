@@ -138,7 +138,7 @@ class ProductBrandController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput();
+            return Redirect::back()->withErrors($validator);
         }
         else{
             try{

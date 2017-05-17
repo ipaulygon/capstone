@@ -79,18 +79,19 @@
                 </div>
             </div>
             <div class="box-body">
-                <div class="form-group">
-                    {!! Form::label('name', 'Package') !!}<span>*</span>
-                    {!! Form::input('text','name',null,[
-                        'class' => 'form-control',
-                        'placeholder'=>'Name',
-                        'maxlength'=>'50',
-                        'required'])
-                    !!}
-                </div>
-                {{-- PRICE --}}
                 <div class="row">
-                    {{-- PRICE --}}
+                    {{-- NAME --}}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {!! Form::label('name', 'Package') !!}<span>*</span>
+                            {!! Form::input('text','name',null,[
+                                'class' => 'form-control',
+                                'placeholder'=>'Name',
+                                'maxlength'=>'50',
+                                'required'])
+                            !!}
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('price', 'Price') !!}<span>*</span>
@@ -98,25 +99,11 @@
                                 <span class="input-group-addon">PhP</span>
                                 {!! Form::input('text','price',null,[
                                     'class' => 'form-control',
+                                    'id' => 'price',
                                     'placeholder'=>'Price',
-                                    'maxlength'=>'8',
                                     'required']) 
                                 !!}
                             </div>
-                        </div>
-                    </div>
-                    {{-- COMPUTED PRICE --}}
-                    <div class="col-md-6">
-                        {!! Form::label('computed', 'Computed Price') !!}
-                        <div class="input-group">
-                            <span class="input-group-addon" style="border: none!important">PhP</span>
-                            {!! Form::input('text','computed',0,[
-                                'class' => 'form-control',
-                                'id' => 'compute',
-                                'style' => 'border: none!important;background: transparent!important',
-                                'placeholder'=>'0',
-                                'readonly']) 
-                            !!}
                         </div>
                     </div>
                 </div>
@@ -145,6 +132,19 @@
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
+                <div class="form-inline pull-right">
+                    {!! Form::label('computed', 'Computed Price') !!}
+                    <div class="input-group">
+                        <span class="input-group-addon" style="border: none!important">PhP</span>
+                        <strong>{!! Form::input('text','computed',0,[
+                            'class' => 'form-control',
+                            'id' => 'compute',
+                            'style' => 'border: none!important;background: transparent!important',
+                            'placeholder'=>'0',
+                            'readonly']) 
+                        !!}</strong>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

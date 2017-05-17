@@ -20,7 +20,11 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services = Service::where('isActive',1)->get();
+        $services = DB::table('service as s')
+            ->join('service_category as c','c.id','s.categoryId')
+            ->where('s.isActive',1)
+            ->select('s.*','c.name as category')
+            ->get();
         return View('service.index',compact('services'));
     }
 
@@ -31,7 +35,6 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $categories [] = [];
         $categories = ServiceCategory::where('isActive',1)->orderBy('name')->get();
         return View('service.create',compact('categories'));
     }
@@ -45,15 +48,15 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|max:50',
+            'name' => ['required','max:50',Rule::unique('service')->where('size',$request->size)],
             'categoryId' => 'required',
-            'size' => 'required|unique:service,size,null,id,name,'.$request->name,
-            'price' => 'required|numeric|between:0,10000'
+            'size' => 'required',
+            'price' => 'required|between:0,500000'
         ];
         $messages = [
+            'name.unique' => 'Service is already in records.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
         ];
         $niceNames = [
             'name' => 'Service',
@@ -73,13 +76,13 @@ class ServiceController extends Controller
                     'name' => trim($request->name),
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'isActive' => 1
                 ]);
                 $service = Service::all()->last();
                 ServicePrice::create([
                     'serviceId' => $service->id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -126,15 +129,14 @@ class ServiceController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => 'required|max:50',
+            'name' => ['required','max:50',Rule::unique('service')->where('size',$request->size)->ignore($id)],
             'categoryId' => 'required',
-            'size' => 'required|unique:service,size,'.$id.',id,name,'.$request->name,
-            'price' => 'required|numeric|between:0,10000'
+            'size' => 'required',
+            'price' => 'required|between:0,500000'
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
             'between' => 'The :attribute must be :between only.',
         ];
         $niceNames = [
@@ -156,11 +158,11 @@ class ServiceController extends Controller
                     'name' => trim($request->name),
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                 ]);
                 ServicePrice::create([
                     'serviceId' => $service->id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

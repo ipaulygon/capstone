@@ -34,15 +34,11 @@ function rowFinder(row){
 }
 
 $(document).on('change', '#qty', function (){
-    if($(this).val()!='' && !isNaN($(this).val()) && $(this).val()>=0){
-        qty = $(this).val();
-    }else{
-        qty = 0;
-    }
+    qty = $(this).val();
     stack = $(this).next('.hidden').val();
     price = this.title;
     price = eval(price+"*"+qty);
-    final = eval($('#compute').val()+"-"+stack+"+"+price);
+    final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).next('.hidden').val(price);
     $('#compute').val(final);
 });
@@ -55,9 +51,16 @@ $(document).on('click','#pushProduct', function (){
         success:function(data){
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+")",
-                '<input type="number" title="'+data.product.price+'" id="qty" class="form-control" name="qty[]"><input type="hidden" class="hidden" value="0">',
+                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden" class="hidden" value="0">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
+            $('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: 100,
+            });
         }
     });
     var row = rowFinder(this);
@@ -78,7 +81,7 @@ $(document).on('click','#pullProduct', function (){
         }
     });
     // price
-    final = eval($('#compute').val()+"-"+$(this).parents().find('.hidden').val());
+    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.hidden').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
@@ -96,7 +99,7 @@ $(document).on('click','#pushService', function (){
                 '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val()+"+"+data.service.price);
+            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -116,7 +119,7 @@ $(document).on('click','#pullService', function (){
                 '<button title="'+data.service.id+'" type="button" id="pushService" class="btn btn-primary btn-sm pull-right"><i class="fa fa-angle-double-right"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val()+"-"+data.service.price);
+            final = eval($('#compute').val().replace(',','')+"-"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -136,11 +139,18 @@ function retrieveProduct(id,qty){
             var stack = eval(qty+"*"+data.product.price);
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+")",
-                '<input type="number" title="'+data.product.price+'" id="qty" class="form-control" name="qty[]" value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
+                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
+            $('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: 100,
+            });
             // price
-            final =  eval($('#compute').val()+"+"+stack);
+            final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
         }
     });
@@ -160,7 +170,7 @@ function retrieveService(id){
                 '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val()+"+"+data.service.price);
+            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });

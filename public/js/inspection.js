@@ -67,6 +67,12 @@ $(document).on('click', '#pushItem', function (){
 });
 
 $(document).on("click", "#removeItem", function (){
+    console.log($(textarea).parent()[0]);
+    console.log($(this).parent()[0]);
+    if($(textarea).parent()[0]==$(this).parent()[0]){
+        $('#form').remove();
+        textarea = "";
+    }
     $(this).parent().remove();
 });
 

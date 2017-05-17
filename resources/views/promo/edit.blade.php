@@ -21,6 +21,10 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -29,6 +33,30 @@
         $(document).ajaxStart(function() { Pace.restart(); });
         $(document).ready(function (){
             $('#mPromo').addClass('active');
+            $("#price").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 1000000,
+            });
+            $("#compute").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 1000000,
+            });
+            $("#stock").inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 999,
+            });
         });
     </script>
     @if($promo->product || $promo->service || $promo->freeProduct || $promo->freeService)

@@ -61,16 +61,16 @@ class PromoController extends Controller
     {
         $rules = [
             'name' => 'required|unique:promo|max:50',
-            'price' => 'required|numeric|between:0,10000',
+            'price' => 'required|between:0,1000000',
+            'stock' => 'between:0,999',
             'date' => 'required',
-            'qty.*' => 'sometimes|required|integer|max:3|between:0,100',
-            'freeQty.*' => 'sometimes|required|integer|max:3|between:0,100',
+            'qty.*' => 'sometimes|required|integer|between:0,100',
+            'freeQty.*' => 'sometimes|required|integer|between:0,100',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
         ];
         $niceNames = [
             'name' => 'Promo',
@@ -94,7 +94,7 @@ class PromoController extends Controller
                 $stock = (trim($request->stock) == '' ? 0 : trim($request->stock));
                 Promo::create([
                     'name' => trim($request->name),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'dateStart' => $finalStartDate,
                     'dateEnd' => $finalEndDate,
                     'stock' => $stock,
@@ -151,7 +151,7 @@ class PromoController extends Controller
                 }
                 PromoPrice::create([
                     'promoId' => $promo->id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -215,15 +215,15 @@ class PromoController extends Controller
     {
         $rules = [
             'name' => ['required','max:50',Rule::unique('promo')->ignore($id)],
-            'price' => 'required|numeric|between:0,10000',
+            'price' => 'required|between:0,1000000',
+            'stock' => 'between:0,999',
             'date' => 'required',
-            'qty.*' => 'sometimes|required|integer|max:3|between:0,100',
-            'freeQty.*' => 'sometimes|required|integer|max:3|between:0,100',
+            'qty.*' => 'sometimes|required|integer|between:0,100',
+            'freeQty.*' => 'sometimes|required|integer|between:0,100',
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'numeric' => 'The :attribute field must be a valid number.',
         ];
         $niceNames = [
             'name' => 'Promo',
@@ -248,7 +248,7 @@ class PromoController extends Controller
                 $promo = Promo::findOrFail($id);
                 $promo->update([
                     'name' => trim($request->name),
-                    'price' => trim($request->price),
+                    'price' => trim(str_replace(',','',$request->price)),
                     'dateStart' => $finalStartDate,
                     'dateEnd' => $finalEndDate,
                     'stock' => $stock,
@@ -309,7 +309,7 @@ class PromoController extends Controller
                 }
                 PromoPrice::create([
                     'promoId' => $id,
-                    'price' => trim($request->price)
+                    'price' => trim(str_replace(',','',$request->price))
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

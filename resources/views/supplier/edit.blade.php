@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div id="persons" class="box-body">
-                @foreach($persons as $person)
+                @foreach($supplier->person as $person)
                     <div id="person" class="form-group">
                         @if($loop->index!=0)
                             <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <div id="numbers" class="box-body">
-                @foreach($numbers as $number)
+                @foreach($supplier->number as $key=>$number)
                     <div id="number" class="form-group">
                         @if($loop->index!=0)
                             <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
@@ -88,10 +88,10 @@
                         @endif
                         {!! Form::label('scNo', 'Contact Number') !!}<span>*</span>
                         {!! Form::input('text','scNo',$number->scNo,[
-                            'class' => 'form-control',
+                            'class' => 'form-control contact',
+                            'id' => $key,
                             'name' => 'scNo[]',
                             'placeholder'=>'Number',
-                            'maxlength'=>'100',
                             'required'])
                         !!}
                     </div>
@@ -108,11 +108,22 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('js/supplier.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
         });
+        @foreach($supplier->number as $key=>$number)
+            @if($number->scNo[4]=='9')
+                $('#{{$key}}').inputmask("(+639)99-9999-999");
+            @elseif($number->scNo[4]=='2')
+                $('#{{$key}}').inputmask("(+639)999-9999");
+            @endif
+        @endforeach
     </script>
 @stop

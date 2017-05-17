@@ -20,12 +20,32 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/package.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
         $(document).ready(function (){
             $('#mPackage').addClass('active');
+            $("#price").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 1000000,
+            });
+            $("#compute").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 1000000,
+            });
         });
     </script>
     @if($package->product || $package->service)

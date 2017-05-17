@@ -149,11 +149,13 @@
                             <li id="mCategory"><a href="{{url('/category')}}"><i class="fa fa-circle-o"></i> Service Category</a></li>
                             <li id="mService"><a href="{{url('/service')}}"><i class="fa fa-circle-o"></i> Service</a></li>
                             <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
+                            <li id="mTechnician"><a href="{{url('/technician')}}"><i class="fa fa-circle-o"></i>Technician</a></li>
                         </ul>
                     </li>
                     {{-- END SERVICE START INDIVIDUAL --}}
                     <li id="mPackage"><a href="{{url('/package')}}"><i class="fa fa-gift"></i> <span>Package</span></a></li>
                     <li id="mPromo"><a href="{{url('/promo')}}"><i class="fa fa-bookmark"></i> <span>Promo</span></a></li>
+                    <li id="mDiscount"><a href="{{url('/discount')}}"><i class="fa fa-tags"></i> <span>Discounts</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->

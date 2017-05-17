@@ -16,8 +16,19 @@ $(document).on("click", "#addNumber", function (){
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button>').appendTo('#numbers');
     $(value).find("input").val("");
+    $(value).find("input").inputmask("(+639)99-9999-999");
 });
 
 $(document).on("click", "#removeNumber", function (){
     $(this).parent().remove();
+});
+
+$(document).on('keypress','.contact',function(){
+    if($(this).val()[4]=='9'){
+        $(this).inputmask("(+639)99-9999-999");
+    }else if($(this).val()[4]=='2'){
+        $(this).inputmask("(+639)999-9999");
+    }else{
+        $(this).inputmask("(+639) ERROR");
+    }
 });

@@ -34,7 +34,7 @@
                             <tr>
                                 <td>{{$service->name}}</td>
                                 <td>
-                                    <li>Category: {{$service->category->name}}</li>
+                                    <li>Category: {{$service->category}}</li>
                                     <li>Size: {{$service->size}}</li>
                                 </td>
                                 <td class="text-right">

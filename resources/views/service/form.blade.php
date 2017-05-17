@@ -38,8 +38,8 @@
                     <span class="input-group-addon">PhP</span>
                     {!! Form::input('text','price',null,[
                         'class' => 'form-control',
+                        'id' => 'price',
                         'placeholder'=>'Price',
-                        'maxlength'=>'8',
                         'required']) 
                     !!}
                 </div>

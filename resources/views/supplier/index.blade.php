@@ -41,7 +41,7 @@
                                 </td>
                                 <td class="text-right">
                                     @foreach($supplier->number as $number)
-                                        <li>{{$number->scNo}}</li>
+                                        {{$number->scNo}}<br>
                                     @endforeach
                                 </td>
                                 <td>{{$supplier->address}}</td>
