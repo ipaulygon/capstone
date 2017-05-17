@@ -22,7 +22,11 @@ class TechnicianController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('technician.index',compact('technicians'));
+        $deactivate = DB::table('technician')
+            ->where('isActive',0)
+            ->select('technician.*')
+            ->get();
+        return View('technician.index',compact('technicians','deactivate'));
     }
 
     /**
@@ -223,6 +227,16 @@ class TechnicianController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request,$id)
+    {
+        $technician = Technician::findOrFail($id);
+        $technician->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\ProductType;
 use App\ProductBrand;
 use App\TypeBrand;
+use App\Product;
 use Validator;
 use Redirect;
 use Session;
@@ -21,7 +22,8 @@ class ProductBrandController extends Controller
     public function index()
     {
         $brands = ProductBrand::where('isActive',1)->get();
-        return View('brand.index', compact('brands'));
+        $deactivate = ProductBrand::where('isActive',0)->get();
+        return View('brand.index', compact('brands','deactivate'));
     }
 
     /**
@@ -177,11 +179,26 @@ class ProductBrandController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $product = Product::where('brandId',$id)->get();
+        if($product->isEmpty()){
+            $brand = ProductBrand::findOrFail($id);
+            $brand->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+
+    public function reactivate(Request $request,$id)
+    {
         $brand = ProductBrand::findOrFail($id);
         $brand->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

@@ -30,7 +30,6 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
-    @yield('headScript')
 </head>
 <body class="hold-transition skin-yellow sidebar-mini">
     <div class="wrapper">

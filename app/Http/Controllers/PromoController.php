@@ -25,7 +25,8 @@ class PromoController extends Controller
     public function index()
     {
         $promos = Promo::where('isActive',1)->get();
-        return View('promo.index',compact('promos'));
+        $deactivate = Promo::where('isActive',0)->get();
+        return View('promo.index',compact('promos','deactivate'));
     }
 
     /**
@@ -328,13 +329,23 @@ class PromoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $item = Promo::findOrFail($id);
         $item->update([
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request,$id)
+    {
+        $item = Promo::findOrFail($id);
+        $item->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 

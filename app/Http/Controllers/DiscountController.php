@@ -25,7 +25,8 @@ class DiscountController extends Controller
     public function index()
     {
         $discounts = Discount::where('isActive',1)->get();
-        return View('discount.index', compact('discounts'));
+        $deactivate = Discount::where('isActive',0)->get();
+        return View('discount.index', compact('discounts','deactivate'));
     }
 
     /**
@@ -91,7 +92,8 @@ class DiscountController extends Controller
                     foreach ($products as $product) {
                         DiscountProduct::create([
                             'discountId' => $discount->id,
-                            'productId' => $product
+                            'productId' => $product,
+                            'isActive' => 1
                         ]);
                     }
                 }
@@ -99,7 +101,8 @@ class DiscountController extends Controller
                     foreach ($services as $service) {
                         DiscountService::create([
                             'discountId' => $discount->id,
-                            'serviceId' => $service
+                            'serviceId' => $service,
+                            'isActive' => 1
                         ]);
                     }
                 }
@@ -184,15 +187,16 @@ class DiscountController extends Controller
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
                 ]);
-                DiscountProduct::where('discountId',$id)->delete();
-                DiscountService::where('discountId',$id)->delete();
+                DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
+                DiscountService::where('discountId',$id)->update(['isActive'=>0]);
                 $products = $request->product;
                 $services = $request->service;
                 if(!empty($products)){
                     foreach ($products as $product) {
                         DiscountProduct::create([
                             'discountId' => $discount->id,
-                            'productId' => $product
+                            'productId' => $product,
+                            'isActive' => 1
                         ]);
                     }
                 }
@@ -200,7 +204,8 @@ class DiscountController extends Controller
                     foreach ($services as $service) {
                         DiscountService::create([
                             'discountId' => $discount->id,
-                            'serviceId' => $service
+                            'serviceId' => $service,
+                            'isActive' => 1
                         ]);
                     }
                 }
@@ -228,6 +233,16 @@ class DiscountController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
+        $discount = Discount::findOrFail($id);
+        $discount->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

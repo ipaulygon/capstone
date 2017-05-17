@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\ProductType;
 use App\ProductBrand;
 use App\TypeBrand;
+use App\TypeVariance;
+use App\Product;
 use Validator;
 use Redirect;
 use Session;
@@ -21,7 +23,8 @@ class ProductTypeController extends Controller
     public function index()
     {
         $types = ProductType::where('isActive',1)->get();
-        return View('type.index', compact('types'));
+        $deactivate = ProductType::where('isActive',0)->get();
+        return View('type.index', compact('types','deactivate'));
     }
 
     /**
@@ -31,7 +34,7 @@ class ProductTypeController extends Controller
      */
     public function create()
     {
-        $brands = ProductBrand::all();
+        $brands = ProductBrand::where('isActive',1)->get();
         return View('type.create',compact('brands'));
     }
 
@@ -185,11 +188,28 @@ class ProductTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $brand = TypeBrand::where('typeId',$id)->get();
+        $variance = TypeVariance::where('typeId',$id)->get();
+        $product = Product::where('typeId',$id)->get();
+        if($brand->isEmpty() && $variance->isEmpty() && $product->isEmpty()){
+            $type = ProductType::findOrFail($id);
+            $type->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+
+    public function reactivate(Request $request,$id)
+    {
         $type = ProductType::findOrFail($id);
         $type->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

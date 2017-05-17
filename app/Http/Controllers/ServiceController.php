@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Service;
 use App\ServicePrice;
 use App\ServiceCategory;
+use App\PromoService;
+use App\PackageService;
 use Validator;
 use Redirect;
 use Session;
@@ -25,7 +27,12 @@ class ServiceController extends Controller
             ->where('s.isActive',1)
             ->select('s.*','c.name as category')
             ->get();
-        return View('service.index',compact('services'));
+        $deactivate = DB::table('service as s')
+            ->join('service_category as c','c.id','s.categoryId')
+            ->where('s.isActive',0)
+            ->select('s.*','c.name as category')
+            ->get();
+        return View('service.index',compact('services','deactivate'));
     }
 
     /**
@@ -183,11 +190,27 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $promo = PromoService::where('serviceId',$id)->get();
+        $package = PackageService::where('serviceId',$id)->get();
+        if($promo->isEmpty() && $package->isEmpty()){
+            $service = Service::findOrFail($id);
+            $service->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
         $service = Service::findOrFail($id);
         $service->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

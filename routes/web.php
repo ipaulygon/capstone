@@ -17,9 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Route::group(['middleware' => 'auth'], function(){
+	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('supplier','SupplierController');
 	Route::resource('type','ProductTypeController');
 	Route::resource('brand','ProductBrandController');
@@ -38,4 +37,19 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('promo/service/{id}','PromoController@service');
 	Route::resource('discount','DiscountController');
 	Route::resource('technician','TechnicianController');
+
+	// Reactivate
+	Route::patch('supplier/reactivate/{id}','SupplierController@reactivate');
+	Route::patch('type/reactivate/{id}','ProductTypeController@reactivate');
+	Route::patch('brand/reactivate/{id}','ProductBrandController@reactivate');
+	Route::patch('unit/reactivate/{id}','ProductUnitController@reactivate');
+	Route::patch('variance/reactivate/{id}','ProductVarianceController@reactivate');
+	Route::patch('product/reactivate/{id}','ProductController@reactivate');
+	Route::patch('category/reactivate/{id}','ServiceCategoryController@reactivate');
+	Route::patch('service/reactivate/{id}','ServiceController@reactivate');
+	Route::patch('inspection/reactivate/{id}','InspectionController@reactivate');
+	Route::patch('technician/reactivate/{id}','TechnicianController@reactivate');
+	Route::patch('package/reactivate/{id}','PackageController@reactivate');
+	Route::patch('promo/reactivate/{id}','PromoController@reactivate');
+	Route::patch('discount/reactivate/{id}','DiscountController@reactivate');
 });

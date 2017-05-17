@@ -8,6 +8,8 @@ use App\Inventory;
 use App\ProductType;
 use App\TypeBrand;
 use App\TypeVariance;
+use App\PromoProduct;
+use App\PackageProduct;
 use Validator;
 use Redirect;
 use Response;
@@ -31,7 +33,14 @@ class ProductController extends Controller
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
-        return View('product.index',compact('products'));
+        $deactivate = DB::table('product as p')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',0)
+            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+        return View('product.index',compact('products','deactivate'));
     }
 
     /**
@@ -222,11 +231,27 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $promo = PromoProduct::where('productId',$id)->get();
+        $package = PackageProduct::where('productId',$id)->get();
+        if($promo->isEmpty() && $package->isEmpty()){
+            $product = Product::findOrFail($id);
+            $product->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
         $product = Product::findOrFail($id);
         $product->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 

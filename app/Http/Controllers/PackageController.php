@@ -25,7 +25,8 @@ class PackageController extends Controller
     public function index()
     {
         $packages = Package::where('isActive',1)->get();
-        return View('package.index',compact('packages'));
+        $deactivate = Package::where('isActive',0)->get();
+        return View('package.index',compact('packages','deactivate'));
     }
 
     /**
@@ -254,6 +255,16 @@ class PackageController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
+        $item = Package::findOrFail($id);
+        $item->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 

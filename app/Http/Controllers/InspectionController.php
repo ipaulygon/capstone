@@ -21,7 +21,8 @@ class InspectionController extends Controller
     public function index()
     {
         $inspections = InspectionType::where('isActive',1)->get(); 
-        return View('inspection.index', compact('inspections'));
+        $deactivate = InspectionType::where('isActive',0)->get(); 
+        return View('inspection.index', compact('inspections','deactivate'));
     }
 
     /**
@@ -183,6 +184,16 @@ class InspectionController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
+        $type = InspectionType::findOrFail($id);
+        $type->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

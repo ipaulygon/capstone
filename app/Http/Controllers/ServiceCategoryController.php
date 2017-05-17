@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ServiceCategory;
+use App\Service;
 use Validator;
 use Redirect;
 use Session;
@@ -19,7 +20,8 @@ class ServiceCategoryController extends Controller
     public function index()
     {
         $categories = ServiceCategory::where('isActive',1)->get();
-        return View('category.index',compact('categories'));
+        $deactivate = ServiceCategory::where('isActive',0)->get();
+        return View('category.index',compact('categories','deactivate'));
     }
 
     /**
@@ -153,11 +155,26 @@ class ServiceCategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $service = Service::where('categoryId',$id)->get();
+        if($service->isEmpty()){
+            $category = ServiceCategory::findOrFail($id);
+            $category->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
         $category = ServiceCategory::findOrFail($id);
         $category->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

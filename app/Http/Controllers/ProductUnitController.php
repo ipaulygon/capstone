@@ -21,7 +21,10 @@ class ProductUnitController extends Controller
         $units = DB::table('product_unit')
             ->where('isActive',1)
             ->get();
-        return View('unit.index', compact('units'));
+        $deactivate = DB::table('product_unit')
+            ->where('isActive',0)
+            ->get();
+        return View('unit.index', compact('units','deactivate'));
     }
 
     /**
@@ -31,7 +34,7 @@ class ProductUnitController extends Controller
      */
     public function create()
     {
-        return View('layout.404');
+        return View('layouts.404');
     }
 
     /**
@@ -160,6 +163,16 @@ class ProductUnitController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+
+    public function reactivate(Request $request, $id)
+    {
+        $unit = ProductUnit::findOrFail($id);
+        $unit->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

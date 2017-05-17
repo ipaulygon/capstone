@@ -21,7 +21,8 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::where('isActive',1)->get();
-        return View('supplier.index', compact('suppliers'));
+        $deactivate = Supplier::where('isActive',0)->get();
+        return View('supplier.index', compact('suppliers','deactivate'));
     }
 
     /**
@@ -199,6 +200,16 @@ class SupplierController extends Controller
             'isActive' => 0
         ]);
         $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request,$id)
+    {
+        $supplier = Supplier::findOrFail($id);
+        $supplier->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 }

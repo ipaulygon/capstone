@@ -6,6 +6,7 @@ use App\ProductVariance;
 use App\ProductType;
 use App\TypeVariance;
 use App\ProductUnit;
+use App\Product;
 use Validator;
 use Redirect;
 use Session;
@@ -22,7 +23,8 @@ class ProductVarianceController extends Controller
     public function index()
     {
         $variances = ProductVariance::where('isActive',1)->get();
-        return View('variance.index', compact('variances'));
+        $deactivate = ProductVariance::where('isActive',0)->get();
+        return View('variance.index', compact('variances','deactivate'));
     }
 
     /**
@@ -202,11 +204,26 @@ class ProductVarianceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $product = Product::where('varianceId',$id)->get();
+        if($product->isEmpty()){
+            $variance = Productvariance::findOrFail($id);
+            $variance->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }else{
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }
+        return Redirect::back();
+    }
+
+    public function reactivate(Request $request, $id)
+    {
         $variance = Productvariance::findOrFail($id);
         $variance->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully deactivated.'); 
         return Redirect::back();
     }
 }

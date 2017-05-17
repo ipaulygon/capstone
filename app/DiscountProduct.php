@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class DiscountProduct extends Model
 {
     protected $table = 'discount_product';
-    public $timestamps = false;
     public $incrementing = false;
     protected $fillable = [
     	'discountId',
     	'productId',
+        'isActive'
     ];
 
     public function product(){

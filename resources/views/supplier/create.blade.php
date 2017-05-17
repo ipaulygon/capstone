@@ -26,6 +26,7 @@
                         'class' => 'form-control',
                         'placeholder'=>'Address',
                         'maxlength'=>'140',
+                        'rows' => '2',
                         'required']) 
                     !!}
                 </div>
