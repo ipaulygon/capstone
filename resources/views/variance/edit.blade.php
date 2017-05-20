@@ -53,9 +53,6 @@
                             </div>
                         </div>
                     </div>
-                    <script>
-                        $('#unit').last().val("{{$activeUnit[$key]}}");
-                    </script>
                 @endforeach
             </div>
             <div class="box-footer">
@@ -78,7 +75,6 @@
             @endforeach
         ];
         $("#pt").val(activeTypes);
-        $("#isOriginal[value={{$variance->isOriginal}}]").prop('checked',true);
         $(".select2").select2();
     </script>
     <script>

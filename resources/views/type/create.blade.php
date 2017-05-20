@@ -21,6 +21,17 @@
                         'required']) 
                     !!}
                 </div>
+                <div class="form-group">
+                    {!! Form::label('category', 'Category') !!}<span>*</span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input id="category" type="radio" class="square-blue" name="category" value="Parts" required> Parts
+                        </div>
+                        <div class="col-md-6">
+                            <input id="category" type="radio" class="square-blue" name="category" value="Supplies" required> Supplies
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
@@ -90,6 +101,9 @@
                 @endforeach
             ]
         }
+        @if(old('category'))
+            $("#category[value={{old('category')}}]").prop('checked',true);
+        @endif
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mType').addClass('active');

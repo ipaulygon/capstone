@@ -10,6 +10,7 @@ use App\TypeBrand;
 use App\TypeVariance;
 use App\PromoProduct;
 use App\PackageProduct;
+use App\ProductVehicle;
 use Validator;
 use Redirect;
 use Response;
@@ -58,7 +59,11 @@ class ProductController extends Controller
             $brands = TypeBrand::where('typeId',$types->first()->id)->get();
             $variances = TypeVariance::where('typeId',$types->first()->id)->get();
         }
-        return View('product.create',compact('types','brands','variances'));
+        $vehicles = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->get();
+        return View('product.create',compact('types','brands','variances','vehicles'));
     }
 
     /**
@@ -70,13 +75,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:product|max:50',
+            'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',trim($request->isOriginal))],
             'description' => 'max:50',
             'price' => 'required|between:0,500000',
             'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
             'varianceId' => 'required',
+            'isOriginal' => 'nullable|required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -91,7 +97,7 @@ class ProductController extends Controller
             'typeId' => 'Product Type',
             'brandId' => 'Product Brand',
             'varianceId' => 'Product Variance',
-            
+            'isOriginal' => 'Part Type',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -109,9 +115,20 @@ class ProductController extends Controller
                     'typeId' => $request->typeId,
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
+                    'isOriginal' => $request->isOriginal,
                     'isActive' => 1
                 ]);
                 $product = Product::all()->last();
+                $vehicles = $request->vehicle;
+                if(!empty($vehicles)){
+                    foreach($vehicles as $vehicle){
+                        ProductVehicle::create([
+                            'productId' => $product->id,
+                            'modelId' => $vehicle,
+                            'isActive' => 1	
+                        ]);
+                    }
+                }
                 ProductPrice::create([
                     'productId' => $product->id,
                     'price' => trim(str_replace(',','',$request->price))
@@ -154,7 +171,11 @@ class ProductController extends Controller
         $types = ProductType::where('isActive',1)->orderBy('name')->get();
         $brands = TypeBrand::where('typeId',$product->typeId)->get();
         $variances = TypeVariance::where('typeId',$product->typeId)->get();
-        return View('product.edit',compact('product','types','brands','variances'));
+        $vehicles = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->get();
+        return View('product.edit',compact('product','types','brands','variances','vehicles'));
     }
 
     /**
@@ -167,13 +188,14 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('product')->ignore($id)],
+            'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',trim($request->isOriginal))->ignore($id)],
             'description' => 'max:50',
             'price' => 'required|between:0,500000',
             'reorder' => 'required|integer|between:0,100',
             'typeId' => 'required',
             'brandId' => 'required',
             'varianceId' => 'required',
+            'isOriginal' => 'nullable|required'
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
@@ -187,7 +209,7 @@ class ProductController extends Controller
             'typeId' => 'Product Type',
             'brandId' => 'Product Brand',
             'varianceId' => 'Product Variance',
-            
+            'isOriginal' => 'Part Type'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -206,8 +228,19 @@ class ProductController extends Controller
                     'typeId' => $request->typeId,
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
+                    'isOriginal' => $request->isOriginal,
                     'isActive' => 1
                 ]);
+                ProductVehicle::where('productId',$id)->update(['isActive'=>0]);
+                $vehicles = $request->vehicle;
+                if(!empty($vehicles)){
+                    foreach($vehicles as $vehicle){
+                        ProductVehicle::updateOrCreate(
+                            ['productId' => $product->id,'modelId' => $vehicle],
+                            ['isActive' => 1]
+                        );
+                    }
+                }
                 ProductPrice::create([
                     'productId' => $id,
                     'price' => str_replace(',','',$request->price)
@@ -258,8 +291,9 @@ class ProductController extends Controller
     public function type($id){
         $brands [] = [];
         $variances [] = [];
+        $type = ProductType::findOrfail($id);
         $brands = TypeBrand::with('brand')->where('typeId',$id)->get();
         $variances = TypeVariance::with('variance')->where('typeId',$id)->get();
-        return response()->json(['brands'=>$brands,'variances'=>$variances]);
+        return response()->json(['type'=>$type,'brands'=>$brands,'variances'=>$variances]);
     }
 }

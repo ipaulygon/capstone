@@ -10,6 +10,7 @@ class ProductType extends Model
     public $timestamps = false;
     protected $fillable = [
     	'name',
+        'category',
     	'isActive'  	
     ];
 

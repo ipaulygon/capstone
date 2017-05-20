@@ -16,6 +16,14 @@ function changeType(id){
             });
             $('#pb').select2();
             $('#pv').select2();
+            if(data.type.category=='Parts'){
+                $('#part').removeClass('hidden');
+            }else{
+                $('.square-blue').iCheck('uncheck');
+                $('#vehicle').val('');
+                $('#vehicle').select2();
+                $('#part').addClass('hidden');
+            }
         }
     });
 }

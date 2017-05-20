@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>Product Type</th>
+                            <th>Category</th>
                             <th>Brand(s)</th>
                             <th class="pull-right">Action</th>
                         </tr>
@@ -32,6 +33,7 @@
                         @foreach($types as $type)
                             <tr>
                                 <td>{{$type->name}}</td>
+                                <td>{{$type->category}}</td>
                                 <td>
                                     @foreach($type->tb as $tb)
                                         <li>{{$tb->brand->name}}</li>

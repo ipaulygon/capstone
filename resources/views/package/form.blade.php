@@ -3,7 +3,7 @@
         {{-- BOX --}}
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">
+                <h3 class="box-title nav-pills-custom">
                     <ul class="nav nav-pills nav-justified" role="tablist">
                         <li role="presentation" class="active"><a href="#product" aria-controls="products" role="tab" data-toggle="tab">Products</a></li>
                         <li role="presentation"><a href="#service" aria-controls="service" role="tab" data-toggle="tab">Services</a></li>
@@ -31,6 +31,9 @@
                                 <tr>
                                     <td>{{$product->brand}} - {{$product->name}}</td>
                                     <td>
+                                        @if($product->isOriginal!=NULL)
+                                            <li>{{$product->isOriginal}}</li>
+                                        @endif
                                         <li>{{$product->type}}</li>
                                         <li>{{$product->variance}}</li>
                                     </td>

@@ -25,11 +25,19 @@
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
+        var activeVehicles = [
+            @foreach($product->vehicle as $vehicle)
+                "{{$vehicle->modelId}}",
+            @endforeach
+        ];
+        $("#vehicle").val(activeVehicles);
         $(".select2").select2();
         @if($product)
             changeType({{$product->typeId}});
             $('#pt').val({{$product->typeId}}).trigger("change");
         @endif
+        $('.square-blue').iCheck('check');
+        $("#isOriginal[value={{$product->isOriginal}}]").prop('checked',true);
         $(document).ajaxStop(function() {
             @if($product)
                 $('#pb').val({{$product->brandId}}).trigger("change");

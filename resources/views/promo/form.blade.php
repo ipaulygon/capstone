@@ -32,6 +32,9 @@
                             <tr>
                                 <td>{{$product->brand}} - {{$product->name}}</td>
                                 <td>
+                                    @if($product->isOriginal!=NULL)
+                                        <li>{{$product->isOriginal}}</li>
+                                    @endif
                                     <li>{{$product->type}}</li>
                                     <li>{{$product->variance}}</li>
                                 </td>
@@ -81,6 +84,9 @@
                             <tr>
                                 <td>{{$product->brand}} - {{$product->name}}</td>
                                 <td>
+                                    @if($product->isOriginal!=NULL)
+                                        <li>{{$product->isOriginal}}</li>
+                                    @endif
                                     <li>{{$product->type}}</li>
                                     <li>{{$product->variance}}</li>
                                 </td>

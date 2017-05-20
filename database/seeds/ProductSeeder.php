@@ -19,6 +19,18 @@ class ProductSeeder extends Seeder
             'typeId' => 3,
             'brandId' => 3,
             'varianceId' => 2,
+            'isOriginal' => 'Original',
+            'isActive' => 1,
+        ]);
+        DB::table('product')->insert([
+            'name' => 'Ultron',
+            'description' => '',
+            'price' => 300.25,
+            'reorder' => 10,
+            'typeId' => 1,
+            'brandId' => 1,
+            'varianceId' => 1,
+            'isOriginal' => NULL,
             'isActive' => 1,
         ]);
     }

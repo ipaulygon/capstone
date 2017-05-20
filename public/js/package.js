@@ -49,8 +49,9 @@ $(document).on('click','#pushProduct', function (){
         url: "/package/product/"+this.title,
         dataType: "JSON",
         success:function(data){
+            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+")",
+                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+part+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden" class="hidden" value="0">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
@@ -137,8 +138,9 @@ function retrieveProduct(id,qty){
                 qty = 0;
             }
             var stack = eval(qty+"*"+data.product.price);
+            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+")",
+                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+part+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();

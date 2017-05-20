@@ -21,6 +21,17 @@
                         'required']) 
                     !!}
                 </div>
+                <div class="form-group">
+                    {!! Form::label('category', 'Category') !!}<span>*</span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input id="category" type="radio" class="square-blue" name="category" value="Parts" required> Parts
+                        </div>
+                        <div class="col-md-6">
+                            <input id="category" type="radio" class="square-blue" name="category" value="Supplies" required> Supplies
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
@@ -75,6 +86,8 @@
                 @endforeach
             ]
         }
+        $('.square-blue').iCheck('check');
+        $("#category[value={{$type->category}}]").prop('checked',true);
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mType').addClass('active');

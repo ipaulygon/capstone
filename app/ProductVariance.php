@@ -12,7 +12,6 @@ class ProductVariance extends Model
     	'name',
     	'size',
     	'units',
-        'isOriginal',
     	'isActive'  	
     ];
 

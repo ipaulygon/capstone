@@ -23,7 +23,7 @@
             <div id="dimensions" class="box-body">
                 {{-- For retrieving input --}}
                 @if(old('dimension'))
-                    @foreach(old('dimension') as $dimension)
+                    @foreach(old('dimension') as $key=>$dimension)
                         <div id="dimension" class="form-group">
                             @if($loop->index!=0)
                                 <button id="removeDimension" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
@@ -44,7 +44,11 @@
                                 <div class="col-md-3">
                                     <select id="unit" name="unit[]" class="form-control" required>
                                         @foreach($units as $unit)
-                                            <option id="unit{{$unit->id}}" value="{{$unit->id}}">{{$unit->name}}</option>
+                                            @if($unit->id == old('unit.'.$key))
+                                                <option value="{{$unit->id}}" selected>{{$unit->name}}</option>
+                                            @else
+                                                <option value="{{$unit->id}}">{{$unit->name}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -68,7 +72,7 @@
                             <div class="col-md-3">
                                 <select id="unit" name="unit[]" class="form-control" required>
                                     @foreach($units as $unit)
-                                        <option id="unit{{$unit->id}}" value="{{$unit->id}}">{{$unit->name}}</option>
+                                        <option value="{{$unit->id}}">{{$unit->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -99,9 +103,6 @@
             @endif
         ];
         $("#pt").val(activeTypes);
-        @if(old('isOriginal'))
-            $("#isOriginal[value={{old('isOriginal')}}]").prop('checked',true);
-        @endif
     </script>
     <script>
         $(document).ready(function (){

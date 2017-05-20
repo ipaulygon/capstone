@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(UserSeeder::class);
+        $this->call(VehicleMakeSeeder::class);
+        $this->call(VehicleModelSeeder::class);
         $this->call(SupplierSeeder::class);
         $this->call(SupplierPersonSeeder::class);
         $this->call(SupplierContactSeeder::class);
@@ -22,9 +24,25 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductVarianceSeeder::class);
         $this->call(TypeVarianceSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(ProductPriceSeeder::class);
+        $this->call(ProductVehicleSeeder::class);
+        $this->call(InventorySeeder::class);
         $this->call(ServiceCategorySeeder::class);
         $this->call(ServiceSeeder::class);
-        // $this->call(InspectionTypeSeeder::class);
-        // $this->call(InspectionItemSeeder::class);
+        $this->call(ServicePriceSeeder::class);
+        $this->call(InspectionTypeSeeder::class);
+        $this->call(InspectionItemSeeder::class);
+        $this->call(TechnicianSeeder::class);
+        $this->call(PackageSeeder::class);
+        $this->call(PackagePriceSeeder::class);
+        $this->call(PackageProductSeeder::class);
+        $this->call(PackageServiceSeeder::class);
+        $this->call(PromoSeeder::class);
+        $this->call(PromoPriceSeeder::class);
+        $this->call(PromoProductSeeder::class);
+        $this->call(PromoServiceSeeder::class);
+        $this->call(DiscountSeeder::class);
+        $this->call(DiscountProductSeeder::class);
+        $this->call(DiscountServiceSeeder::class);
     }
 }

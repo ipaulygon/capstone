@@ -12,8 +12,7 @@ class InspectionTypeSeeder extends Seeder
     public function run()
     {
         DB::table('inspection_type')->insert([
-            'name' => 'Tires',
-            'description' => '',
+            'type' => 'Tires',
             'isActive' => 1
         ]);
     }

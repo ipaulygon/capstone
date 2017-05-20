@@ -67,9 +67,7 @@ class ProductVarianceController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator)->withInput(
-                $request->except(['unit'])
-            );
+            return Redirect::back()->withErrors($validator)->withInput();
         }else{
             try{
                 DB::beginTransaction();

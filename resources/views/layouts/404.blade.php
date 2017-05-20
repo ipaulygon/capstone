@@ -15,7 +15,7 @@
 
                 <h3>
                     We could not find the page you were looking for.
-                    Meanwhile, you may return to <a href="{{url('/home')}}">dashboard</a>.
+                    Meanwhile, you may return to <a href="{{url('/dashboard')}}">dashboard</a>.
                 </h3>
                 </div>
                 <!-- /.error-content -->

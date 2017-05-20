@@ -19,7 +19,6 @@ class CreateProductVarianceTable extends Migration
             $table->string('name', 75);//for sizeCode
             $table->text('size');//size itself
             $table->text('units');
-            $table->boolean('isOriginal');
             $table->boolean('isActive');
         });
     }

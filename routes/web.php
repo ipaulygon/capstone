@@ -18,25 +18,31 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/home', 'HomeController@index')->name('home');
+	Route::resource('dashboard', 'DashboardController');
+	Route::resource('vehicle','VehicleController');
 	Route::resource('supplier','SupplierController');
 	Route::resource('type','ProductTypeController');
 	Route::resource('brand','ProductBrandController');
 	Route::resource('unit','ProductUnitController');
 	Route::resource('variance','ProductVarianceController');
 	Route::resource('product','ProductController');
-	Route::get('product/type/{id}','ProductController@type');
 	Route::resource('category','ServiceCategoryController');
 	Route::resource('service','ServiceController');
 	Route::resource('inspection','InspectionController');
 	Route::resource('package','PackageController');
-	Route::get('package/product/{id}','PackageController@product');
-	Route::get('package/service/{id}','PackageController@service');
 	Route::resource('promo','PromoController');
-	Route::get('promo/product/{id}','PromoController@product');
-	Route::get('promo/service/{id}','PromoController@service');
 	Route::resource('discount','DiscountController');
 	Route::resource('technician','TechnicianController');
+	// Transactions
+	Route::resource('purchase','PurchaseController');
+
+	//GetJSON
+	Route::get('type/remove/{id}','ProductTypeController@remove');
+	Route::get('product/type/{id}','ProductController@type');
+	Route::get('package/product/{id}','PackageController@product');
+	Route::get('package/service/{id}','PackageController@service');
+	Route::get('promo/product/{id}','PromoController@product');
+	Route::get('promo/service/{id}','PromoController@service');
 
 	// Reactivate
 	Route::patch('supplier/reactivate/{id}','SupplierController@reactivate');

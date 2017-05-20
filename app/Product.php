@@ -16,6 +16,7 @@ class Product extends Model
     	'typeId',
     	'brandId',
         'varianceId',
+        'isOriginal',
     	'isActive'  	
     ];
 
@@ -29,5 +30,9 @@ class Product extends Model
 
     public function variance(){
         return $this->belongsTo('App\ProductVariance','varianceId')->where('isActive',1);
+    }
+
+    public function vehicle(){
+        return $this->hasMany('App\ProductVehicle', 'productId')->where('isActive',1);
     }
 }

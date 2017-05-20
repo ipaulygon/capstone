@@ -25,10 +25,21 @@
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
+        var activeVehicles = [
+            @if(old('vehicle'))
+                @foreach(old('vehicle') as $vehicle)
+                    "{{$vehicle}}",
+                @endforeach
+            @endif
+        ];
+        $("#vehicle").val(activeVehicles);
         $(".select2").select2();
         @if(old('typeId'))
             changeType({{old('typeId')}});
             $('#pt').val({{old('typeId')}}).trigger("change");
+        @endif
+        @if(old('isOriginal'))
+            $("#isOriginal[value={{old('isOriginal')}}]").prop('checked',true);
         @endif
         $(document).ajaxStop(function() {
             @if(old('typeId'))

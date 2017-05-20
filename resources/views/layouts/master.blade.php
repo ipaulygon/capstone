@@ -13,6 +13,7 @@
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}
     @yield('style')
+    <link rel="shortcut icon" href="{{{ asset('favicon.ico') }}}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/ionicons.css') }}">
@@ -35,7 +36,7 @@
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
-            <a href="{{url('/home')}}" class="logo">
+            <a href="{{url('/dashboard')}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b></b></span>
                 <!-- logo for regular state and mobile devices -->
@@ -115,12 +116,13 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
                     <li class="treeview">
-                        <a href="{{url('/home')}}">
+                        <a href="{{url('/dashboard')}}">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="header">MAINTAINANCE</li>
+                    <li id="mVehicle"><a href="{{url('/vehicle')}}"><i class="fa fa-car"></i> <span>Vehicle</span></a></li>
                     {{-- START INVENTORY --}}
                     <li id="mi" class="treeview">
                         <a>
@@ -155,6 +157,8 @@
                     <li id="mPackage"><a href="{{url('/package')}}"><i class="fa fa-gift"></i> <span>Package</span></a></li>
                     <li id="mPromo"><a href="{{url('/promo')}}"><i class="fa fa-bookmark"></i> <span>Promo</span></a></li>
                     <li id="mDiscount"><a href="{{url('/discount')}}"><i class="fa fa-tags"></i> <span>Discounts</span></a></li>
+                    <li class="header">TRANSACTION</li>
+                    <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -175,7 +179,7 @@
             <!-- /.content -->
         </div>
         <footer class="main-footer">
-            <strong>Copyright © 2017 <a href="facebook.com">Rapide</a>.</strong> All rights reserved.
+            <strong>Copyright © 2017 <a href="http://facebook.com">Rapide</a>.</strong> All rights reserved.
         </footer>
     </div>
     <!-- Scripts -->
@@ -209,6 +213,11 @@
         $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
             checkboxClass: 'icheckbox_flat-green',
             radioClass: 'iradio_flat-green'
+        });
+        //Square blue color scheme for icheck
+        $('input[type="checkbox"].square-blue, input[type="radio"].square-blue').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue'
         });
     });
     </script>

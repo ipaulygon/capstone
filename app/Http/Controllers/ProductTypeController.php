@@ -48,6 +48,7 @@ class ProductTypeController extends Controller
     {
         $rules = [
             'name' => 'required|unique:product_type|max:50',
+            'category' => 'required',
             'brand.*' => 'required|max:50',
         ];
         $messages = [
@@ -57,6 +58,7 @@ class ProductTypeController extends Controller
         ];
         $niceNames = [
             'name' => 'Product Type',
+            'category' => 'Category',
             'brand.*' => 'Brand Name',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -69,6 +71,7 @@ class ProductTypeController extends Controller
                 DB::beginTransaction();
                 ProductType::create([
                     'name' => trim($request->name),
+                    'category' => trim($request->category),
                     'isActive' => 1
                 ]);
                 $type = ProductType::all()->last();
@@ -76,9 +79,7 @@ class ProductTypeController extends Controller
                 foreach ($brands as $brand) {
                     ProductBrand::updateOrCreate(
                         ['name' => $brand],
-                        [
-                            'isActive' => 1
-                        ]
+                        ['isActive' => 1]
                     );
                     $branded = ProductBrand::where('name',$brand)->first();
                     TypeBrand::firstOrCreate([
@@ -132,6 +133,7 @@ class ProductTypeController extends Controller
     {
         $rules = [
             'name' => ['required','max:50',Rule::unique('product_type')->ignore($id)],
+            'category' => 'required',
             'brand.*' => 'required|max:50',
         ];
         $messages = [
@@ -140,6 +142,7 @@ class ProductTypeController extends Controller
         ];
         $niceNames = [
             'name' => 'Product Type',
+            'category' => 'Category',
             'brand.*' => 'Brand Name',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -152,16 +155,15 @@ class ProductTypeController extends Controller
                 DB::beginTransaction();
                 $type = ProductType::findOrFail($id);
                 $type->update([
-                    'name' => trim($request->name)
+                    'name' => trim($request->name),
+                    'category' => trim($request->category)
                 ]);
                 TypeBrand::where('typeId',$id)->delete();
                 $brands = $request->brand;
                 foreach ($brands as $brand) {
                     ProductBrand::updateOrCreate(
                         ['name' => $brand],
-                        [
-                            'isActive' => 1
-                        ]
+                        ['isActive' => 1]
                     );
                     $branded = ProductBrand::where('name',$brand)->first();
                     TypeBrand::firstOrCreate([
@@ -211,5 +213,15 @@ class ProductTypeController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
+    }
+
+    public function remove(Request $request, $id){
+        $brandId = ProductBrand::where('name',$id)->first();
+        $product = Product::where('brandId',$brandId->id)->get();
+        if($product->isEmpty()){
+            return response()->json(['message'=>0]);
+        }else{
+            return response()->json(['message'=>'It seems that the record is still being used in other items. Discarding failed.']);
+        }
     }
 }

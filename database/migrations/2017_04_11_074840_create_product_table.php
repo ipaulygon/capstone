@@ -23,6 +23,7 @@ class CreateProductTable extends Migration
             $table->unsignedInteger('typeId');
             $table->unsignedInteger('brandId');
             $table->unsignedInteger('varianceId');
+            $table->string('isOriginal',50)->nullable();
             $table->boolean('isActive');
             $table->foreign('typeId')
                   ->references('id')->on('product_type')
