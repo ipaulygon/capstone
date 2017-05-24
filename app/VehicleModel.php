@@ -12,6 +12,7 @@ class VehicleModel extends Model
         'makeId',
     	'name',
         'year',
+        'transmission',
     	'isActive'  	
     ];
 

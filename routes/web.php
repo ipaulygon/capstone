@@ -35,6 +35,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('technician','TechnicianController');
 	// Transactions
 	Route::resource('purchase','PurchaseController');
+	Route::patch('purchase/final/{id}','PurchaseController@finalize');
+	Route::resource('delivery','DeliveryController');
+
+	//PDF
+	Route::get('purchase/pdf/{id}','PdfController@purchase');
 
 	//GetJSON
 	Route::get('type/remove/{id}','ProductTypeController@remove');
@@ -43,6 +48,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('package/service/{id}','PackageController@service');
 	Route::get('promo/product/{id}','PromoController@product');
 	Route::get('promo/service/{id}','PromoController@service');
+	Route::get('purchase/product/{id}','PurchaseController@product');
+	Route::get('delivery/header/{id}','DeliveryController@header');
+	Route::get('delivery/detail/{id}','DeliveryController@detail');
 
 	// Reactivate
 	Route::patch('supplier/reactivate/{id}','SupplierController@reactivate');

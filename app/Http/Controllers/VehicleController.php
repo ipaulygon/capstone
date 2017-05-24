@@ -72,11 +72,13 @@ class VehicleController extends Controller
                 $make = VehicleMake::all()->last();
                 $models = $request->model;
                 $years = $request->year;
+                $transmissions = $request->transmission;
                 foreach ($models as $key=>$model) {
                     VehicleModel::create([
                         'makeId' => $make->id,
                         'name' => $model,
                         'year' => $years[$key],
+                        'transmission' => $transmissions[$key],
                         'isActive' => 1  
                     ]);
                 }
@@ -154,9 +156,10 @@ class VehicleController extends Controller
                 VehicleModel::where('makeId',$id)->update(['isActive'=>0]);
                 $models = $request->model;
                 $years = $request->year;
+                $transmissions = $request->transmission;
                 foreach ($models as $key=>$model) {
                     VehicleModel::updateOrCreate(
-                        ['makeId' => $make->id,'name' => $model,'year' => $years[$key]],
+                        ['makeId' => $make->id,'name' => $model,'year' => $years[$key],'transmission' => $transmissions[$key]],
                         ['isActive' => 1]
                     );
                 }

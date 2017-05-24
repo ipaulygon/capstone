@@ -34,7 +34,7 @@
                                 <td>{{$make->name}}</td>
                                 <td>
                                     @foreach($make->model as $model)
-                                        <li>{{$model->year}} {{$model->name}}</li>
+                                        <li>{{$model->year}} {{$model->name}} - {{$model->transmission}}</li>
                                     @endforeach
                                 </td>
                                 <td class="pull-right">
@@ -68,7 +68,7 @@
                                 <td>{{$make->name}}</td>
                                 <td>
                                     @foreach($make->model as $model)
-                                        <li>{{$model->year}} {{$model->name}}</li>
+                                        <li>{{$model->year}} {{$model->name}} - {{$model->transmission}}</li>
                                     @endforeach
                                 </td>
                                 <td class="pull-right">

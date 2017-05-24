@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Model(s)</h3>
@@ -45,7 +45,7 @@
                             </button><br>
                         @endif
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 {!! Form::label('model', 'Model') !!}<span>*</span>
                                 {!! Form::input('text',null,$model->name,[
                                     'class' => 'form-control',
@@ -55,7 +55,7 @@
                                     'required'])
                                 !!}
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 {!! Form::label('year', 'Year') !!}<span>*</span>
                                 {!! Form::input('text',null,$model->year,[
                                     'class' => 'form-control year',
@@ -63,6 +63,20 @@
                                     'placeholder' => 'Year',
                                     'required'])
                                 !!}
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('trasmission', 'Transmission') !!}<span>*</span>
+                                    <select id="transmission" name="transmission[]" class="form-control" required>
+                                        @if($model->transmission=='AT')
+                                            <option value="AT" selected>Automatic</option>
+                                            <option value="MT">Manual</option>
+                                        @else
+                                            <option value="AT">Automatic</option>
+                                            <option value="MT" selected>Manual</option>
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>

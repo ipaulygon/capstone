@@ -35,6 +35,10 @@ function rowFinder(row){
 
 $(document).on('change', '#qty', function (){
     qty = $(this).val();
+    if(qty=='' || qty==null){
+        qty = 1;
+        $(this).val(1);
+    }
     stack = $(this).next('.hidden').val();
     price = this.title;
     price = eval(price+"*"+qty);
@@ -51,7 +55,7 @@ $(document).on('click','#pushProduct', function (){
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+part+")",
+                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden" class="hidden" value="0">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
@@ -140,7 +144,7 @@ function retrieveProduct(id,qty){
             var stack = eval(qty+"*"+data.product.price);
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+" ("+data.product.variance.name+part+")",
+                '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();

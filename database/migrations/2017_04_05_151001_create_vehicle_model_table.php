@@ -17,8 +17,9 @@ class CreateVehicleModelTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('makeId');
-            $table->string('name');
-            $table->string('year');
+            $table->string('name', 50);
+            $table->string('year', 4);
+            $table->string('transmission', 5);
             $table->boolean('isActive');
         });
     }

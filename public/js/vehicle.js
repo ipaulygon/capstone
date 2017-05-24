@@ -3,7 +3,8 @@ $(document).on("click", "#addModel", function (){
         '<button id="removeModel" type="button" class="btn btn-flat btn-danger btn-xs pull-right">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button><br>').appendTo('#models');
-    $(value).find("input").val("");
+    $(value).find('input').val('');
+    $(value).find('select').val('AT');
     $('.year').inputmask({ 
         alias: "integer",
         prefix: '',

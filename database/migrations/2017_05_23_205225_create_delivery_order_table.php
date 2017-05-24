@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInventoryTable extends Migration
+class CreateDeliveryOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,18 @@ class CreateInventoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('inventory', function (Blueprint $table) {
+        Schema::create('delivery_order', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('productId');
-            $table->integer('quantity');
+            $table->string('deliveryId', 50);
+            $table->string('purchaseId', 50);
             $table->timestamps();
-            $table->foreign('productId')
-                  ->references('id')->on('product')
+            $table->foreign('deliveryId')
+                  ->references('id')->on('delivery_header')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('purchaseId')
+                  ->references('id')->on('purchase_header')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -33,6 +37,6 @@ class CreateInventoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory');
+        Schema::dropIfExists('delivery_order');
     }
 }

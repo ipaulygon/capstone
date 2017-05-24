@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Inventory extends Model
 {
     protected $table = 'inventory';
-    public $incrementing = false;
     protected $fillable = [
     	'productId',
     	'quantity'	
