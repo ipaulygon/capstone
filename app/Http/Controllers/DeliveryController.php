@@ -98,6 +98,10 @@ class DeliveryController extends Controller
                     ]);
                 }
                 foreach($orders as $order){
+                    DeliveryOrder::create([
+                        'purchaseId' => $order,
+                        'deliveryId' => $id
+                    ]);
                     foreach($products as $key=>$product){
                         $detail = PurchaseDetail::where('purchaseId',''.$order)->where('productId',$product)->where('isActive',1)->first();
                         if(!empty($detail)){
@@ -143,7 +147,7 @@ class DeliveryController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -154,7 +158,7 @@ class DeliveryController extends Controller
      */
     public function edit($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -166,7 +170,7 @@ class DeliveryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -177,7 +181,7 @@ class DeliveryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
     }
 
     public function header($id)

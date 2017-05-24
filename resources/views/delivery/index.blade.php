@@ -34,38 +34,14 @@
                                 <td>{{$delivery->id}}</td>
                                 <td>{{$delivery->supplier}}</td>
                                 <td class="pull-right">
-                                    <a href="{{url('/delivery/'.$delivery->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
-                                        <i class="glyphicon glyphicon-edit"></i>
+                                    <a href="{{url('/delivery/pdf/'.$delivery->id)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                        <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
-                                    <button onclick="showModal({{$delivery->id}})"type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
-                                        <i class="glyphicon glyphicon-trash"></i>
-                                    </button>
-                                    {!! Form::open(['method'=>'delete','action' => ['DeliveryController@destroy',$delivery->id],'id'=>'del'.$delivery->id]) !!}
-                                    {!! Form::close() !!}
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                {{-- Deactivate --}}
-                <div id="deactivateModal" class="modal fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title">Discard</h4>
-                            </div>
-                            <div class="modal-body" style="text-align:center">
-                                Are you sure you want to discard this record?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <button id="deactivate" type="button" class="btn btn-danger">Discard</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -14,7 +14,11 @@ class DeliveryHeader extends Model
     ];
 
     public function detail(){
-    	return $this->hasMany('App\DeliveryDetail', 'deliveryId')->where('isActive',1);
+    	return $this->hasMany('App\DeliveryDetail', 'deliveryId');
+    }
+
+    public function order(){
+    	return $this->hasMany('App\DeliveryOrder', 'deliveryId');
     }
     
     public function supplier(){

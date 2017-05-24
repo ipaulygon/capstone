@@ -55,37 +55,37 @@
         <div class="center header">
             Rapide
         </div>
-        <label style="float:right;color:red">{{$purchase->id}}</label>
+        <label style="float:right;color:red">{{$delivery->id}}</label>
         <div style="clear:both"></div>
         <div class="center">
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            PURCHASE ORDER
+            RECEIVE DELIVERY
         </div><br>
         <div style="float:left" class="col-md-6">
-            Supplier: {{$purchase->supplier->name}}<br>
-            Address: {{$purchase->supplier->address}}
+            Supplier: {{$delivery->supplier->name}}<br>
+            Address: {{$delivery->supplier->address}}
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y')}}
+            Date: {{date('F j, Y')}}<br>
+            Reference Orders: 
+            @foreach($delivery->order as $order)
+                {{$order->purchaseId}}|
+            @endforeach
         </div>
         <div style="clear:both"></div>
         <br>
         <table width="100%">
             <thead>
                 <tr>
-                    <th width="5%" class="text-right">Qty</th>
                     <th>Product</th>
-                    <th>Vehicle</th>
-                    <th class="text-right">Unit Price</th>
-                    <th class="text-right">Total Cost</th>
+                    <th width="20%" class="text-right">Quantity Delivered</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($purchase->detail as $product)
+                @foreach($delivery->detail as $product)
                 <tr>
-                    <td class="text-right">{{number_format($product->quantity)}}</td>
                     <?php
                         if($product->product->isOriginal!=null){
                             $part = "- ".$product->product->isOriginal;
@@ -94,21 +94,18 @@
                         }
                     ?>
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}})</td>
-                    <td>{{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})</td>
-                    <td class="text-right">{{number_format($product->product->price,2)}}</td>
-                    <td class="text-right">{{number_format($product->quantity*$product->product->price,2)}}</td>
+                    <td class="text-right">{{number_format($product->quantity)}}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
         <div class="footer">
             <div style="float:left" class="col-md-6">
-                Please deliver to: ______________________<br>
-                Approved by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br> 
+                Received by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br>
+                Counter Checked by: ______________________<br> 
             </div>
             <div style="clear:both"></div>
             <br>
-            Remarks: {{$purchase->remarks}}
         </div>
     </body>
 </html>

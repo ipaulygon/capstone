@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
+	Route::get('delivery/pdf/{id}','PdfController@delivery');
 
 	//GetJSON
 	Route::get('type/remove/{id}','ProductTypeController@remove');
