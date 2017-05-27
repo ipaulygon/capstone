@@ -143,6 +143,7 @@
     <script src="{{ URL::asset('js/supplier.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
             $(".contact").inputmask("(+639)99-9999-999");

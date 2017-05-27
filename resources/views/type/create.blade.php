@@ -105,6 +105,7 @@
             $("#category[value={{old('category')}}]").prop('checked',true);
         @endif
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mType').addClass('active');
         });

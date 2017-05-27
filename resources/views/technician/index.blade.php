@@ -160,6 +160,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mTechnician').addClass('active');
         });

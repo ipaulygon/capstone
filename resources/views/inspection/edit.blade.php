@@ -78,6 +78,7 @@
     <script src="{{ URL::asset('js/inspection.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mInspection').addClass('active');
         });

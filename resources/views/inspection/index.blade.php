@@ -142,6 +142,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mInspection').addClass('active');
         });

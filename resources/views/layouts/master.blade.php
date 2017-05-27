@@ -33,7 +33,7 @@
         ]) !!};
     </script>
 </head>
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="fixed hold-transition skin-yellow sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
@@ -130,46 +130,53 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="header">MAINTAINANCE</li>
-                    <li id="mVehicle"><a href="{{url('/vehicle')}}"><i class="fa fa-car"></i> <span>Vehicle</span></a></li>
-                    {{-- START INVENTORY --}}
-                    <li id="mi" class="treeview">
+                    <li class="header">MAINTENANCE</li>
+                    <li id="maintenance" class="treeview">
                         <a>
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>Inventory</span>
+                            <i class="fa fa-database"></i>
+                            <span>Maintenance</span>
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="mSupplier"><a href="{{url('/supplier')}}"><i class="fa fa-circle-o"></i> Supplier</a></li>
-                            <li id="mType"><a href="{{url('/type')}}"><i class="fa fa-circle-o"></i> Product Type</a></li>
-                            <li id="mBrand"><a href="{{url('/brand')}}"><i class="fa fa-circle-o"></i> Product Brand</a></li>
-                            <li id="mUnit"><a href="{{url('/unit')}}"><i class="fa fa-circle-o"></i> Product Unit</a></li>
-                            <li id="mVariance"><a href="{{url('/variance')}}"><i class="fa fa-circle-o"></i> Product Variance</a></li>
-                            <li id="mProduct"><a href="{{url('/product')}}"><i class="fa fa-circle-o"></i> Product</a></li>
+                            <li id="mVehicle"><a href="{{url('/vehicle')}}"><i class="fa fa-car"></i> <span>Vehicle</span></a></li>
+                            <li id="mi" class="treeview">
+                                <a>
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>Inventory</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li id="mSupplier"><a href="{{url('/supplier')}}"><i class="fa fa-circle-o"></i> Supplier</a></li>
+                                    <li id="mType"><a href="{{url('/type')}}"><i class="fa fa-circle-o"></i> Product Type</a></li>
+                                    <li id="mBrand"><a href="{{url('/brand')}}"><i class="fa fa-circle-o"></i> Product Brand</a></li>
+                                    <li id="mUnit"><a href="{{url('/unit')}}"><i class="fa fa-circle-o"></i> Product Unit</a></li>
+                                    <li id="mVariance"><a href="{{url('/variance')}}"><i class="fa fa-circle-o"></i> Product Variance</a></li>
+                                    <li id="mProduct"><a href="{{url('/product')}}"><i class="fa fa-circle-o"></i> Product</a></li>
+                                </ul>
+                            </li>
+                            <li id="ms" class="treeview">
+                                <a>
+                                    <i class="fa fa-wrench"></i>
+                                    <span>Service</span>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li id="mCategory"><a href="{{url('/category')}}"><i class="fa fa-circle-o"></i> Service Category</a></li>
+                                    <li id="mService"><a href="{{url('/service')}}"><i class="fa fa-circle-o"></i> Service</a></li>
+                                    <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
+                                    <li id="mTechnician"><a href="{{url('/technician')}}"><i class="fa fa-circle-o"></i>Technician</a></li>
+                                </ul>
+                            </li>
+                            <li id="mPackage"><a href="{{url('/package')}}"><i class="fa fa-gift"></i> <span>Package</span></a></li>
+                            <li id="mPromo"><a href="{{url('/promo')}}"><i class="fa fa-bookmark"></i> <span>Promo</span></a></li>
+                            <li id="mDiscount"><a href="{{url('/discount')}}"><i class="fa fa-tags"></i> <span>Discounts</span></a></li>
                         </ul>
                     </li>
-                    {{-- END INVENTORY/START SERVICE --}}
-                    <li id="ms" class="treeview">
-                        <a>
-                            <i class="fa fa-wrench"></i>
-                            <span>Service</span>
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li id="mCategory"><a href="{{url('/category')}}"><i class="fa fa-circle-o"></i> Service Category</a></li>
-                            <li id="mService"><a href="{{url('/service')}}"><i class="fa fa-circle-o"></i> Service</a></li>
-                            <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
-                            <li id="mTechnician"><a href="{{url('/technician')}}"><i class="fa fa-circle-o"></i>Technician</a></li>
-                        </ul>
-                    </li>
-                    {{-- END SERVICE START INDIVIDUAL --}}
-                    <li id="mPackage"><a href="{{url('/package')}}"><i class="fa fa-gift"></i> <span>Package</span></a></li>
-                    <li id="mPromo"><a href="{{url('/promo')}}"><i class="fa fa-bookmark"></i> <span>Promo</span></a></li>
-                    <li id="mDiscount"><a href="{{url('/discount')}}"><i class="fa fa-tags"></i> <span>Discounts</span></a></li>
-                    <li class="header">TRANSACTION</li>
+                    <li class="header">TRANSACTIONS</li>
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
+                    <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -209,28 +216,28 @@
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
     <script>
-    $(function () {
-        //iCheck for checkbox and radio inputs
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
+        $(function () {
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            });
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass: 'iradio_minimal-red'
+            });
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue'
+            });
+            //Square blue color scheme for icheck
+            $('input[type="checkbox"].square-blue, input[type="radio"].square-blue').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue'
+            });
         });
-        //Red color scheme for iCheck
-        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-            checkboxClass: 'icheckbox_minimal-red',
-            radioClass: 'iradio_minimal-red'
-        });
-        //Flat red color scheme for iCheck
-        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue'
-        });
-        //Square blue color scheme for icheck
-        $('input[type="checkbox"].square-blue, input[type="radio"].square-blue').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue'
-        });
-    });
     </script>
     @yield('script')
 </body>

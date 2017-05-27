@@ -158,6 +158,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mPackage').addClass('active');
         });
         function showModal(id){

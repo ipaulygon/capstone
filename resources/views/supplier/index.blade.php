@@ -158,6 +158,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
         });

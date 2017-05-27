@@ -137,6 +137,7 @@
     <script src="{{ URL::asset('js/vehicle.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mVehicle').addClass('active');
             $('.year').inputmask({ 
                 alias: "integer",

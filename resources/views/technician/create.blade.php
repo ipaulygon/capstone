@@ -22,6 +22,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mTechnician').addClass('active');
             $('#contact').inputmask("(+639)99-9999-999");

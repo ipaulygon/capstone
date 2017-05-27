@@ -29,6 +29,7 @@
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mPackage').addClass('active');
             $("#price").inputmask({ 
                 alias: "currency",

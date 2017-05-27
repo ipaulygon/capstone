@@ -182,6 +182,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mPromo').addClass('active');
         });
         function showModal(id){

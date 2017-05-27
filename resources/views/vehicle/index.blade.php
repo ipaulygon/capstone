@@ -142,6 +142,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mVehicle').addClass('active');
         });
         function showModal(id){

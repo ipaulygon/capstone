@@ -27,6 +27,7 @@
     </script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mService').addClass('active');
             $("#price").inputmask({ 

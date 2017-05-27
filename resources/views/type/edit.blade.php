@@ -89,6 +89,7 @@
         $('.square-blue').iCheck('check');
         $("#category[value={{$type->category}}]").prop('checked',true);
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mType').addClass('active');
         });

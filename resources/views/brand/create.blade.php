@@ -29,6 +29,7 @@
     </script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mBrand').addClass('active');
         });

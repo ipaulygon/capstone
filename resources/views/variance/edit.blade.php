@@ -83,6 +83,7 @@
     </script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mVariance').addClass('active');
             $(".dim").inputmask({ 

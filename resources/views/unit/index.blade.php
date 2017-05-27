@@ -221,6 +221,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mUnit').addClass('active');
         });

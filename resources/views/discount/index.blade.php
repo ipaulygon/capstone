@@ -160,6 +160,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mDiscount').addClass('active');
         });
         function showModal(id){

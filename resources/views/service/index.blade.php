@@ -148,6 +148,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mService').addClass('active');
         });

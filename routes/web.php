@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('purchase/final/{id}','PurchaseController@finalize');
 	Route::resource('delivery','DeliveryController');
 	Route::resource('inspect','InspectController');
+	Route::resource('estimate','EstimateController');
 
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');

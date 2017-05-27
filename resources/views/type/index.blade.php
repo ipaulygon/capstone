@@ -144,6 +144,7 @@
                 info: false,
                 responsive: true,
             });
+            $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mType').addClass('active');
         });

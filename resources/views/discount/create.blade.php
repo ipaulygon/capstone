@@ -41,6 +41,7 @@
     </script>
     <script>
         $(document).ready(function (){
+            $('#maintenance').addClass('active');
             $('#mDiscount').addClass('active');
             $("#rate").inputmask({ 
                 alias: "percentage",
