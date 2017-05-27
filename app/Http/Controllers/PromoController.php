@@ -93,7 +93,7 @@ class PromoController extends Controller
                 $endDate = explode('/',$dates[1]); // MM[0] DD[1] YYYY[2] 
                 $finalEndDate = "$endDate[2]-$endDate[0]-$endDate[1]";
                 $stock = (trim($request->stock) == '' ? null : trim($request->stock));
-                Promo::create([
+                $promo = Promo::create([
                     'name' => trim($request->name),
                     'price' => trim(str_replace(',','',$request->price)),
                     'dateStart' => $finalStartDate,
@@ -101,7 +101,6 @@ class PromoController extends Controller
                     'stock' => $stock,
                     'isActive' => 1
                 ]);
-                $promo = Promo::all()->last();
                 $products = $request->product;
                 $qty = $request->qty;
                 $services = $request->service;

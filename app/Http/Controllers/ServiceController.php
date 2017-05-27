@@ -79,14 +79,13 @@ class ServiceController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Service::create([
+                $service = Service::create([
                     'name' => trim($request->name),
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
                     'price' => trim(str_replace(',','',$request->price)),
                     'isActive' => 1
                 ]);
-                $service = Service::all()->last();
                 ServicePrice::create([
                     'serviceId' => $service->id,
                     'price' => trim(str_replace(',','',$request->price))

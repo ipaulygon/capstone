@@ -80,12 +80,11 @@ class DiscountController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Discount::create([
+                $discount = Discount::create([
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
                     'isActive' => 1
                 ]);
-                $discount = Discount::all()->last();
                 $products = $request->product;
                 $services = $request->service;
                 if(!empty($products)){

@@ -68,12 +68,11 @@ class SupplierController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Supplier::create([
+                $supplier = Supplier::create([
                     'name' => trim($request->name),
                     'address' => trim($request->address),
                     'isActive' => 1
                 ]);
-                $supplier = Supplier::all()->last();
                 $persons = $request->spName;
                 $contacts = $request->scNo;
                 foreach ($persons as $person) {

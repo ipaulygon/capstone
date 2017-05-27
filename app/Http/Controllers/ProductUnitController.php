@@ -46,7 +46,7 @@ class ProductUnitController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:product_unit|max:20',
+            'name' => 'required|alpha|unique:product_unit|max:20',
             'description' => 'required|max:50',
         ];
         $messages = [
@@ -115,7 +115,7 @@ class ProductUnitController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:20',Rule::unique('product_unit')->ignore(trim($request->id))],
+            'name' => ['required','alpha','max:20',Rule::unique('product_unit')->ignore(trim($request->id))],
             'description' => 'required|max:50',
         ];
         $messages = [

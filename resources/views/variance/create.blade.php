@@ -11,7 +11,7 @@
 @section('content')
     {!! Form::open(['url' => 'variance']) !!}
     @include('variance.form')
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">Dimension(s)</h3>
@@ -32,16 +32,17 @@
                             @endif
                             {!! Form::label('dimension', 'Dimension') !!}<span>*</span>
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     {!! Form::input('text',null,$dimension,[
-                                        'class' => 'form-control',
+                                        'class' => 'form-control dim',
+                                        'id' => 'dim',
                                         'name' => 'dimension[]',
                                         'placeholder'=>'Dimension',
                                         'maxlength'=>'50',
                                         'required'])
                                     !!}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <select id="unit" name="unit[]" class="form-control" required>
                                         @foreach($units as $unit)
                                             @if($unit->id == old('unit.'.$key))
@@ -60,16 +61,16 @@
                     <div id="dimension" class="form-group">
                         {!! Form::label('dimension', 'Dimension') !!}<span>*</span>
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 {!! Form::input('text',null,null,[
-                                    'class' => 'form-control',
+                                    'class' => 'form-control dim',
                                     'name' => 'dimension[]',
                                     'placeholder'=>'Dimension',
                                     'maxlength'=>'50',
                                     'required'])
                                 !!}
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <select id="unit" name="unit[]" class="form-control" required>
                                     @foreach($units as $unit)
                                         <option value="{{$unit->id}}">{{$unit->name}}</option>
@@ -91,6 +92,10 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('js/variance.js') }}"></script>
     <script>
@@ -108,6 +113,13 @@
         $(document).ready(function (){
             $('#mi').addClass('active');
             $('#mVariance').addClass('active');
+            $(".dim").inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 0,
+                max: 10000,
+            });
         });
     </script>
 @stop

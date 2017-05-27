@@ -48,8 +48,8 @@ class ProductVarianceController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:product_variance|max:75',
-            'dimension.*' => 'required|max:50',
+            'name' => 'required|unique:product_variance|max:50',
+            'dimension.*' => 'required|integer',
             'unit.*' => 'required',
             'type' => 'required'
         ];
@@ -140,8 +140,8 @@ class ProductVarianceController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:75',Rule::unique('product_variance')->ignore($id)],
-            'dimension.*' => 'required',
+            'name' => ['required','max:50',Rule::unique('product_variance')->ignore($id)],
+            'dimension.*' => 'required|integer',
             'unit.*' => 'required',
             'type' => 'required'
         ];
@@ -208,6 +208,7 @@ class ProductVarianceController extends Controller
             $variance->update([
                 'isActive' => 0
             ]);
+            TypeVariance::where('varianceId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
         }else{
             $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');

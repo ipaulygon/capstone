@@ -33,6 +33,7 @@
         $(document).ajaxStart(function() { Pace.restart(); });
         $(document).ready(function (){
             $('#mPromo').addClass('active');
+            $('#date').inputmask('99/99/9999-99/99/9999');
             $("#price").inputmask({ 
                 alias: "currency",
                 prefix: '',

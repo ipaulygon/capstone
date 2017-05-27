@@ -84,12 +84,11 @@ class PackageController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Package::create([
+                $package = Package::create([
                     'name' => trim($request->name),
                     'price' => trim(str_replace(',','',$request->price)),
                     'isActive' => 1
                 ]);
-                $package = Package::all()->last();
                 $products = $request->product;
                 $qty = $request->qty;
                 $services = $request->service;

@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('purchase','PurchaseController');
 	Route::patch('purchase/final/{id}','PurchaseController@finalize');
 	Route::resource('delivery','DeliveryController');
+	Route::resource('inspect','InspectController');
 
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
@@ -52,8 +53,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('purchase/product/{id}','PurchaseController@product');
 	Route::get('delivery/header/{id}','DeliveryController@header');
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
+	Route::get('inspect/customer/{name}','InspectController@customer');
+	Route::get('inspect/vehicle/{name}','InspectController@vehicle');
 
 	// Reactivate
+	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');
 	Route::patch('supplier/reactivate/{id}','SupplierController@reactivate');
 	Route::patch('type/reactivate/{id}','ProductTypeController@reactivate');
 	Route::patch('brand/reactivate/{id}','ProductBrandController@reactivate');

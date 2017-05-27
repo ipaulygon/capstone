@@ -5,8 +5,8 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
 @stop
 
 @section('content')

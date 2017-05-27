@@ -51,7 +51,7 @@
                                         <a href="{{url('/purchase/'.$purchase->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                             <i class="glyphicon glyphicon-edit"></i>
                                         </a>
-                                        <button onclick="showModal({{$purchase->id}})"type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
+                                        <button onclick="showModal('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
                                             <i class="glyphicon glyphicon-trash"></i>
                                         </button>
                                         {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}

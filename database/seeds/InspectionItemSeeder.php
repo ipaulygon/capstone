@@ -12,19 +12,20 @@ class InspectionItemSeeder extends Seeder
     public function run()
     {
         DB::table('inspection_item')->insert([
-            'name' => 'Front Left Tire',
+            'name' => 'Head Light',
             'form' => '[
                             {
                                 "type": "radio-group",
                                 "required": true,
                                 "label": "Rating",
                                 "inline": true,
-                                "className": "flat-red",
-                                "name": "rating",
+                                "className": "",
+                                "name": "radio-group-1495719902602",
                                 "values": [
                                     {
                                         "label": "😃",
-                                        "value": "1"
+                                        "value": "1",
+                                        "selected": true
                                     },
                                     {
                                         "label": "😐",
@@ -41,7 +42,7 @@ class InspectionItemSeeder extends Seeder
                                 "label": "Condition",
                                 "placeholder": "Condition",
                                 "className": "form-control",
-                                "name": "condition",
+                                "name": "text-1495719902626",
                                 "subtype": "text",
                                 "maxlength": "100"
                             }
@@ -50,19 +51,20 @@ class InspectionItemSeeder extends Seeder
             'isActive' => 1
         ]);
         DB::table('inspection_item')->insert([
-            'name' => 'Rear Left Tire',
+            'name' => 'Tail Light',
             'form' => '[
                             {
                                 "type": "radio-group",
                                 "required": true,
                                 "label": "Rating",
                                 "inline": true,
-                                "className": "flat-red",
-                                "name": "rating",
+                                "className": "",
+                                "name": "radio-group-1495720031404",
                                 "values": [
                                     {
                                         "label": "😃",
-                                        "value": "1"
+                                        "value": "1",
+                                        "selected": true
                                     },
                                     {
                                         "label": "😐",
@@ -79,83 +81,7 @@ class InspectionItemSeeder extends Seeder
                                 "label": "Condition",
                                 "placeholder": "Condition",
                                 "className": "form-control",
-                                "name": "condition",
-                                "subtype": "text",
-                                "maxlength": "100"
-                            }
-                        ]',
-            'typeId' => 1,
-            'isActive' => 1
-        ]);
-        DB::table('inspection_item')->insert([
-            'name' => 'Front Right Tire',
-            'form' => '[
-                            {
-                                "type": "radio-group",
-                                "required": true,
-                                "label": "Rating",
-                                "inline": true,
-                                "className": "flat-red",
-                                "name": "rating",
-                                "values": [
-                                    {
-                                        "label": "😃",
-                                        "value": "1"
-                                    },
-                                    {
-                                        "label": "😐",
-                                        "value": "2"
-                                    },
-                                    {
-                                        "label": "☹️",
-                                        "value": "3"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "label": "Condition",
-                                "placeholder": "Condition",
-                                "className": "form-control",
-                                "name": "condition",
-                                "subtype": "text",
-                                "maxlength": "100"
-                            }
-                        ]',
-            'typeId' => 1,
-            'isActive' => 1
-        ]);
-        DB::table('inspection_item')->insert([
-            'name' => 'Rear Right Tire',
-            'form' => '[
-                            {
-                                "type": "radio-group",
-                                "required": true,
-                                "label": "Rating",
-                                "inline": true,
-                                "className": "flat-red",
-                                "name": "rating",
-                                "values": [
-                                    {
-                                        "label": "😃",
-                                        "value": "1"
-                                    },
-                                    {
-                                        "label": "😐",
-                                        "value": "2"
-                                    },
-                                    {
-                                        "label": "☹️",
-                                        "value": "3"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "label": "Condition",
-                                "placeholder": "Condition",
-                                "className": "form-control",
-                                "name": "condition",
+                                "name": "text-1495720031415",
                                 "subtype": "text",
                                 "maxlength": "100"
                             }

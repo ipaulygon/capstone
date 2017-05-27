@@ -66,11 +66,10 @@ class InspectionController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                InspectionType::create([
+                $type = InspectionType::create([
                     'type' => trim($request->type),
                     'isActive' => 1
                 ]);
-                $type = InspectionType::all()->last();
                 $items = $request->item;
                 $forms = $request->inspectionForm;
                 foreach ($items as $key=>$item) {

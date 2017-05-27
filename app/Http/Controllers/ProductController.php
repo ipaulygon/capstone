@@ -74,16 +74,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',trim($request->isOriginal))],
-            'description' => 'max:50',
-            'price' => 'required|between:0,500000',
-            'reorder' => 'required|integer|between:0,100',
-            'typeId' => 'required',
-            'brandId' => 'required',
-            'varianceId' => 'required',
-            'isOriginal' => 'nullable|required'
-        ];
+        $part = ProductType::findOrFail($request->typeId)->first()->category;
+        if($part=='Supplies'){
+            $rules = [
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)],
+                'description' => 'max:50',
+                'price' => 'required|between:0,500000',
+                'reorder' => 'required|integer|between:0,100',
+                'typeId' => 'required',
+                'brandId' => 'required',
+                'varianceId' => 'required',
+            ];
+        }else{
+            $rules = [
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)],
+                'description' => 'max:50',
+                'price' => 'required|between:0,500000',
+                'reorder' => 'required|integer|between:0,100',
+                'typeId' => 'required',
+                'brandId' => 'required',
+                'varianceId' => 'required',
+                'isOriginal' => 'required'
+            ];
+        }
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
@@ -97,7 +110,6 @@ class ProductController extends Controller
             'typeId' => 'Product Type',
             'brandId' => 'Product Brand',
             'varianceId' => 'Product Variance',
-            'isOriginal' => 'Part Type',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -107,7 +119,7 @@ class ProductController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                Product::create([
+                $product = Product::create([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
                     'price' => trim(str_replace(',','',$request->price)),
@@ -118,7 +130,6 @@ class ProductController extends Controller
                     'isOriginal' => $request->isOriginal,
                     'isActive' => 1
                 ]);
-                $product = Product::all()->last();
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
                     foreach($vehicles as $vehicle){
@@ -187,16 +198,29 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',trim($request->isOriginal))->ignore($id)],
-            'description' => 'max:50',
-            'price' => 'required|between:0,500000',
-            'reorder' => 'required|integer|between:0,100',
-            'typeId' => 'required',
-            'brandId' => 'required',
-            'varianceId' => 'required',
-            'isOriginal' => 'nullable|required'
-        ];
+        $part = ProductType::findOrFail($request->typeId)->first()->category;
+        if($part=='Supplies'){
+            $rules = [
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->ignore($id)],
+                'description' => 'max:50',
+                'price' => 'required|between:0,500000',
+                'reorder' => 'required|integer|between:0,100',
+                'typeId' => 'required',
+                'brandId' => 'required',
+                'varianceId' => 'required',
+            ];
+        }else{
+            $rules = [
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)->ignore($id)],
+                'description' => 'max:50',
+                'price' => 'required|between:0,500000',
+                'reorder' => 'required|integer|between:0,100',
+                'typeId' => 'required',
+                'brandId' => 'required',
+                'varianceId' => 'required',
+                'isOriginal' => 'required'
+            ];
+        }
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
@@ -209,7 +233,6 @@ class ProductController extends Controller
             'typeId' => 'Product Type',
             'brandId' => 'Product Brand',
             'varianceId' => 'Product Variance',
-            'isOriginal' => 'Part Type'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 

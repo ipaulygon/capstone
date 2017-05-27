@@ -21,8 +21,12 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script>
-        $("#sc").val({{old('categoryId')}});
-        $("#sizeId[value={{old('size')}}]").prop('checked',true);
+        @if(old('categoryId'))
+            $("#sc").val({{old('categoryId')}});
+        @endif
+        @if(old('size'))
+            $("#sizeId[value={{old('size')}}]").prop('checked',true);
+        @endif
         $(".select2").select2();
     </script>
     <script>

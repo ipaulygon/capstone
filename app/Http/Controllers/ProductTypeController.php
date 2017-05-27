@@ -69,12 +69,11 @@ class ProductTypeController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                ProductType::create([
+                $type = ProductType::create([
                     'name' => trim($request->name),
                     'category' => trim($request->category),
                     'isActive' => 1
                 ]);
-                $type = ProductType::all()->last();
                 $brands = $request->brand;
                 foreach ($brands as $brand) {
                     ProductBrand::updateOrCreate(

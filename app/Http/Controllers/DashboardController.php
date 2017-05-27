@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
+use Validator;
+use Redirect;
+use Session;
+use DB;
+use Illuminate\Validation\Rule;
 class DashboardController extends Controller
 {
     /**
@@ -13,7 +16,16 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return View('dashboard');
+        $stocks = DB::table('inventory as i')
+            ->join('product as p','p.id','i.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->where('p.reorder','>=','i.quantity')
+            ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as original','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+        return View('dashboard',compact('stocks'));
     }
 
     /**

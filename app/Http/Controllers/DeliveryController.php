@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DeliveryHeader;
 use App\DeliveryDetail;
+use App\DeliveryOrder;
 use App\PurchaseHeader;
 use App\PurchaseDetail;
 use App\Inventory;
@@ -75,11 +76,10 @@ class DeliveryController extends Controller
                 DB::beginTransaction();
                 $id = DeliveryHeader::all()->count() + 1;
                 $id = 'DELIVERY'.str_pad($id, 5, '0', STR_PAD_LEFT); 
-                DeliveryHeader::create([
+                $delivery = DeliveryHeader::create([
                     'id' => $id,
                     'supplierId' => $request->supplierId,
                 ]);
-                $delivery = DeliveryHeader::all()->last();
                 $products = $request->product;
                 $qtys = $request->qty;
                 $orders = $request->order;

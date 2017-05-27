@@ -66,15 +66,17 @@ class ProductBrandController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                ProductBrand::create([
+                $brand = ProductBrand::create([
                     'name' => trim($request->name),
                     'isActive' => 1
                 ]);
-                $brand = ProductBrand::all()->last();
                 $types = $request->type;
                 foreach ($types as $type) {
                     TypeBrand::updateOrCreate(
-                        ['typeId' => $type,'brandId' => $brand->id],
+                        [
+                            'typeId' => $type,
+                            'brandId' => $brand->id
+                        ],
                         [
                             'typeId' => $type,
                             'brandId' => $brand->id
@@ -185,6 +187,7 @@ class ProductBrandController extends Controller
             $brand->update([
                 'isActive' => 0
             ]);
+            TypeBrand::where('brandId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
         }else{
             $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');

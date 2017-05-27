@@ -14,6 +14,7 @@
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}
     @yield('style')
     <link rel="shortcut icon" href="{{{ asset('favicon.ico') }}}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/jquery/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/font-awesome.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/ionicons.css') }}">
@@ -125,7 +126,7 @@
                 <ul class="sidebar-menu">
                     <li class="treeview">
                         <a href="{{url('/dashboard')}}">
-                            <i class="fa fa-dashboard"></i>
+                            <i class="fa fa-line-chart"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
@@ -168,6 +169,7 @@
                     <li class="header">TRANSACTION</li>
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
+                    <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -220,8 +222,8 @@
         });
         //Flat red color scheme for iCheck
         $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-            checkboxClass: 'icheckbox_flat-green',
-            radioClass: 'iradio_flat-green'
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue'
         });
         //Square blue color scheme for icheck
         $('input[type="checkbox"].square-blue, input[type="radio"].square-blue').iCheck({

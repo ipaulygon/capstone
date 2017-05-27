@@ -41,9 +41,6 @@ class PurchaseController extends Controller
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
-            // ->join('product_vehicle as v','v.productId','p.id')
-            // ->join('vehicle_model as vd','vd.id','v.modelId')
-            // ->join('vehicle_make as vk','vk.id','vd.makeId')
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
@@ -86,7 +83,7 @@ class PurchaseController extends Controller
                 DB::beginTransaction();
                 $id = PurchaseHeader::all()->count() + 1;
                 $id = 'ORDER'.str_pad($id, 5, '0', STR_PAD_LEFT); 
-                PurchaseHeader::create([
+                $purchase = PurchaseHeader::create([
                     'id' => $id,
                     'supplierId' => $request->supplierId,
                     'remarks' => trim($request->remarks),
@@ -94,7 +91,6 @@ class PurchaseController extends Controller
                     'isFinalize' => 0,
                     'isDelivered' => 0
                 ]);
-                $purchase = PurchaseHeader::all()->last();
                 $products = $request->product;
                 $qtys = $request->qty;
                 $models = $request->modelId;
@@ -149,9 +145,6 @@ class PurchaseController extends Controller
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
-            // ->join('product_vehicle as v','v.productId','p.id')
-            // ->join('vehicle_model as vd','vd.id','v.modelId')
-            // ->join('vehicle_make as vk','vk.id','vd.makeId')
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
@@ -231,6 +224,7 @@ class PurchaseController extends Controller
         $purchase->update([
             'isActive' => 0
         ]);
+        PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
         $request->session()->flash('success', 'Successfully deactivated.');  
         return Redirect::back();
     }

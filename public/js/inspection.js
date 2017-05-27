@@ -41,8 +41,7 @@ $(document).on('click', '#pushItem', function (){
                     "required": true,
                     "label": "Rating",
                     "inline": true,
-                    "className": "flat-red",
-                    "name": "rating",
+                    "className": "",
                     "values": [
                         {"label": "😃","value": "1"},
                         {"label": "😐","value": "2"},
@@ -54,9 +53,8 @@ $(document).on('click', '#pushItem', function (){
                     "label": "Condition",
                     "placeholder": "Condition",
                     "className": "form-control",
-                    "name": "condition",
                     "subtype": "text",
-                    "maxlength": "100"
+                    "maxlength": "100",
                 }
             ]//end of defaultFields
         }

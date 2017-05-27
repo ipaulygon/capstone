@@ -65,11 +65,10 @@ class VehicleController extends Controller
         else{
             try{
                 DB::beginTransaction();
-                VehicleMake::create([
+                $make = VehicleMake::create([
                     'name' => trim($request->name),
                     'isActive' => 1
                 ]);
-                $make = VehicleMake::all()->last();
                 $models = $request->model;
                 $years = $request->year;
                 $transmissions = $request->transmission;
@@ -180,8 +179,23 @@ class VehicleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $vehicle = VehicleMake::findOrFail($id);
+        $vehicle->update([
+            'isActive' => 0
+        ]);
+        $request->session()->flash('success', 'Successfully deactivated.');  
+        return Redirect::back();
+    }
+    
+    public function reactivate(Request $request, $id)
+    {
+        $vehicle = VehicleMake::findOrFail($id);
+        $vehicle->update([
+            'isActive' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully reactivated.');  
+        return Redirect::back();
     }
 }

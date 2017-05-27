@@ -6,6 +6,13 @@ $(document).on("click", "#addDimension", function (){
     var select = $('#unit').closest();
     $('#dimension').find('#unit option').clone().appendTo(select);
     $(value).find('input').val('');
+    $(".dim").inputmask({ 
+        alias: "integer",
+        prefix: '',
+        allowMinus: false,
+        min: 0,
+        max: 10000,
+    });
 });
 
 $(document).on("click", "#removeDimension", function (){
