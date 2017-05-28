@@ -49,7 +49,7 @@
                                 </td>
                                 <td>{{$inspect->remarks}}</td>
                                 <td class="pull-right">
-                                    <a href="{{url('/inspect/'.$inspect->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                    <a href="{{url('/inspect/'.$inspect->inspectId.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                 </td>

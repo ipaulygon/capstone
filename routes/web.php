@@ -56,6 +56,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
 	Route::get('inspect/customer/{name}','InspectController@customer');
 	Route::get('inspect/vehicle/{name}','InspectController@vehicle');
+	Route::get('estimate/customer/{name}','EstimateController@customer');
+	Route::get('estimate/vehicle/{name}','EstimateController@vehicle');
+	Route::get('estimate/product/{id}','EstimateController@product');
+	Route::get('estimate/service/{id}','EstimateController@service');
+	Route::get('estimate/package/{id}','EstimateController@package');
+	Route::get('estimate/promo/{id}','EstimateController@promo');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

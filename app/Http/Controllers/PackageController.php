@@ -59,7 +59,6 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-        
         $rules = [
             'name' => 'required|unique:package|max:50',
             'price' => 'required|between:0,1000000',

@@ -29,7 +29,7 @@ class InspectController extends Controller
             ->join('vehicle as v','v.id','i.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('i.*','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
+            ->select('i.*','i.id as inspectId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
             ->get();
         return View('inspect.index',compact('inspects'));
     }
@@ -73,7 +73,7 @@ class InspectController extends Controller
             'address' => 'required|max:140',
             'plate' => 'required',
             'modelId' => 'required',
-            'mileage' => 'nullable|numeric',
+            'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'remarks' => 'max:140',
             'form.*' => 'required',
@@ -122,7 +122,7 @@ class InspectController extends Controller
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => $request->mileage
+                        'mileage' => str_replace(' km','',$request->mileage)
                     ]
                 );
                 $inspection = InspectionHeader::create([
@@ -211,7 +211,7 @@ class InspectController extends Controller
             'address' => 'required|max:140',
             'plate' => 'required',
             'modelId' => 'required',
-            'mileage' => 'nullable|numeric',
+            'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'remarks' => 'max:140',
             'form.*' => 'required',
@@ -260,7 +260,7 @@ class InspectController extends Controller
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => $request->mileage
+                        'mileage' => str_replace(' km','',$request->mileage)
                     ]
                 );
                 $inspection = InspectionHeader::findOrFail($id);

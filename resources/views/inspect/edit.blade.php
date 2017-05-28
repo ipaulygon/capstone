@@ -52,8 +52,10 @@
             $("#mileage").inputmask({ 
                 alias: "decimal",
                 prefix: '',
+                suffix: ' km',
                 allowMinus: false,
                 min: 0,
+                max: 1000000
             });
             $('#tInspect').addClass('active');
         });

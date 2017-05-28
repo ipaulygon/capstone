@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\EstimateHeader;
+use App\EstimateProduct;
+use App\EstimateService;
+use App\EstimatePackage;
+use App\EstimatePromo;
+use App\Product;
+use App\Service;
+use App\Package;
+use App\Promo;
 use App\Vehicle;
 use App\Customer;
 use Validator;
@@ -20,6 +29,24 @@ class EstimateController extends Controller
      */
     public function index()
     {
+        $estimates = DB::table('estimate_header as e')
+            ->join('customer as c','c.id','e.customerId')
+            ->join('vehicle as v','v.id','e.vehicleId')
+            ->join('vehicle_model as vd','vd.id','v.modelId')
+            ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->select('e.*','e.id as estimateId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
+            ->get();
+        return View('estimate.index',compact('estimates'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $date = date('Y-m-d');
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
@@ -31,17 +58,27 @@ class EstimateController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('estimate.index',compact('customers','models','technicians'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $products = DB::table('product as p')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+        $services = DB::table('service as s')
+            ->join('service_category as c','c.id','s.categoryId')
+            ->where('s.isActive',1)
+            ->select('s.*','c.name as category')
+            ->get();
+        $packages = DB::table('package as p')
+            ->select('p.*')
+            ->get();
+        $promos = DB::table('promo as p')
+            ->select('p.*')
+            ->where('dateStart','>=',$date)
+            ->where('dateEnd','<=',$date)
+            ->get();
+        return View('estimate.create',compact('customers','models','technicians','products','services','packages','promos'));
     }
 
     /**
@@ -52,7 +89,133 @@ class EstimateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'firstName' => 'required|max:100',
+            'middleName' => 'max:100',
+            'lastName' => 'required|max:100',
+            'contact' => 'required',
+            'email' => 'nullable|email',
+            'address' => 'required|max:140',
+            'plate' => 'required',
+            'modelId' => 'required',
+            'mileage' => 'nullable|between:0,1000000',
+            'product.*' => 'sometimes|required',
+            'productQty.*' => 'sometimes|required|numeric',
+            'service.*' => 'sometimes|required',
+            'package.*' => 'sometimes|required',
+            'packageQty.*' => 'sometimes|required|numeric',
+            'promo.*' => 'sometimes|required',
+            'promoQty.*' => 'sometimes|required|numeric',
+        ];
+        $messages = [
+            'unique' => ':attribute already exists.',
+            'required' => 'The :attribute field is required.',
+            'max' => 'The :attribute field must be no longer than :max characters.'
+        ];
+        $niceNames = [
+            'firstName' => 'First Name',
+            'middleName' => 'Middle Name',
+            'lastName' => 'Last Name',
+            'contact' => 'Contact No.',
+            'email' => 'Email Address',
+            'address' => 'Address',
+            'plate' => 'Plate No.',
+            'modelId' => 'Vehicle Model',
+            'mileage' => 'Mileage',
+            'product.*' => 'Product',
+            'productQty.*' => 'Product Quantity',
+            'service.*' => 'Service',
+            'package.*' => 'Package',
+            'packageQty.*' => 'Package Quantity',
+            'promo.*' => 'Promo Quantity',
+            'promoQty.*' => 'Promo Quantity',
+        ];
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames); 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        else{
+            try{
+                DB::beginTransaction();
+                $customer = Customer::updateOrCreate(
+                    [
+                        'firstName' => trim($request->firstName),
+                        'middleName' => trim($request->middleName),
+                        'lastName' => trim($request->lastName)
+                    ],[
+                        'contact' => $request->contact,
+                        'email' => $request->email,
+                        'address' => trim($request->address),
+                    ]
+                );
+                $vehicle = Vehicle::updateOrCreate(
+                    ['plate' => str_replace('_','',trim($request->plate))],
+                    [
+                        'modelId' => $request->modelId,
+                        'mileage' => str_replace(' km','',$request->mileage)
+                    ]
+                );
+                $estimate = EstimateHeader::create([
+                    'customerId' => $customer->id,
+                    'vehicleId' => $vehicle->id,
+                    'isFinalize' => 0
+                ]);
+                $products = $request->product;
+                $prodQty = $request->productQty;
+                $services = $request->service;
+                $packages = $request->package;
+                $packQty = $request->packageQty;
+                $promos = $request->promo;
+                $promoQty = $request->promoQty;
+                if(!empty($products)){
+                    foreach($products as $key=>$product){
+                        EstimateProduct::create([
+                            'estimateId' => $estimate->id,
+                            'productId' => $product,
+                            'quantity' => $prodQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($services)){
+                    foreach($services as $key=>$service){
+                        EstimateService::create([
+                            'estimateId' => $estimate->id,
+                            'serviceId' => $service,
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($packages)){
+                    foreach($packages as $key=>$package){
+                        EstimatePackage::create([
+                            'estimateId' => $estimate->id,
+                            'packageId' => $package,
+                            'quantity' => $packQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($promos)){
+                    foreach($promos as $key=>$promo){
+                        EstimatePromo::create([
+                            'estimateId' => $estimate->id,
+                            'promoId' => $promo,
+                            'quantity' => $promoQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                DB::commit();
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollBack();
+                $errMess = $e->getMessage();
+                return Redirect::back()->withErrors($errMess);
+            }
+            $request->session()->flash('success', 'Successfully added.');  
+            return Redirect::back();
+        }
     }
 
     /**
@@ -63,7 +226,7 @@ class EstimateController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -74,7 +237,40 @@ class EstimateController extends Controller
      */
     public function edit($id)
     {
-        //
+        $estimate = EstimateHeader::findOrFail($id);
+        $date = date('Y-m-d');
+        $customers = DB::table('customer')
+            ->select('customer.*')
+            ->get();
+        $models = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->get();
+        $technicians = DB::table('technician')
+            ->where('isActive',1)
+            ->select('technician.*')
+            ->get();
+        $products = DB::table('product as p')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+        $services = DB::table('service as s')
+            ->join('service_category as c','c.id','s.categoryId')
+            ->where('s.isActive',1)
+            ->select('s.*','c.name as category')
+            ->get();
+        $packages = DB::table('package as p')
+            ->select('p.*')
+            ->get();
+        $promos = DB::table('promo as p')
+            ->select('p.*')
+            ->where('dateStart','>=',$date)
+            ->where('dateEnd','<=',$date)
+            ->get();
+        return View('estimate.edit',compact('estimate','customers','models','technicians','products','services','packages','promos'));
     }
 
     /**
@@ -86,7 +282,137 @@ class EstimateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = [
+            'firstName' => 'required|max:100',
+            'middleName' => 'max:100',
+            'lastName' => 'required|max:100',
+            'contact' => 'required',
+            'email' => 'nullable|email',
+            'address' => 'required|max:140',
+            'plate' => 'required',
+            'modelId' => 'required',
+            'mileage' => 'nullable|between:0,1000000',
+            'product.*' => 'sometimes|required',
+            'productQty.*' => 'sometimes|required|numeric',
+            'service.*' => 'sometimes|required',
+            'package.*' => 'sometimes|required',
+            'packageQty.*' => 'sometimes|required|numeric',
+            'promo.*' => 'sometimes|required',
+            'promoQty.*' => 'sometimes|required|numeric',
+        ];
+        $messages = [
+            'unique' => ':attribute already exists.',
+            'required' => 'The :attribute field is required.',
+            'max' => 'The :attribute field must be no longer than :max characters.'
+        ];
+        $niceNames = [
+            'firstName' => 'First Name',
+            'middleName' => 'Middle Name',
+            'lastName' => 'Last Name',
+            'contact' => 'Contact No.',
+            'email' => 'Email Address',
+            'address' => 'Address',
+            'plate' => 'Plate No.',
+            'modelId' => 'Vehicle Model',
+            'mileage' => 'Mileage',
+            'product.*' => 'Product',
+            'productQty.*' => 'Product Quantity',
+            'service.*' => 'Service',
+            'package.*' => 'Package',
+            'packageQty.*' => 'Package Quantity',
+            'promo.*' => 'Promo Quantity',
+            'promoQty.*' => 'Promo Quantity',
+        ];
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames); 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+        else{
+            try{
+                DB::beginTransaction();
+                $customer = Customer::updateOrCreate(
+                    [
+                        'firstName' => trim($request->firstName),
+                        'middleName' => trim($request->middleName),
+                        'lastName' => trim($request->lastName)
+                    ],[
+                        'contact' => $request->contact,
+                        'email' => $request->email,
+                        'address' => trim($request->address),
+                    ]
+                );
+                $vehicle = Vehicle::updateOrCreate(
+                    ['plate' => str_replace('_','',trim($request->plate))],
+                    [
+                        'modelId' => $request->modelId,
+                        'mileage' => str_replace(' km','',$request->mileage)
+                    ]
+                );
+                $estimate = EstimateHeader::findOrFail($id);
+                $estimate->update([
+                    'customerId' => $customer->id,
+                    'vehicleId' => $vehicle->id,
+                ]);
+                $products = $request->product;
+                $prodQty = $request->productQty;
+                $services = $request->service;
+                $packages = $request->package;
+                $packQty = $request->packageQty;
+                $promos = $request->promo;
+                $promoQty = $request->promoQty;
+                EstimateProduct::where('estimateId',$id)->update(['isActive'=>0]);
+                EstimateService::where('estimateId',$id)->update(['isActive'=>0]);
+                EstimatePackage::where('estimateId',$id)->update(['isActive'=>0]);
+                EstimatePromo::where('estimateId',$id)->update(['isActive'=>0]);
+                if(!empty($products)){
+                    foreach($products as $key=>$product){
+                        EstimateProduct::create([
+                            'estimateId' => $estimate->id,
+                            'productId' => $product,
+                            'quantity' => $prodQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($services)){
+                    foreach($services as $key=>$service){
+                        EstimateService::create([
+                            'estimateId' => $estimate->id,
+                            'serviceId' => $service,
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($packages)){
+                    foreach($packages as $key=>$package){
+                        EstimatePackage::create([
+                            'estimateId' => $estimate->id,
+                            'packageId' => $package,
+                            'quantity' => $packQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($promos)){
+                    foreach($promos as $key=>$promo){
+                        EstimatePromo::create([
+                            'estimateId' => $estimate->id,
+                            'promoId' => $promo,
+                            'quantity' => $promoQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                DB::commit();
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollBack();
+                $errMess = $e->getMessage();
+                return Redirect::back()->withErrors($errMess);
+            }
+            $request->session()->flash('success', 'Successfully updated.');  
+            return Redirect::back();
+        }
     }
 
     /**
@@ -97,6 +423,58 @@ class EstimateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
+    }
+
+    public function customer($id)
+    {
+        $customer = DB::table('customer as c')
+            ->where(DB::raw('CONCAT_WS(" ",c.firstName,c.middleName,c.lastName)'),''.$id)
+            ->select('c.*')
+            ->first();
+        return response()->json(['customer'=>$customer]);
+    }
+    
+    public function vehicle($id)
+    {
+        $vehicle = DB::table('vehicle as v')
+            ->where('v.plate',''.$id)
+            ->select('v.*')
+            ->first();
+        if(!empty($vehicle)){
+            return response()->json(['vehicle'=>$vehicle]);
+        }
+    }
+
+    public function product($id){
+        $product = Product::with('type')->with('brand')->with('variance')->findOrFail($id);
+        return response()->json(['product'=>$product]);
+    }
+
+    public function service($id){
+        $service = Service::with('category')->findOrFail($id);
+        return response()->json(['service'=>$service]);
+    }
+
+    public function package($id){
+        $package = Package::with('product.product.type')
+            ->with('product.product.brand')
+            ->with('product.product.variance')
+            ->with('service.service.category')
+            ->findOrFail($id);
+        return response()->json(['package'=>$package]);
+    }
+
+    public function promo($id){
+        $promo = Promo::with('product.product.type')
+            ->with('product.product.brand')
+            ->with('product.product.variance')
+            ->with('freeProduct.product.type')
+            ->with('freeProduct.product.brand')
+            ->with('freeProduct.product.variance')
+            ->with('service.service.category')
+            ->with('freeService.service.category')
+            ->findOrFail($id);
+        return response()->json(['promo'=>$promo]);
     }
 }

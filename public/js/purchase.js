@@ -39,7 +39,7 @@ $(document).on('change', '#products', function(){
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty" id="qty" name="qty[]" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="qty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +
@@ -88,6 +88,9 @@ $(document).on('change', '#products', function(){
 
 $(document).on('click','#pullProduct', function(){
     $('#products option[value="'+this.title+'"]').attr('disabled',false);
+    stack = $(this).parents('tr').find('#stack').val().replace(',','');
+    final = eval($('#compute').val().replace(',','')+"-"+stack);
+    $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
 });
@@ -102,7 +105,7 @@ function retrieveProduct(id,qty,model){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(data.product.price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty" id="qty" name="qty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +

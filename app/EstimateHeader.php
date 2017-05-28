@@ -17,6 +17,18 @@ class EstimateHeader extends Model
         return $this->hasMany('App\EstimateProduct','estimateId')->where('isActive',1);
     }
 
+    public function service(){
+        return $this->hasMany('App\EstimateService','estimateId')->where('isActive',1);
+    }
+
+    public function package(){
+        return $this->hasMany('App\EstimatePackage','estimateId')->where('isActive',1);
+    }
+
+    public function promo(){
+        return $this->hasMany('App\EstimatePromo','estimateId')->where('isActive',1);
+    }
+
     public function customer(){
         return $this->belongsTo('App\Customer','customerId');
     }
