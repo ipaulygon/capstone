@@ -14,6 +14,7 @@ class DiscountSeeder extends Seeder
         DB::table('discount')->insert([
             'name' => 'Summer Sale',
             'rate' => 10.00,
+            'type' => 'Individual',
             'isActive' => 1,
         ]);
     }

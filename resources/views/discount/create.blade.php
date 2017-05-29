@@ -35,9 +35,24 @@
                 @endforeach
             @endif
         ];
+        @if(old('type'))
+            $(".square-blue[value={{old('type')}}]").prop('checked',true);
+        @else
+            $(".square-blue[value=Individual").prop('checked',true);
+        @endif
         $("#product").val(activeProduct);
         $("#service").val(activeService);
         $(".select2").select2();
+        $('#type1').on('ifChecked ifUnchecked', function(event){
+            if(event.type=="ifChecked"){
+                $('#product').val('');
+                $('#service').val('');
+                $('.select2').select2();
+                $(".select2").prop('disabled',true);
+            }else{
+                $(".select2").prop('disabled',false);
+            }
+        });
     </script>
     <script>
         $(document).ready(function (){

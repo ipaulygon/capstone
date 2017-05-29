@@ -35,4 +35,8 @@ class Product extends Model
     public function vehicle(){
         return $this->hasMany('App\ProductVehicle', 'productId')->where('isActive',1);
     }
+
+    public function discount(){
+        return $this->hasOne('App\DiscountProduct', 'productId')->where('isActive',1);
+    }
 }

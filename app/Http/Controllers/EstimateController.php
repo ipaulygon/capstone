@@ -7,10 +7,12 @@ use App\EstimateProduct;
 use App\EstimateService;
 use App\EstimatePackage;
 use App\EstimatePromo;
+use App\EstimateDiscount;
 use App\Product;
 use App\Service;
 use App\Package;
 use App\Promo;
+use App\Discount;
 use App\Vehicle;
 use App\Customer;
 use Validator;
@@ -71,14 +73,21 @@ class EstimateController extends Controller
             ->select('s.*','c.name as category')
             ->get();
         $packages = DB::table('package as p')
+            ->where('p.isActive',1)
             ->select('p.*')
             ->get();
         $promos = DB::table('promo as p')
-            ->select('p.*')
             ->where('dateStart','>=',$date)
             ->where('dateEnd','<=',$date)
+            ->where('p.isActive',1)
+            ->select('p.*')
             ->get();
-        return View('estimate.create',compact('customers','models','technicians','products','services','packages','promos'));
+        $discounts = DB::table('discount as d')
+            ->where('d.isActive',1)
+            ->where('d.type','Whole')
+            ->select('d.*')
+            ->get();
+        return View('estimate.create',compact('customers','models','technicians','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -168,6 +177,7 @@ class EstimateController extends Controller
                 $packQty = $request->packageQty;
                 $promos = $request->promo;
                 $promoQty = $request->promoQty;
+                $discounts = $request->discount;
                 if(!empty($products)){
                     foreach($products as $key=>$product){
                         EstimateProduct::create([
@@ -203,6 +213,15 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'promoId' => $promo,
                             'quantity' => $promoQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($discounts)){
+                    foreach($discounts as $key=>$discount){
+                        EstimateDiscount::create([
+                            'estimateId' => $estimate->id,
+                            'discountId' => $discount,
                             'isActive' => 1
                         ]);
                     }
@@ -263,14 +282,21 @@ class EstimateController extends Controller
             ->select('s.*','c.name as category')
             ->get();
         $packages = DB::table('package as p')
+            ->where('p.isActive',1)
             ->select('p.*')
             ->get();
         $promos = DB::table('promo as p')
-            ->select('p.*')
             ->where('dateStart','>=',$date)
             ->where('dateEnd','<=',$date)
+            ->where('p.isActive',1)
+            ->select('p.*')
             ->get();
-        return View('estimate.edit',compact('estimate','customers','models','technicians','products','services','packages','promos'));
+        $discounts = DB::table('discount as d')
+            ->where('d.isActive',1)
+            ->where('d.type','Whole')
+            ->select('d.*')
+            ->get();
+        return View('estimate.edit',compact('estimate','customers','models','technicians','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -361,6 +387,7 @@ class EstimateController extends Controller
                 $packQty = $request->packageQty;
                 $promos = $request->promo;
                 $promoQty = $request->promoQty;
+                $discounts = $request->discount;
                 EstimateProduct::where('estimateId',$id)->update(['isActive'=>0]);
                 EstimateService::where('estimateId',$id)->update(['isActive'=>0]);
                 EstimatePackage::where('estimateId',$id)->update(['isActive'=>0]);
@@ -400,6 +427,15 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'promoId' => $promo,
                             'quantity' => $promoQty[$key],
+                            'isActive' => 1
+                        ]);
+                    }
+                }
+                if(!empty($discounts)){
+                    foreach($discounts as $key=>$discount){
+                        EstimateDiscount::create([
+                            'estimateId' => $estimate->id,
+                            'discountId' => $discount,
                             'isActive' => 1
                         ]);
                     }
@@ -447,12 +483,12 @@ class EstimateController extends Controller
     }
 
     public function product($id){
-        $product = Product::with('type')->with('brand')->with('variance')->findOrFail($id);
+        $product = Product::with('type')->with('brand')->with('variance')->with('discount.header')->findOrFail($id);
         return response()->json(['product'=>$product]);
     }
 
     public function service($id){
-        $service = Service::with('category')->findOrFail($id);
+        $service = Service::with('category')->with('discount.header')->findOrFail($id);
         return response()->json(['service'=>$service]);
     }
 
@@ -476,5 +512,10 @@ class EstimateController extends Controller
             ->with('freeService.service.category')
             ->findOrFail($id);
         return response()->json(['promo'=>$promo]);
+    }
+
+    public function discount($id){
+        $discount = Discount::findOrFail($id);
+        return response()->json(['discount'=>$discount]);
     }
 }

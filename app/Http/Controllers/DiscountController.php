@@ -62,6 +62,7 @@ class DiscountController extends Controller
         $rules = [
             'name' => 'required|unique:discount|max:50',
             'rate' => 'required|between:0,100',
+            'type' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -71,6 +72,7 @@ class DiscountController extends Controller
         $niceNames = [
             'name' => 'Discount',
             'rate' => 'Rate',
+            'type' => 'Type'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -83,6 +85,7 @@ class DiscountController extends Controller
                 $discount = Discount::create([
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
+                    'type' => $request->type,
                     'isActive' => 1
                 ]);
                 $products = $request->product;
@@ -163,6 +166,7 @@ class DiscountController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('discount')->ignore($id)],
             'rate' => 'required|between:0,100',
+            'type' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -172,6 +176,7 @@ class DiscountController extends Controller
         $niceNames = [
             'name' => 'Discount',
             'rate' => 'Rate',
+            'required' => 'Type'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -185,6 +190,7 @@ class DiscountController extends Controller
                 $discount->update([
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
+                    'type' => $request->type,
                 ]);
                 DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
                 DiscountService::where('discountId',$id)->update(['isActive'=>0]);

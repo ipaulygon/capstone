@@ -40,7 +40,7 @@
             border: 1px solid black;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2
+            background-color: #e6e6e6
         }
         th{
             background-color: black;

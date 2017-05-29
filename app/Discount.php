@@ -11,6 +11,7 @@ class Discount extends Model
     protected $fillable = [
     	'name',
     	'rate',
+        'type',
     	'isActive'  	
     ];
 

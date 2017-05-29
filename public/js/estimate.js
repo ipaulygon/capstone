@@ -47,6 +47,24 @@ function rowFinder(row){
     }
     return row;
 }
+
+function discountReplenish(){
+    if($('#discountStack').length!=0){
+        discounted = eval($('#discountStack').val().replace(',','')+"*"+'-1');
+        final = eval($('#compute').val().replace(',','')+"+"+discounted);
+        $('#compute').val(final);
+    }
+}
+
+function discountRecount(){
+    if($('#discountStack').length!=0){
+        final =  eval($('#compute').val().replace(',','')+"*"+($('#discountPrice').val().replace(' %','')/100));
+        discountStack = 0-final;
+        $('#discountStack').val(discountStack);
+        final = eval($('#compute').val().replace(',','')+"-"+final);
+        $('#compute').val(final);
+    }
+}
 // QUANTITY
 $(document).on('change', '#qty', function (){
     qty = $(this).val();
@@ -57,9 +75,11 @@ $(document).on('change', '#qty', function (){
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     price = this.title;
     price = eval(price+"*"+qty);
+    discountReplenish();
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
+    discountRecount();
 });
 // PRODUCTS
 $(document).on('change', '#products', function(){
@@ -69,11 +89,22 @@ $(document).on('change', '#products', function(){
         url: "/estimate/product/"+this.value,
         dataType: "JSON",
         success:function(data){
+            var discount = null;
+            if(data.product.discount!=null){
+                discount = (data.product.discount.header.rate);
+            }
+            if(discount!=null){
+                price = (data.product.price)-(data.product.price*(discount/100));
+                discountString = '['+discount+' % discount]';
+            }else{
+                price = data.product.price;
+                discountString = '';
+            }
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
-                data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.product.price+'" readonly></strong>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
+                data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
+                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
@@ -123,12 +154,23 @@ function retrieveProduct(id,qty){
         url: "/estimate/product/"+id,
         dataType: "JSON",
         success:function(data){
+            var discount = null;
+            if(data.product.discount!=null){
+                discount = (data.product.discount.header.rate);
+            }
+            if(discount!=null){
+                price = (data.product.price)-(data.product.price*(discount/100));
+                discountString = '['+discount+' % discount]';
+            }else{
+                price = data.product.price;
+                discountString = '';
+            }
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
-            stack = eval(data.product.price+'*'+qty);
+            stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.product.price+'" readonly></strong>',
+                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
@@ -164,7 +206,6 @@ function retrieveProduct(id,qty){
     $('#products').val('');
     $("#products").select2();
 }
-// END PRODUCTS
 // SERVICES
 $(document).on('change', '#services', function(){
     $('#services option[value="'+this.value+'"]').attr('disabled',true);
@@ -173,19 +214,32 @@ $(document).on('change', '#services', function(){
         url: "/estimate/service/"+this.value,
         dataType: "JSON",
         success:function(data){
-            stack = data.service.price;
+            var discount = null;
+            if(data.service.discount!=null){
+                discount = (data.service.discount.header.rate);
+            }
+            if(discount!=null){
+                price = (data.service.price)-(data.service.price*(discount/100));
+                discountString = '['+discount+' % discount]';
+            }else{
+                price = data.service.price;
+                discountString = '';
+            }
+            stack = price;
             row = pList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">',
-                data.service.name+" - "+data.service.size+" ("+data.service.category.name+")",
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.service.price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+data.service.price+'" readonly></strong>',
+                data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
+                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             // price
+            discountReplenish();
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
+            discountRecount();
             $(".price").inputmask({ 
                 alias: "currency",
                 prefix: '',
@@ -223,10 +277,21 @@ function retrieveService(id){
         url: "/estimate/service/"+id,
         dataType: "JSON",
         success:function(data){
-            stack = data.service.price;
+            var discount = null;
+            if(data.service.discount!=null){
+                discount = (data.service.discount.header.rate);
+            }
+            if(discount!=null){
+                price = (data.service.price)-(data.service.price*(discount/100));
+                discountString = '['+discount+' % discount]';
+            }else{
+                price = data.service.price;
+                discountString = '';
+            }
+            stack = price;
             row = pList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">',
-                data.service.name+" - "+data.service.size+" ("+data.service.category.name+")",
+                data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.service.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+data.service.price+'" readonly></strong>',
                 '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
@@ -530,4 +595,95 @@ function retrievePromo(id,qty){
     });
     $('#promos').val('');
     $("#promos").select2();
+}
+// DISCOUNTS
+$(document).on('change', '#discounts', function(){
+    $('#discounts').prop('disabled',true);
+    $.ajax({
+        type: "GET",
+        url: "/estimate/discount/"+this.value,
+        dataType: "JSON",
+        success:function(data){
+            final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
+            discountStack = 0-final;
+            final = eval($('#compute').val().replace(',','')+"-"+final);
+            $('#compute').val(final);
+            row = pList.row.add([
+                '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
+                data.discount.name+" - DISCOUNT",
+                '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
+                '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
+                '<button title="'+data.discount.id+'" type="button" id="pullDiscount" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+            ]).draw().node();
+            $(row).find('td').eq(2).addClass('text-right');
+            $(row).find('td').eq(3).addClass('text-right');
+            $("#discountPrice").inputmask({ 
+                alias: "percentage",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 100,
+            });
+            $('#discountStack').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+                min: -10000000,
+                max: 10000000,
+            });
+        }
+    });
+});
+
+$(document).on('click','#pullDiscount', function(){
+    $('#discounts').prop('disabled',false);
+    $('#discounts').val('');
+    $("#discounts").select2();
+    discounted = eval($('#discountStack').val().replace(',','')+"*"+'-1');
+    final = eval($('#compute').val().replace(',','')+"+"+discounted);
+    $('#compute').val(final);
+    var row = rowFinder(this);
+    pList.row(row).remove().draw();
+});
+
+function retrieveDiscount(id){
+    $('#discounts').val(id);
+    $("#discounts").select2();
+    $('#discounts').prop('disabled',true);
+    $.ajax({
+        type: "GET",
+        url: "/estimate/discount/"+id,
+        dataType: "JSON",
+        success:function(data){
+            final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
+            discountStack = 0-final;
+            final = eval($('#compute').val().replace(',','')+"-"+final);
+            $('#compute').val(final);
+            row = pList.row.add([
+                '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
+                data.discount.name+" - DISCOUNT",
+                '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
+                '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
+                '<button title="'+data.discount.id+'" type="button" id="pullDiscount" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+            ]).draw().node();
+            $(row).find('td').eq(2).addClass('text-right');
+            $(row).find('td').eq(3).addClass('text-right');
+            $("#discountPrice").inputmask({ 
+                alias: "percentage",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 100,
+            });
+            $('#discountStack').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+                min: -10000000,
+                max: 10000000,
+            });
+        }
+    });
 }

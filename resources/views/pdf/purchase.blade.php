@@ -40,7 +40,7 @@
             border: 1px solid black;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2
+            background-color: #e6e6e6
         }
         th{
             background-color: black;
@@ -94,7 +94,11 @@
                         }
                     ?>
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}})</td>
-                    <td>{{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})</td>
+                    <td>
+                        @if($product->modelId!=null)
+                        {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})
+                        @endif
+                    </td>
                     <td class="text-right">{{number_format($product->product->price,2)}}</td>
                     <td class="text-right">{{number_format($product->quantity*$product->product->price,2)}}</td>
                 </tr>

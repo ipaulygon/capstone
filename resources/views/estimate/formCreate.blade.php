@@ -143,6 +143,17 @@
                         </select>  
                     </div>
                 </div>
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="form-group">
+                        {!! Form::label('discounts', 'Discount Search') !!}
+                        <select id="discounts" name="discountId" class="select2 form-control">
+                            <option value=""></option>
+                            @foreach($discounts as $discount)
+                                <option value="{{$discount->id}}">{{$discount->name}} - {{$discount->rate}} %</option>
+                            @endforeach
+                        </select>  
+                    </div>
+                </div>
             </div>
             <table id="productList" class="table table-striped responsive">
                 <thead>
@@ -151,17 +162,13 @@
                         <th>Item</th>
                         <th width="15%" class="text-right">Unit Price</th>
                         <th width="15%" class="text-right">Total Cost</th>
-                        <th width="5%">Action</th>
+                        <th width="5%" class="pull-right">Action</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
         <div class="box-footer">
-            <div class="col-md-12">
-                {!! Form::label('signature', 'Customer\'s Signature') !!}
-                <canvas id="simple_sketch" width="800" height="200"></canvas>
-            </div>
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
             <div class="form-inline pull-right">
                 {!! Form::label('computed', 'Total Price') !!}

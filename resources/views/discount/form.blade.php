@@ -29,6 +29,17 @@
                     !!}
                 </div>
             </div>
+            <div class="form-group">
+                {!! Form::label('type', 'Type') !!}<span>*</span>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input id="type1" type="radio" class="square-blue" name="type" value="Whole" required> Whole
+                    </div>
+                    <div class="col-md-6">
+                        <input id="type2" type="radio" class="square-blue" name="type" value="Individual" required> Individual
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="box-footer">
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
@@ -36,7 +47,7 @@
     </div>
 </div>
 
-<div class="col-md-4">
+<div id="productBox" class="col-md-4">
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">Product</h3>
@@ -58,7 +69,7 @@
     </div>
 </div>
 
-<div class="col-md-4">
+<div id="serviceBox" class="col-md-4">
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">Service</h3>

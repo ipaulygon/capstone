@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function(){
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
 	Route::get('delivery/pdf/{id}','PdfController@delivery');
+	Route::get('estimate/pdf/{id}','PdfController@estimate');
 
 	//GetJSON
 	Route::get('type/remove/{id}','ProductTypeController@remove');
@@ -62,6 +63,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('estimate/service/{id}','EstimateController@service');
 	Route::get('estimate/package/{id}','EstimateController@package');
 	Route::get('estimate/promo/{id}','EstimateController@promo');
+	Route::get('estimate/discount/{id}','EstimateController@discount');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

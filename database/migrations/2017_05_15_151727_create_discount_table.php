@@ -18,6 +18,7 @@ class CreateDiscountTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->double('rate',5,2);
+            $table->string('type', 15);
             $table->boolean('isActive');
         });
     }

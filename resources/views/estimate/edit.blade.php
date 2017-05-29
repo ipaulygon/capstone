@@ -20,7 +20,6 @@
 @stop
 
 @section('script')
-    <script src="{{ URL::asset('assets/plugins/sketch/sketch.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
@@ -34,7 +33,6 @@
     <script src="{{ URL::asset('js/estimate.js') }}"></script>
     <script>
         $(document).ready(function (){
-            $('#simple_sketch').sketch();
             var customers = [
                 @foreach($customers as $customer)
                     '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
@@ -82,7 +80,7 @@
             }
         });
     </script>
-    @if($estimate->product || $estimate->service || $estimate->package || $estimate->promo)
+    @if($estimate->product || $estimate->service || $estimate->package || $estimate->promo || $estimate->discount)
         <script>$('#compute').val(0)</script>
         @if($estimate->product)
         @foreach($estimate->product as $key=>$product)
@@ -103,6 +101,9 @@
         @foreach($estimate->promo as $key=>$promo)
             <script>retrievePromo({{$promo->promoId}},{{$promo->quantity}})</script>
         @endforeach
+        @endif
+        @if($estimate->discount)
+        <script>retrieveDiscount({{$estimate->discount->discountId}})</script>
         @endif
     @endif
 @stop

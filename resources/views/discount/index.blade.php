@@ -24,6 +24,7 @@
                     <thead>
                         <tr>
                             <th>Discount</th>
+                            <th>Type</th>
                             <th>Item(s)</th>
                             <th class="pull-right">Action</th>
                         </tr>
@@ -32,6 +33,7 @@
                         @foreach($discounts as $discount)
                             <tr>
                                 <td>{{$discount->name}} - {{$discount->rate}} %</td>
+                                <td>{{$discount->type}}</td>
                                 <td>
                                     @if($discount->product->isNotEmpty())
                                         <b>Products:</b>

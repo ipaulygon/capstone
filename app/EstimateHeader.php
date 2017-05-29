@@ -28,6 +28,10 @@ class EstimateHeader extends Model
     public function promo(){
         return $this->hasMany('App\EstimatePromo','estimateId')->where('isActive',1);
     }
+    
+    public function discount(){
+        return $this->hasOne('App\EstimateDiscount','estimateId')->where('isActive',1);
+    }
 
     public function customer(){
         return $this->belongsTo('App\Customer','customerId');

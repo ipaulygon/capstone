@@ -19,4 +19,8 @@ class Service extends Model
     public function category(){
         return $this->belongsTo('App\ServiceCategory','categoryId')->where('isActive',1);
     }
+
+    public function discount(){
+        return $this->hasOne('App\DiscountService', 'serviceId')->where('isActive',1);
+    }
 }
