@@ -47,4 +47,8 @@ class Product extends Model
     public function priceRecord(){
         return $this->hasMany('App\ProductPrice', 'productId');
     }
+
+    public function inventory(){
+        return $this->hasOne('App\Inventory', 'productId');
+    }
 }

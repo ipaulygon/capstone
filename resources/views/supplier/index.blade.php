@@ -19,7 +19,7 @@
                     <i class="glyphicon glyphicon-plus"></i> Add New</a>
                 </div>
             </div>
-            <div class="box-body dataTable_wrapper">
+            <div class="box-body dataTable_wrapper"a>
                 <table id="list" class="table table-striped responsive">
                     <thead>
                         <tr>

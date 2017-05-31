@@ -10,7 +10,7 @@ $('#firstName').on('autocompleteselect',function(event, ui){
     name = ui.item.value
     $.ajax({
         type: "GET",
-        url: "/estimate/customer/"+name,
+        url: "/job/customer/"+name,
         dataType: "JSON",
         success:function(data){
             $('#firstName').val(data.customer.firstName);
@@ -27,7 +27,7 @@ $('#plate').on('change',function(){
     name = $(this).val().replace('_','');
     $.ajax({
         type: "GET",
-        url: "/estimate/vehicle/"+name,
+        url: "/job/vehicle/"+name,
         dataType: "JSON",
         success:function(data){
             $('#plate').val(data.vehicle.plate);
@@ -86,7 +86,7 @@ $(document).on('change', '#products', function(){
     $('#products option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/product/"+this.value,
+        url: "/job/product/"+this.value,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -110,13 +110,12 @@ $(document).on('change', '#products', function(){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            console.log(data.product);
             $('#prodqty'+data.product.id).inputmask({ 
                 alias: "integer",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 100,
+                max: data.product.inventory.quantity,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -152,7 +151,7 @@ function oldProduct(id,qty){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/product/"+id,
+        url: "/job/product/"+id,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -169,7 +168,7 @@ function oldProduct(id,qty){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="prodqty'+data.product.id+'" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -180,12 +179,12 @@ function oldProduct(id,qty){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
+            $('#prodqty'+data.product.id).inputmask({ 
                 alias: "integer",
                 prefix: '',
                 allowMinus: false,
-                min: 1,
-                max: 100,
+                min: 0,
+                max: data.product.inventory.quantity,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -212,13 +211,13 @@ function retrieveProduct(id,qty,price,discountString){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/product/"+id,
+        url: "/job/product/"+id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="prodqty'+data.product.id+'" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -229,12 +228,12 @@ function retrieveProduct(id,qty,price,discountString){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
+            $('#prodqty'+data.product.id).inputmask({ 
                 alias: "integer",
                 prefix: '',
                 allowMinus: false,
-                min: 1,
-                max: 100,
+                min: 0,
+                max: data.product.inventory.quantity,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -261,7 +260,7 @@ $(document).on('change', '#services', function(){
     $('#services option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/service/"+this.value,
+        url: "/job/service/"+this.value,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -324,7 +323,7 @@ function oldService(id){
     $('#services option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/service/"+id,
+        url: "/job/service/"+id,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -378,7 +377,7 @@ function retrieveService(id,price,discountString){
     $('#services option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/service/"+id,
+        url: "/job/service/"+id,
         dataType: "JSON",
         success:function(data){
             stack = price;
@@ -419,7 +418,7 @@ $(document).on('change', '#packages', function(){
     $('#packages option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/package/"+this.value,
+        url: "/job/package/"+this.value,
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
@@ -483,7 +482,7 @@ function oldPackage(id,qty){
     $('#packages option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/package/"+id,
+        url: "/job/package/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(data.package.price+"*"+qty);
@@ -540,7 +539,7 @@ function retrievePackage(id,qty,price){
     $('#packages option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/package/"+id,
+        url: "/job/package/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(price+'*'+qty);
@@ -599,7 +598,7 @@ $(document).on('change', '#promos', function(){
     $('#promos option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/promo/"+this.value,
+        url: "/job/promo/"+this.value,
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
@@ -677,7 +676,7 @@ function oldPromo(id,qty){
     $('#promos option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/promo/"+id,
+        url: "/job/promo/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(data.promo.price+"*"+qty);
@@ -750,7 +749,7 @@ function retrievePromo(id,qty,price){
     $('#promos option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/promo/"+id,
+        url: "/job/promo/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(price+'*'+qty);
@@ -823,7 +822,7 @@ $(document).on('change', '#discounts', function(){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/discount/"+this.value,
+        url: "/job/discount/"+this.value,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
@@ -873,7 +872,7 @@ function oldDiscount(id){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/discount/"+id,
+        url: "/job/discount/"+id,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
@@ -914,7 +913,7 @@ function retrieveDiscount(id,rate){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/estimate/discount/"+id,
+        url: "/job/discount/"+id,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(rate/100));
