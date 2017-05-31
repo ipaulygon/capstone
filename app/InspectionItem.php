@@ -16,6 +16,6 @@ class InspectionItem extends Model
     ];
 
     public function type(){
-        return $this->belongsTo('App\InspectionType','typeId')->where('isActive',1);
+        return $this->belongsTo('App\InspectionType','typeId');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Discount;
+use App\DiscountRate;
 use App\DiscountProduct;
 use App\DiscountService;
 use App\Product;
@@ -36,16 +37,36 @@ class DiscountController extends Controller
      */
     public function create()
     {
+        $dProducts = DB::table('discount_product')
+            ->distinct()
+            ->where('isActive',1)
+            ->select('productId')
+            ->get();
+        $discountedProducts = [];
+        foreach($dProducts as $d){
+            $discountedProducts[] = $d->productId;
+        }
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->where('p.isActive',1)
+            ->whereNotIn('p.id',$discountedProducts)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
+        $dServices = DB::table('discount_service')
+            ->distinct()
+            ->where('isActive',1)
+            ->select('serviceId')
+            ->get();
+        $discountedServices = [];
+        foreach($dServices as $d){
+            $discountedServices[] = $d->serviceId;
+        }
         $services = DB::table('service as s')
             ->join('service_category as c','c.id','s.categoryId')
             ->where('s.isActive',1)
+            ->whereNotIn('s.id',$discountedServices)
             ->select('s.*','c.name as category')
             ->get();
         return View('discount.create',compact('products','services'));
@@ -108,6 +129,10 @@ class DiscountController extends Controller
                         ]);
                     }
                 }
+                DiscountRate::create([
+                    'discountId' => $discount->id,
+                    'rate' => trim(str_replace(' %','',$request->rate))
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -139,16 +164,38 @@ class DiscountController extends Controller
     public function edit($id)
     {
         $discount = Discount::findOrFail($id);
+        $dProducts = DB::table('discount_product')
+            ->distinct()
+            ->where('isActive',1)
+            ->whereNotIn('discountId',[$id])
+            ->select('productId')
+            ->get();
+        $discountedProducts = [];
+        foreach($dProducts as $d){
+            $discountedProducts[] = $d->productId;
+        }
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->where('p.isActive',1)
+            ->whereNotIn('p.id',$discountedProducts)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
+        $dServices = DB::table('discount_service')
+            ->distinct()
+            ->where('isActive',1)
+            ->whereNotIn('discountId',[$id])
+            ->select('serviceId')
+            ->get();
+        $discountedServices = [];
+        foreach($dServices as $d){
+            $discountedServices[] = $d->serviceId;
+        }
         $services = DB::table('service as s')
             ->join('service_category as c','c.id','s.categoryId')
             ->where('s.isActive',1)
+            ->whereNotIn('s.id',$discountedServices)
             ->select('s.*','c.name as category')
             ->get();
         return View('discount.edit',compact('discount','products','services'));
@@ -214,6 +261,10 @@ class DiscountController extends Controller
                         ]);
                     }
                 }
+                DiscountRate::create([
+                    'discountId' => $discount->id,
+                    'rate' => trim(str_replace(' %','',$request->rate))
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

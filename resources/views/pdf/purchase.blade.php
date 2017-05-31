@@ -68,7 +68,7 @@
             Address: {{$purchase->supplier->address}}
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y')}}
+            Date: {{date('F j, Y', strtotime($purchase->created_at))}}
         </div>
         <div style="clear:both"></div>
         <br>
@@ -92,6 +92,7 @@
                         }else{
                             $part = "";
                         }
+                        $price = $product->product->priceRecord->where('created_at','<=',$purchase->created_at)->first()->price;
                     ?>
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}})</td>
                     <td>
@@ -99,8 +100,8 @@
                         {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})
                         @endif
                     </td>
-                    <td class="text-right">{{number_format($product->product->price,2)}}</td>
-                    <td class="text-right">{{number_format($product->quantity*$product->product->price,2)}}</td>
+                    <td class="text-right">{{number_format($price,2)}}</td>
+                    <td class="text-right">{{number_format($product->quantity*$price,2)}}</td>
                 </tr>
                 @endforeach
             </tbody>

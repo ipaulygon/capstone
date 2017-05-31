@@ -4,6 +4,11 @@
     {{"Product Type"}}
 @stop
 
+@section('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+@stop
+
+
 @section('content')
     {!! Form::open(['url' => 'type']) !!}
     <div class="col-md-4">
@@ -92,6 +97,7 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/ptype.js') }}"></script>
     <script>
         var options = {
@@ -103,6 +109,8 @@
         }
         @if(old('category'))
             $("#category[value={{old('category')}}]").prop('checked',true);
+        @else
+            $("#category[value=Parts]").prop('checked',true);
         @endif
         $(document).ready(function (){
             $('#maintenance').addClass('active');

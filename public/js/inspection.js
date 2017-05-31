@@ -65,13 +65,34 @@ $(document).on('click', '#pushItem', function (){
 });
 
 $(document).on("click", "#removeItem", function (){
-    console.log($(textarea).parent()[0]);
-    console.log($(this).parent()[0]);
-    if($(textarea).parent()[0]==$(this).parent()[0]){
-        $('#form').remove();
-        textarea = "";
+    id = $(this).parent().find('input.hidden').val();
+    context = $(this).parent();
+    if(id!=null){
+        $.ajax({
+            type: "GET",
+            url: "/inspection/remove/"+id,
+            dataType: "JSON",
+            success:function(data){
+                if(data.message==0){
+                    $(context).remove();
+                }else{
+                    $('#notif').append(
+                        '<div class="alert alert-danger alert-dismissible">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+                        data.message +
+                        '</div>'
+                    );
+                }
+            }
+        });
+    }else{
+        if($(textarea).parent()[0]==$(this).parent()[0]){
+            $('#form').remove();
+            textarea = "";
+        }
+        $(context).remove();
     }
-    $(this).parent().remove();
 });
 
 $(document).on('click', '#save', function (){

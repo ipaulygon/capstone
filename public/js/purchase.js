@@ -102,15 +102,20 @@ function retrieveProduct(id,qty,model){
         url: "/purchase/product/"+id,
         dataType: "JSON",
         success:function(data){
+            $.each(data.product.price_record,function(key,value){
+                if((new Date(value.created_at)) <= (new Date($('#created').val()))){
+                    price = value.price;
+                }
+            });
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
-            stack = eval(data.product.price+'*'+qty);
+            stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.product.price+'" readonly></strong>',
+                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
                 '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
             ]).draw().node();

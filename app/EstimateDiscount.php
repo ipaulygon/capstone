@@ -15,7 +15,7 @@ class EstimateDiscount extends Model
     ];
 
     public function discount(){
-        return $this->belongsTo('App\Discount','discountId')->where('isActive',1);
+        return $this->belongsTo('App\Discount','discountId');
     }
 
     public function header(){

@@ -21,4 +21,8 @@ class Package extends Model
     public function service(){
         return $this->hasMany('App\PackageService', 'packageId')->where('isActive',1);
     }
+    
+    public function priceRecord(){
+        return $this->hasMany('App\PackagePrice', 'packageId');
+    }
 }

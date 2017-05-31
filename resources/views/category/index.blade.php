@@ -116,13 +116,12 @@
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}<span>*</span>
+                                    {!! Form::label('description', 'Description') !!}
                                     {!! Form::textarea('description',null,[
                                         'class' => 'form-control',
                                         'placeholder'=>'Description',
                                         'maxlength'=>'50',
-                                        'rows'=>'3',
-                                        'required']) 
+                                        'rows'=>'3']) 
                                     !!}
                                 </div>
                             </div>
@@ -158,14 +157,13 @@
                                     !!}
                                 </div>
                                 <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}<span>*</span>
+                                    {!! Form::label('description', 'Description') !!}
                                     {!! Form::textarea('description',null,[
                                         'id'=>'categoryDesc',
                                         'class' => 'form-control',
                                         'placeholder'=>'Description',
                                         'maxlength'=>'50',
-                                        'rows'=>'3',
-                                        'required']) 
+                                        'rows'=>'3']) 
                                     !!}
                                 </div>
                             </div>

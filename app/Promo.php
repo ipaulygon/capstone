@@ -32,4 +32,8 @@ class Promo extends Model
     public function service(){
         return $this->hasMany('App\PromoService', 'promoId')->where('isActive',1)->where('isFree',0);
     }
+
+    public function priceRecord(){
+        return $this->hasMany('App\PromoPrice', 'promoId');
+    }
 }

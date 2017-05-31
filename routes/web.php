@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('delivery','DeliveryController');
 	Route::resource('inspect','InspectController');
 	Route::resource('estimate','EstimateController');
+	Route::resource('job','JobController');
 
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
@@ -46,8 +47,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
 
 	//GetJSON
+	Route::get('vehicle/remove/{id}','VehicleController@remove');
 	Route::get('type/remove/{id}','ProductTypeController@remove');
 	Route::get('product/type/{id}','ProductController@type');
+	Route::get('inspection/remove/{id}','InspectionController@remove');
 	Route::get('package/product/{id}','PackageController@product');
 	Route::get('package/service/{id}','PackageController@service');
 	Route::get('promo/product/{id}','PromoController@product');
@@ -64,6 +67,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('estimate/package/{id}','EstimateController@package');
 	Route::get('estimate/promo/{id}','EstimateController@promo');
 	Route::get('estimate/discount/{id}','EstimateController@discount');
+	Route::get('job/customer/{name}','JobController@customer');
+	Route::get('job/vehicle/{name}','JobController@vehicle');
+	Route::get('job/product/{id}','JobController@product');
+	Route::get('job/service/{id}','JobController@service');
+	Route::get('job/package/{id}','JobController@package');
+	Route::get('job/promo/{id}','JobController@promo');
+	Route::get('job/discount/{id}','JobController@discount');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

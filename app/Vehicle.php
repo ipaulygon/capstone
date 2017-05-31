@@ -15,6 +15,6 @@ class Vehicle extends Model
     ];
 
     public function model(){
-    	return $this->belongsTo('App\VehicleModel','modelId')->where('isActive',1);
+    	return $this->belongsTo('App\VehicleModel','modelId');
     }
 }

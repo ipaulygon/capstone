@@ -57,7 +57,7 @@ $(document).on('click','.select2-results__option',function(){
                     alias: "integer",
                     prefix: '',
                     allowMinus: false,
-                    min: 1,
+                    min: 0,
                     max: stack,
                 });
             });
@@ -108,7 +108,7 @@ $(document).on('change','#purchase',function(){
                             alias: "integer",
                             prefix: '',
                             allowMinus: false,
-                            min: 1,
+                            min: 0,
                             max: value.quantity,
                         });
                     }

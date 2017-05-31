@@ -15,10 +15,10 @@ class ProductVehicle extends Model
     ];
 
     public function product(){
-        return $this->belongsTo('App\Product','productId')->where('isActive',1);
+        return $this->belongsTo('App\Product','productId');
     }
 
     public function model(){
-        return $this->belongsTo('App\VehicleModel','modelId')->where('isActive',1);
+        return $this->belongsTo('App\VehicleModel','modelId');
     }
 }

@@ -181,11 +181,27 @@ class VehicleController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $vehicle = VehicleMake::findOrFail($id);
-        $vehicle->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $checkProduct = DB::table('product_vehicle as pv')
+            ->join('vehicle_model as vd','vd.id','pv.modelId')
+            ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->where('pv.isActive',1)
+            ->where('vk.id',$id)
+            ->get();
+        $checkVehicle = DB::table('vehicle as v')
+            ->join('vehicle_model as vd','vd.id','v.modelId')
+            ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->where('vk.id',$id)
+            ->get();
+        if(count($checkProduct) > 0 || count($checkVehicle) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
+            $vehicle = VehicleMake::findOrFail($id);
+            $vehicle->update([
+                'isActive' => 0
+            ]);
+            VehicleModel::where('makeId',$id)->update(['isActive'=>0]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }
         return Redirect::back();
     }
     
@@ -197,5 +213,24 @@ class VehicleController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
+    }
+
+    public function remove(Request $request, $id){
+        $checkProduct = DB::table('product_vehicle as pv')
+            ->join('vehicle_model as vd','vd.id','pv.modelId')
+            ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->where('pv.isActive',1)
+            ->where('pv.modelId',$id)
+            ->get();
+        $checkVehicle = DB::table('vehicle as v')
+            ->join('vehicle_model as vd','vd.id','v.modelId')
+            ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->where('v.modelId',$id)
+            ->get();
+        if(count($checkProduct) > 0 || count($checkVehicle) > 0){
+            return response()->json(['message'=>'It seems that the record is still being used in other items. Discarding failed.']);
+        }else{
+            return response()->json(['message'=>0]);
+        }
     }
 }

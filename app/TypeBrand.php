@@ -15,10 +15,10 @@ class TypeBrand extends Model
     ];
 
     public function type(){
-        return $this->belongsTo('App\ProductType','typeId')->where('isActive',1);
+        return $this->belongsTo('App\ProductType','typeId');
     }
 
     public function brand(){
-        return $this->belongsTo('App\ProductBrand','brandId')->where('isActive',1);
+        return $this->belongsTo('App\ProductBrand','brandId');
     }
 }

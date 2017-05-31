@@ -16,10 +16,10 @@ class PromoService extends Model
     ];
 
     public function service(){
-        return $this->belongsTo('App\Service','serviceId')->where('isActive',1);
+        return $this->belongsTo('App\Service','serviceId');
     }
 
     public function promo(){
-        return $this->belongsTo('App\Promo','promoId')->where('isActive',1);
+        return $this->belongsTo('App\Promo','promoId');
     }
 }

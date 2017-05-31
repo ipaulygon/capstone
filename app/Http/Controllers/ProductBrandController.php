@@ -181,16 +181,18 @@ class ProductBrandController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $product = Product::where('brandId',$id)->get();
-        if($product->isEmpty()){
+        $checkProduct = DB::table('product')
+            ->where('brandId',$id)
+            ->get();
+        if(count($checkProduct) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $brand = ProductBrand::findOrFail($id);
             $brand->update([
                 'isActive' => 0
             ]);
             TypeBrand::where('brandId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }
         return Redirect::back();
     }

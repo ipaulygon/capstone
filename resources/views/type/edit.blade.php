@@ -4,6 +4,10 @@
     {{"Product Type"}}
 @stop
 
+@section('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+@stop
+
 @section('content')
     {!! Form::model($type , ['method' => 'patch', 'action' => ['ProductTypeController@update',$type->id]]) !!}
     <div class="col-md-4">
@@ -55,6 +59,7 @@
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         @endif
+                        <input type="hidden" class="hidden" value="{{$tb->brandId}}">
                         {!! Form::label('brand', 'Brand') !!}<span>*</span>
                         {!! Form::input('text','brand',$tb->brand->name,[
                             'class' => 'form-control autocomplete',
@@ -77,6 +82,7 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/ptype.js') }}"></script>
     <script>
         var options = {

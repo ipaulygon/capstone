@@ -84,27 +84,27 @@
         <script>$('#compute').val(0)</script>
         @if(old('product'))
         @foreach(old('product') as $key=>$product)
-            <script>retrieveProduct({{$product}},{{old("productQty.".$key)}})</script>
+            <script>oldProduct({{$product}},{{old("productQty.".$key)}})</script>
         @endforeach
         @endif
         @if(old('service'))
         @foreach(old('service') as $key=>$service)
-            <script>retrieveService({{$service}})</script>
+            <script>oldService({{$service}})</script>
         @endforeach
         @endif
         @if(old('package'))
         @foreach(old('package') as $key=>$package)
-            <script>retrievePackage({{$package}},{{old("packageQty.".$key)}})</script>
+            <script>oldPackage({{$package}},{{old("packageQty.".$key)}})</script>
         @endforeach
         @endif
         @if(old('promo'))
         @foreach(old('promo') as $key=>$promo)
-            <script>retrievePromo({{$promo}},{{old("promoQty.".$key)}})</script>
+            <script>oldPromo({{$promo}},{{old("promoQty.".$key)}})</script>
         @endforeach
         @endif
         @if(old('discount'))
         @foreach(old('discount') as $key=>$discount)
-            <script>retrieveDiscount({{$discount}})</script>
+            <script>oldDiscount({{$discount}})</script>
         @endforeach
         @endif
     @endif

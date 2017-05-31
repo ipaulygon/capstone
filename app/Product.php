@@ -21,15 +21,15 @@ class Product extends Model
     ];
 
     public function type(){
-        return $this->belongsTo('App\ProductType','typeId')->where('isActive',1);
+        return $this->belongsTo('App\ProductType','typeId');
     }
 
     public function brand(){
-        return $this->belongsTo('App\ProductBrand','brandId')->where('isActive',1);
+        return $this->belongsTo('App\ProductBrand','brandId');
     }
 
     public function variance(){
-        return $this->belongsTo('App\ProductVariance','varianceId')->where('isActive',1);
+        return $this->belongsTo('App\ProductVariance','varianceId');
     }
 
     public function vehicle(){
@@ -38,5 +38,13 @@ class Product extends Model
 
     public function discount(){
         return $this->hasOne('App\DiscountProduct', 'productId')->where('isActive',1);
+    }
+    
+    public function discountRecord(){
+        return $this->hasMany('App\DiscountProduct', 'productId');
+    }
+
+    public function priceRecord(){
+        return $this->hasMany('App\ProductPrice', 'productId');
     }
 }

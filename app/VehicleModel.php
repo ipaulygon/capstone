@@ -13,10 +13,10 @@ class VehicleModel extends Model
     	'name',
         'year',
         'transmission',
-    	'isActive'  	
+    	'isActive'
     ];
 
     public function make(){
-    	return $this->belongsTo('App\VehicleMake','makeId')->where('isActive',1);
+    	return $this->belongsTo('App\VehicleMake','makeId');
     }
 }

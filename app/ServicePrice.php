@@ -14,6 +14,6 @@ class ServicePrice extends Model
     ];
 
    public function service(){
-        return $this->belongsTo('App\Service','serviceId')->where('isActive',1);
+        return $this->belongsTo('App\Service','serviceId');
     }
 }

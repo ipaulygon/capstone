@@ -178,11 +178,21 @@ class InspectionController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $type = InspectionType::findOrFail($id);
-        $type->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $checkInspect = DB::table('inspection_detail as id')
+            ->join('inspection_item as ii','ii.id','id.itemId')
+            ->join('inspection_type as it','it.id','ii.typeId')
+            ->where('it.id',$id)
+            ->where('id.isActive',1)
+            ->get();
+        if(count($checkInspect) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
+            $type = InspectionType::findOrFail($id);
+            $type->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }
         return Redirect::back();
     }
     
@@ -194,5 +204,17 @@ class InspectionController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
+    }
+
+    public function remove(Request $request, $id){
+        $checkInspect = DB::table('inspection_detail')
+            ->where('itemId',$id)
+            ->where('isActive',1)
+            ->get();
+        if(count($checkInspect) > 0){
+            return response()->json(['message'=>'It seems that the record is still being used in other items. Discarding failed.']);
+        }else{
+            return response()->json(['message'=>0]);
+        }
     }
 }

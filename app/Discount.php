@@ -16,10 +16,14 @@ class Discount extends Model
     ];
 
     public function product(){
-    	return $this->hasMany('App\DiscountProduct', 'discountId');
+    	return $this->hasMany('App\DiscountProduct', 'discountId')->where('isActive',1);
     }
 
     public function service(){
-    	return $this->hasMany('App\DiscountService', 'discountId');
+    	return $this->hasMany('App\DiscountService', 'discountId')->where('isActive',1);
+    }
+
+    public function rateRecord(){
+        return $this->hasMany('App\DiscountRate', 'discountId');
     }
 }

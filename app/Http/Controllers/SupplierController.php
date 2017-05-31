@@ -194,11 +194,20 @@ class SupplierController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $checkPurchase = DB::table('purchase_header as ph')
+            ->join('supplier as s','s.id','ph.supplierId')
+            ->where('ph.supplierId',$id)
+            ->get();
+        return $checkPurchase;
+        if(count($checkPurchase) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
+            $supplier = Supplier::findOrFail($id);
+            $supplier->update([
+                'isActive' => 0
+            ]);
+            $request->session()->flash('success', 'Successfully deactivated.');
+        }
         return Redirect::back();
     }
     

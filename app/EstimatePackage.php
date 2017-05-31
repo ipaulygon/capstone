@@ -16,7 +16,7 @@ class EstimatePackage extends Model
     ];
 
     public function package(){
-        return $this->belongsTo('App\Package','packageId')->where('isActive',1);
+        return $this->belongsTo('App\Package','packageId');
     }
 
     public function header(){

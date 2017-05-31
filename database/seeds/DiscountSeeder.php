@@ -17,5 +17,11 @@ class DiscountSeeder extends Seeder
             'type' => 'Individual',
             'isActive' => 1,
         ]);
+        DB::table('discount')->insert([
+            'name' => 'Senior Citizen',
+            'rate' => 20.00,
+            'type' => 'Whole',
+            'isActive' => 1,
+        ]);
     }
 }

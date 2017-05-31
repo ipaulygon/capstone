@@ -58,7 +58,7 @@
             Rapide
         </div>
         <div style="float:right">
-            {{date('F j, Y')}}<br>
+            {{date('F j, Y', strtotime($estimate->created_at))}}<br>
             <label style="color:red">ESTIMATE{{$estimate->id}}</label>
         </div>
         <div style="clear:both"></div>
@@ -106,13 +106,18 @@
                         }
                         $discount = null;
                         if($product->product->discount!=null){
-                            $discount = $product->product->discount->header->rate;
+                            $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                        }else{
+                            $dis = $product->product->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                            if(count($dis) > 0){
+                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                            }
                         }
+                        $price = $product->product->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
                         if($discount!=null){
-                            $price = $product->product->price-($product->product->price*($discount/100));
+                            $price = $price-($price*($discount/100));
                             $discountString = '['.$discount.' % discount]';
                         }else{
-                            $price = $product->product->price;
                             $discountString = '';
                         }
                     ?>
@@ -130,13 +135,18 @@
                     <?php
                         $discount = null;
                         if($service->service->discount!=null){
-                            $discount = $service->service->discount->header->rate;
+                            $discount = $service->service->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                        }else{
+                            $dis = $service->service->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                            if(count($dis) > 0){
+                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                            }
                         }
+                        $price = $service->service->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
                         if($discount!=null){
-                            $price = $service->service->price-($service->service->price*($discount/100));
+                            $price = $price-($price*($discount/100));
                             $discountString = '['.$discount.' % discount]';
                         }else{
-                            $price = $product->service->price;
                             $discountString = '';
                         }
                     ?>
@@ -170,10 +180,13 @@
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
                         @endforeach
                     </td>
-                    <td class="text-right">{{number_format($package->package->price,2)}}</td>
-                    <td class="text-right">{{number_format($package->quantity*$package->package->price,2)}}</td>
                     <?php
-                        $total += $package->quantity*$package->package->price;
+                        $price = $package->package->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                    ?>
+                    <td class="text-right">{{number_format($price,2)}}</td>
+                    <td class="text-right">{{number_format($package->quantity*$price,2)}}</td>
+                    <?php
+                        $total += $package->quantity*$price;
                     ?>
                 </tr>
                 @endforeach
@@ -211,24 +224,32 @@
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
                         @endforeach
                     </td>
-                    <td class="text-right">{{number_format($promo->promo->price,2)}}</td>
-                    <td class="text-right">{{number_format($promo->quantity*$promo->promo->price,2)}}</td>
                     <?php
-                        $total += $promo->quantity*$promo->promo->price;
+                        $price = $promo->promo->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                    ?>
+                    <td class="text-right">{{number_format($price,2)}}</td>
+                    <td class="text-right">{{number_format($promo->quantity*$price,2)}}</td>
+                    <?php
+                        $total += $promo->quantity*$price;
                     ?>
                 </tr>
                 @endforeach
-                <tr>
-                    <td></td>
-                    <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
-                    <td class="text-right">{{$estimate->discount->discount->rate}} %</td>
-                    <td class="text-right">-{{number_format($total*($estimate->discount->discount->rate/100),2)}}</td>
-                </tr>
+                @if($estimate->discount)
+                    <tr>
+                        <td></td>
+                        <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
+                        <td class="text-right">{{$estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate}} %</td>
+                        <td class="text-right">-{{number_format($total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100),2)}}</td>
+                        <?php 
+                            $discounts += $total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100);
+                        ?>
+                    </tr>
+                @endif
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total-($total*($estimate->discount->discount->rate/100)),2)}}</td>
+                    <td class="text-right">PhP {{number_format($total-$discounts,2)}}</td>
                 </tr>
             </tbody>
         </table>
@@ -241,7 +262,7 @@
             <div style="float:right" class="col-md-6">
                 <br>
                 CUSTOMER'S SIGNATURE: ___________________<br>
-                GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-($total*($estimate->discount->discount->rate/100)),2)}}<br> 
+                GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discounts,2)}}<br> 
             </div>
         </div>
     </body>

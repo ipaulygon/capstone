@@ -8,8 +8,6 @@ use App\Inventory;
 use App\ProductType;
 use App\TypeBrand;
 use App\TypeVariance;
-use App\PromoProduct;
-use App\PackageProduct;
 use App\ProductVehicle;
 use Validator;
 use Redirect;
@@ -287,16 +285,30 @@ class ProductController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $promo = PromoProduct::where('productId',$id)->get();
-        $package = PackageProduct::where('productId',$id)->get();
-        if($promo->isEmpty() && $package->isEmpty()){
+        $checkPackage = DB::table('package_product')
+            ->where('productId',$id)
+            ->where('isActive',1)
+            ->get();
+        $checkPromo = DB::table('promo_product')
+            ->where('productId',$id)
+            ->where('isActive',1)
+            ->get();
+        $checkPurchase = DB::table('purchase_detail')
+            ->where('productId',$id)
+            ->where('quantity','!=','delivered')
+            ->get();
+        $checkInventory = DB::table('inventory')
+            ->where('productId',$id)
+            ->where('quantity','>',0)
+            ->get();
+        if(count($checkPackage) > 0 || count($checkPromo) > 0 || count($checkPurchase) > 0 || count($checkInventory) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $product = Product::findOrFail($id);
             $product->update([
                 'isActive' => 0
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }
         return Redirect::back();
     }

@@ -202,16 +202,18 @@ class ProductVarianceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $product = Product::where('varianceId',$id)->get();
-        if($product->isEmpty()){
+        $checkProduct = DB::table('product')
+            ->where('varianceId',$id)
+            ->get();
+        if(count($checkProduct) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $variance = Productvariance::findOrFail($id);
             $variance->update([
                 'isActive' => 0
             ]);
             TypeVariance::where('varianceId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }
         return Redirect::back();
     }

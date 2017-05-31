@@ -155,15 +155,18 @@ class ServiceCategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $service = Service::where('categoryId',$id)->get();
-        if($service->isEmpty()){
+        $checkService = DB::table('service')
+            ->where('categoryId',$id)
+            ->where('isActive',1)
+            ->get();
+        if(count($checkService) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $category = ServiceCategory::findOrFail($id);
             $category->update([
                 'isActive' => 0
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }
         return Redirect::back();
     }

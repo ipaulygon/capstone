@@ -5,6 +5,7 @@
 @stop
 
 @section('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
 @stop
@@ -29,12 +30,15 @@
                     </div>
                     @foreach($type->item as $item)
                         <div id="item" class="form-group">
-                            <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </button>
+                            @if($loop->index!=0)
+                                <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
                             <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right">
                                 <i class="glyphicon glyphicon-menu-right"></i>
                             </button>
+                            <input type="hidden" class="hidden" value="{{$item->id}}">
                             {!! Form::label('item', 'Inspection Items') !!}<span>*</span>
                             <textarea class="hidden" name="inspectionForm[]" id="inspectionForm" required>{{$item->form}}</textarea>
                             {!! Form::input('text',null,$item->name,[
@@ -73,6 +77,7 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/formbuilder/form-builder.min.js') }}"></script>
     <script src="{{ URL::asset('assets/formbuilder/form-render.min.js') }}"></script>
     <script src="{{ URL::asset('js/inspection.js') }}"></script>

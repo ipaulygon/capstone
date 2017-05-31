@@ -14,6 +14,6 @@ class PromoPrice extends Model
     ];
 
     public function promo(){
-        return $this->belongsTo('App\Promo','promoId')->where('isActive',1);
+        return $this->belongsTo('App\Promo','promoId');
     }
 }

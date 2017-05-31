@@ -4,6 +4,7 @@
             <h3 class="box-title">Purchase Order Details</h3>
         </div>
         <div class="box-body dataTable_wrapper">
+            <input id="created" type="hidden" class="hidden" value="{{$created}}">
             <div class="col-md-row">
                 <div class="col-md-6">
                     <div class="form-group">

@@ -34,6 +34,7 @@
         $("#product").val(activeProduct);
         $("#service").val(activeService);
         $(".select2").select2();
+        $(".square-blue[value={{$discount->type}}").prop('checked',true);
         $('#type1').on('ifChecked ifUnchecked', function(event){
             if(event.type=="ifChecked"){
                 $('#product').val('');

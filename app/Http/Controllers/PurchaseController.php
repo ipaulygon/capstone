@@ -45,7 +45,8 @@ class PurchaseController extends Controller
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
         $date = date('F j, Y');
-        return View('purchase.create',compact('products','suppliers','date'));
+        $created = date('Y-m-d H:i:s');
+        return View('purchase.create',compact('products','suppliers','date','created'));
     }
 
     /**
@@ -148,8 +149,9 @@ class PurchaseController extends Controller
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
-        $date = date('F j, Y');
-        return View('purchase.edit',compact('purchase','suppliers','products','date'));
+        $date = date('F j, Y',strtotime($purchase->created_at));
+        $created = $purchase->created_at;
+        return View('purchase.edit',compact('purchase','suppliers','products','date','created'));
     }
 
     /**
@@ -239,7 +241,12 @@ class PurchaseController extends Controller
     }
 
     public function product($id){
-        $product = Product::with('type')->with('brand')->with('variance')->with('vehicle.model.make')->findOrFail($id);
+        $product = Product::with('type')
+            ->with('brand')
+            ->with('variance')
+            ->with('vehicle.model.make')
+            ->with('priceRecord')
+            ->findOrFail($id);
         return response()->json(['product'=>$product]);
     }
 }

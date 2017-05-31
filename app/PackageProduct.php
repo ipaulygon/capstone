@@ -16,10 +16,10 @@ class PackageProduct extends Model
     ];
 
     public function product(){
-        return $this->belongsTo('App\Product','productId')->where('isActive',1);
+        return $this->belongsTo('App\Product','productId');
     }
 
     public function package(){
-        return $this->belongsTo('App\Package','packageId')->where('isActive',1);
+        return $this->belongsTo('App\Package','packageId');
     }
 }

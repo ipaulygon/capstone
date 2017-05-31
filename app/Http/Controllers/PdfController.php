@@ -31,8 +31,9 @@ class PdfController extends Controller
     public function estimate($id){
         $estimate = EstimateHeader::findOrFail($id);
         $total = 0;
+        $discounts = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.estimate',compact('estimate','total'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.estimate',compact('estimate','total','discounts'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
     }
 }

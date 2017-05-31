@@ -22,7 +22,7 @@ class DashboardController extends Controller
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->where('p.isActive',1)
-            ->where('p.reorder','>=','i.quantity')
+            ->where('i.quantity','<=','p.reorder')
             ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as original','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
         return View('dashboard',compact('stocks'));
@@ -35,7 +35,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -46,7 +46,7 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -57,7 +57,7 @@ class DashboardController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -68,7 +68,7 @@ class DashboardController extends Controller
      */
     public function edit($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -80,7 +80,7 @@ class DashboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -91,6 +91,6 @@ class DashboardController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
     }
 }

@@ -84,26 +84,71 @@
         <script>$('#compute').val(0)</script>
         @if($estimate->product)
         @foreach($estimate->product as $key=>$product)
-            <script>retrieveProduct({{$product->productId}},{{$product->quantity}})</script>
+            <?php
+                $discount = null;
+                if($product->product->discount!=null){
+                    $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                }else{
+                    $dis = $product->product->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                    if(count($dis) > 0){
+                        $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                    }
+                }
+                $price = $product->product->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                if($discount!=null){
+                    $price = $price-($price*($discount/100));
+                    $discountString = '['.$discount.' % discount]';
+                }else{
+                    $discountString = '';
+                }
+            ?>
+            <script>retrieveProduct({{$product->productId}},{{$product->quantity}},{{$price}},"{{$discountString}}")</script>
         @endforeach
         @endif
         @if($estimate->service)
         @foreach($estimate->service as $key=>$service)
-            <script>retrieveService({{$service->serviceId}})</script>
+            <?php
+                $discount = null;
+                if($service->service->discount!=null){
+                    $discount = $service->service->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                }else{
+                    $dis = $service->service->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                    if(count($dis) > 0){
+                        $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                    }
+                }
+                $price = $service->service->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                if($discount!=null){
+                    $price = $price-($price*($discount/100));
+                    $discountString = '['.$discount.' % discount]';
+                }else{
+                    $discountString = '';
+                }
+            ?>
+            <script>retrieveService({{$service->serviceId}},{{$price}},"{{$discountString}}")</script>
         @endforeach
         @endif
         @if($estimate->package)
         @foreach($estimate->package as $key=>$package)
-            <script>retrievePackage({{$package->packageId}},{{$package->quantity}})</script>
+            <?php
+                $price = $package->package->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+            ?>
+            <script>retrievePackage({{$package->packageId}},{{$package->quantity}},{{$price}})</script>
         @endforeach
         @endif
         @if($estimate->promo)
         @foreach($estimate->promo as $key=>$promo)
-            <script>retrievePromo({{$promo->promoId}},{{$promo->quantity}})</script>
+            <?php
+                $price = $promo->promo->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+            ?>
+            <script>retrievePromo({{$promo->promoId}},{{$promo->quantity}},{{$price}})</script>
         @endforeach
         @endif
         @if($estimate->discount)
-        <script>retrieveDiscount({{$estimate->discount->discountId}})</script>
+            <?php
+                $rate = $estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+            ?>
+        <script>retrieveDiscount({{$estimate->discount->discountId}},{{$rate}})</script>
         @endif
     @endif
 @stop

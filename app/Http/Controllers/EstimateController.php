@@ -483,12 +483,22 @@ class EstimateController extends Controller
     }
 
     public function product($id){
-        $product = Product::with('type')->with('brand')->with('variance')->with('discount.header')->findOrFail($id);
+        $product = Product::with('type')
+            ->with('brand')
+            ->with('variance')
+            ->with('discount.header.rateRecord')
+            ->with('discountRecord.header.rateRecord')
+            ->with('priceRecord')
+            ->findOrFail($id);
         return response()->json(['product'=>$product]);
     }
 
     public function service($id){
-        $service = Service::with('category')->with('discount.header')->findOrFail($id);
+        $service = Service::with('category')
+            ->with('discount.header.rateRecord')
+            ->with('discountRecord.header.rateRecord')
+            ->with('priceRecord')
+            ->findOrFail($id);
         return response()->json(['service'=>$service]);
     }
 
@@ -497,6 +507,7 @@ class EstimateController extends Controller
             ->with('product.product.brand')
             ->with('product.product.variance')
             ->with('service.service.category')
+            ->with('priceRecord')
             ->findOrFail($id);
         return response()->json(['package'=>$package]);
     }
@@ -510,12 +521,13 @@ class EstimateController extends Controller
             ->with('freeProduct.product.variance')
             ->with('service.service.category')
             ->with('freeService.service.category')
+            ->with('priceRecord')
             ->findOrFail($id);
         return response()->json(['promo'=>$promo]);
     }
 
     public function discount($id){
-        $discount = Discount::findOrFail($id);
+        $discount = Discount::with('rateRecord')->findOrFail($id);
         return response()->json(['discount'=>$discount]);
     }
 }

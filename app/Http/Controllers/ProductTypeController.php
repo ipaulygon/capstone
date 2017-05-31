@@ -189,17 +189,24 @@ class ProductTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $brand = TypeBrand::where('typeId',$id)->get();
-        $variance = TypeVariance::where('typeId',$id)->get();
-        $product = Product::where('typeId',$id)->get();
-        if($brand->isEmpty() && $variance->isEmpty() && $product->isEmpty()){
+        $checkBrand = DB::table('type_brand')
+            ->where('typeId',$id)
+            ->get();
+        $checkVariance = DB::table('type_variance')
+            ->where('typeId',$id)
+            ->get();
+        $checkProduct = DB::table('product')
+            ->where('typeId',$id)
+            ->where('isActive',1)
+            ->get();
+        if(count($checkBrand) > 0 || count($checkVariance) > 0 || count($checkProduct) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $type = ProductType::findOrFail($id);
             $type->update([
                 'isActive' => 0
             ]);
-            $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            $request->session()->flash('success', 'Successfully deactivated.');
         }
         return Redirect::back();
     }
@@ -215,12 +222,13 @@ class ProductTypeController extends Controller
     }
 
     public function remove(Request $request, $id){
-        $brandId = ProductBrand::where('name',$id)->first();
-        $product = Product::where('brandId',$brandId->id)->get();
-        if($product->isEmpty()){
-            return response()->json(['message'=>0]);
-        }else{
+        $checkProduct = DB::table('product')
+            ->where('brandId',$id)
+            ->get();
+        if(count($checkProduct) > 0){
             return response()->json(['message'=>'It seems that the record is still being used in other items. Discarding failed.']);
+        }else{
+            return response()->json(['message'=>0]);
         }
     }
 }

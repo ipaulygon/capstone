@@ -15,10 +15,10 @@ class PackageService extends Model
     ];
 
     public function service(){
-        return $this->belongsTo('App\Service','serviceId')->where('isActive',1);
+        return $this->belongsTo('App\Service','serviceId');
     }
 
     public function package(){
-        return $this->belongsTo('App\Package','packageId')->where('isActive',1);
+        return $this->belongsTo('App\Package','packageId');
     }
 }

@@ -68,7 +68,7 @@
             Address: {{$delivery->supplier->address}}
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y')}}<br>
+            Date: {{date('F j, Y',strtotime($delivery->created_at))}}<br>
             Reference Orders: 
             @foreach($delivery->order as $order)
                 {{$order->purchaseId}}|

@@ -4,6 +4,10 @@
     {{"Vehicle"}}
 @stop
 
+@section('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+@stop
+
 @section('content')
     {!! Form::model($make , ['method' => 'patch', 'action' => ['VehicleController@update',$make->id]]) !!}
     <div class="col-md-4">
@@ -15,7 +19,7 @@
                 <div class="form-group">
                     {!! Form::label('name', 'Vehicle Make') !!}<span>*</span>
                     {!! Form::input('text','name',null,[
-                        'class' => 'form-control',
+                        'class' => 'form-control make',
                         'placeholder'=>'Name',
                         'maxlength'=>'50',
                         'required']) 
@@ -46,9 +50,10 @@
                         @endif
                         <div class="row">
                             <div class="col-md-6">
+                                <input type="hidden" class="hidden" value="{{$model->id}}">
                                 {!! Form::label('model', 'Model') !!}<span>*</span>
                                 {!! Form::input('text',null,$model->name,[
-                                    'class' => 'form-control',
+                                    'class' => 'form-control model',
                                     'name' => 'model[]',
                                     'placeholder' => 'Model',
                                     'maxlength' => '50',
@@ -93,6 +98,7 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>

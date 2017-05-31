@@ -15,6 +15,29 @@ $(document).on("click", "#addModel", function (){
 });
 
 $(document).on("click", "#removeModel", function (){
-    $(this).parent().remove();
+    id = $(this).parent().find('input.hidden').val();
+    context = $(this).parent();
+    if(id!=null){
+        $.ajax({
+            type: "GET",
+            url: "/vehicle/remove/"+id,
+            dataType: "JSON",
+            success:function(data){
+                if(data.message==0){
+                    $(context).remove();
+                }else{
+                    $('#notif').append(
+                        '<div class="alert alert-danger alert-dismissible">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                        '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+                        data.message +
+                        '</div>'
+                    );
+                }
+            }
+        });
+    }else{
+        $(context).remove();
+    }
 });
 

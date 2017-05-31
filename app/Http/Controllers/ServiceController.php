@@ -5,8 +5,6 @@ use Illuminate\Http\Request;
 use App\Service;
 use App\ServicePrice;
 use App\ServiceCategory;
-use App\PromoService;
-use App\PackageService;
 use Validator;
 use Redirect;
 use Session;
@@ -189,16 +187,22 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $promo = PromoService::where('serviceId',$id)->get();
-        $package = PackageService::where('serviceId',$id)->get();
-        if($promo->isEmpty() && $package->isEmpty()){
+        $checkPackage = DB::table('package_service')
+            ->where('serviceId',$id)
+            ->where('isActive',1)
+            ->get();
+        $checkPromo = DB::table('package_promo')
+            ->where('serviceId',$id)
+            ->where('isActive',1)
+            ->get();
+        if(count($checkPackage) > 0 || count($checkPromo) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
             $service = Service::findOrFail($id);
             $service->update([
                 'isActive' => 0
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
-        }else{
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }
         return Redirect::back();
     }

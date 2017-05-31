@@ -15,10 +15,10 @@ class DiscountProduct extends Model
     ];
 
     public function product(){
-        return $this->belongsTo('App\Product','productId')->where('isActive',1);
+        return $this->belongsTo('App\Product','productId');
     }
 
     public function header(){
-        return $this->belongsTo('App\Discount','discountId')->where('isActive',1);
+        return $this->belongsTo('App\Discount','discountId');
     }
 }

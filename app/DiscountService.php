@@ -15,10 +15,10 @@ class DiscountService extends Model
     ];
 
     public function service(){
-        return $this->belongsTo('App\Service','serviceId')->where('isActive',1);
+        return $this->belongsTo('App\Service','serviceId');
     }
 
     public function header(){
-        return $this->belongsTo('App\Discount','discountId')->where('isActive',1);
+        return $this->belongsTo('App\Discount','discountId');
     }
 }
