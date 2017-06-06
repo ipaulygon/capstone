@@ -18,7 +18,9 @@ $('#firstName').on('autocompleteselect',function(event, ui){
             $('#lastName').val(data.customer.lastName);
             $('#contact').val(data.customer.contact);
             $('#email').val(data.customer.email);
-            $('#address').text(data.customer.address);
+            $('#street').text(data.customer.street);
+            $('#brgy').text(data.customer.brgy);
+            $('#city').text(data.customer.city);
         }
     });
 });

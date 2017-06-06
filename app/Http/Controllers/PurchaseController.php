@@ -249,4 +249,9 @@ class PurchaseController extends Controller
             ->findOrFail($id);
         return response()->json(['product'=>$product]);
     }
+
+    public function finalz($id){
+        $purchase = PurchaseHeader::with('detail')->findOrFail($id);
+        return response()->json(['purchase'=>$purchase]);
+    }
 }

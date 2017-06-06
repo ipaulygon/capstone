@@ -70,15 +70,37 @@
                     !!}
                 </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('address', 'Address') !!}<span>*</span>
-                {!! Form::textarea('address',null,[
-                    'class' => 'form-control',
-                    'placeholder'=>'Address',
-                    'maxlength'=>'140',
-                    'rows' => '2',
-                    'required']) 
-                !!}
+            <div class="row">
+                <div class="form-group col-md-4">
+                    {!! Form::label('street', 'No. & St./Bldg.') !!}<span>*</span>
+                    {!! Form::textarea('street',null,[
+                        'class' => 'form-control',
+                        'placeholder'=>'No. & St./Bldg.',
+                        'maxlength'=>'140',
+                        'rows' => '1',
+                        'required']) 
+                    !!}
+                </div>
+                <div class="form-group col-md-4">
+                    {!! Form::label('brgy', 'Brgy./Subd.') !!}<span>*</span>
+                    {!! Form::textarea('brgy',null,[
+                        'class' => 'form-control',
+                        'placeholder'=>'Brgy./Subd.',
+                        'maxlength'=>'140',
+                        'rows' => '1',
+                        'required']) 
+                    !!}
+                </div>
+                <div class="form-group col-md-4">
+                    {!! Form::label('city', 'City/Municipality') !!}<span>*</span>
+                    {!! Form::textarea('city',null,[
+                        'class' => 'form-control',
+                        'placeholder'=>'City/Municipality',
+                        'maxlength'=>'140',
+                        'rows' => '1',
+                        'required']) 
+                    !!}
+                </div>
             </div>
         </div>
         <div class="box-footer">

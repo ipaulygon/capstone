@@ -18,6 +18,7 @@ function changeType(id){
             $('#pv').select2();
             if(data.type.category=='Parts'){
                 $('#part').removeClass('hidden');
+                $("#isOriginal[value=Original]").prop('checked',true);
             }else{
                 $('.square-blue').iCheck('uncheck');
                 $('#vehicle').val('');

@@ -16,6 +16,31 @@ function rowFinder(row){
     return row;
 }
 
+$(document).on('keyup', '.qr' ,function (){
+    if(Number($(this).val()) > Number($(this).attr('data-qty'))){
+        $(this).popover({
+            trigger: 'manual',
+            content: function(){
+                var content = "Oops! Your input exceeds the corresponding number of orders. The max value will be set.";
+                return content;
+            },
+            placement: function(){
+                var placement = 'top';
+                return placement;
+            },
+            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+
+        $(this).popover('show');
+    }else{
+        $(this).popover('hide');
+    }
+});
+
+$(document).on('focusout','.qr',function(){
+    $(this).popover('hide');
+});
+
 $(document).on('change', '#supp', function(){
     $('.hidden.order').remove();
     $('#purchase option').remove();
@@ -46,20 +71,21 @@ $(document).on('click','.select2-results__option',function(){
         success:function(data){
             $.each(data.products,function(key,value){
                 stack = eval($('#qo'+value.productId).val()+"-"+value.quantity);
-                if(value.quantity==0)
                 if(stack==0){
                     var row = rowFinder($('#qo'+value.productId));
                     pList.row(row).remove().draw();
+                }else{
+                    $('#qo'+value.productId).val(stack);
+                    $('#rowDesc'+value.productId+' #list'+value.purchaseId).remove();
+                    $('#qr'+value.product.id).attr('data-qty',stack);
+                    $('#qr'+value.productId).inputmask({ 
+                        alias: "integer",
+                        prefix: '',
+                        allowMinus: false,
+                        min: 0,
+                        max: stack,
+                    });
                 }
-                $('#qo'+value.productId).val(stack);
-                $('#rowDesc'+value.productId+' #list'+value.purchaseId).remove();
-                $('#qr'+value.productId).inputmask({ 
-                    alias: "integer",
-                    prefix: '',
-                    allowMinus: false,
-                    min: 0,
-                    max: stack,
-                });
             });
         }
     });
@@ -81,6 +107,7 @@ $(document).on('change','#purchase',function(){
                         stack = eval($('#qo'+value.productId).val()+"+"+value.quantity);
                         $('#qo'+value.productId).val(stack);
                         $('#rowDesc'+value.productId).append('<li>'+value.purchaseId+' x '+value.quantity+" pcs."+'</li>');
+                        $('#qr'+value.product.id).attr('data-qty',stack);
                         $('#qr'+value.productId).inputmask({ 
                             alias: "integer",
                             prefix: '',
@@ -94,7 +121,7 @@ $(document).on('change','#purchase',function(){
                             '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><strong><input class="qo" id="qo'+value.productId+'" style="border: none!important;background: transparent!important" type="text" value="'+value.quantity+'" readonly> pcs.</strong>',
                             value.brand+" - "+value.product+part+" ("+value.variance+")",
                             '<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+value.quantity+" pcs."+'</li>',
-                            '<input type="text" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required>'
+                            '<input type="text" data-qty="'+value.quantity+'" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required>'
                         ]).draw().node();
                         $(row).find('td').eq(0).addClass('text-right');
                         $(row).find('td').eq(2).attr('id','rowDesc'+value.productId);

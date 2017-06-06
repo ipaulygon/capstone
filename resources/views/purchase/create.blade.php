@@ -39,14 +39,13 @@
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
         });
     </script>
     @if(old('product'))
         <script>$('#compute').val(0)</script>
         @foreach(old('product') as $key=>$product)
-            <script>retrieveProduct({{$product}},{{old("qty.".$key)}},{{old("modelId.".$key)}})</script>
+            <script>oldProduct({{$product}},{{old("qty.".$key)}},{{old("modelId.".$key)}})</script>
         @endforeach
     @endif
 @stop

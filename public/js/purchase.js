@@ -71,14 +71,12 @@ $(document).on('change', '#products', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -92,21 +90,19 @@ $(document).on('click','#pullProduct', function(){
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
     var row = rowFinder(this);
+    $('#products').val('');
+    $("#products").select2();
     pList.row(row).remove().draw();
 });
 
-function retrieveProduct(id,qty,model){
+function oldProduct(id,qty,model){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
         url: "/purchase/product/"+id,
         dataType: "JSON",
         success:function(data){
-            $.each(data.product.price_record,function(key,value){
-                if((new Date(value.created_at)) <= (new Date($('#created').val()))){
-                    price = value.price;
-                }
-            });
+            price = data.product.price
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+'*'+qty);
             row = pList.row.add([
@@ -149,17 +145,93 @@ function retrieveProduct(id,qty,model){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
     $('#products').val('');
     $("#products").select2();
+}
+
+function retrieveProduct(price,id,qty,model){
+    $('#products option[value="'+id+'"]').attr('disabled',true);
+    $.ajax({
+        type: "GET",
+        url: "/purchase/product/"+id,
+        dataType: "JSON",
+        success:function(data){
+            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            stack = eval(price+'*'+qty);
+            row = pList.row.add([
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
+                data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
+                '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
+                '<option value=""></option>' +
+                '</select>',
+                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+            ]).draw().node();
+            $(row).find('td').eq(3).addClass('text-right');
+            $(row).find('td').eq(4).addClass('text-right');
+            if(JSON.stringify(data.product.vehicle)=='[]'){
+                $('#'+data.product.id).addClass('hidden');
+            }else{
+                $.each(data.product.vehicle,function(key, value){
+                    if(value.model.id==model){
+                        $('#'+data.product.id).append('<option value="'+value.model.id+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                    }else{
+                        $('#'+data.product.id).append('<option value="'+value.model.id+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                    }
+                });
+                $('#'+data.product.id).select2();
+            }
+            // price
+            final = eval($('#compute').val().replace(',','')+"+"+stack);
+            $('#compute').val(final);
+            $('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: 100,
+            });
+            $(".price").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+            });
+            $('.stack').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                min: 0,
+            });
+        }
+    });
+    $('#products').val('');
+    $("#products").select2();
+}
+
+function detailProduct(id,qty){
+    $.ajax({
+        type: "GET",
+        url: "/purchase/product/"+id,
+        dataType: "JSON",
+        success:function(data){
+            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            row = pList.row.add([
+                qty,
+                data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")"
+            ]).draw().node();
+            $(row).find('td').eq(0).addClass('text-right');
+        }
+    });
 }

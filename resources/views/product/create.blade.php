@@ -47,6 +47,9 @@
                 $('#pv').val({{old('varianceId')}}).trigger("change");
             @endif
         });
+        @if($types->first()->category=='Parts')
+            $("#isOriginal[value=Original]").prop('checked',true);
+        @endif
     </script>
     <script>
         $(document).ready(function (){

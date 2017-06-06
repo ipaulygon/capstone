@@ -39,14 +39,16 @@
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
         });
     </script>
     @if($purchase->detail)
         <script>$('#compute').val(0)</script>
         @foreach($purchase->detail as $key=>$product)
-            <script>retrieveProduct({{$product->productId}},{{$product->quantity}},{{$product->modelId}})</script>
+            <?php
+                $price = $product->product->priceRecord->where('created_at','<=',$purchase->created_at)->first()->price;
+            ?>
+            <script>retrieveProduct({{$price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}})</script>
         @endforeach
     @endif
 @stop

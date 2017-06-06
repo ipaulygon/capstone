@@ -15,25 +15,28 @@ use App\EstimateHeader;
 class PdfController extends Controller
 {
     public function purchase($id){
+        $date = date('Y-m-d H:i:s');
         $purchase = PurchaseHeader::findOrFail($id);
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.purchase',compact('purchase'))->setPaper([0,0,612,396]);
+        $pdf = PDF::loadview('pdf.purchase',compact('purchase','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('purchase.pdf');
     }
     
     public function delivery($id){
+        $date = date('Y-m-d H:i:s');
         $delivery = DeliveryHeader::findOrFail($id);
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.delivery',compact('delivery'))->setPaper([0,0,612,396]);
+        $pdf = PDF::loadview('pdf.delivery',compact('delivery','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('delivery.pdf');
     }
 
     public function estimate($id){
+        $date = date('Y-m-d H:i:s');
         $estimate = EstimateHeader::findOrFail($id);
         $total = 0;
         $discounts = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.estimate',compact('estimate','total','discounts'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.estimate',compact('estimate','total','discounts','date'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
     }
 }

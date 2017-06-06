@@ -25,7 +25,7 @@
                         <tr>
                             <th>Vehicle</th>
                             <th>Customer</th>
-                            <th>Remarks</th>
+                            <th>Assigned Technician</th>
                             <th class="pull-right">Action</th>
                         </tr>
                     </thead>
@@ -41,7 +41,7 @@
                                 </td>
                                 <td>
                                     <li>Name: {{$inspect->firstName}} {{$inspect->middleName}} {{$inspect->lastName}}</li>
-                                    <li>Address: {{$inspect->address}}</li>
+                                    <li>Address: {{$inspect->street}} {{$inspect->brgy}} {{$inspect->city}}</li>
                                     <li>Contact No.: {{$inspect->contact}}</li>
                                     @if($inspect->email!=null)
                                     <li>{{$inspect->email}}</li>

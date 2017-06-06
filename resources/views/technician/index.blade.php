@@ -43,7 +43,7 @@
                                     ?>
                                     <li>Birthdate: {{$date}}</li>
                                     <li>Contact: {{$technician->contact}}</li>
-                                    <li>Address: {{$technician->address}}</li>
+                                    <li>Address: {{$technician->street}} {{$technician->brgy}} {{$technician->city}}</li>
                                     @if($technician->email)
                                     <li>Email: {{$technician->email}}</li>
                                     @endif

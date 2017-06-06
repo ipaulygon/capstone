@@ -1,12 +1,23 @@
 <div class="col-md-12">
-    <div class="box">
+    <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">Purchase Order Details</h3>
         </div>
         <div class="box-body dataTable_wrapper">
             <input id="created" type="hidden" class="hidden" value="{{$created}}">
             <div class="col-md-row">
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {!! Form::label('date', 'Date') !!}    
+                        <strong>{!! Form::input('text','date',$date,[
+                            'class' => 'form-control',
+                            'id' => 'date',
+                            'style' => 'border: none!important;background: transparent!important',
+                            'readonly']) 
+                        !!}</strong>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="form-group">
                         {!! Form::label('supplierId', 'Supplier') !!}<span>*</span>
                         <select id="supp" name="supplierId" class="select2 form-control" required>
@@ -16,29 +27,18 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        {!! Form::label('date', 'Date') !!}    
-                        {!! Form::input('text','date',$date,[
-                            'class' => 'form-control',
-                            'id' => 'date',
-                            'style' => 'border: none!important;background: transparent!important',
-                            'readonly']) 
-                        !!}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    {!! Form::label('products', 'Product Search') !!}
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <select id="products" name="productId" class="select2 form-control">
-                            <option value=""></option>
-                            @foreach($products as $product)
-                                <option value="{{$product->id}}">{{$product->brand}} - {{$product->name}} - {{$product->isOriginal}} ({{$product->variance}})</option>
-                            @endforeach
-                        </select>
+                        {!! Form::label('products', 'Product Search') !!}
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <select id="products" name="productId" class="select2 form-control">
+                                <option value=""></option>
+                                @foreach($products as $product)
+                                    <option value="{{$product->id}}">{{$product->brand}} - {{$product->name}} - {{$product->isOriginal}} ({{$product->variance}})</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>

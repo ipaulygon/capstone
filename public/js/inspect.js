@@ -21,7 +21,7 @@ function popForm(typeId,typeName,itemId,itemName,form){
         formData: formData
     };
     formContainer.formRender(formRenderOpts);
-    formContainer.prepend('<span style="color:black!important;font-size:1.2em">'+itemName+':</span><br>');
+    formContainer.prepend('<span style="color:black!important;padding-left: 3%">'+itemName+':</span><br>');
     formContainer.append('<input type="text" class="hidden" name="typeId[]" id="typeId" value="'+typeId+'" required>');
     formContainer.append('<input type="text" class="hidden" name="typeName[]" id="typeName" value="'+typeName+'" required>');
     formContainer.append('<input type="text" class="hidden" name="itemId[]" id="itemId" value="'+itemId+'" required>');
@@ -89,7 +89,9 @@ $('#firstName').on('autocompleteselect',function(event, ui){
             $('#lastName').val(data.customer.lastName);
             $('#contact').val(data.customer.contact);
             $('#email').val(data.customer.email);
-            $('#address').text(data.customer.address);
+            $('#street').text(data.customer.street);
+            $('#brgy').text(data.customer.brgy);
+            $('#city').text(data.customer.city);
         }
     });
 });

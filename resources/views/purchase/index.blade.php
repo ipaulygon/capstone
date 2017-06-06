@@ -7,6 +7,7 @@
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
 @stop
 
 @section('content')
@@ -77,8 +78,20 @@
                                 <span aria-hidden="true">×</span></button>
                                 <h4 class="modal-title">Finalize</h4>
                             </div>
-                            <div class="modal-body" style="text-align:center">
-                                Are you sure you want to finalize this record?
+                            <div class="modal-body">
+                                <div style="text-align:center">Are you sure you want to finalize this record?</div>
+                                <br>
+                                <div class="dataTable_wrapper">
+                                    <table id="productList" class="table table-striped responsive">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-right">Qty</th>
+                                                <th>Product</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -115,6 +128,8 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ URL::asset('js/purchase.js') }}"></script>
     <script>
         var deactivate = null;
         var finalize = null;
@@ -134,6 +149,17 @@
         function finalizeModal(id){
 			finalize = id;
 			$('#finalizeModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/purchase/finalz/"+id,
+                dataType: "JSON",
+                success:function(data){
+                    $('#productList').DataTable().clear().draw();
+                    $.each(data.purchase.detail,function(key,value){
+                        detailProduct(value.productId,value.quantity);
+                    });
+                }
+            });
 		}
 		$('#finalize').on('click', function (){
 			$('#fin'+finalize).submit();

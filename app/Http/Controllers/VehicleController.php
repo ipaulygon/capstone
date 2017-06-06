@@ -73,13 +73,10 @@ class VehicleController extends Controller
                 $years = $request->year;
                 $transmissions = $request->transmission;
                 foreach ($models as $key=>$model) {
-                    VehicleModel::create([
-                        'makeId' => $make->id,
-                        'name' => $model,
-                        'year' => $years[$key],
-                        'transmission' => $transmissions[$key],
-                        'isActive' => 1  
-                    ]);
+                    VehicleModel::updateOrCreate(
+                        ['makeId' => $make->id,'name' => $model,'year' => $years[$key],'transmission' => $transmissions[$key]],
+                        ['isActive' => 1]
+                    );
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

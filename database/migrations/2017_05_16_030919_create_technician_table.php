@@ -19,9 +19,11 @@ class CreateTechnicianTable extends Migration
             $table->string('firstName', 100);
             $table->string('middleName', 100);
             $table->string('lastName', 100);
-            $table->text('address');
+            $table->text('street');
+            $table->text('brgy');
+            $table->text('city');
             $table->date('birthdate');
-            $table->string('contact');
+            $table->string('contact', 30);
             $table->string('email')->nullable();
             $table->text('image')->nullable();
             $table->unique(['firstName', 'middleName','lastName']);

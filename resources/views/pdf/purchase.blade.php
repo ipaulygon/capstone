@@ -50,6 +50,9 @@
             position: absolute;
             bottom: 0;
         }
+        .footerd{
+            font-size: 0.8em;
+        }
     </style>
     <body>
         <div class="center header">
@@ -107,13 +110,14 @@
             </tbody>
         </table>
         <div class="footer">
-            <div style="float:left" class="col-md-6">
+            <div class="col-md-6">
                 Please deliver to: ______________________<br>
                 Approved by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br> 
             </div>
-            <div style="clear:both"></div>
             <br>
             Remarks: {{$purchase->remarks}}
+            <br><br>
+            <div class="footerd">Printed by: Admin {{$date}}</div>
         </div>
     </body>
 </html>

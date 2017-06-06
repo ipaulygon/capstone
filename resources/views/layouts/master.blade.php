@@ -13,7 +13,6 @@
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}
     @yield('style')
-    <link rel="shortcut icon" href="{{{ asset('favicon.ico') }}}">
     <link rel="stylesheet" href="{{ URL::asset('assets/jquery/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/font-awesome.css') }}">
@@ -23,7 +22,11 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
     <style>
         form span{
+            font-weight: bold;
             color: red;
+        }
+        label{
+            font-weight: 600;
         }
     </style>
     <!-- Scripts -->
@@ -56,7 +59,7 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-primary">10</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">You have 10 notifications</li>

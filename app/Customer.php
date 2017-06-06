@@ -12,7 +12,9 @@ class Customer extends Model
     	'firstName',
     	'middleName',
         'lastName',
-        'address',
+        'street',
+        'brgy',
+        'city',
         'contact',
         'email',	
     ];

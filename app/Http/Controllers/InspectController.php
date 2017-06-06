@@ -70,7 +70,9 @@ class InspectController extends Controller
             'lastName' => 'required|max:100',
             'contact' => 'required',
             'email' => 'nullable|email',
-            'address' => 'required|max:140',
+            'street' => 'nullable|max:140',
+            'brgy' => 'nullable|max:140',
+            'city' => 'required|max:140',
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
@@ -90,7 +92,9 @@ class InspectController extends Controller
             'lastName' => 'Last Name',
             'contact' => 'Contact No.',
             'email' => 'Email Address',
-            'address' => 'Address',
+            'street' => 'No. & St./Bldg.',
+            'brgy' => 'Brgy./Subd.',
+            'city' => 'City/Municipality',
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
@@ -115,7 +119,9 @@ class InspectController extends Controller
                     ],[
                         'contact' => $request->contact,
                         'email' => $request->email,
-                        'address' => trim($request->address),
+                        'street' => trim($request->street),
+                        'brgy' => trim($request->brgy),
+                        'city' => trim($request->city),
                     ]
                 );
                 $vehicle = Vehicle::updateOrCreate(
@@ -208,7 +214,9 @@ class InspectController extends Controller
             'lastName' => 'required|max:100',
             'contact' => 'required',
             'email' => 'nullable|email',
-            'address' => 'required|max:140',
+            'street' => 'nullable|max:140',
+            'brgy' => 'nullable|max:140',
+            'city' => 'required|max:140',
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
@@ -228,7 +236,9 @@ class InspectController extends Controller
             'lastName' => 'Last Name',
             'contact' => 'Contact No.',
             'email' => 'Email Address',
-            'address' => 'Address',
+            'street' => 'No. & St./Bldg.',
+            'brgy' => 'Brgy./Subd.',
+            'city' => 'City/Municipality',
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
@@ -253,7 +263,9 @@ class InspectController extends Controller
                     ],[
                         'contact' => $request->contact,
                         'email' => $request->email,
-                        'address' => trim($request->address),
+                        'street' => trim($request->street),
+                        'brgy' => trim($request->brgy),
+                        'city' => trim($request->city),
                     ]
                 );
                 $vehicle = Vehicle::updateOrCreate(

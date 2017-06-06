@@ -35,7 +35,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('technician','TechnicianController');
 	// Transactions
 	Route::resource('purchase','PurchaseController');
-	Route::patch('purchase/final/{id}','PurchaseController@finalize');
+	Route::patch('purchase/finalize/{id}','PurchaseController@finalize');
+	Route::get('purchase/finalz/{id}','PurchaseController@finalz');
 	Route::resource('delivery','DeliveryController');
 	Route::resource('inspect','InspectController');
 	Route::resource('estimate','EstimateController');
