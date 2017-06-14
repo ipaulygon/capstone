@@ -50,7 +50,7 @@
                 @foreach($supplier->person as $person)
                     <div id="person" class="form-group">
                         @if($loop->index!=0)
-                            <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                            <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         @endif
@@ -66,7 +66,7 @@
                 @endforeach
             </div>
             <div class="box-footer">
-                <button id="addPerson" type="button" class="btn btn-sm btn-primary pull-right">
+                <button id="addPerson" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>
@@ -83,7 +83,7 @@
                 @foreach($supplier->number as $key=>$number)
                     <div id="number" class="form-group">
                         @if($loop->index!=0)
-                            <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                            <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         @endif
@@ -99,7 +99,7 @@
                 @endforeach
             </div>
             <div class="box-footer">
-                <button id="addNumber" type="button" class="btn btn-sm btn-primary pull-right">
+                <button id="addNumber" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>
@@ -122,9 +122,9 @@
         });
         @foreach($supplier->number as $key=>$number)
             @if($number->scNo[4]=='9')
-                $('#{{$key}}').inputmask("(+639)99-9999-999");
+                $('#{{$key}}').inputmask("+63 999 9999 999");
             @elseif($number->scNo[4]=='2')
-                $('#{{$key}}').inputmask("(+639)999-9999");
+                $('#{{$key}}').inputmask("+63 9 999 9999");
             @endif
         @endforeach
     </script>

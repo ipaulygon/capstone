@@ -88,7 +88,6 @@ class PurchaseController extends Controller
                     'id' => $id,
                     'supplierId' => $request->supplierId,
                     'remarks' => trim($request->remarks),
-                    'isActive' => 1,
                     'isFinalize' => 0,
                     'isDelivered' => 0
                 ]);

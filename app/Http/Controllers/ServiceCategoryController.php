@@ -66,7 +66,6 @@ class ServiceCategoryController extends Controller
                 ServiceCategory::create([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
-                    'isActive' => 1
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

@@ -19,7 +19,7 @@ class CreateEstimatePromoTable extends Migration
             $table->unsignedInteger('estimateId');
             $table->unsignedInteger('promoId');
             $table->integer('quantity');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('estimateId')
                   ->references('id')->on('estimate_header')
                   ->onUpdate('cascade')

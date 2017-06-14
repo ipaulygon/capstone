@@ -16,7 +16,7 @@ class CreateVehicleTable extends Migration
         Schema::create('vehicle', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('plate', 10);
+            $table->string('plate', 20);
             $table->unsignedInteger('modelId');
             $table->double('mileage', 10,2)->nullable();
             $table->foreign('modelId')

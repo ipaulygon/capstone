@@ -1,3 +1,19 @@
+$("#price").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+    max: 1000000,
+});
+$("#compute").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+});
+
 var products = $('#products').DataTable({
     responsive: true,
     "paging": false,
@@ -33,7 +49,7 @@ function rowFinder(row){
     return row;
 }
 
-$(document).on('change', '#qty', function (){
+$(document).on('keyup', '#qty', function (){
     qty = $(this).val();
     if(qty=='' || qty==null){
         qty = 1;
@@ -47,17 +63,17 @@ $(document).on('change', '#qty', function (){
     $('#compute').val(final);
 });
 
-$(document).on('click','#pushProduct', function (){
+$(document).on('click','.pushProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/package/product/"+this.title,
+        url: "/package/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden" class="hidden" value="0">',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 
                 alias: "integer",
@@ -72,36 +88,37 @@ $(document).on('click','#pushProduct', function (){
     products.row(row).remove().draw();
 });
 
-$(document).on('click','#pullProduct', function (){
+$(document).on('click','.pullProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/package/product/"+this.title,
+        url: "/package/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             products.row.add([
                 data.product.brand.name+" - "+data.product.name,
                 '<li>'+data.product.type.name+'</li><li>'+data.product.variance.name+'</li>',
-                '<button title="'+data.product.id+'" type="button" id="pushProduct" class="btn btn-primary btn-sm pull-right"><i class="fa fa-angle-double-right"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-primary btn-sm pull-right pushProduct" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>'
             ]).draw();
         }
     });
     // price
+    console.log($(this).parents().find('.hidden').val());
     final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.hidden').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
 });
 
-$(document).on('click','#pushService', function (){
+$(document).on('click','.pushService', function (){
     $.ajax({
         type: "GET",
-        url: "/package/service/"+this.title,
+        url: "/package/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             sList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">'+data.service.name+" - "+data.service.size,
                 data.service.category.name,
-                '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
             final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
@@ -112,16 +129,16 @@ $(document).on('click','#pushService', function (){
     services.row(row).remove().draw();
 });
 
-$(document).on('click','#pullService', function (){
+$(document).on('click','.pullService', function (){
     $.ajax({
         type: "GET",
-        url: "/package/service/"+this.title,
+        url: "/package/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             services.row.add([
                 data.service.name+" - "+data.service.size,
                 data.service.category.name,
-                '<button title="'+data.service.id+'" type="button" id="pushService" class="btn btn-primary btn-sm pull-right"><i class="fa fa-angle-double-right"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-primary btn-sm pull-right pushService" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>'
             ]).draw();
             // price
             final = eval($('#compute').val().replace(',','')+"-"+data.service.price);
@@ -138,15 +155,12 @@ function retrieveProduct(id,qty){
         url: "/package/product/"+id,
         dataType: "JSON",
         success:function(data){
-            if(qty=='' && isNaN(qty) && qty<0){
-                qty = 0;
-            }
             var stack = eval(qty+"*"+data.product.price);
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 
                 alias: "integer",
@@ -160,7 +174,7 @@ function retrieveProduct(id,qty){
             $('#compute').val(final);
         }
     });
-    var row = rowFinder($('#products').find('button[title="'+id+'"]'));
+    var row = rowFinder($('#products').find('button[id="'+id+'"]'));
     products.row(row).remove().draw();
 }
 
@@ -173,13 +187,13 @@ function retrieveService(id){
             sList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">'+data.service.name+" - "+data.service.size,
                 data.service.category.name,
-                '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-angle-double-left"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
             final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });
-    var row = rowFinder($('#services').find('button[title="'+id+'"]'));
+    var row = rowFinder($('#services').find('button[id="'+id+'"]'));
     services.row(row).remove().draw();
 }

@@ -55,7 +55,7 @@
                 @foreach($type->tb as $tb)
                     <div id="brand" class="form-group">
                         @if($loop->index!=0)
-                            <button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                            <button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
                         @endif
@@ -72,7 +72,7 @@
                 @endforeach
             </div>
             <div class="box-footer">
-                <button id="addBrand" type="button" class="btn btn-sm btn-primary pull-right">
+                <button id="addBrand" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>

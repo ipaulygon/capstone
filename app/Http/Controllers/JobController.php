@@ -8,6 +8,7 @@ use App\JobService;
 use App\JobPackage;
 use App\JobPromo;
 use App\JobDiscount;
+use App\JobTechnician;
 use App\Product;
 use App\Service;
 use App\Package;
@@ -38,7 +39,46 @@ class JobController extends Controller
             ->join('vehicle_make as vk','vk.id','vd.makeId')
             ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
             ->get();
-        return View('job.index',compact('jobs'));
+        $date = date('Y-m-d');
+        $customers = DB::table('customer')
+            ->select('customer.*')
+            ->get();
+        $models = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->get();
+        $technicians = DB::table('technician')
+            ->where('isActive',1)
+            ->select('technician.*')
+            ->get();
+        $products = DB::table('product as p')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+        $services = DB::table('service as s')
+            ->join('service_category as c','c.id','s.categoryId')
+            ->where('s.isActive',1)
+            ->select('s.*','c.name as category')
+            ->get();
+        $packages = DB::table('package as p')
+            ->where('p.isActive',1)
+            ->select('p.*')
+            ->get();
+        $promos = DB::table('promo as p')
+            ->where('dateStart','>=',$date)
+            ->where('dateEnd','<=',$date)
+            ->where('p.isActive',1)
+            ->select('p.*')
+            ->get();
+        $discounts = DB::table('discount as d')
+            ->where('d.isActive',1)
+            ->where('d.type','Whole')
+            ->select('d.*')
+            ->get();
+        return View('job.index',compact('jobs','customers','models','technicians','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -48,6 +88,7 @@ class JobController extends Controller
      */
     public function create()
     {
+        return View('layouts.404');
         $date = date('Y-m-d');
         $customers = DB::table('customer')
             ->select('customer.*')
@@ -99,9 +140,9 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
@@ -110,6 +151,7 @@ class JobController extends Controller
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
+            'technician.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -135,6 +177,7 @@ class JobController extends Controller
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
+            'technician.*' => 'Technician Assigned',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',
@@ -171,12 +214,14 @@ class JobController extends Controller
                         'mileage' => str_replace(' km','',$request->mileage)
                     ]
                 );
+                $time = date('H:i:s');
                 $job = JobHeader::create([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
                     'isFinalize' => 0,
                     'total' => 0,
-                    'paid' => 0
+                    'paid' => 0,
+                    'start' => $request->start." ".$time
                 ]);
                 $products = $request->product;
                 $prodQty = $request->productQty;
@@ -201,7 +246,6 @@ class JobController extends Controller
                         JobService::create([
                             'jobId' => $job->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -211,7 +255,6 @@ class JobController extends Controller
                             'jobId' => $job->id,
                             'packageId' => $package,
                             'quantity' => $packQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -221,7 +264,6 @@ class JobController extends Controller
                             'jobId' => $job->id,
                             'promoId' => $promo,
                             'quantity' => $promoQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -230,9 +272,15 @@ class JobController extends Controller
                         JobDiscount::create([
                             'jobId' => $job->id,
                             'discountId' => $discount,
-                            'isActive' => 1
                         ]);
                     }
+                }
+                $technicians = $request->technician;
+                foreach($technicians as $technician){
+                    JobTechnician::create([
+                        'jobId' => $job->id,
+                        'technicianId' => $technician,
+                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -265,7 +313,6 @@ class JobController extends Controller
     public function edit($id)
     {
         $job = JobHeader::findOrFail($id);
-        $date = date('Y-m-d');
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
@@ -294,8 +341,8 @@ class JobController extends Controller
             ->select('p.*')
             ->get();
         $promos = DB::table('promo as p')
-            ->where('dateStart','>=',$date)
-            ->where('dateEnd','<=',$date)
+            ->where('dateStart','>=',$job->created_at)
+            ->where('dateEnd','<=',$job->created_at)
             ->where('p.isActive',1)
             ->select('p.*')
             ->get();
@@ -317,9 +364,9 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
@@ -328,6 +375,7 @@ class JobController extends Controller
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
+            'technician.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -353,6 +401,7 @@ class JobController extends Controller
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
+            'technician.*' => 'Technician Assigned',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',
@@ -394,7 +443,6 @@ class JobController extends Controller
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
                     'total' => 0,
-                    'paid' => 0
                 ]);
                 $products = $request->product;
                 $prodQty = $request->productQty;
@@ -455,6 +503,14 @@ class JobController extends Controller
                             'isActive' => 1
                         ]);
                     }
+                }
+                $technicians = $request->technician;
+                foreach($technicians as $technician){
+                    JobTechnician::create([
+                        'jobId' => $job->id,
+                        'technicianId' => $technician,
+                        'isActive' => 1
+                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -546,5 +602,10 @@ class JobController extends Controller
     public function discount($id){
         $discount = Discount::with('rateRecord')->findOrFail($id);
         return response()->json(['discount'=>$discount]);
+    }
+
+    public function check($id){
+        $job = JobHeader::with('customer','vehicle.model.make','technician')->findOrFail($id);
+        return response()->json(['job'=>$job]);
     }
 }

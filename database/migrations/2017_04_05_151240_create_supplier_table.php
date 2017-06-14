@@ -18,7 +18,7 @@ class CreateSupplierTable extends Migration
             $table->increments('id');
             $table->string('name', 75);
             $table->text('address');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

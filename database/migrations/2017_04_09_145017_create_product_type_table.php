@@ -18,7 +18,7 @@ class CreateProductTypeTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->string('category', 50);
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

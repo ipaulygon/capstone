@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('job/package/{id}','JobController@package');
 	Route::get('job/promo/{id}','JobController@promo');
 	Route::get('job/discount/{id}','JobController@discount');
+	Route::get('job/check/{id}','JobController@check');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

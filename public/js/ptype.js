@@ -1,6 +1,6 @@
 $(document).on("click", "#addBrand", function (){
     var value = $("#brand").clone().prepend(
-        '<button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right">' +
+        '<button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button>').appendTo('#brands');
     $(value).find("input").val("");

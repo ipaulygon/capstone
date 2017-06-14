@@ -12,7 +12,9 @@ class JobProduct extends Model
     	'jobId',
     	'productId',
         'quantity',
-    	'isActive'
+        'completed',
+    	'isActive',
+        'isComplete'
     ];
 
     public function product(){

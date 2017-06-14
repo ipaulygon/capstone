@@ -17,7 +17,7 @@ class CreateDiscountProductTable extends Migration
             $table->engine = 'InnoDB';
             $table->unsignedInteger('discountId');
             $table->unsignedInteger('productId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('discountId')
                   ->references('id')->on('discount')

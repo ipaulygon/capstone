@@ -107,7 +107,6 @@ class DiscountController extends Controller
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
                     'type' => $request->type,
-                    'isActive' => 1
                 ]);
                 $products = $request->product;
                 $services = $request->service;
@@ -116,7 +115,6 @@ class DiscountController extends Controller
                         DiscountProduct::create([
                             'discountId' => $discount->id,
                             'productId' => $product,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -125,7 +123,6 @@ class DiscountController extends Controller
                         DiscountService::create([
                             'discountId' => $discount->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -248,7 +245,6 @@ class DiscountController extends Controller
                         DiscountProduct::create([
                             'discountId' => $discount->id,
                             'productId' => $product,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -257,7 +253,6 @@ class DiscountController extends Controller
                         DiscountService::create([
                             'discountId' => $discount->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }

@@ -40,7 +40,7 @@
                                 </td>
                                 <td>
                                     <li>Name: {{$estimate->firstName}} {{$estimate->middleName}} {{$estimate->lastName}}</li>
-                                    <li>Address: {{$estimate->address}}</li>
+                                    <li>Address: {{$estimate->street}} {{$estimate->brgy}} {{$estimate->city}}</li>
                                     <li>Contact No.: {{$estimate->contact}}</li>
                                     @if($estimate->email!=null)
                                     <li>{{$estimate->email}}</li>

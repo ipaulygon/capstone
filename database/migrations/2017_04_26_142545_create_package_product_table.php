@@ -19,7 +19,7 @@ class CreatePackageProductTable extends Migration
             $table->unsignedInteger('packageId');
             $table->unsignedInteger('productId');
             $table->integer('quantity');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('packageId')
                   ->references('id')->on('package')
                   ->onUpdate('cascade')

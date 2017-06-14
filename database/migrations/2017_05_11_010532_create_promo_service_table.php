@@ -19,7 +19,7 @@ class CreatePromoServiceTable extends Migration
             $table->unsignedInteger('promoId');
             $table->unsignedInteger('serviceId');
             $table->boolean('isFree');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('promoId')
                   ->references('id')->on('promo')
                   ->onUpdate('cascade')

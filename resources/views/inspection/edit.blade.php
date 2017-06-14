@@ -31,11 +31,11 @@
                     @foreach($type->item as $item)
                         <div id="item" class="form-group">
                             @if($loop->index!=0)
-                                <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             @endif
-                            <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right">
+                            <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Create form">
                                 <i class="glyphicon glyphicon-menu-right"></i>
                             </button>
                             <input type="hidden" class="hidden" value="{{$item->id}}">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="box-footer">
                     <button type="button" id="save" class="btn btn-primary">Save</button>
-                    <button id="addItemUpdate" type="button" class="btn btn-md btn-primary pull-right">
+                    <button id="addItemUpdate" type="button" class="btn btn-md btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                         <i class="glyphicon glyphicon-plus"></i>
                     </button>
                 </div>

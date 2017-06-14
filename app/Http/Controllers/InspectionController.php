@@ -68,7 +68,6 @@ class InspectionController extends Controller
                 DB::beginTransaction();
                 $type = InspectionType::create([
                     'type' => trim($request->type),
-                    'isActive' => 1
                 ]);
                 $items = $request->item;
                 $forms = $request->inspectionForm;
@@ -77,7 +76,6 @@ class InspectionController extends Controller
                         'name' => $item,
                         'form' => $forms[$key],
                         'typeId' => $type->id,
-                        'isActive' => 1
                     ]);
                 }
                 DB::commit();

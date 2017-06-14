@@ -46,7 +46,7 @@ $(document).on('change', '#products', function(){
                 '</select>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.product.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');
             $(row).find('td').eq(4).addClass('text-right');
@@ -84,8 +84,8 @@ $(document).on('change', '#products', function(){
     $("#products").select2();
 });
 
-$(document).on('click','#pullProduct', function(){
-    $('#products option[value="'+this.title+'"]').attr('disabled',false);
+$(document).on('click','.pullProduct', function(){
+    $('#products option[value="'+this.id+'"]').attr('disabled',false);
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
@@ -113,7 +113,7 @@ function oldProduct(id,qty,model){
                 '</select>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');
             $(row).find('td').eq(4).addClass('text-right');
@@ -175,7 +175,7 @@ function retrieveProduct(price,id,qty,model){
                 '</select>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');
             $(row).find('td').eq(4).addClass('text-right');

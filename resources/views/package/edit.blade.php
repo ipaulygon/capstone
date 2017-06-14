@@ -31,22 +31,6 @@
         $(document).ready(function (){
             $('#maintenance').addClass('active');
             $('#mPackage').addClass('active');
-            $("#price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-                max: 1000000,
-            });
-            $("#compute").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-                max: 10000000,
-            });
         });
     </script>
     @if($package->product || $package->service)

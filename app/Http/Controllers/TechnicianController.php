@@ -107,7 +107,6 @@ class TechnicianController extends Controller
                     'contact' => trim($request->contact),
                     'email' => trim($request->email),
                     'image' => $techPic,
-                    'isActive' => 1
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

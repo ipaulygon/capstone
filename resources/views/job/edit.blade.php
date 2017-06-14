@@ -33,51 +33,36 @@
     <script src="{{ URL::asset('js/job.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#tJob').addClass('active');
             var customers = [
                 @foreach($customers as $customer)
                     '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
                 @endforeach
             ];    
             var activeTechnicians = [
-                @if(old('technician'))
-                    @foreach(old('technician') as $technician)
-                        "{{$technician}}",
-                    @endforeach
-                @endif
-            ];
+                @foreach($job->technician as $technician)
+                    '{{$technician->technicianId}}',
+                @endforeach
+            ]; 
             $("#technician").val(activeTechnicians);
-            @if(old('modelId'))
-                $("#model").val({{old('modelId')}});
-            @endif
+            $("#model").val({{$job->vehicle->modelId}});
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});
-            $('#contact').inputmask("(+639)99-9999-999");
-            $('#plate').inputmask("AAA 9999");
-            $('#email').inputmask("email");
-            $("#mileage").inputmask({ 
-                alias: "decimal",
-                prefix: '',
-                suffix: ' km',
-                allowMinus: false,
-                min: 0,
-            });
-            $("#compute").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('#tJob').addClass('active');
-        });
-        $(document).on('keypress','#contact',function(){
-            if($(this).val()[4]=='9'){
-                $(this).inputmask("(+639)99-9999-999");
-            }else if($(this).val()[4]=='2'){
-                $(this).inputmask("(+639)999-9999");
-            }else{
-                $(this).inputmask("(+639) ERROR");
-            }
+            @if($job->customer->contact[2] == '2' && old('contact')[14] == 'l')
+                $('#contact').inputmask("(02) 999 9999 loc. 9999");
+            @elseif($job->customer->contact == '2')
+                $('#contact').inputmask("(02) 999 9999");
+            @else
+                $('#contact').inputmask("+63 999 9999 999");
+            @endif
+            @if(strlen($job->vehicle->plate) == 7)
+                $('#plate').inputmask("AAA 999");
+            @elseif(strlen($job->vehicle->plate )== 8)
+                $('#plate').inputmask("AAA 9999");
+            @else
+                $('#plate').inputmask();
+                $('#plate').val("For Registration");
+            @endif
         });
     </script>
     @if($job->product || $job->service || $job->package || $job->promo || $job->discount)

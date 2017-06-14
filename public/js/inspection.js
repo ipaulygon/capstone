@@ -2,7 +2,7 @@ var textarea = $('#inspectionForm').first();
 var form;
 $(document).on("click", "#addItem", function (){
     var value = $("#item").clone().prepend(
-        '<button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">' +
+        '<button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button>'
     ).appendTo('#items');
@@ -96,7 +96,9 @@ $(document).on("click", "#removeItem", function (){
 });
 
 $(document).on('click', '#save', function (){
-    var data = form.actions.getData('json');
-    $(textarea).text(data);
+    if(form!=null){
+        var data = form.actions.getData('json');
+        $(textarea).text(data);
+    }
     $('#submit').submit();
 });

@@ -65,9 +65,9 @@ class InspectController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
@@ -143,7 +143,6 @@ class InspectController extends Controller
                         'inspectionId' => $inspection->id,
                         'itemId' => $item,
                         'remarks' => $forms[$key],
-                        'isActive' => 1
                     ]);
                 }
                 $technicians = $request->technician;
@@ -151,7 +150,6 @@ class InspectController extends Controller
                     InspectionTechnician::create([
                         'inspectionId' => $inspection->id,
                         'technicianId' => $technician,
-                        'isActive' => 1
                     ]);
                 }
                 DB::commit();
@@ -209,9 +207,9 @@ class InspectController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',

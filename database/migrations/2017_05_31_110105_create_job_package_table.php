@@ -19,7 +19,9 @@ class CreateJobPackageTable extends Migration
             $table->unsignedInteger('jobId');
             $table->unsignedInteger('packageId');
             $table->integer('quantity');
-            $table->boolean('isActive');
+            $table->integer('completed')->default(0);
+            $table->boolean('isActive')->default(1);
+            $table->boolean('isComplete')->default(0);
             $table->foreign('jobId')
                   ->references('id')->on('job_header')
                   ->onUpdate('cascade')

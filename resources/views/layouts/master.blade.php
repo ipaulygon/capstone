@@ -182,7 +182,7 @@
                     <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li>
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li class="header">QUERIES</li>
-                    <li id="query"><a href="{{url('/queries')}}"><i class="fa  fa-bookmark-o"></i> <span>Queries</span></a></li>
+                    <li id="query"><a href="{{url('/query')}}"><i class="fa  fa-bookmark-o"></i> <span>Queries</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->

@@ -18,7 +18,7 @@ class CreateProductVehicleTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('productId');
             $table->unsignedInteger('modelId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('productId')
                   ->references('id')->on('product')
                   ->onUpdate('cascade')

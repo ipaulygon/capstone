@@ -39,7 +39,7 @@
                                     <li>{{$product->variance}}</li>
                                 </td>
                                 <td class="pull-right">
-                                    <button title="{{$product->id}}" id="pushProduct" class="btn btn-primary btn-sm" type="button"><i class="fa fa-angle-double-right"></i></button>
+                                    <button id="{{$product->id}}" class="btn btn-primary btn-sm pushProduct" type="button" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -62,7 +62,7 @@
                                 <td>{{$service->name}} - {{$service->size}}</td>
                                 <td>{{$service->category}}</td>
                                 <td class="pull-right">
-                                    <button title="{{$service->id}}" id="pushService" class="btn btn-primary btn-sm" type="button"><i class="fa fa-angle-double-right"></i></button>
+                                    <button id="{{$service->id}}" class="btn btn-primary btn-sm pushService" type="button" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -91,7 +91,7 @@
                                     <li>{{$product->variance}}</li>
                                 </td>
                                 <td class="pull-right">
-                                    <button title="{{$product->id}}" id="pushFreeProduct" class="btn btn-primary btn-sm" type="button"><i class="fa fa-angle-double-right"></i></button>
+                                    <button id="{{$product->id}}" class="btn btn-primary btn-sm pushFreeProduct" type="button" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                 </td>
                             </tr>
                             @endforeach
@@ -100,7 +100,7 @@
                                 <td>{{$service->name}} - {{$service->size}}</td>
                                 <td>{{$service->category}}</td>
                                 <td class="pull-right">
-                                    <button title="{{$service->id}}" id="pushFreeService" class="btn btn-primary btn-sm" type="button"><i class="fa fa-angle-double-right"></i></button>
+                                    <button id="{{$service->id}}" class="btn btn-primary btn-sm pushFreeService" type="button" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                 </td>
                             </tr>
                             @endforeach

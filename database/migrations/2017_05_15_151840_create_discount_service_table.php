@@ -17,7 +17,7 @@ class CreateDiscountServiceTable extends Migration
             $table->engine = 'InnoDB';
             $table->unsignedInteger('discountId');
             $table->unsignedInteger('serviceId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('discountId')
                   ->references('id')->on('discount')

@@ -18,7 +18,7 @@ class CreateEstimateServiceTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('estimateId');
             $table->unsignedInteger('serviceId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('estimateId')
                   ->references('id')->on('estimate_header')
                   ->onUpdate('cascade')

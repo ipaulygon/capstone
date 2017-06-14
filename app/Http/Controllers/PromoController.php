@@ -99,7 +99,6 @@ class PromoController extends Controller
                     'dateStart' => $finalStartDate,
                     'dateEnd' => $finalEndDate,
                     'stock' => $stock,
-                    'isActive' => 1
                 ]);
                 $products = $request->product;
                 $qty = $request->qty;
@@ -114,7 +113,6 @@ class PromoController extends Controller
                             'productId' => $product,
                             'quantity' => $qty[$key],
                             'isFree' => 0,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -125,7 +123,6 @@ class PromoController extends Controller
                             'productId' => $product,
                             'quantity' => $fqty[$key],
                             'isFree' => 1,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -135,7 +132,6 @@ class PromoController extends Controller
                             'promoId' => $promo->id,
                             'serviceId' => $service,
                             'isFree' => 0,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -145,7 +141,6 @@ class PromoController extends Controller
                             'promoId' => $promo->id,
                             'serviceId' => $service,
                             'isFree' => 1,
-                            'isActive' => 1
                         ]);
                     }
                 }

@@ -126,7 +126,6 @@ class ProductController extends Controller
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
-                    'isActive' => 1
                 ]);
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
@@ -134,7 +133,6 @@ class ProductController extends Controller
                         ProductVehicle::create([
                             'productId' => $product->id,
                             'modelId' => $vehicle,
-                            'isActive' => 1	
                         ]);
                     }
                 }
@@ -250,7 +248,6 @@ class ProductController extends Controller
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
-                    'isActive' => 1
                 ]);
                 ProductVehicle::where('productId',$id)->update(['isActive'=>0]);
                 $vehicles = $request->vehicle;

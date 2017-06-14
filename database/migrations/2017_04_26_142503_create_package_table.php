@@ -18,7 +18,7 @@ class CreatePackageTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->double('price', 15,2);
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

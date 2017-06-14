@@ -21,7 +21,7 @@ class CreatePromoTable extends Migration
             $table->date('dateStart')->nullable();
             $table->date('dateEnd')->nullable();
             $table->integer('stock')->nullable();
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

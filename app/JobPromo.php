@@ -12,7 +12,9 @@ class JobPromo extends Model
     	'jobId',
     	'promoId',
         'quantity',
-    	'isActive'  	
+        'completed',
+    	'isActive',
+        'isComplete'	
     ];
 
     public function promo(){

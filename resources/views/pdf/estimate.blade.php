@@ -52,6 +52,9 @@
             bottom: 0;
             margin-bottom: 60px;
         }
+        .footerd{
+            font-size: 0.8em;
+        }
     </style>
     <body>
         <div class="center header">
@@ -59,7 +62,7 @@
         </div>
         <div style="float:right">
             {{date('F j, Y', strtotime($estimate->created_at))}}<br>
-            <label style="color:red">ESTIMATE{{$estimate->id}}</label>
+            <label style="color:red">{{$estId}}</label>
         </div>
         <div style="clear:both"></div>
         <div class="center">
@@ -70,7 +73,7 @@
         </div><br>
         <div style="float:left" class="col-md-6">
             Customer: {{$estimate->customer->firstName}} {{$estimate->customer->middleName}} {{$estimate->customer->lastName}}<br>
-            Address: {{$estimate->customer->address}}<br>
+            Address: {{$estimate->customer->street}} {{$estimate->customer->brgy}} {{$estimate->customer->city}}<br>
             Phone Number: {{$estimate->customer->contact}}<br>
             Email: {{$estimate->customer->email}}<br>
         </div>
@@ -264,6 +267,8 @@
                 CUSTOMER'S SIGNATURE: ___________________<br>
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discounts,2)}}<br> 
             </div>
+            <br><br>
+            <div class="footerd">Printed by: Admin {{$date}}</div>
         </div>
     </body>
 </html>

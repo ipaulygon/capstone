@@ -18,7 +18,7 @@ class CreateInspectionTechnicianTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('inspectionId');
             $table->unsignedInteger('technicianId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('inspectionId')
                   ->references('id')->on('inspection_header')

@@ -20,7 +20,7 @@ class CreateServiceTable extends Migration
             $table->double('price', 15,2);
             $table->string('size', 20);
             $table->unsignedInteger('categoryId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->unique(['name', 'size']);
             $table->foreign('categoryId')
                   ->references('id')->on('service_category')

@@ -18,7 +18,8 @@ class CreateJobServiceTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('jobId');
             $table->unsignedInteger('serviceId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
+            $table->boolean('isComplete')->default(0);
             $table->foreign('jobId')
                   ->references('id')->on('job_header')
                   ->onUpdate('cascade')

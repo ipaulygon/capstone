@@ -78,7 +78,6 @@ class ProductVarianceController extends Controller
                     'size' => $sizes,
                     'units' => $units,
                     'isOriginal' => $request->isOriginal,
-                    'isActive' => 1
                 ]);
                 $variance = ProductVariance::all()->last();
                 $id = $variance->id;
@@ -170,7 +169,6 @@ class ProductVarianceController extends Controller
                     'size' => $sizes,
                     'units' => $units,
                     'isOriginal' => $request->isOriginal,
-                    'isActive' => 1
                 ]);
                 TypeVariance::where('varianceId',$id)->delete();
                 $types = $request->type;

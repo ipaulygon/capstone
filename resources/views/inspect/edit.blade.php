@@ -32,6 +32,7 @@
     <script src="{{ URL::asset('js/inspect.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#tInspect').addClass('active');
             var customers = [
                 @foreach($customers as $customer)
                     '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
@@ -46,27 +47,21 @@
             $("#model").val({{$inspect->vehicle->modelId}});
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});
-            $('#contact').inputmask("(+639)99-9999-999");
-            $('#plate').inputmask("AAA 9999");
-            $('#email').inputmask("email");
-            $("#mileage").inputmask({ 
-                alias: "decimal",
-                prefix: '',
-                suffix: ' km',
-                allowMinus: false,
-                min: 0,
-                max: 1000000
-            });
-            $('#tInspect').addClass('active');
-        });
-        $(document).on('keypress','#contact',function(){
-            if($(this).val()[4]=='9'){
-                $(this).inputmask("(+639)99-9999-999");
-            }else if($(this).val()[4]=='2'){
-                $(this).inputmask("(+639)999-9999");
-            }else{
-                $(this).inputmask("(+639) ERROR");
-            }
+            @if($inspect->customer->contact[2] == '2' && old('contact')[14] == 'l')
+                $('#contact').inputmask("(02) 999 9999 loc. 9999");
+            @elseif($inspect->customer->contact == '2')
+                $('#contact').inputmask("(02) 999 9999");
+            @else
+                $('#contact').inputmask("+63 999 9999 999");
+            @endif
+            @if(strlen($inspect->vehicle->plate) == 7)
+                $('#plate').inputmask("AAA 999");
+            @elseif(strlen($inspect->vehicle->plate )== 8)
+                $('#plate').inputmask("AAA 9999");
+            @else
+                $('#plate').inputmask();
+                $('#plate').val("For Registration");
+            @endif
         });
     </script>
     @foreach($inspect->detail as $detail)

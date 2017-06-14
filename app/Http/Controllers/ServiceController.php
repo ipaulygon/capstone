@@ -82,7 +82,6 @@ class ServiceController extends Controller
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
                     'price' => trim(str_replace(',','',$request->price)),
-                    'isActive' => 1
                 ]);
                 ServicePrice::create([
                     'serviceId' => $service->id,

@@ -30,7 +30,6 @@ $(document).on('keyup', '.qr' ,function (){
             },
             template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
         });
-
         $(this).popover('show');
     }else{
         $(this).popover('hide');

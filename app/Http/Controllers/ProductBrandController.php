@@ -68,7 +68,6 @@ class ProductBrandController extends Controller
                 DB::beginTransaction();
                 $brand = ProductBrand::create([
                     'name' => trim($request->name),
-                    'isActive' => 1
                 ]);
                 $types = $request->type;
                 foreach ($types as $type) {

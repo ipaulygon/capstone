@@ -8,6 +8,7 @@ use App\EstimateService;
 use App\EstimatePackage;
 use App\EstimatePromo;
 use App\EstimateDiscount;
+use App\EstimateTechnician;
 use App\Product;
 use App\Service;
 use App\Package;
@@ -99,9 +100,9 @@ class EstimateController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
@@ -110,6 +111,7 @@ class EstimateController extends Controller
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
+            'technician.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -135,6 +137,7 @@ class EstimateController extends Controller
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
+            'technician.*' => 'Technician Assigned',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',
@@ -190,7 +193,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'productId' => $product,
                             'quantity' => $prodQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -199,7 +201,6 @@ class EstimateController extends Controller
                         EstimateService::create([
                             'estimateId' => $estimate->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -209,7 +210,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'packageId' => $package,
                             'quantity' => $packQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -219,7 +219,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'promoId' => $promo,
                             'quantity' => $promoQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -228,9 +227,15 @@ class EstimateController extends Controller
                         EstimateDiscount::create([
                             'estimateId' => $estimate->id,
                             'discountId' => $discount,
-                            'isActive' => 1
                         ]);
                     }
+                }
+                $technicians = $request->technician;
+                foreach($technicians as $technician){
+                    EstimateTechnician::create([
+                        'estimateId' => $estimate->id,
+                        'technicianId' => $technician,
+                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -315,9 +320,9 @@ class EstimateController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => 'required|max:100',
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => 'required|max:45',
+            'middleName' => 'max:45',
+            'lastName' => 'required|max:45',
             'contact' => 'required',
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
@@ -326,6 +331,7 @@ class EstimateController extends Controller
             'plate' => 'required',
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
+            'technician.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -351,6 +357,7 @@ class EstimateController extends Controller
             'plate' => 'Plate No.',
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
+            'technician.*' => 'Technician Assigned',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',
@@ -410,7 +417,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'productId' => $product,
                             'quantity' => $prodQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -419,7 +425,6 @@ class EstimateController extends Controller
                         EstimateService::create([
                             'estimateId' => $estimate->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -429,7 +434,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'packageId' => $package,
                             'quantity' => $packQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -439,7 +443,6 @@ class EstimateController extends Controller
                             'estimateId' => $estimate->id,
                             'promoId' => $promo,
                             'quantity' => $promoQty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -448,9 +451,15 @@ class EstimateController extends Controller
                         EstimateDiscount::create([
                             'estimateId' => $estimate->id,
                             'discountId' => $discount,
-                            'isActive' => 1
                         ]);
                     }
+                }
+                $technicians = $request->technician;
+                foreach($technicians as $technician){
+                    EstimateTechnician::create([
+                        'estimateId' => $estimate->id,
+                        'technicianId' => $technician,
+                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

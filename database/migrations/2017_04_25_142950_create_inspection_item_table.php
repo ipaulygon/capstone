@@ -19,7 +19,7 @@ class CreateInspectionItemTable extends Migration
             $table->string('name', 50);
             $table->text('form');
             $table->unsignedInteger('typeId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('typeId')
                   ->references('id')->on('inspection_type')
                   ->onUpdate('cascade')

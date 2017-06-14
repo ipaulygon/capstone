@@ -34,31 +34,6 @@
         $(document).ready(function (){
             $('#maintenance').addClass('active');
             $('#mPromo').addClass('active');
-            $('#date').inputmask('99/99/9999-99/99/9999');
-            $("#price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-                max: 1000000,
-            });
-            $("#compute").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-                max: 10000000,
-            });
-            $("#stock").inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-                max: 999,
-            });
         });
     </script>
     @if(old('product') || old('service') || old('freeProduct') || old('freeService'))

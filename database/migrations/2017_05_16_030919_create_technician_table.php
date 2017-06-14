@@ -16,18 +16,18 @@ class CreateTechnicianTable extends Migration
         Schema::create('technician', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('firstName', 100);
-            $table->string('middleName', 100);
-            $table->string('lastName', 100);
+            $table->string('firstName', 45);
+            $table->string('middleName', 45);
+            $table->string('lastName', 45);
             $table->text('street');
             $table->text('brgy');
             $table->text('city');
             $table->date('birthdate');
             $table->string('contact', 30);
-            $table->string('email')->nullable();
+            $table->string('email', 45)->nullable();
             $table->text('image')->nullable();
             $table->unique(['firstName', 'middleName','lastName']);
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

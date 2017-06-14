@@ -19,7 +19,7 @@ class CreateInspectionDetailTable extends Migration
             $table->unsignedInteger('inspectionId');
             $table->unsignedInteger('itemId');
             $table->text('remarks');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('inspectionId')
                   ->references('id')->on('inspection_header')

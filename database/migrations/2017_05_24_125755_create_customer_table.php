@@ -16,14 +16,14 @@ class CreateCustomerTable extends Migration
         Schema::create('customer', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('firstName', 100);
-            $table->string('middleName', 100);
-            $table->string('lastName', 100);
+            $table->string('firstName', 45);
+            $table->string('middleName', 45);
+            $table->string('lastName', 45);
             $table->text('street')->nullable();
             $table->text('brgy')->nullable();
             $table->text('city');
             $table->string('contact', 30);
-            $table->string('email')->nullable();
+            $table->string('email', 45)->nullable();
             $table->unique(['firstName', 'middleName','lastName']);
         });
     }

@@ -19,7 +19,7 @@ class TechnicianSeeder extends Seeder
             'brgy' => 'Brgy. Pedro Cruz',
             'city' => 'San Juan City',
             'birthdate' => '1999-01-28',
-            'contact' => '(+639)05-4090-523',
+            'contact' => '+63 905 4090 523',
             'email' => 'paulandrei@ymail.com',
             'image' => 'pics/steve.jpg',
             'isActive' => 1,

@@ -17,7 +17,7 @@ class CreateProductBrandTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name', 50);
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

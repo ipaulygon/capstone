@@ -17,15 +17,15 @@ class InspectionHeader extends Model
         return $this->hasMany('App\InspectionDetail','inspectionId')->where('isActive',1);
     }
     
-    public function technician(){
-        return $this->hasMany('App\InspectionTechnician','inspectionId')->where('isActive',1);
-    }
-
     public function customer(){
         return $this->belongsTo('App\Customer','customerId');
     }
     
     public function vehicle(){
         return $this->belongsTo('App\Vehicle','vehicleId');
+    }
+    
+    public function technician(){
+        return $this->hasMany('App\InspectionTechnician','inspectionId')->where('isActive',1);
     }
 }

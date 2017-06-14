@@ -5,6 +5,96 @@ var pList = $('#productList').DataTable({
     "info": false,
     "retrieve": true,
 });
+$('#email').inputmask("email");
+$("#mileage").inputmask({ 
+    alias: "decimal",
+    prefix: '',
+    suffix: ' km',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+    max: 1000000
+});
+$("#compute").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+});
+
+$(document).on('focus','#plate',function(){
+    $(this).popover({
+        trigger: 'manual',
+        content: function(){
+            var content = '<button type="button" id="po" class="btn btn-primary btn-block">ABC 123</button><button type="button" id="pn" class="btn btn-primary btn-block">ABC 1234</button><button type="button" id="ph" class="btn btn-primary btn-block">For Registration</button>';
+            return content;
+        },
+        html: true,
+        placement: function(){
+            var placement = 'top';
+            return placement;
+        },
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        title: function(){
+            var title = 'Choose a format:';
+            return title;
+        }
+    });
+    $(this).popover('show');
+});
+$(document).on('focusout','#plate',function(){
+    $(this).popover('hide');
+});
+$(document).on('click','#po',function(){
+    $('#plate').val('');
+    $('#plate').inputmask("AAA 999");
+});
+$(document).on('click','#pn',function(){
+    $('#plate').val('');
+    $('#plate').inputmask("AAA 9999");
+});
+$(document).on('click','#ph',function(){
+    $('#plate').val('');
+    $('#plate').inputmask();
+    $('#plate').val("For Registration");
+});
+
+$(document).on('focus','#contact',function(){
+    $(this).popover({
+        trigger: 'manual',
+        content: function(){
+            var content = '<button type="button" id="cp" class="btn btn-primary btn-block">Mobile No.</button><button type="button" id="tp" class="btn btn-primary btn-block">Telephone No.</button><button type="button" id="tpl" class="btn btn-primary btn-block">Telephone No. w/ Local</button>';
+            return content;
+        },
+        html: true,
+        placement: function(){
+            var placement = 'top';
+            return placement;
+        },
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        title: function(){
+            var title = 'Choose a format:';
+            return title;
+        }
+    });
+    $(this).popover('show');
+});
+$(document).on('focusout','#contact',function(){
+    $(this).popover('hide');
+});
+$(document).on('click','#cp',function(){
+    $('#contact').val('');
+    $('#contact').inputmask("+63 999 9999 999");
+});
+$(document).on('click','#tp',function(){
+    $('#contact').val('');
+    $('#contact').inputmask("(02) 999 9999");
+});
+$(document).on('click','#tpl',function(){
+    $('#contact').val('');
+    $('#contact').inputmask("(02) 999 9999 loc. 9999");
+});
 // AUTOCOMPLETE
 $('#firstName').on('autocompleteselect',function(event, ui){
     name = ui.item.value
@@ -26,18 +116,20 @@ $('#firstName').on('autocompleteselect',function(event, ui){
 });
 
 $('#plate').on('change',function(){
-    name = $(this).val().replace('_','');
-    $.ajax({
-        type: "GET",
-        url: "/estimate/vehicle/"+name,
-        dataType: "JSON",
-        success:function(data){
-            $('#plate').val(data.vehicle.plate);
-            $('#model').val(data.vehicle.modelId);
-            $('#mileage').val(data.vehicle.mileage);
-            $('#model').select2();
-        }
-    });
+    name = $(this).val();
+    if(name[4]<10){
+        $.ajax({
+            type: "GET",
+            url: "/estimate/vehicle/"+name,
+            dataType: "JSON",
+            success:function(data){
+                $('#plate').val(data.vehicle.plate);
+                $('#model').val(data.vehicle.modelId);
+                $('#mileage').val(data.vehicle.mileage);
+                $('#model').select2();
+            }
+        });
+    }
 });
 // DATATABLE
 function rowFinder(row){
@@ -68,7 +160,7 @@ function discountRecount(){
     }
 }
 // QUANTITY
-$(document).on('change', '#qty', function (){
+$(document).on('keyup', '#qty', function (){
     qty = $(this).val();
     if(qty=='' || qty==null || qty==0){
         qty = 1;
@@ -108,7 +200,7 @@ $(document).on('change', '#products', function(){
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -125,14 +217,12 @@ $(document).on('change', '#products', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -140,8 +230,8 @@ $(document).on('change', '#products', function(){
     $("#products").select2();
 });
 
-$(document).on('click','#pullProduct', function(){
-    $('#products option[value="'+this.title+'"]').attr('disabled',false);
+$(document).on('click','.pullProduct', function(){
+    $('#products option[value="'+this.id+'"]').attr('disabled',false);
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
@@ -174,7 +264,7 @@ function oldProduct(id,qty){
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -194,14 +284,12 @@ function oldProduct(id,qty){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -223,7 +311,7 @@ function retrieveProduct(id,qty,price,discountString){
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.product.id+'" type="button" id="pullProduct" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -243,14 +331,12 @@ function retrieveProduct(id,qty,price,discountString){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -282,7 +368,7 @@ $(document).on('change', '#services', function(){
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -297,14 +383,12 @@ $(document).on('change', '#services', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -312,8 +396,8 @@ $(document).on('change', '#services', function(){
     $("#services").select2();
 });
 
-$(document).on('click','#pullService', function(){
-    $('#services option[value="'+this.title+'"]').attr('disabled',false);
+$(document).on('click','.pullService', function(){
+    $('#services option[value="'+this.id+'"]').attr('disabled',false);
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
@@ -345,7 +429,7 @@ function oldService(id){
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -360,14 +444,12 @@ function oldService(id){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -388,7 +470,7 @@ function retrieveService(id,price,discountString){
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<button title="'+data.service.id+'" type="button" id="pullService" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -401,14 +483,12 @@ function retrieveService(id,price,discountString){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -428,7 +508,7 @@ $(document).on('change', '#packages', function(){
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
-                '<button title="'+data.package.id+'" type="button" id="pullPackage" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -456,14 +536,12 @@ $(document).on('change', '#packages', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -471,8 +549,8 @@ $(document).on('change', '#packages', function(){
     $("#packages").select2();
 });
 
-$(document).on('click','#pullPackage', function(){
-    $('#packages option[value="'+this.title+'"]').attr('disabled',false);
+$(document).on('click','.pullPackage', function(){
+    $('#packages option[value="'+this.id+'"]').attr('disabled',false);
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
@@ -493,7 +571,7 @@ function oldPackage(id,qty){
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.package.id+'" type="button" id="pullPackage" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -524,14 +602,12 @@ function oldPackage(id,qty){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -550,7 +626,7 @@ function retrievePackage(id,qty,price){
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.package.id+'" type="button" id="pullPackage" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -581,14 +657,12 @@ function retrievePackage(id,qty,price){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -608,7 +682,7 @@ $(document).on('change', '#promos', function(){
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
-                '<button title="'+data.promo.id+'" type="button" id="pullPromo" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -650,14 +724,12 @@ $(document).on('change', '#promos', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -665,8 +737,8 @@ $(document).on('change', '#promos', function(){
     $("#promos").select2();
 });
 
-$(document).on('click','#pullPromo', function(){
-    $('#promos option[value="'+this.title+'"]').attr('disabled',false);
+$(document).on('click','.pullPromo', function(){
+    $('#promos option[value="'+this.id+'"]').attr('disabled',false);
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     final = eval($('#compute').val().replace(',','')+"-"+stack);
     $('#compute').val(final);
@@ -687,7 +759,7 @@ function oldPromo(id,qty){
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.promo.id+'" type="button" id="pullPromo" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -732,14 +804,12 @@ function oldPromo(id,qty){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -760,7 +830,7 @@ function retrievePromo(id,qty,price){
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
-                '<button title="'+data.promo.id+'" type="button" id="pullPromo" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -805,14 +875,12 @@ function retrievePromo(id,qty,price){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 1000000,
             });
             $('.stack').inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 min: 0,
-                max: 10000000,
             });
         }
     });
@@ -836,7 +904,7 @@ $(document).on('change', '#discounts', function(){
                 data.discount.name+" - DISCOUNT",
                 '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
                 '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button title="'+data.discount.id+'" type="button" id="pullDiscount" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -859,7 +927,7 @@ $(document).on('change', '#discounts', function(){
     });
 });
 
-$(document).on('click','#pullDiscount', function(){
+$(document).on('click','.pullDiscount', function(){
     $('#discounts').prop('disabled',false);
     $('#discounts').val('');
     $("#discounts").select2();
@@ -888,7 +956,7 @@ function oldDiscount(id){
                 data.discount.name+" - DISCOUNT",
                 '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
                 '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button title="'+data.discount.id+'" type="button" id="pullDiscount" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
@@ -929,7 +997,7 @@ function retrieveDiscount(id,rate){
                 data.discount.name+" - DISCOUNT",
                 '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+rate+'" readonly></strong>',
                 '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button title="'+data.discount.id+'" type="button" id="pullDiscount" class="btn btn-danger btn-sm pull-right"><i class="fa fa-remove"></i></button>'
+                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');

@@ -86,7 +86,6 @@ class PackageController extends Controller
                 $package = Package::create([
                     'name' => trim($request->name),
                     'price' => trim(str_replace(',','',$request->price)),
-                    'isActive' => 1
                 ]);
                 $products = $request->product;
                 $qty = $request->qty;
@@ -97,7 +96,6 @@ class PackageController extends Controller
                             'packageId' => $package->id,
                             'productId' => $product,
                             'quantity' => $qty[$key],
-                            'isActive' => 1
                         ]);
                     }
                 }
@@ -106,7 +104,6 @@ class PackageController extends Controller
                         PackageService::create([
                             'packageId' => $package->id,
                             'serviceId' => $service,
-                            'isActive' => 1
                         ]);
                     }
                 }

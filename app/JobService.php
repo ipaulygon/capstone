@@ -11,7 +11,8 @@ class JobService extends Model
     protected $fillable = [
     	'jobId',
     	'serviceId',
-    	'isActive'  	
+    	'isActive',
+        'isComplete'
     ];
 
     public function service(){

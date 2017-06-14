@@ -12,7 +12,9 @@ class JobPackage extends Model
     	'jobId',
     	'packageId',
         'quantity',
-    	'isActive'  	
+        'completed',
+    	'isActive',
+        'isComplete'	
     ];
 
     public function package(){

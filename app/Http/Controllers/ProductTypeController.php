@@ -72,7 +72,6 @@ class ProductTypeController extends Controller
                 $type = ProductType::create([
                     'name' => trim($request->name),
                     'category' => trim($request->category),
-                    'isActive' => 1
                 ]);
                 $brands = $request->brand;
                 foreach ($brands as $brand) {

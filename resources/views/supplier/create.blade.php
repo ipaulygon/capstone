@@ -51,7 +51,7 @@
                     @foreach(old('spName') as $spName)
                         <div id="person" class="form-group">
                             @if($loop->index!=0)
-                                <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                <button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             @endif
@@ -80,7 +80,7 @@
                 @endif
             </div>
             <div class="box-footer">
-                <button id="addPerson" type="button" class="btn btn-sm btn-primary pull-right">
+                <button id="addPerson" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>
@@ -99,7 +99,7 @@
                     @foreach(old('scNo') as $scNo)
                         <div id="number" class="form-group">
                             @if($loop->index!=0)
-                                <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                                <button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             @endif
@@ -126,7 +126,7 @@
                 @endif
             </div>
             <div class="box-footer">
-                <button id="addNumber" type="button" class="btn btn-sm btn-primary pull-right">
+                <button id="addNumber" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>
@@ -146,7 +146,7 @@
             $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
-            $(".contact").inputmask("(+639)99-9999-999");
+            $(".contact").inputmask("+63 999 9999 999");
         });
     </script>
 @stop

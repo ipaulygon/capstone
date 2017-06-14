@@ -30,10 +30,10 @@
                     @if(old('item'))
                     @foreach(old('item') as $key=>$item)
                         <div id="item" class="form-group">
-                            <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right">
+                            <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                 <i class="glyphicon glyphicon-remove"></i>
                             </button>
-                            <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right">
+                            <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Create form">
                                 <i class="glyphicon glyphicon-menu-right"></i>
                             </button>
                             {!! Form::label('item', 'Inspection Items') !!}<span>*</span>
@@ -49,7 +49,7 @@
                     @endforeach
                     @else
                     <div id="item" class="form-group">
-                        <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right">
+                        <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Create form">
                             <i class="glyphicon glyphicon-menu-right"></i>
                         </button>
                         {!! Form::label('item', 'Inspection Items') !!}<span>*</span>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="box-footer">
                     <button type="button" id="save" class="btn btn-primary">Save</button>
-                    <button id="addItem" type="button" class="btn btn-md btn-primary pull-right">
+                    <button id="addItem" type="button" class="btn btn-md btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">
                         <i class="glyphicon glyphicon-plus"></i>
                     </button>
                 </div>

@@ -20,7 +20,7 @@ class CreateVehicleModelTable extends Migration
             $table->string('name', 50);
             $table->string('year', 4);
             $table->string('transmission', 5);
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
         });
     }
 

@@ -13,7 +13,7 @@ class SupplierContactSeeder extends Seeder
     {
         DB::table('supplier_contact')->insert([
             'scId' => '1',
-            'scNo' => '(+639)05-4090-523',
+            'scNo' => '+63 905 4090 523',
         ]);
     }
 }

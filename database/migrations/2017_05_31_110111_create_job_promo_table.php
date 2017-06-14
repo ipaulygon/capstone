@@ -19,7 +19,9 @@ class CreateJobPromoTable extends Migration
             $table->unsignedInteger('jobId');
             $table->unsignedInteger('promoId');
             $table->integer('quantity');
-            $table->boolean('isActive');
+            $table->integer('completed')->default(0);
+            $table->boolean('isActive')->default(1);
+            $table->boolean('isComplete')->default(0);
             $table->foreign('jobId')
                   ->references('id')->on('job_header')
                   ->onUpdate('cascade')

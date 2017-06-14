@@ -20,7 +20,7 @@ class CreatePromoProductTable extends Migration
             $table->unsignedInteger('productId');
             $table->integer('quantity');
             $table->boolean('isFree');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('promoId')
                   ->references('id')->on('promo')
                   ->onUpdate('cascade')

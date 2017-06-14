@@ -71,7 +71,6 @@ class SupplierController extends Controller
                 $supplier = Supplier::create([
                     'name' => trim($request->name),
                     'address' => trim($request->address),
-                    'isActive' => 1
                 ]);
                 $persons = $request->spName;
                 $contacts = $request->scNo;
@@ -198,7 +197,6 @@ class SupplierController extends Controller
             ->join('supplier as s','s.id','ph.supplierId')
             ->where('ph.supplierId',$id)
             ->get();
-        return $checkPurchase;
         if(count($checkPurchase) > 0){
             $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
         }else{

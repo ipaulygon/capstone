@@ -33,6 +33,7 @@
     <script src="{{ URL::asset('js/estimate.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#tEstimate').addClass('active');
             var customers = [
                 @foreach($customers as $customer)
                     '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
@@ -51,61 +52,30 @@
             @endif
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});
-            $('#contact').inputmask("(+639)99-9999-999");
-            $('#plate').inputmask("AAA 9999");
-            $('#email').inputmask("email");
-            $("#mileage").inputmask({ 
-                alias: "decimal",
-                prefix: '',
-                suffix: ' km',
-                allowMinus: false,
-                min: 0,
-            });
-            $("#compute").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('#tEstimate').addClass('active');
-        });
-        $(document).on('keypress','#contact',function(){
-            if($(this).val()[4]=='9'){
-                $(this).inputmask("(+639)99-9999-999");
-            }else if($(this).val()[4]=='2'){
-                $(this).inputmask("(+639)999-9999");
-            }else{
-                $(this).inputmask("(+639) ERROR");
-            }
+            @if(!old('contact'))
+                $('#contact').inputmask("+63 999 9999 999");
+            @else
+                @if(old('contact')[2] == '2' && old('contact')[14] == 'l')
+                    $('#contact').inputmask("(02) 999 9999 loc. 9999");
+                @elseif(old('contact')[2] == '2')
+                    $('#contact').inputmask("(02) 999 9999");
+                @else
+                    $('#contact').inputmask("+63 999 9999 999");
+                @endif
+            @endif
+            @if(!old('plate'))
+                $('#plate').inputmask("AAA 999");
+            @else
+                @if(strlen(old('plate')) == 7)
+                    $('#plate').inputmask("AAA 999");
+                @elseif(strlen(old('plate')) == 8)
+                    $('#plate').inputmask("AAA 9999");
+                @else
+                    $('#plate').inputmask();
+                    $('#plate').val("For Registration");
+                @endif
+            @endif
         });
     </script>
-    @if(old('product') || old('service') || old('package') || old('promo') || old('discount'))
-        <script>$('#compute').val(0)</script>
-        @if(old('product'))
-        @foreach(old('product') as $key=>$product)
-            <script>oldProduct({{$product}},{{old("productQty.".$key)}})</script>
-        @endforeach
-        @endif
-        @if(old('service'))
-        @foreach(old('service') as $key=>$service)
-            <script>oldService({{$service}})</script>
-        @endforeach
-        @endif
-        @if(old('package'))
-        @foreach(old('package') as $key=>$package)
-            <script>oldPackage({{$package}},{{old("packageQty.".$key)}})</script>
-        @endforeach
-        @endif
-        @if(old('promo'))
-        @foreach(old('promo') as $key=>$promo)
-            <script>oldPromo({{$promo}},{{old("promoQty.".$key)}})</script>
-        @endforeach
-        @endif
-        @if(old('discount'))
-        @foreach(old('discount') as $key=>$discount)
-            <script>oldDiscount({{$discount}})</script>
-        @endforeach
-        @endif
-    @endif
+    @include('layouts.oldItems')
 @stop

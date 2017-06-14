@@ -18,7 +18,7 @@ class CreatePackageServiceTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('packageId');
             $table->unsignedInteger('serviceId');
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('packageId')
                   ->references('id')->on('package')
                   ->onUpdate('cascade')

@@ -40,4 +40,8 @@ class EstimateHeader extends Model
     public function vehicle(){
         return $this->belongsTo('App\Vehicle','vehicleId');
     }
+
+    public function technician(){
+        return $this->hasMany('App\EstimateTechnician','estimateId')->where('isActive',1);
+    }
 }

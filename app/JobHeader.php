@@ -11,8 +11,11 @@ class JobHeader extends Model
     	'customerId',
         'vehicleId',
     	'isFinalize',
+        'isComplete',
         'total',
-        'paid'
+        'paid',
+        'start',
+        'end'
     ];
 
     public function product(){
@@ -41,5 +44,9 @@ class JobHeader extends Model
     
     public function vehicle(){
         return $this->belongsTo('App\Vehicle','vehicleId');
+    }
+
+    public function technician(){
+        return $this->hasMany('App\JobTechnician','jobId')->where('isActive',1);
     }
 }

@@ -22,7 +22,7 @@ class CreatePurchaseDetailTable extends Migration
             $table->integer('quantity');
             $table->integer('delivered');
             $table->timestamps();
-            $table->boolean('isActive');
+            $table->boolean('isActive')->default(1);
             $table->foreign('purchaseId')
                   ->references('id')->on('purchase_header')
                   ->onUpdate('cascade')

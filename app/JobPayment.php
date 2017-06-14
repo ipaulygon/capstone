@@ -9,7 +9,7 @@ class JobPayment extends Model
     protected $table = 'job_payment';
     protected $fillable = [
     	'jobId',
-        'paid',  	
+        'paid',
     ];
 
     public function header(){
