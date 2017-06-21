@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PurchaseHeader;
 use App\PurchaseDetail;
-use App\Product;
 use Validator;
 use Redirect;
 use Session;
@@ -237,16 +236,6 @@ class PurchaseController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully finalized.');  
         return Redirect::back();
-    }
-
-    public function product($id){
-        $product = Product::with('type')
-            ->with('brand')
-            ->with('variance')
-            ->with('vehicle.model.make')
-            ->with('priceRecord')
-            ->findOrFail($id);
-        return response()->json(['product'=>$product]);
     }
 
     public function finalz($id){

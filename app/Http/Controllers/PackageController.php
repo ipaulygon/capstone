@@ -6,8 +6,6 @@ use App\Package;
 use App\PackageProduct;
 use App\PackageService;
 use App\PackagePrice;
-use App\Product;
-use App\Service;
 use Validator;
 use Redirect;
 use Response;
@@ -261,15 +259,5 @@ class PackageController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
-    }
-
-    public function product($id){
-        $product = Product::with('type')->with('brand')->with('variance')->findOrFail($id);
-        return response()->json(['product'=>$product]);
-    }
-
-    public function service($id){
-        $service = Service::with('category')->findOrFail($id);
-        return response()->json(['service'=>$service]);
     }
 }

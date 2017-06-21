@@ -49,6 +49,9 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $products = DB::table('product')
+            ->select('*')
+            ->get();
         $types [] = [];
         $brands [] = [];
         $variances [] = [];
@@ -61,7 +64,7 @@ class ProductController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->get();
-        return View('product.create',compact('types','brands','variances','vehicles'));
+        return View('product.create',compact('products','types','brands','variances','vehicles'));
     }
 
     /**
@@ -175,6 +178,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        $products = DB::table('product')
+            ->select('*')
+            ->get();
         $types = ProductType::where('isActive',1)->orderBy('name')->get();
         $brands = TypeBrand::where('typeId',$product->typeId)->get();
         $variances = TypeVariance::where('typeId',$product->typeId)->get();
@@ -182,7 +188,7 @@ class ProductController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->get();
-        return View('product.edit',compact('product','types','brands','variances','vehicles'));
+        return View('product.edit',compact('product','products','types','brands','variances','vehicles'));
     }
 
     /**

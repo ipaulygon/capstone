@@ -10,7 +10,8 @@
                     <div class="form-group">
                         {!! Form::label('name', 'Product') !!}<span>*</span>
                         {!! Form::input('text','name',null,[
-                            'class' => 'form-control',
+                            'class' => 'form-control autocomplete',
+                            'id' => 'productName',
                             'placeholder'=>'Name',
                             'maxlength'=>'50']) 
                         !!}

@@ -21,9 +21,21 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
     <style>
+        form{
+            font-family: "Segoe UI"
+        }
         form span{
-            font-weight: bold;
+            font-weight: 580;
             color: red;
+        }
+        form input{
+            font-weight: 580;
+        }
+        form select{
+            font-weight: 580;
+        }
+        form textarea{
+            font-weight: 580;
         }
         label{
             font-weight: 600;

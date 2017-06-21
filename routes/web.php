@@ -47,36 +47,26 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
 	Route::get('delivery/pdf/{id}','PdfController@delivery');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
+	Route::get('job/pdf/{id}','PdfController@job');
 
 	//GetJSON
 	Route::get('vehicle/remove/{id}','VehicleController@remove');
 	Route::get('type/remove/{id}','ProductTypeController@remove');
 	Route::get('product/type/{id}','ProductController@type');
 	Route::get('inspection/remove/{id}','InspectionController@remove');
-	Route::get('package/product/{id}','PackageController@product');
-	Route::get('package/service/{id}','PackageController@service');
-	Route::get('promo/product/{id}','PromoController@product');
-	Route::get('promo/service/{id}','PromoController@service');
-	Route::get('purchase/product/{id}','PurchaseController@product');
+	Route::get('item/customer/{name}','ItemController@customer');
+	Route::get('item/vehicle/{name}','ItemController@vehicle');
+	Route::get('item/product/{id}','ItemController@product');
+	Route::get('item/service/{id}','ItemController@service');
+	Route::get('item/package/{id}','ItemController@package');
+	Route::get('item/promo/{id}','ItemController@promo');
+	Route::get('item/discount/{id}','ItemController@discount');
 	Route::get('delivery/header/{id}','DeliveryController@header');
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
-	Route::get('inspect/customer/{name}','InspectController@customer');
-	Route::get('inspect/vehicle/{name}','InspectController@vehicle');
-	Route::get('estimate/customer/{name}','EstimateController@customer');
-	Route::get('estimate/vehicle/{name}','EstimateController@vehicle');
-	Route::get('estimate/product/{id}','EstimateController@product');
-	Route::get('estimate/service/{id}','EstimateController@service');
-	Route::get('estimate/package/{id}','EstimateController@package');
-	Route::get('estimate/promo/{id}','EstimateController@promo');
-	Route::get('estimate/discount/{id}','EstimateController@discount');
-	Route::get('job/customer/{name}','JobController@customer');
-	Route::get('job/vehicle/{name}','JobController@vehicle');
-	Route::get('job/product/{id}','JobController@product');
-	Route::get('job/service/{id}','JobController@service');
-	Route::get('job/package/{id}','JobController@package');
-	Route::get('job/promo/{id}','JobController@promo');
-	Route::get('job/discount/{id}','JobController@discount');
 	Route::get('job/check/{id}','JobController@check');
+	Route::get('job/finalz/{id}','JobController@finalz');
+	Route::get('job/procz/{id}','JobController@procz');
+	Route::patch('job/finalize/{id}','JobController@finalize');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

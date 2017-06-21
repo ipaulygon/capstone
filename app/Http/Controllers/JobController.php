@@ -9,11 +9,6 @@ use App\JobPackage;
 use App\JobPromo;
 use App\JobDiscount;
 use App\JobTechnician;
-use App\Product;
-use App\Service;
-use App\Package;
-use App\Promo;
-use App\Discount;
 use App\Vehicle;
 use App\Customer;
 use Validator;
@@ -218,8 +213,7 @@ class JobController extends Controller
                 $job = JobHeader::create([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
-                    'isFinalize' => 0,
-                    'total' => 0,
+                    'total' => str_replace(',','',$request->computed),
                     'paid' => 0,
                     'start' => $request->start." ".$time
                 ]);
@@ -442,7 +436,7 @@ class JobController extends Controller
                 $job->update([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
-                    'total' => 0,
+                    'total' => str_replace(',','',$request->computed),
                 ]);
                 $products = $request->product;
                 $prodQty = $request->productQty;
@@ -534,78 +528,27 @@ class JobController extends Controller
         return View('layouts.404');
     }
 
-    public function customer($id)
-    {
-        $customer = DB::table('customer as c')
-            ->where(DB::raw('CONCAT_WS(" ",c.firstName,c.middleName,c.lastName)'),''.$id)
-            ->select('c.*')
-            ->first();
-        return response()->json(['customer'=>$customer]);
+    public function finalz($id){
+        $job = JobHeader::with('product','service','package','promo','discount')->findOrFail($id);
+        return response()->json(['job'=>$job]);
     }
     
-    public function vehicle($id)
-    {
-        $vehicle = DB::table('vehicle as v')
-            ->where('v.plate',''.$id)
-            ->select('v.*')
-            ->first();
-        if(!empty($vehicle)){
-            return response()->json(['vehicle'=>$vehicle]);
-        }
+    public function procz($id){
+        $job = JobHeader::with('product','service','package','promo','discount')->findOrFail($id);
+        return response()->json(['job'=>$job]);
     }
 
-    public function product($id){
-        $product = Product::with('type')
-            ->with('brand')
-            ->with('variance')
-            ->with('inventory')
-            ->with('discount.header.rateRecord')
-            ->with('discountRecord.header.rateRecord')
-            ->with('priceRecord')
-            ->findOrFail($id);
-        return response()->json(['product'=>$product]);
-    }
-
-    public function service($id){
-        $service = Service::with('category')
-            ->with('discount.header.rateRecord')
-            ->with('discountRecord.header.rateRecord')
-            ->with('priceRecord')
-            ->findOrFail($id);
-        return response()->json(['service'=>$service]);
-    }
-
-    public function package($id){
-        $package = Package::with('product.product.type')
-            ->with('product.product.brand')
-            ->with('product.product.variance')
-            ->with('service.service.category')
-            ->with('priceRecord')
-            ->findOrFail($id);
-        return response()->json(['package'=>$package]);
-    }
-
-    public function promo($id){
-        $promo = Promo::with('product.product.type')
-            ->with('product.product.brand')
-            ->with('product.product.variance')
-            ->with('freeProduct.product.type')
-            ->with('freeProduct.product.brand')
-            ->with('freeProduct.product.variance')
-            ->with('service.service.category')
-            ->with('freeService.service.category')
-            ->with('priceRecord')
-            ->findOrFail($id);
-        return response()->json(['promo'=>$promo]);
-    }
-
-    public function discount($id){
-        $discount = Discount::with('rateRecord')->findOrFail($id);
-        return response()->json(['discount'=>$discount]);
+    public function finalize(Request $request, $id){
+        $job = JobHeader::findOrFail($id);
+        $job->update([
+            'isFinalize' => 1
+        ]);
+        $request->session()->flash('success', 'Successfully finalized.');  
+        return Redirect::back();
     }
 
     public function check($id){
-        $job = JobHeader::with('customer','vehicle.model.make','technician')->findOrFail($id);
+        $job = JobHeader::with('customer','vehicle.model.make','technician.technician')->findOrFail($id);
         return response()->json(['job'=>$job]);
     }
 }

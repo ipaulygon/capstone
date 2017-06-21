@@ -12,11 +12,9 @@
 @stop
 
 @section('content')
-    <div class="col-md-12">
-        {!! Form::model($inspect , ['method' => 'patch', 'action' => ['InspectController@update',$inspect->id]]) !!}
-        @include('inspect.formEdit')
-        {!! Form::close() !!}
-    </div>
+    {!! Form::model($inspect , ['method' => 'patch', 'action' => ['InspectController@update',$inspect->id]]) !!}
+    @include('inspect.formEdit')
+    {!! Form::close() !!}
 @stop
 
 @section('script')
@@ -29,6 +27,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/inspect.js') }}"></script>
     <script>
         $(document).ready(function (){
@@ -56,8 +55,16 @@
             @endif
             @if(strlen($inspect->vehicle->plate) == 7)
                 $('#plate').inputmask("AAA 999");
-            @elseif(strlen($inspect->vehicle->plate )== 8)
+            @elseif(strlen($inspect->vehicle->plate)== 8)
                 $('#plate').inputmask("AAA 9999");
+            @elseif(strlen($inspect->vehicle->plate) == 6)
+                @if($inspect->vehicle->plate[3] != ' ')
+                    $('#plate').inputmask("AA 9999");
+                @else
+                    $('#plate').inputmask("AAA 99");
+                @endif
+            @elseif(strlen($inspect->vehicle->plate) == 1)
+                $('#plate').inputmask("9");
             @else
                 $('#plate').inputmask();
                 $('#plate').val("For Registration");

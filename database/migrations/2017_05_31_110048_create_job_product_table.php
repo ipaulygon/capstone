@@ -19,7 +19,7 @@ class CreateJobProductTable extends Migration
             $table->unsignedInteger('jobId');
             $table->unsignedInteger('productId');
             $table->integer('quantity');
-            $table->integer('completed')->devault(0);
+            $table->integer('completed')->default(0);
             $table->boolean('isActive')->default(1);
             $table->boolean('isComplete')->default(0);
             $table->foreign('jobId')

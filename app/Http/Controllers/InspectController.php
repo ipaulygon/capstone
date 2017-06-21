@@ -326,24 +326,4 @@ class InspectController extends Controller
     {
         return View('layouts.404');
     }
-    
-    public function customer($id)
-    {
-        $customer = DB::table('customer as c')
-            ->where(DB::raw('CONCAT_WS(" ",c.firstName,c.middleName,c.lastName)'),''.$id)
-            ->select('c.*')
-            ->first();
-        return response()->json(['customer'=>$customer]);
-    }
-    
-    public function vehicle($id)
-    {
-        $vehicle = DB::table('vehicle as v')
-            ->where('v.plate',''.$id)
-            ->select('v.*')
-            ->first();
-        if(!empty($vehicle)){
-            return response()->json(['vehicle'=>$vehicle]);
-        }
-    }
 }

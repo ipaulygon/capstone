@@ -12,6 +12,7 @@ use PDF;
 use App\PurchaseHeader;
 use App\DeliveryHeader;
 use App\EstimateHeader;
+use App\JobHeader;
 class PdfController extends Controller
 {
     public function purchase($id){
@@ -39,5 +40,16 @@ class PdfController extends Controller
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','date'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
+    }
+
+    public function job($id){
+        $jobId = 'JOB'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+        $date = date('Y-m-d H:i:s');
+        $job = JobHeader::findOrFail($id);
+        $total = 0;
+        $discounts = 0;
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discounts','date'))->setPaper([0,0,612,792]);
+        return $pdf->stream('job.pdf');
     }
 }

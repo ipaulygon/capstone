@@ -7,6 +7,10 @@
         <link href="css/style.css" rel="stylesheet">
     </head>
     <style type="text/css">
+        @page{
+            margin-top: 1cm;
+            margin-bottom: -0.75cm;
+        }
         body{
             font-family: "SegoeUI","Sans-serif";
             font-size: 12px;

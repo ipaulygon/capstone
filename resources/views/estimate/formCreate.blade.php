@@ -12,7 +12,8 @@
         <div class="box-footer">
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
             <div class="form-inline pull-right">
-                {!! Form::label('computed', 'Total Price') !!}
+                {!! Form::label('computed', 'Total Price',[
+                    'style' => 'font-size:18px']) !!}
                 <div class="input-group">
                     <span class="input-group-addon" style="border: none!important">PhP</span>
                     <strong>{!! Form::input('text','computed',0,[

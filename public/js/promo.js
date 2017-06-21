@@ -107,7 +107,7 @@ $(document).on('keyup', '#qty', function (){
 $(document).on('click','.pushFreeProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -132,7 +132,7 @@ $(document).on('click','.pushFreeProduct', function (){
 $(document).on('click','.pullFreeProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             frees.row.add([
@@ -152,7 +152,7 @@ $(document).on('click','.pullFreeProduct', function (){
 $(document).on('click','.pushProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -177,7 +177,7 @@ $(document).on('click','.pushProduct', function (){
 $(document).on('click','.pullProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             products.row.add([
@@ -197,7 +197,7 @@ $(document).on('click','.pullProduct', function (){
 $(document).on('click','.pushFreeService', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             fList.row.add([
@@ -217,7 +217,7 @@ $(document).on('click','.pushFreeService', function (){
 $(document).on('click','.pullFreeService', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             frees.row.add([
@@ -237,7 +237,7 @@ $(document).on('click','.pullFreeService', function (){
 $(document).on('click','.pushService', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             sList.row.add([
@@ -257,7 +257,7 @@ $(document).on('click','.pushService', function (){
 $(document).on('click','.pullService', function (){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             services.row.add([
@@ -277,7 +277,7 @@ $(document).on('click','.pullService', function (){
 function retrieveFreeProduct(id,qty){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
@@ -306,7 +306,7 @@ function retrieveFreeProduct(id,qty){
 function retrieveProduct(id,qty){
     $.ajax({
         type: "GET",
-        url: "/promo/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
@@ -335,7 +335,7 @@ function retrieveProduct(id,qty){
 function retrieveFreeService(id){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+id,
+        url: "/item/service/"+id,
         dataType: "JSON",
         success:function(data){
             fList.row.add([
@@ -355,7 +355,7 @@ function retrieveFreeService(id){
 function retrieveService(id){
     $.ajax({
         type: "GET",
-        url: "/promo/service/"+id,
+        url: "/item/service/"+id,
         dataType: "JSON",
         success:function(data){
             sList.row.add([

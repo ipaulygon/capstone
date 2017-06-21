@@ -1,20 +1,3 @@
-var pList = $('#productList').DataTable({
-    responsive: true,
-    "searching": false,
-    "paging": false,
-    "info": false,
-    "retrieve": true,
-});
-$('#email').inputmask("email");
-$("#mileage").inputmask({ 
-    alias: "decimal",
-    prefix: '',
-    suffix: ' km',
-    allowMinus: false,
-    autoGroup: true,
-    min: 0,
-    max: 1000000
-});
 $("#compute").inputmask({ 
     alias: "currency",
     prefix: '',
@@ -22,114 +5,12 @@ $("#compute").inputmask({
     autoGroup: true,
     min: 0,
 });
-
-$(document).on('focus','#plate',function(){
-    $(this).popover({
-        trigger: 'manual',
-        content: function(){
-            var content = '<button type="button" id="po" class="btn btn-primary btn-block">ABC 123</button><button type="button" id="pn" class="btn btn-primary btn-block">ABC 1234</button><button type="button" id="ph" class="btn btn-primary btn-block">For Registration</button>';
-            return content;
-        },
-        html: true,
-        placement: function(){
-            var placement = 'top';
-            return placement;
-        },
-        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-        title: function(){
-            var title = 'Choose a format:';
-            return title;
-        }
-    });
-    $(this).popover('show');
-});
-$(document).on('focusout','#plate',function(){
-    $(this).popover('hide');
-});
-$(document).on('click','#po',function(){
-    $('#plate').val('');
-    $('#plate').inputmask("AAA 999");
-});
-$(document).on('click','#pn',function(){
-    $('#plate').val('');
-    $('#plate').inputmask("AAA 9999");
-});
-$(document).on('click','#ph',function(){
-    $('#plate').val('');
-    $('#plate').inputmask();
-    $('#plate').val("For Registration");
-});
-
-$(document).on('focus','#contact',function(){
-    $(this).popover({
-        trigger: 'manual',
-        content: function(){
-            var content = '<button type="button" id="cp" class="btn btn-primary btn-block">Mobile No.</button><button type="button" id="tp" class="btn btn-primary btn-block">Telephone No.</button><button type="button" id="tpl" class="btn btn-primary btn-block">Telephone No. w/ Local</button>';
-            return content;
-        },
-        html: true,
-        placement: function(){
-            var placement = 'top';
-            return placement;
-        },
-        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-        title: function(){
-            var title = 'Choose a format:';
-            return title;
-        }
-    });
-    $(this).popover('show');
-});
-$(document).on('focusout','#contact',function(){
-    $(this).popover('hide');
-});
-$(document).on('click','#cp',function(){
-    $('#contact').val('');
-    $('#contact').inputmask("+63 999 9999 999");
-});
-$(document).on('click','#tp',function(){
-    $('#contact').val('');
-    $('#contact').inputmask("(02) 999 9999");
-});
-$(document).on('click','#tpl',function(){
-    $('#contact').val('');
-    $('#contact').inputmask("(02) 999 9999 loc. 9999");
-});
-// AUTOCOMPLETE
-$('#firstName').on('autocompleteselect',function(event, ui){
-    name = ui.item.value
-    $.ajax({
-        type: "GET",
-        url: "/job/customer/"+name,
-        dataType: "JSON",
-        success:function(data){
-            $('#firstName').val(data.customer.firstName);
-            $('#middleName').val(data.customer.middleName);
-            $('#lastName').val(data.customer.lastName);
-            $('#contact').val(data.customer.contact);
-            $('#email').val(data.customer.email);
-            $('#street').text(data.customer.street);
-            $('#brgy').text(data.customer.brgy);
-            $('#city').text(data.customer.city);
-        }
-    });
-});
-
-$('#plate').on('change',function(){
-    name = $(this).val();
-    if(name[4]<10){
-        $.ajax({
-            type: "GET",
-            url: "/job/vehicle/"+name,
-            dataType: "JSON",
-            success:function(data){
-                $('#plate').val(data.vehicle.plate);
-                $('#model').val(data.vehicle.modelId);
-                $('#mileage').val(data.vehicle.mileage);
-                $('#model').select2();
-            }
-        });
-    }
+var pList = $('#productList').DataTable({
+    responsive: true,
+    "searching": false,
+    "paging": false,
+    "info": false,
+    "retrieve": true,
 });
 // DATATABLE
 function rowFinder(row){
@@ -180,7 +61,7 @@ $(document).on('change', '#products', function(){
     $('#products option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/product/"+this.value,
+        url: "/item/product/"+this.value,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -243,7 +124,7 @@ function oldProduct(id,qty){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -301,7 +182,7 @@ function retrieveProduct(id,qty,price,discountString){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -348,7 +229,7 @@ $(document).on('change', '#services', function(){
     $('#services option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/service/"+this.value,
+        url: "/item/service/"+this.value,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -409,7 +290,7 @@ function oldService(id){
     $('#services option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/service/"+id,
+        url: "/item/service/"+id,
         dataType: "JSON",
         success:function(data){
             var discount = null;
@@ -461,7 +342,7 @@ function retrieveService(id,price,discountString){
     $('#services option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/service/"+id,
+        url: "/item/service/"+id,
         dataType: "JSON",
         success:function(data){
             stack = price;
@@ -500,7 +381,7 @@ $(document).on('change', '#packages', function(){
     $('#packages option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/package/"+this.value,
+        url: "/item/package/"+this.value,
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
@@ -562,7 +443,7 @@ function oldPackage(id,qty){
     $('#packages option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/package/"+id,
+        url: "/item/package/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(data.package.price+"*"+qty);
@@ -617,7 +498,7 @@ function retrievePackage(id,qty,price){
     $('#packages option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/package/"+id,
+        url: "/item/package/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(price+'*'+qty);
@@ -674,7 +555,7 @@ $(document).on('change', '#promos', function(){
     $('#promos option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/promo/"+this.value,
+        url: "/item/promo/"+this.value,
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
@@ -750,7 +631,7 @@ function oldPromo(id,qty){
     $('#promos option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/promo/"+id,
+        url: "/item/promo/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(data.promo.price+"*"+qty);
@@ -821,7 +702,7 @@ function retrievePromo(id,qty,price){
     $('#promos option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/promo/"+id,
+        url: "/item/promo/"+id,
         dataType: "JSON",
         success:function(data){
             stack = eval(price+'*'+qty);
@@ -892,7 +773,7 @@ $(document).on('change', '#discounts', function(){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/discount/"+this.value,
+        url: "/item/discount/"+this.value,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
@@ -944,7 +825,7 @@ function oldDiscount(id){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/discount/"+id,
+        url: "/item/discount/"+id,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
@@ -985,7 +866,7 @@ function retrieveDiscount(id,rate){
     $('#discounts').prop('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/job/discount/"+id,
+        url: "/item/discount/"+id,
         dataType: "JSON",
         success:function(data){
             final =  eval($('#compute').val().replace(',','')+"*"+(rate/100));

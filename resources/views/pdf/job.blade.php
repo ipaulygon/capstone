@@ -65,29 +65,29 @@
             Rapide
         </div>
         <div style="float:right">
-            {{date('F j, Y', strtotime($estimate->created_at))}}<br>
-            <label style="color:red">{{$estId}}</label>
+            {{date('F j, Y', strtotime($job->created_at))}}<br>
+            <label style="color:red">{{$jobId}}</label>
         </div>
         <div style="clear:both"></div>
         <div class="center">
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            ESTIMATE REPAIR
+            JOB ORDER
         </div><br>
         <div style="float:left" class="col-md-6">
-            Customer: {{$estimate->customer->firstName}} {{$estimate->customer->middleName}} {{$estimate->customer->lastName}}<br>
-            Address: {{$estimate->customer->street}} {{$estimate->customer->brgy}} {{$estimate->customer->city}}<br>
-            Phone Number: {{$estimate->customer->contact}}<br>
-            Email: {{$estimate->customer->email}}<br>
+            Customer: {{$job->customer->firstName}} {{$job->customer->middleName}} {{$job->customer->lastName}}<br>
+            Address: {{$job->customer->street}} {{$job->customer->brgy}} {{$job->customer->city}}<br>
+            Phone Number: {{$job->customer->contact}}<br>
+            Email: {{$job->customer->email}}<br>
         </div>
         <div style="float:right" class="col-md-6">
-            Plate: {{$estimate->vehicle->plate}}<br>
-            Make: {{$estimate->vehicle->model->make->name}}<br>
-            Model: {{$estimate->vehicle->model->name}}<br>
-            Year: {{$estimate->vehicle->model->year}}<br>
-            Transmission: {{$estimate->vehicle->model->transmission}}<br>
-            Mileage: {{$estimate->vehicle->mileage}}<br>
+            Plate: {{$job->vehicle->plate}}<br>
+            Make: {{$job->vehicle->model->make->name}}<br>
+            Model: {{$job->vehicle->model->name}}<br>
+            Year: {{$job->vehicle->model->year}}<br>
+            Transmission: {{$job->vehicle->model->transmission}}<br>
+            Mileage: {{$job->vehicle->mileage}}<br>
         </div>
         <div style="clear:both"></div>
         <br>
@@ -102,7 +102,7 @@
             </thead>
             <tbody>
                 {{-- product --}}
-                @foreach($estimate->product as $product)
+                @foreach($job->product as $product)
                 <tr>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                     <?php
@@ -113,14 +113,14 @@
                         }
                         $discount = null;
                         if($product->product->discount!=null){
-                            $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                            $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$job->created_at)->first()->rate;
                         }else{
-                            $dis = $product->product->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                            $dis = $product->product->discountRecord->where('created_at','<=',$job->created_at)->where('updated_at','>=',$job->created_at);
                             if(count($dis) > 0){
-                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$job->created_at)->first()->rate;
                             }
                         }
-                        $price = $product->product->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $product->product->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
                         if($discount!=null){
                             $price = $price-($price*($discount/100));
                             $discountString = '['.$discount.' % discount]';
@@ -137,19 +137,19 @@
                 </tr>
                 @endforeach
                 {{-- service --}}
-                @foreach($estimate->service as $service)
+                @foreach($job->service as $service)
                 <tr>
                     <?php
                         $discount = null;
                         if($service->service->discount!=null){
-                            $discount = $service->service->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                            $discount = $service->service->discount->header->rateRecord->where('created_at','<=',$job->created_at)->first()->rate;
                         }else{
-                            $dis = $service->service->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                            $dis = $service->service->discountRecord->where('created_at','<=',$job->created_at)->where('updated_at','>=',$job->created_at);
                             if(count($dis) > 0){
-                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$job->created_at)->first()->rate;
                             }
                         }
-                        $price = $service->service->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $service->service->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
                         if($discount!=null){
                             $price = $price-($price*($discount/100));
                             $discountString = '['.$discount.' % discount]';
@@ -167,7 +167,7 @@
                 </tr>
                 @endforeach
                 {{-- package --}}
-                @foreach($estimate->package as $package)
+                @foreach($job->package as $package)
                 <tr>
                     <td class="text-right">{{number_format($package->quantity)}}</td>
                     <td>
@@ -188,7 +188,7 @@
                         @endforeach
                     </td>
                     <?php
-                        $price = $package->package->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $package->package->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
                     ?>
                     <td class="text-right">{{number_format($price,2)}}</td>
                     <td class="text-right">{{number_format($package->quantity*$price,2)}}</td>
@@ -198,7 +198,7 @@
                 </tr>
                 @endforeach
                 {{-- promo --}}
-                @foreach($estimate->promo as $promo)
+                @foreach($job->promo as $promo)
                 <tr>
                     <td class="text-right">{{number_format($promo->quantity)}}</td>
                     <td>
@@ -232,7 +232,7 @@
                         @endforeach
                     </td>
                     <?php
-                        $price = $promo->promo->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $promo->promo->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
                     ?>
                     <td class="text-right">{{number_format($price,2)}}</td>
                     <td class="text-right">{{number_format($promo->quantity*$price,2)}}</td>
@@ -241,14 +241,14 @@
                     ?>
                 </tr>
                 @endforeach
-                @if($estimate->discount)
+                @if($job->discount)
                     <tr>
                         <td></td>
-                        <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
-                        <td class="text-right">{{$estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate}} %</td>
-                        <td class="text-right">-{{number_format($total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100),2)}}</td>
+                        <td>{{$job->discount->discount->name}} - DISCOUNT</td>
+                        <td class="text-right">{{$job->discount->discount->rateRecord->where('created_at','<=',$job->created_at)->first()->rate}} %</td>
+                        <td class="text-right">-{{number_format($total*($job->discount->discount->rateRecord->where('created_at','<=',$job->created_at)->first()->rate/100),2)}}</td>
                         <?php 
-                            $discounts += $total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100);
+                            $discounts += $total*($job->discount->discount->rateRecord->where('created_at','<=',$job->created_at)->first()->rate/100);
                         ?>
                     </tr>
                 @endif
@@ -262,7 +262,7 @@
         </table>
         <div class="footer">
             <div style="float:left" class="col-md-6">
-                This serves as an estimate only.<br>
+                This serves as an job only.<br>
                 STORE MANAGER: ______________________<br>
                 ADMIN OFFICER: ______________________<br> 
             </div>

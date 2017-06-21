@@ -30,6 +30,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/job.js') }}"></script>
     <script>
         $(document).ready(function (){
@@ -57,8 +58,16 @@
             @endif
             @if(strlen($job->vehicle->plate) == 7)
                 $('#plate').inputmask("AAA 999");
-            @elseif(strlen($job->vehicle->plate )== 8)
+            @elseif(strlen($job->vehicle->plate)== 8)
                 $('#plate').inputmask("AAA 9999");
+            @elseif(strlen($job->vehicle->plate) == 6)
+                @if($job->vehicle->plate[3] != ' ')
+                    $('#plate').inputmask("AA 9999");
+                @else
+                    $('#plate').inputmask("AAA 99");
+                @endif
+            @elseif(strlen($job->vehicle->plate) == 1)
+                $('#plate').inputmask("9");
             @else
                 $('#plate').inputmask();
                 $('#plate').val("For Registration");

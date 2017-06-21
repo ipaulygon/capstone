@@ -34,7 +34,7 @@ $(document).on('change', '#products', function(){
     $('#products option[value="'+this.value+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/purchase/product/"+this.value,
+        url: "/item/product/"+this.value,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -99,7 +99,7 @@ function oldProduct(id,qty,model){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/purchase/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             price = data.product.price
@@ -162,7 +162,7 @@ function retrieveProduct(price,id,qty,model){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
-        url: "/purchase/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -223,7 +223,7 @@ function retrieveProduct(price,id,qty,model){
 function detailProduct(id,qty){
     $.ajax({
         type: "GET",
-        url: "/purchase/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')

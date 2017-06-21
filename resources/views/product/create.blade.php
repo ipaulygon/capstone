@@ -25,6 +25,11 @@
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
+        var products = [
+            @foreach($products as $products)
+                '{{$products->name}}',
+            @endforeach
+        ];
         var activeVehicles = [
             @if(old('vehicle'))
                 @foreach(old('vehicle') as $vehicle)
@@ -34,6 +39,7 @@
         ];
         $("#vehicle").val(activeVehicles);
         $(".select2").select2();
+        $('#productName').autocomplete({source: products});
         @if(old('typeId'))
             changeType({{old('typeId')}});
             $('#pt').val({{old('typeId')}}).trigger("change");

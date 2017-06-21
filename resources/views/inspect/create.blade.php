@@ -12,11 +12,9 @@
 @stop
 
 @section('content')
-    <div class="col-md-12">
-        {!! Form::open(['url' => 'inspect']) !!}
-        @include('inspect.formCreate')
-        {!! Form::close() !!}
-    </div>
+    {!! Form::open(['url' => 'inspect']) !!}
+    @include('inspect.formCreate')
+    {!! Form::close() !!}
 @stop
 
 @section('script')
@@ -29,6 +27,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/inspect.js') }}"></script>
     <script>
         $(document).ready(function (){
@@ -69,6 +68,14 @@
                     $('#plate').inputmask("AAA 999");
                 @elseif(strlen(old('plate')) == 8)
                     $('#plate').inputmask("AAA 9999");
+                @elseif(strlen(old('plate')) == 6)
+                    @if(old('plate')[3] != ' ')
+                        $('#plate').inputmask("AA 9999");
+                    @else
+                        $('#plate').inputmask("AAA 99");
+                    @endif
+                @elseif(strlen(old('plate')) == 1)
+                    $('#plate').inputmask("9");
                 @else
                     $('#plate').inputmask();
                     $('#plate').val("For Registration");

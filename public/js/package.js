@@ -66,7 +66,7 @@ $(document).on('keyup', '#qty', function (){
 $(document).on('click','.pushProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/package/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -91,7 +91,7 @@ $(document).on('click','.pushProduct', function (){
 $(document).on('click','.pullProduct', function (){
     $.ajax({
         type: "GET",
-        url: "/package/product/"+this.id,
+        url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
             products.row.add([
@@ -112,7 +112,7 @@ $(document).on('click','.pullProduct', function (){
 $(document).on('click','.pushService', function (){
     $.ajax({
         type: "GET",
-        url: "/package/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             sList.row.add([
@@ -132,7 +132,7 @@ $(document).on('click','.pushService', function (){
 $(document).on('click','.pullService', function (){
     $.ajax({
         type: "GET",
-        url: "/package/service/"+this.id,
+        url: "/item/service/"+this.id,
         dataType: "JSON",
         success:function(data){
             services.row.add([
@@ -152,7 +152,7 @@ $(document).on('click','.pullService', function (){
 function retrieveProduct(id,qty){
     $.ajax({
         type: "GET",
-        url: "/package/product/"+id,
+        url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
@@ -181,7 +181,7 @@ function retrieveProduct(id,qty){
 function retrieveService(id){
     $.ajax({
         type: "GET",
-        url: "/package/service/"+id,
+        url: "/item/service/"+id,
         dataType: "JSON",
         success:function(data){
             sList.row.add([

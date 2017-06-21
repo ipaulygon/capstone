@@ -4,7 +4,7 @@ $('#jobCarousel').carousel({
 });
 
 var day = null;
-var datePick = new Date();
+var datePick = moment(new Date()).format("YYYY-MM-DD");
 $('#start').val(datePick);
 $('#calendar').fullCalendar({
     contentHeight: 600,
@@ -48,6 +48,9 @@ $('#calendar').fullCalendar({
 });
 
 function clickEvent(id){
+    $('.detailTechs').remove();
+    var finalize = null;
+    var completed = null;
     $.ajax({
         type: "GET",
         url: "/job/check/"+id,
@@ -61,10 +64,30 @@ function clickEvent(id){
             $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" ("+data.job.vehicle.model.transmission+")");
             $('#detailMileage').text(data.job.vehicle.mileage);
             $('#detailCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
+            $.each(data.job.technician,function(key,value){
+                $('#detailTechs').append('<li class="detailTechs">'+value.technician.firstName+' '+value.technician.lastName+'</li>');
+            });
+            if(data.job.isFinalize){
+                $('#detailPDF').removeClass('hidden');
+                $('#detailUpdate').addClass('hidden');
+                $('#detailFinalize').addClass('hidden');
+                if(data.job.isCompleted){
+                    $('#detailProcess').addClass('hidden');
+                }else{
+                    $('#detailProcess').removeClass('hidden');
+                }
+            }else{
+                $('#detailPDF').addClass('hidden');
+                $('#detailUpdate').removeClass('hidden');
+                $('#detailFinalize').removeClass('hidden');
+            }
         }
     });
     $('#detailBox').removeClass('hidden');
     $('#detailUpdate').attr("href","/job/"+id+"/edit");
+    $('#detailPDF').attr("href","/job/pdf/"+id);
+    $('#detailFinalize').attr("onclick","finalizeModal("+id+")");
+    $('#detailProcess').attr("onclick","process("+id+")");
 }
 
 function hoverEvent(id,element){
@@ -162,5 +185,13 @@ $(document).on('click','#addNew',function(){
 });
 
 $(document).on('click','#backNew',function(){
+    $('#jobCarousel').carousel(0);
+});
+
+$(document).on('click','#detailProcess',function(){
+    $('#jobCarousel').carousel(2);
+});
+
+$(document).on('click','#backProcess',function(){
     $('#jobCarousel').carousel(0);
 });

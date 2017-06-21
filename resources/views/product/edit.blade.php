@@ -26,12 +26,20 @@
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
         var activeVehicles = [
-            @foreach($product->vehicle as $vehicle)
-                "{{$vehicle->modelId}}",
+            @if($product->vehicle)
+                @foreach($product->vehicle as $vehicle)
+                    "{{$vehicle->modelId}}",
+                @endforeach
+            @endif
+        ];
+        var products = [
+            @foreach($products as $products)
+                '{{$products->name}}',
             @endforeach
         ];
         $("#vehicle").val(activeVehicles);
         $(".select2").select2();
+        $('#productName').autocomplete({source: products});
         @if($product)
             changeType({{$product->typeId}});
             $('#pt').val({{$product->typeId}}).trigger("change");
