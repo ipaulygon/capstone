@@ -17,6 +17,7 @@ $('#calendar').fullCalendar({
             $(this).addClass('day-click');
             day = $(this);
             $('#start').val(datePick);
+            $('#dateSelected').text(datePick);
             $('#detailBox').addClass('hidden');
         }else{
             $(this).tooltip({
@@ -188,9 +189,6 @@ $(document).on('click','#backNew',function(){
     $('#jobCarousel').carousel(0);
 });
 
-$(document).on('click','#detailProcess',function(){
-    $('#jobCarousel').carousel(2);
-});
 
 $(document).on('click','#backProcess',function(){
     $('#jobCarousel').carousel(0);

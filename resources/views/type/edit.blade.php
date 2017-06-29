@@ -52,16 +52,29 @@
                 </div>
             </div>
             <div id="brands" class="box-body">
-                @foreach($type->tb as $tb)
+                @if(empty($type->tb))
+                    @foreach($type->tb as $tb)
+                        <div id="brand" class="form-group">
+                            @if($loop->index!=0)
+                                <button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
+                            <input type="hidden" class="hidden" value="{{$tb->brandId}}">
+                            {!! Form::label('brand', 'Brand') !!}<span>*</span>
+                            {!! Form::input('text','brand',$tb->brand->name,[
+                                'class' => 'form-control autocomplete',
+                                'name' => 'brand[]',
+                                'placeholder'=>'Name',
+                                'maxlength'=>'50',
+                                'required'])
+                            !!}
+                        </div>
+                    @endforeach
+                @else
                     <div id="brand" class="form-group">
-                        @if($loop->index!=0)
-                            <button id="removeBrand" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </button>
-                        @endif
-                        <input type="hidden" class="hidden" value="{{$tb->brandId}}">
                         {!! Form::label('brand', 'Brand') !!}<span>*</span>
-                        {!! Form::input('text','brand',$tb->brand->name,[
+                        {!! Form::input('text',null,null,[
                             'class' => 'form-control autocomplete',
                             'name' => 'brand[]',
                             'placeholder'=>'Name',
@@ -69,7 +82,7 @@
                             'required'])
                         !!}
                     </div>
-                @endforeach
+                @endif 
             </div>
             <div class="box-footer">
                 <button id="addBrand" type="button" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="Add">

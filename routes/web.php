@@ -64,9 +64,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('delivery/header/{id}','DeliveryController@header');
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
 	Route::get('job/check/{id}','JobController@check');
-	Route::get('job/finalz/{id}','JobController@finalz');
-	Route::get('job/procz/{id}','JobController@procz');
+	Route::get('job/get/{id}','JobController@get');
 	Route::patch('job/finalize/{id}','JobController@finalize');
+	Route::patch('job/process/{id}','JobController@process');
+	Route::post('job/pay','JobController@pay');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

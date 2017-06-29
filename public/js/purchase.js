@@ -16,11 +16,14 @@ function rowFinder(row){
     return row;
 }
 
-$(document).on('change', '#qty', function (){
+$(document).on('keyup', '#qty', function (){
     qty = $(this).val();
     if(qty=='' || qty==null || qty==0){
         qty = 1;
         $(this).val(1);
+    }
+    if(qty>100){
+        qty = 100;
     }
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     price = this.title;

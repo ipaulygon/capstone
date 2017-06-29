@@ -13,7 +13,7 @@ function finalizeModal(id){
     $('#finalizeModal').modal('show');
     $.ajax({
         type: "GET",
-        url: "/job/finalz/"+id,
+        url: "/job/get/"+id,
         dataType: "JSON",
         success:function(data){
             fList.clear().draw();

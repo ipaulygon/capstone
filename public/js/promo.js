@@ -96,6 +96,9 @@ $(document).on('keyup', '#qty', function (){
         qty = 1;
         $(this).val(1);
     }
+    if(qty>100){
+        qty = 100;
+    }
     stack = $(this).next('.hidden').val();
     price = this.title;
     price = eval(price+"*"+qty);

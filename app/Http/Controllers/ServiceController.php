@@ -190,7 +190,7 @@ class ServiceController extends Controller
             ->where('serviceId',$id)
             ->where('isActive',1)
             ->get();
-        $checkPromo = DB::table('package_promo')
+        $checkPromo = DB::table('promo_service')
             ->where('serviceId',$id)
             ->where('isActive',1)
             ->get();

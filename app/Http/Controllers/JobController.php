@@ -9,6 +9,7 @@ use App\JobPackage;
 use App\JobPromo;
 use App\JobDiscount;
 use App\JobTechnician;
+use App\JobPayment;
 use App\Vehicle;
 use App\Customer;
 use Validator;
@@ -73,7 +74,7 @@ class JobController extends Controller
             ->where('d.type','Whole')
             ->select('d.*')
             ->get();
-        return View('job.index',compact('jobs','customers','models','technicians','products','services','packages','promos','discounts'));
+        return View('job.index',compact('jobs','customers','models','technicians','products','services','packages','promos','discounts','date'));
     }
 
     /**
@@ -528,14 +529,35 @@ class JobController extends Controller
         return View('layouts.404');
     }
 
-    public function finalz($id){
+    public function get($id){
         $job = JobHeader::with('product','service','package','promo','discount')->findOrFail($id);
         return response()->json(['job'=>$job]);
     }
-    
-    public function procz($id){
-        $job = JobHeader::with('product','service','package','promo','discount')->findOrFail($id);
-        return response()->json(['job'=>$job]);
+
+    public function process($id){
+        $job = JobHeader::findOrFail($id);
+        return $job;
+    }
+
+    public function pay(Request $request){
+        try{
+            DB::beginTransaction();
+            $job = JobHeader::findOrFail($request->id);
+            $payment = str_replace(',','',$request->payment);
+            JobPayment::create([
+                'jobId' => $job->id,
+                'paid' => $payment
+            ]);
+            $now = $job->paid + $payment;
+            $job->update([
+                'paid' => $now
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Payment successfully added']);
     }
 
     public function finalize(Request $request, $id){

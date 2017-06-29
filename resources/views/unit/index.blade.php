@@ -137,7 +137,7 @@
                 {{-- Update --}}
                 <div id="updateModal" class="modal fade">
                     <div class="modal-dialog">
-                    {!! Form::open(['method'=>'patch','action' => ['ProductUnitController@destroy',0]]) !!}
+                    {!! Form::open(['method'=>'patch','action' => ['ProductUnitController@update',0]]) !!}
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

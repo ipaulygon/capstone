@@ -19,7 +19,7 @@
                 <div class="col-md-4">
                     <div id="actionBox" class="box box-primary box-solid">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Actions</h3>
+                            <h3 id="dateSelected" class="box-title">{{$date}}</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                                 <i class="fa fa-minus"></i></button>
@@ -146,6 +146,9 @@
                                                             <a href="{{url('/job/pdf/'.$job->jobId)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                                                 <i class="glyphicon glyphicon-eye-open"></i>
                                                             </a>
+                                                            <button onclick="process('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Process record">
+                                                                <i class="glyphicon glyphicon-tasks"></i>
+                                                            </button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -168,8 +171,11 @@
                 {!! Form::close() !!}
             </div>
             <div id="processForm" class="item">
+                {!! Form::open(['method'=>'post','action' => ['JobController@process',0]]) !!}
+                <input id="processId" name="id" type="hidden">
+                <div class="col-md-8"><button id="backProcess" type="button" class="btn btn-success btn-md"><i class="fa fa-angle-double-left"></i> Back</button><br><br></div>
+                <div class="col-md-4"></div>
                 <div class="col-md-8">
-                    <button id="backProcess" type="button" class="btn btn-success btn-md"><i class="fa fa-angle-double-left"></i> Back</button><br><br>
                     <div id="processBox" class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Process Job Order</h3>
@@ -202,6 +208,42 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div id="paymentBox" class="box box-success">
+                        <div class="box-header with border">
+                            <h3 class="box-title">Payment</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="input-group">
+                                <span class="input-group-addon" style="border: none!important">
+                                {!! Form::label('computed', 'Total Price: ',[
+                                'style' => 'font-size:18px']) !!}
+                                PhP</span>
+                                <strong>{!! Form::input('text','computed',0,[
+                                    'class' => 'form-control',
+                                    'id' => 'totalPrice',
+                                    'style' => 'border: none!important;background: transparent!important',
+                                    'readonly']) 
+                                !!}</strong>
+                            </div>
+                            {{-- {!! Form::label('computed', 'Payments: ') !!} --}}
+                            {!! Form::label('inputPayment', 'Add Payment: ') !!}
+                            <input type="hidden" id="paymentId">
+                            {!! Form::input('text','inputPayment',null,[
+                                'id'=>'inputPayment',
+                                'class' => 'form-control',
+                                'placeholder'=>'Payment']) 
+                            !!}
+                            <br><br>
+                            <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
+                        </div>
+                    </div>
+                </div>
+                {!! Form::close() !!}
             </div>
             {{-- Finalize --}}
             <div id="finalizeModal" class="modal fade">
