@@ -17,7 +17,8 @@
                     {!! Form::input('text','name',null,[
                         'class' => 'form-control',
                         'placeholder'=>'Name',
-                        'maxlength'=>'75']) 
+                        'maxlength'=>'75',
+                        'required']) 
                     !!}
                 </div>
                 <div class="form-group">
@@ -146,7 +147,19 @@
             $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
-            $(".contact").inputmask("+63 999 9999 999");
+            @if(!old('scNo'))
+                $('.contact').inputmask("+63 999 9999 999");
+            @else
+                @foreach(old('scNo') as $scNo)
+                    @if($scNo[2] == '2' && strlen($scNo) >= 17)
+                        $('.contact:eq({{$loop->index}})').inputmask("(02) 999 9999 loc. 9999");
+                    @elseif($scNo[2] == '2')
+                        $('.contact:eq({{$loop->index}})').inputmask("(02) 999 9999");
+                    @else
+                        $('.contact:eq({{$loop->index}})').inputmask("+63 999 9999 999");
+                    @endif
+                @endforeach
+            @endif
         });
     </script>
 @stop

@@ -72,7 +72,7 @@
                     </tbody>
                 </table>
                 <div class="form-group pull-right">
-                    <input type="checkbox" id="show"> Show deactivated records
+                    <label class="checkbox-inline"><input type="checkbox" id="show"> Show deactivated records</label>
                 </div>
                 <table id="dlist" class="table table-striped responsive hidden">
                     <thead>

@@ -11,9 +11,14 @@ $(document).on("click", "#addItem", function (){
 });
 
 $(document).on("click", "#addItemUpdate", function (){
-    var value = $("#item").clone().appendTo('#items');
+    var value = $("#item").clone().prepend(
+        '<button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
+        '<i class="glyphicon glyphicon-remove"></i>' +
+        '</button>'
+    ).appendTo('#items');
     $(value).find("input").val("");
     $(value).find("textarea").text("");
+    $(value).find("input.hidden").val("");
 });
 
 $(document).on('click', '#pushItem', function (){
@@ -65,7 +70,7 @@ $(document).on('click', '#pushItem', function (){
 });
 
 $(document).on("click", "#removeItem", function (){
-    id = $(this).parent().find('input.hidden').val();
+    id = Number($(this).parent().find('input.hidden').val());
     context = $(this).parent();
     if(id!=null){
         $.ajax({

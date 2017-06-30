@@ -120,11 +120,13 @@
             $('#mi').addClass('active');
             $('#mSupplier').addClass('active');
         });
-        @foreach($supplier->number as $key=>$number)
-            @if($number->scNo[4]=='9')
-                $('#{{$key}}').inputmask("+63 999 9999 999");
-            @elseif($number->scNo[4]=='2')
-                $('#{{$key}}').inputmask("+63 9 999 9999");
+        @foreach($supplier->number as $number)
+            @if($number->scNo[2] == '2' && strlen($number->scNo) >= 17)
+                $('.contact:eq({{$loop->index}})').inputmask("(02) 999 9999 loc. 9999");
+            @elseif($number->scNo[2] == '2')
+                $('.contact:eq({{$loop->index}})').inputmask("(02) 999 9999");
+            @else
+                $('.contact:eq({{$loop->index}})').inputmask("+63 999 9999 999");
             @endif
         @endforeach
     </script>

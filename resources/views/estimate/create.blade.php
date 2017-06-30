@@ -54,7 +54,7 @@
             @if(!old('contact'))
                 $('#contact').inputmask("+63 999 9999 999");
             @else
-                @if(old('contact')[2] == '2' && old('contact')[14] == 'l')
+                @if(old('contact')[2] == '2' && strlen(old('contact')) >= 17)
                     $('#contact').inputmask("(02) 999 9999 loc. 9999");
                 @elseif(old('contact')[2] == '2')
                     $('#contact').inputmask("(02) 999 9999");

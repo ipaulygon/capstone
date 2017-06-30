@@ -47,9 +47,9 @@
             $("#model").val({{$estimate->vehicle->modelId}});
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});
-            @if($estimate->customer->contact[2] == '2' && old('contact')[14] == 'l')
+            @if($estimate->customer->contact[2] == '2' && strlen($estimate->customer->contact) >= 17)
                 $('#contact').inputmask("(02) 999 9999 loc. 9999");
-            @elseif($estimate->customer->contact == '2')
+            @elseif($estimate->customer->contact[2] == '2')
                 $('#contact').inputmask("(02) 999 9999");
             @else
                 $('#contact').inputmask("+63 999 9999 999");

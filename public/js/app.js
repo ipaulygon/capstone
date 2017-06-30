@@ -2679,7 +2679,7 @@ if (typeof jQuery === 'undefined') {
   }
 
   Modal.prototype.toggle = function (_relatedTarget) {
-    return this.isShown ? this.hide() : this.show(_relatedTarget)
+    return this.isShown ? this.addClass('hidden') : this.show(_relatedTarget)
   }
 
   Modal.prototype.show = function (_relatedTarget) {
@@ -2715,7 +2715,7 @@ if (typeof jQuery === 'undefined') {
       }
 
       that.$element
-        .show()
+        .removeClass('hidden')
         .scrollTop(0)
 
       that.adjustDialog()
@@ -2785,7 +2785,7 @@ if (typeof jQuery === 'undefined') {
   Modal.prototype.escape = function () {
     if (this.isShown && this.options.keyboard) {
       this.$element.on('keydown.dismiss.bs.modal', $.proxy(function (e) {
-        e.which == 27 && this.hide()
+        e.which == 27 && this.addClass('hidden')
       }, this))
     } else if (!this.isShown) {
       this.$element.off('keydown.dismiss.bs.modal')
@@ -2802,7 +2802,7 @@ if (typeof jQuery === 'undefined') {
 
   Modal.prototype.hideModal = function () {
     var that = this
-    this.$element.hide()
+    this.$element.addClass('hidden')
     this.backdrop(function () {
       that.$body.removeClass('modal-open')
       that.resetAdjustments()
@@ -2835,7 +2835,7 @@ if (typeof jQuery === 'undefined') {
         if (e.target !== e.currentTarget) return
         this.options.backdrop == 'static'
           ? this.$element[0].focus()
-          : this.hide()
+          : this.addClass('hidden')
       }, this))
 
       if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
@@ -3103,10 +3103,10 @@ if (typeof jQuery === 'undefined') {
 
     self.hoverState = 'in'
 
-    if (!self.options.delay || !self.options.delay.show) return self.show()
+    if (!self.options.delay || !self.options.delay.show) return self.removeClass('hidden')
 
     self.timeout = setTimeout(function () {
-      if (self.hoverState == 'in') self.show()
+      if (self.hoverState == 'in') self.removeClass('hidden')
     }, self.options.delay.show)
   }
 
@@ -3137,10 +3137,10 @@ if (typeof jQuery === 'undefined') {
 
     self.hoverState = 'out'
 
-    if (!self.options.delay || !self.options.delay.hide) return self.hide()
+    if (!self.options.delay || !self.options.delay.hide) return self.addClass('hidden')
 
     self.timeout = setTimeout(function () {
-      if (self.hoverState == 'out') self.hide()
+      if (self.hoverState == 'out') self.addClass('hidden')
     }, self.options.delay.hide)
   }
 
@@ -3549,7 +3549,7 @@ if (typeof jQuery === 'undefined') {
 
     // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
     // this manually by checking the contents.
-    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').addClass('hidden')
   }
 
   Popover.prototype.hasContent = function () {
@@ -8779,14 +8779,14 @@ jQuery.fn.extend( {
 	},
 	toggle: function( state ) {
 		if ( typeof state === "boolean" ) {
-			return state ? this.show() : this.hide();
+			return state ? this.removeClass('hidden') : this.addClass('hidden');
 		}
 
 		return this.each( function() {
 			if ( isHiddenWithinTree( this ) ) {
-				jQuery( this ).show();
+				jQuery( this ).removeClass('hidden');
 			} else {
-				jQuery( this ).hide();
+				jQuery( this ).addClass('hidden');
 			}
 		} );
 	}
@@ -10985,7 +10985,7 @@ function defaultPrefilter( elem, props, opts ) {
 		}
 	}
 
-	// Bail out if this is a no-op like .hide().hide()
+	// Bail out if this is a no-op like .addClass('hidden').addClass('hidden')
 	propTween = !jQuery.isEmptyObject( props );
 	if ( !propTween && jQuery.isEmptyObject( orig ) ) {
 		return;
@@ -11349,7 +11349,7 @@ jQuery.fn.extend( {
 	fadeTo: function( speed, to, easing, callback ) {
 
 		// Show any hidden elements after setting opacity to 0
-		return this.filter( isHiddenWithinTree ).css( "opacity", 0 ).show()
+		return this.filter( isHiddenWithinTree ).css( "opacity", 0 ).removeClass('hidden')
 
 			// Animate to the value specified
 			.end().animate( { opacity: to }, speed, easing, callback );

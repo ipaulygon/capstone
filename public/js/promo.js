@@ -31,6 +31,7 @@ function cb(start, end) {
 }
 
 $('#date').daterangepicker({
+    minDate: start,
     startDate: start,
     endDate: end,
     ranges: {
@@ -92,18 +93,33 @@ function rowFinder(row){
 
 $(document).on('keyup', '#qty', function (){
     qty = $(this).val();
-    if(qty=='' || qty==null){
+    if(qty=='' || qty==null || qty<1){
         qty = 1;
         $(this).val(1);
-    }
-    if(qty>100){
+    }else if(qty>100){
         qty = 100;
+        $(this).val(100);
+        $(this).popover({
+            trigger: 'manual',
+            content: function(){
+                var content = "Oops! Your input exceeds the max number of items. The max value will be set.";
+                return content;
+            },
+            placement: function(){
+                var placement = 'top';
+                return placement;
+            },
+            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+        $(this).popover('show');
+    }else{
+        $(this).popover('hide');
     }
-    stack = $(this).next('.hidden').val();
-    price = this.title;
+    stack = $(this).nextAll('.stack').first().val();
+    price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
-    $(this).next('.hidden').val(price);
+    $(this).nextAll('.stack').first().val(price);
     $('#compute').val(final);
 });
 
@@ -116,7 +132,7 @@ $(document).on('click','.pushFreeProduct', function (){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             fList.row.add([
                 '<input type="hidden" name="freeProduct[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required><input type="hidden" class="hidden" value="0">',
+                '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required><input type="hidden" class="hidden stack" value="0">',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullFreeProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 
@@ -146,7 +162,7 @@ $(document).on('click','.pullFreeProduct', function (){
         }
     });
     // price
-    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.hidden').val());
+    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.stack').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     fList.row(row).remove().draw();
@@ -161,7 +177,7 @@ $(document).on('click','.pushProduct', function (){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden" class="hidden" value="0">',
+                '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden stack" class="hidden stack" value="0">',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 
@@ -191,7 +207,7 @@ $(document).on('click','.pullProduct', function (){
         }
     });
     // price
-    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.hidden').val());
+    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.stack').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
@@ -287,7 +303,7 @@ function retrieveFreeProduct(id,qty){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             fList.row.add([
                 '<input type="hidden" name="freeProduct[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
+                '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required value="'+qty+'"><input type="hidden" class="hidden stack" value="'+stack+'">',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullFreeProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 
@@ -316,7 +332,7 @@ function retrieveProduct(id,qty){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<input type="text" title="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden" value="'+stack+'">',
+                '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden stack" value="'+stack+'">',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             $('.qty').inputmask({ 

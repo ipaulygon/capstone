@@ -30,9 +30,11 @@
                     @if(old('item'))
                     @foreach(old('item') as $key=>$item)
                         <div id="item" class="form-group">
-                            <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
-                                <i class="glyphicon glyphicon-remove"></i>
-                            </button>
+                            @if($loop->index!=0)
+                                <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                            @endif
                             <button id="pushItem" type="button" class="btn btn-flat btn-warning btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Create form">
                                 <i class="glyphicon glyphicon-menu-right"></i>
                             </button>
