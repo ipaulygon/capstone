@@ -155,7 +155,7 @@ class EstimateController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => $request->contact,
+                        'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
@@ -375,7 +375,7 @@ class EstimateController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => $request->contact,
+                        'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),

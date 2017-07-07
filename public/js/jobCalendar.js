@@ -26,6 +26,9 @@ $('#calendar').fullCalendar({
                 title: 'Cannot be selected'
             });
             $(this).tooltip('show');
+            setTimeout(function(){
+                $(this).tooltip('hide');
+            },2000);
         }
     },
     eventClick: function(event,jsEvent,view){

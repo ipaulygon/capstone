@@ -16,15 +16,31 @@ function process(id){
         dataType: "JSON",
         success:function(data){
             procList.clear().draw();
-            $('#totalPrice').val(data.job.total);
-            $('#inputPayment').attr('data-qty',data.job.total)
+            $('.payment').remove();
+            $('#totalPrice').val(data.job.total)
+            balance = data.job.total-data.paid;
+            $('#balance').val(balance);
+            $("#balance").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: balance,
+                max: balance
+            });
+            if(balance==0){
+                $('.addPayment').addClass('hidden');
+            }else{
+                $('.addPayment').removeClass('hidden');
+            }
+            $('#inputPayment').attr('data-qty',balance);
             $("#inputPayment").inputmask({ 
                 alias: "currency",
                 prefix: '',
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: data.job.total
+                max: balance
             });
             $.each(data.job.product,function(key,value){
                 $.ajax({
@@ -187,14 +203,48 @@ function process(id){
                     }
                 });
             });
+            $.each(data.job.payment,function(key,value){
+                $('#paymentList').append(
+                    '<div class="col-md-12 paymentList">' +
+                    '<input class="payment prices col-md-6" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>' +
+                    '<label>'+value.created_at+'</label>' +
+                    '</div>'
+                );
+            });
+            $(".prices").inputmask({ 
+                alias: "currency",
+                prefix: 'PhP ',
+                allowMinus: false,
+                autoGroup: true,
+            });
         }
     });
 }
 
 $(document).on('click','#savePayment', function(){
-    payment = $('#inputPayment').val();
+    balance = $('#balance').val().replace(',','');
+    payment = $('#inputPayment').val().replace(',','');
     id = $('#paymentId').val();
     if(payment!="0.00"){
+        balance = eval(balance+"-"+payment);
+        $('#balance').val(balance);
+        $("#balance").inputmask({ 
+            alias: "currency",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: balance,
+            max: balance
+        });
+        $('#inputPayment').attr('data-qty',balance);
+        $("#inputPayment").inputmask({ 
+            alias: "currency",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: 0,
+            max: balance
+        });
         $(this).popover('hide');
         $('#inputPayment').val('0.00');
         $.ajax({
@@ -203,23 +253,38 @@ $(document).on('click','#savePayment', function(){
             data: {id: id,payment: payment},
             success:function(data){
                 $('#notif').append(
-                    '<div class="alert alert-success alert-dismissible">' +
+                    '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
                     '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
                     data.message +
                     '</div>'
                 );
+                $('#paymentList').append(
+                    '<div class="col-md-12 paymentList">' +
+                    '<input class="payment prices col-md-6" value="'+data.payment+'" style="border:none!important;background: transparent!important" readonly>' +
+                    '<label>'+data.job.updated_at+'</label>' +
+                    '</div>'
+                );
+                $(".prices").inputmask({ 
+                    alias: "currency",
+                    prefix: 'PhP ',
+                    allowMinus: false,
+                    autoGroup: true,
+                });
             }
         });
     }else{
         $('#notif').append(
-            '<div class="alert alert-danger alert-dismissible">' +
+            '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
             '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
             '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
             'Invalid Payment' +
             '</div>'
         );
     }
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },3000);
 });
 
 $(document).on('keyup', '#inputPayment' ,function (){

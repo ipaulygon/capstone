@@ -196,7 +196,7 @@ class JobController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => $request->contact,
+                        'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
@@ -419,7 +419,7 @@ class JobController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => $request->contact,
+                        'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
@@ -530,8 +530,9 @@ class JobController extends Controller
     }
 
     public function get($id){
-        $job = JobHeader::with('product','service','package','promo','discount')->findOrFail($id);
-        return response()->json(['job'=>$job]);
+        $job = JobHeader::with('product','service','package','promo','discount','payment')->findOrFail($id);
+        $paid = $job->payment->sum('paid');
+        return response()->json(['job'=>$job,'paid'=>$paid]);
     }
 
     public function process($id){
@@ -557,7 +558,7 @@ class JobController extends Controller
             DB::rollBack();
             $errMess = $e->getMessage();
         }
-        return response()->json(['message'=>'Payment successfully added']);
+        return response()->json(['message'=>'Payment successfully added','job'=>$job,'payment'=>number_format($payment)]);
     }
 
     public function finalize(Request $request, $id){

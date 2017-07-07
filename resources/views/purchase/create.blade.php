@@ -5,6 +5,7 @@
 @stop
 
 @section('style')
+    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
@@ -18,6 +19,7 @@
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
@@ -32,14 +34,7 @@
         $(document).ajaxStart(function() { Pace.restart(); });
         $(document).ready(function (){
             $(".select2").select2();
-            $('#tPurchase').addClass('active');
-            $("#compute").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
+            $('#tPurchase').addClass('active'); 
         });
     </script>
     @if(old('product'))

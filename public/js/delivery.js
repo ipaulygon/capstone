@@ -6,6 +6,15 @@ var pList = $('#productList').DataTable({
     "retrieve": true,
 });
 
+$('#date').datepicker({
+    format: 'mm/dd/yyyy',
+    endDate: new Date,
+    startDate: '-7d',
+    autoclose: false,
+    todayHighlight: true,
+});
+$('#date').inputmask("99/99/9999");
+
 function rowFinder(row){
     if($(row).closest('table').hasClass("collapsed")) {
         var child = $(row).parents("tr.child");
@@ -49,10 +58,25 @@ $(document).on('change', '#supp', function(){
         url: "/delivery/header/"+this.value,
         dataType: "JSON",
         success:function(data){
+            var start = new Date();
             $('#purchase').append('<option value=""></option>');
             $.each(data.purchases,function(key, value){
-                $('#purchase').append('<option value="'+value.id+'">'+value.id+'</option>')
+                $('#purchase').append('<option value="'+value.id+'">'+value.id+'</option>');
+                if(start > new Date(value.dateMake)){
+                    start = value.dateMake;
+                } 
             });
+            start = start.split('-');
+            start = start[1]+"/"+start[2]+"/"+start[0];
+            $('#date').datepicker('remove');
+            $('#date').datepicker({
+                format: 'mm/dd/yyyy',
+                endDate: new Date,
+                startDate: start+'',
+                autoclose: false,
+                todayHighlight: true,
+            });
+            $('#date').datepicker('update');
             $('#purchase').val('');
             $("#purchase").select2();
         }
@@ -69,7 +93,8 @@ $(document).on('click','.select2-results__option',function(){
         dataType: "JSON",
         success:function(data){
             $.each(data.products,function(key,value){
-                stack = eval($('#qo'+value.productId).val()+"-"+value.quantity);
+                balance = value.quantity - value.delivered;
+                stack = eval($('#qo'+value.productId).val()+"-"+balance);
                 if(stack==0){
                     var row = rowFinder($('#qo'+value.productId));
                     pList.row(row).remove().draw();
@@ -103,9 +128,10 @@ $(document).on('change','#purchase',function(){
             $.each(data.products,function(key,value){
                 if(value.quantity!=value.delivered){
                     if(value.productId==$('#id'+value.productId).val()){
-                        stack = eval($('#qo'+value.productId).val()+"+"+value.quantity);
+                        balance = value.quantity - value.delivered;
+                        stack = eval($('#qo'+value.productId).val()+"+"+balance);
                         $('#qo'+value.productId).val(stack);
-                        $('#rowDesc'+value.productId).append('<li>'+value.purchaseId+' x '+value.quantity+" pcs."+'</li>');
+                        $('#rowDesc'+value.productId).append('<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+balance+" pcs."+'</li>');
                         $('#qr'+value.product.id).attr('data-qty',stack);
                         $('#qr'+value.productId).inputmask({ 
                             alias: "integer",
@@ -116,10 +142,11 @@ $(document).on('change','#purchase',function(){
                         });
                     }else{
                         part = (value.isOriginal!=null ? ' - '+value.isOriginal : '')
+                        balance = value.quantity - value.delivered;
                         row = pList.row.add([
-                            '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><strong><input class="qo" id="qo'+value.productId+'" style="border: none!important;background: transparent!important" type="text" value="'+value.quantity+'" readonly> pcs.</strong>',
+                            '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><strong><input class="qo" id="qo'+value.productId+'" style="border: none!important;background: transparent!important" type="text" value="'+balance+'" readonly> pcs.</strong>',
                             value.brand+" - "+value.product+part+" ("+value.variance+")",
-                            '<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+value.quantity+" pcs."+'</li>',
+                            '<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+balance+" pcs."+'</li>',
                             '<input type="text" data-qty="'+value.quantity+'" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required>'
                         ]).draw().node();
                         $(row).find('td').eq(0).addClass('text-right');
@@ -135,7 +162,7 @@ $(document).on('change','#purchase',function(){
                             prefix: '',
                             allowMinus: false,
                             min: 0,
-                            max: value.quantity,
+                            max: balance,
                         });
                     }
                 }

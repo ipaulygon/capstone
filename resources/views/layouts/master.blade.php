@@ -48,7 +48,7 @@
         ]) !!};
     </script>
 </head>
-<body class="fixed hold-transition skin-yellow sidebar-mini">
+<body id="mainBody" class="fixed hold-transition skin-yellow sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
@@ -233,6 +233,9 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
+    <script>
+        $('#mainBody').addClass('sidebar-collapse');
+    </script>
     <script>
         $(function () {
             //iCheck for checkbox and radio inputs

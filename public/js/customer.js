@@ -50,7 +50,7 @@ $(document).on('focus','#plate',function(){
     $(this).popover({
         trigger: 'manual',
         content: function(){
-            var content = '<button type="button" id="po" class="btn btn-primary btn-block">ABC 123</button><button type="button" id="ps" class="btn btn-primary btn-block">ABC 45</button><button type="button" id="pn" class="btn btn-primary btn-block">ABC 1234</button><button type="button" id="pnn" class="btn btn-primary btn-block">AB 1234</button><button type="button" id="pvip" class="btn btn-primary btn-block">9</button><button type="button" id="ph" class="btn btn-primary btn-block">For Registration</button>';
+            var content = '<button type="button" id="po" class="btn btn-primary btn-block">ABC 123</button><button type="button" id="ps" class="btn btn-primary btn-block">ABC 45</button><button type="button" id="pn" class="btn btn-primary btn-block">ABC 1234</button><button type="button" id="pnn" class="btn btn-primary btn-block">AB 1234</button><button type="button" id="pvip" class="btn btn-primary btn-block">VIP</button><button type="button" id="ph" class="btn btn-primary btn-block">For Registration</button>';
             return content;
         },
         html: true,
@@ -87,7 +87,7 @@ $(document).on('click','#pnn',function(){
 });
 $(document).on('click','#pvip',function(){
     $('#plate').val('');
-    $('#plate').inputmask("9");
+    $('#plate').inputmask("99");
 });
 $(document).on('click','#ph',function(){
     $('#plate').val('');
@@ -105,6 +105,13 @@ $('#firstName').on('autocompleteselect',function(event, ui){
             $('#firstName').val(data.customer.firstName);
             $('#middleName').val(data.customer.middleName);
             $('#lastName').val(data.customer.lastName);
+            if(data.customer.contact[2] == '2' && data.customer.contact.length >= 17){
+                $('#contact').inputmask("(02) 999 9999 loc. 9999");
+            }else if(data.customer.contact[2] == '2'){
+                $('#contact').inputmask("(02) 999 9999");
+            }else{
+                $('#contact').inputmask("+63 999 9999 999");
+            }
             $('#contact').val(data.customer.contact);
             $('#email').val(data.customer.email);
             $('#street').text(data.customer.street);
@@ -116,7 +123,7 @@ $('#firstName').on('autocompleteselect',function(event, ui){
 
 $('#plate').on('change',function(){
     name = $(this).val();
-    if(name[4]<10 || name[0]<10){
+    if(name.length>2 && name.length!=16){
         $.ajax({
             type: "GET",
             url: "/item/vehicle/"+name,
@@ -128,5 +135,9 @@ $('#plate').on('change',function(){
                 $('#model').select2();
             }
         });
+    }else if(name.length==2){
+        if(Number(name)>16){
+            $('#plate').val('16');
+        }
     }
 });

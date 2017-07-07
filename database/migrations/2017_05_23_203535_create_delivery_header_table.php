@@ -17,6 +17,7 @@ class CreateDeliveryHeaderTable extends Migration
             $table->engine = 'InnoDB';
             $table->string('id', 50)->primary();
             $table->unsignedInteger('supplierId');
+            $table->date('dateMake');
             $table->timestamps();
             $table->foreign('supplierId')
                   ->references('id')->on('supplier')

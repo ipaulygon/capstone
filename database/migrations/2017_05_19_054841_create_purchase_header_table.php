@@ -18,6 +18,7 @@ class CreatePurchaseHeaderTable extends Migration
             $table->string('id', 50)->primary();
             $table->unsignedInteger('supplierId');
             $table->text('remarks', 200);
+            $table->date('dateMake');
             $table->boolean('isActive')->default(1);
             $table->boolean('isFinalize');
             $table->boolean('isDelivered');

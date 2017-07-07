@@ -215,4 +215,20 @@ class InspectionController extends Controller
             return response()->json(['message'=>0]);
         }
     }
+
+    public function getData($id){
+        $items = InspectionItem::where('isActive',1)->get();
+        $customers = DB::table('customer')
+            ->select('customer.*')
+            ->get();
+        $models = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->get();
+        $technicians = DB::table('technician')
+            ->where('isActive',1)
+            ->select('technician.*')
+            ->get();
+        return View('inspection.form',compact('items','customers','models','technicians'));
+    }
 }

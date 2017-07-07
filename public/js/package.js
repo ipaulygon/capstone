@@ -81,6 +81,10 @@ $(document).on('keyup', '#qty', function (){
     $('#compute').val(final);
 });
 
+$(document).on('focusout','#qty',function(){
+    $(this).popover('hide');
+});
+
 $(document).on('click','.pushProduct', function (){
     $.ajax({
         type: "GET",

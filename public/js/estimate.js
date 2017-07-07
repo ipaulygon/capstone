@@ -5,6 +5,13 @@ $("#compute").inputmask({
     autoGroup: true,
     min: 0,
 });
+$("#totalPrice").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+});
 var pList = $('#productList').DataTable({
     'responsive': true,
     "searching": false,
@@ -43,18 +50,41 @@ function discountRecount(){
 // QUANTITY
 $(document).on('keyup', '#qty', function (){
     qty = $(this).val();
-    if(qty=='' || qty==null || qty==0){
+    if(qty=='' || qty==null || qty<1){
         qty = 1;
         $(this).val(1);
+    }else if(qty>100){
+        qty = 100;
+        $(this).val(100);
+        $(this).popover({
+            trigger: 'manual',
+            content: function(){
+                var content = "Oops! Your input exceeds the max number of items. The max value will be set.";
+                return content;
+            },
+            placement: function(){
+                var placement = 'top';
+                return placement;
+            },
+            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+        $(this).popover('show');
+    }else{
+        $(this).popover('hide');
     }
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    price = this.title;
+    price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
+    console.log(stack);
     discountReplenish();
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
     discountRecount();
+});
+
+$(document).on('focusout','#qty',function(){
+    $(this).popover('hide');
 });
 // PRODUCTS
 $(document).on('change', '#products', function(){
@@ -77,7 +107,7 @@ $(document).on('change', '#products', function(){
             }
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
@@ -85,26 +115,7 @@ $(document).on('change', '#products', function(){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#products').val('');
@@ -141,7 +152,7 @@ function oldProduct(id,qty){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -152,26 +163,7 @@ function oldProduct(id,qty){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#products').val('');
@@ -188,7 +180,7 @@ function retrieveProduct(id,qty,price,discountString){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -199,26 +191,7 @@ function retrieveProduct(id,qty,price,discountString){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#products').val('');
@@ -258,19 +231,7 @@ $(document).on('change', '#services', function(){
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
             discountRecount();
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#services').val('');
@@ -319,19 +280,7 @@ function oldService(id){
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
             discountRecount();
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#services').val('');
@@ -358,19 +307,7 @@ function retrieveService(id,price,discountString){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#services').val('');
@@ -385,7 +322,7 @@ $(document).on('change', '#packages', function(){
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" title="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
@@ -404,26 +341,7 @@ $(document).on('change', '#packages', function(){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#packages').val('');
@@ -448,7 +366,7 @@ function oldPackage(id,qty){
         success:function(data){
             stack = eval(data.package.price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" title="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -470,26 +388,7 @@ function oldPackage(id,qty){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
 }
@@ -503,7 +402,7 @@ function retrievePackage(id,qty,price){
         success:function(data){
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -525,26 +424,7 @@ function retrievePackage(id,qty,price){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#packages').val('');
@@ -559,7 +439,7 @@ $(document).on('change', '#promos', function(){
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" title="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
@@ -592,26 +472,7 @@ $(document).on('change', '#promos', function(){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#promos').val('');
@@ -636,7 +497,7 @@ function oldPromo(id,qty){
         success:function(data){
             stack = eval(data.promo.price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" title="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -672,26 +533,7 @@ function oldPromo(id,qty){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#promos').val('');
@@ -707,7 +549,7 @@ function retrievePromo(id,qty,price){
         success:function(data){
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
@@ -743,31 +585,36 @@ function retrievePromo(id,qty,price){
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1,
-                max: 100,
-            });
-            $(".price").inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                autoGroup: true,
-                min: 0,
-            });
-            $('.stack').inputmask({ 
-                alias: "currency",
-                prefix: '',
-                allowMinus: false,
-                min: 0,
-            });
+            masking();
         }
     });
     $('#promos').val('');
     $("#promos").select2();
 }
+
+function masking(){
+    $('.qty').inputmask({ 
+        alias: "integer",
+        prefix: '',
+        allowMinus: false,
+        min: 1,
+        max: 100,
+    });
+    $(".price").inputmask({ 
+        alias: "currency",
+        prefix: '',
+        allowMinus: false,
+        autoGroup: true,
+        min: 0,
+    });
+    $('.stack').inputmask({ 
+        alias: "currency",
+        prefix: '',
+        allowMinus: false,
+        min: 0,
+    });
+}
+
 // DISCOUNTS
 $(document).on('change', '#discounts', function(){
     $('#discounts').prop('disabled',true);

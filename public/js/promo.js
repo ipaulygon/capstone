@@ -123,6 +123,10 @@ $(document).on('keyup', '#qty', function (){
     $('#compute').val(final);
 });
 
+$(document).on('focusout','#qty',function(){
+    $(this).popover('hide');
+});
+
 $(document).on('click','.pushFreeProduct', function (){
     $.ajax({
         type: "GET",

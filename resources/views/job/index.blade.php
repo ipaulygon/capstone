@@ -220,22 +220,38 @@
                         <div class="box-body">
                             <div class="input-group">
                                 <span class="input-group-addon" style="border: none!important">
-                                {!! Form::label('computed', 'Total Price: ',[
+                                {!! Form::label('computed', 'Balance: ',[
                                 'style' => 'font-size:18px']) !!}
                                 PhP</span>
                                 <strong>{!! Form::input('text','computed',0,[
                                     'class' => 'form-control',
-                                    'id' => 'totalPrice',
+                                    'id' => 'balance',
                                     'style' => 'border: none!important;background: transparent!important',
                                     'readonly']) 
                                 !!}</strong>
                             </div>
+                            <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Details <i class="fa fa-caret-down"></i></a>
+                            <br><div class="collapse" id="viewDetails">
+                                <div class="col-md-12">
+                                    <label class="col-md-6">Total Price: </label>
+                                    <strong>{!! Form::input('text','totalPrice',0,[
+                                        'class' => 'col-md-6 prices',
+                                        'id' => 'totalPrice',
+                                        'style' => 'border: none!important;background: transparent!important',
+                                        'readonly']) 
+                                    !!}</strong>
+                                </div>
+                                <div id="paymentList">
+                                    <label>Payments:</label><br>
+                                </div>
+                            </div>
+                            <br>
                             {{-- {!! Form::label('computed', 'Payments: ') !!} --}}
-                            {!! Form::label('inputPayment', 'Add Payment: ') !!}
+                            {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
                             <input type="hidden" id="paymentId">
                             {!! Form::input('text','inputPayment',null,[
                                 'id'=>'inputPayment',
-                                'class' => 'form-control',
+                                'class' => 'form-control addPayment',
                                 'placeholder'=>'Payment']) 
                             !!}
                             <br><br>
@@ -322,12 +338,16 @@
                     title: '{{$job->plate}}',
                     start: '{{$job->start}}',
                     @if($job->isComplete && $job->total==$job->paid)
+                        //success
                         color: '#00a65a'
                     @elseif(!$job->isComplete && $job->isFinalize && $job->total==$job->paid)
+                        //info
                         color: '#00c0ef'
                     @elseif(!$job->isComplete && $job->isFinalize && $job->total!=$job->paid)
+                        //warning
                         color: '#f39c12'
                     @else
+                        //primary
                         color: '#3c8dbc'
                     @endif
                 };

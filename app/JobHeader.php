@@ -49,4 +49,8 @@ class JobHeader extends Model
     public function technician(){
         return $this->hasMany('App\JobTechnician','jobId')->where('isActive',1);
     }
+
+    public function payment(){
+        return $this->hasMany('App\JobPayment','jobId');
+    }
 }

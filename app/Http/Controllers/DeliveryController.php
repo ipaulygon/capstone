@@ -39,7 +39,7 @@ class DeliveryController extends Controller
         $suppliers = DB::table('supplier')
             ->where('isActive',1)
             ->get();
-        $date = date('F j, Y');
+        $date = date('m/d/Y');
         return View('delivery.create',compact('suppliers','date'));
     }
 
@@ -76,9 +76,12 @@ class DeliveryController extends Controller
                 DB::beginTransaction();
                 $id = DeliveryHeader::all()->count() + 1;
                 $id = 'DELIVERY'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+                $created = explode('/',$request->date); // MM[0] DD[1] YYYY[2] 
+                $finalCreated = "$created[2]-$created[0]-$created[1]";
                 $delivery = DeliveryHeader::create([
                     'id' => $id,
                     'supplierId' => $request->supplierId,
+                    'dateMake' => $finalCreated
                 ]);
                 $products = $request->product;
                 $qtys = $request->qty;

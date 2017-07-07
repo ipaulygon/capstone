@@ -1,7 +1,7 @@
 $('#email').inputmask("email");
 $('#bday').datepicker({
     format: 'mm/dd/yyyy',
-    endDate: new Date,
+    endDate: '-18y',
     autoclose: false,
     todayHighlight: true,
 });

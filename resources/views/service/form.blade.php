@@ -25,10 +25,10 @@
                 {!! Form::label('size', 'Size') !!}<span>*</span><br>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="sizeId" type="radio" class="flat-red" name="size" value="Sedan" required> Sedan
+                        <input id="sizeId" type="radio" class="square-blue" name="size" value="Sedan" required> Sedan
                     </div>
                     <div class="col-md-6">
-                        <input id="sizeId" type="radio" class="flat-red" name="size" value="Large" required> Large Vehicle
+                        <input id="sizeId" type="radio" class="square-blue" name="size" value="Large" required> Large Vehicle
                     </div>
                 </div>
             </div>

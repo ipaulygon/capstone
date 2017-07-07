@@ -12,6 +12,7 @@ class PurchaseHeader extends Model
         'id',
     	'supplierId',
         'remarks',
+        'dateMake',
     	'isActive' ,
         'isFinalize',
         'isDelivered'	

@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('category','ServiceCategoryController');
 	Route::resource('service','ServiceController');
 	Route::resource('inspection','InspectionController');
+	Route::get('/inspection/data/{id}','InspectionController@getData');
 	Route::resource('package','PackageController');
 	Route::resource('promo','PromoController');
 	Route::resource('discount','DiscountController');

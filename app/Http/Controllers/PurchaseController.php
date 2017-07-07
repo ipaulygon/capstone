@@ -43,7 +43,7 @@ class PurchaseController extends Controller
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
-        $date = date('F j, Y');
+        $date = date('m/d/Y');
         $created = date('Y-m-d H:i:s');
         return View('purchase.create',compact('products','suppliers','date','created'));
     }
@@ -83,12 +83,15 @@ class PurchaseController extends Controller
                 DB::beginTransaction();
                 $id = PurchaseHeader::all()->count() + 1;
                 $id = 'ORDER'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+                $created = explode('/',$request->date); // MM[0] DD[1] YYYY[2] 
+                $finalCreated = "$created[2]-$created[0]-$created[1]";
                 $purchase = PurchaseHeader::create([
                     'id' => $id,
                     'supplierId' => $request->supplierId,
                     'remarks' => trim($request->remarks),
+                    'dateMake' => $finalCreated,
                     'isFinalize' => 0,
-                    'isDelivered' => 0
+                    'isDelivered' => 0,
                 ]);
                 $products = $request->product;
                 $qtys = $request->qty;
@@ -147,7 +150,7 @@ class PurchaseController extends Controller
             ->where('p.isActive',1)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
-        $date = date('F j, Y',strtotime($purchase->created_at));
+        $date = date('m/d/Y',strtotime($purchase->dateMake));
         $created = $purchase->created_at;
         return View('purchase.edit',compact('purchase','suppliers','products','date','created'));
     }
@@ -187,9 +190,12 @@ class PurchaseController extends Controller
             try{
                 DB::beginTransaction();
                 $purchase = PurchaseHeader::findOrFail($id);
+                $created = explode('/',$request->date); // MM[0] DD[1] YYYY[2] 
+                $finalCreated = "$created[2]-$created[0]-$created[1]";
                 $purchase->update([
                     'supplierId' => $request->supplierId,
                     'remarks' => trim($request->remarks),
+                    'dateMake' => $finalCreated
                 ]);
                 $products = $request->product;
                 $qtys = $request->qty;

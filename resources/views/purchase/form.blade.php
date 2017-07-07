@@ -10,10 +10,10 @@
                     <div class="form-group">
                         {!! Form::label('date', 'Date') !!}    
                         <strong>{!! Form::input('text','date',$date,[
-                            'class' => 'form-control',
-                            'id' => 'date',
-                            'style' => 'border: none!important;background: transparent!important',
-                            'readonly']) 
+                                'class' => 'form-control',
+                                'id' => 'date',
+                                'placeholder'=>'date',
+                                'required']) 
                         !!}</strong>
                     </div>
                 </div>

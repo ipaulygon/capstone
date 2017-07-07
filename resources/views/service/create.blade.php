@@ -26,14 +26,14 @@
         @endif
         @if(old('size'))
             $("#sizeId[value={{old('size')}}]").prop('checked',true);
+        @else
+            $("#sizeId[value=Sedan]").prop('checked',true);
         @endif
-        $(".select2").select2();
-    </script>
-    <script>
         $(document).ready(function (){
             $('#maintenance').addClass('active');
             $('#ms').addClass('active');
             $('#mService').addClass('active');
+            $(".select2").select2();
             $("#price").inputmask({ 
                 alias: "currency",
                 prefix: '',

@@ -6,6 +6,22 @@ var pList = $('#productList').DataTable({
     "retrieve": true,
 });
 
+$('#date').datepicker({
+    format: 'mm/dd/yyyy',
+    endDate: new Date,
+    startDate: '-7d',
+    autoclose: false,
+    todayHighlight: true,
+});
+$('#date').inputmask("99/99/9999");
+$("#compute").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+});
+
 function rowFinder(row){
     if($(row).closest('table').hasClass("collapsed")) {
         var child = $(row).parents("tr.child");

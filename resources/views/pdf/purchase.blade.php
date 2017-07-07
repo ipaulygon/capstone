@@ -9,7 +9,7 @@
     <style type="text/css">
         @page{
             margin-top: 1cm;
-            margin-bottom: -0.75cm;
+            margin-bottom: 0.25cm;
         }
         body{
             font-family: "SegoeUI","Sans-serif";
@@ -75,7 +75,7 @@
             Address: {{$purchase->supplier->address}}
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y', strtotime($purchase->created_at))}}
+            Date: {{date('F j, Y', strtotime($purchase->dateMake))}}
         </div>
         <div style="clear:both"></div>
         <br>
