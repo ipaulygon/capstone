@@ -50,7 +50,7 @@
                                     <a href="{{url('/estimate/'.$estimate->estimateId.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <a href="{{url('/estimate/pdf/'.$estimate->estimateId)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                    <a href="{{url('/estimate/pdf/'.$estimate->estimateId)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                 </td>

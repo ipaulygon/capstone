@@ -10,6 +10,9 @@ class JobPayment extends Model
     protected $fillable = [
     	'jobId',
         'paid',
+        'creditCard',
+        'pin',
+        'isCredit'
     ];
 
     public function header(){

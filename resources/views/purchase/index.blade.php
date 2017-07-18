@@ -60,7 +60,7 @@
                                         {!! Form::open(['method'=>'patch','action' => ['PurchaseController@finalize',$purchase->id],'id'=>'fin'.$purchase->id]) !!}
                                         {!! Form::close() !!}
                                     @else
-                                        <a href="{{url('/purchase/pdf/'.$purchase->id)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                        <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                             <i class="glyphicon glyphicon-eye-open"></i>
                                         </a>
                                     @endif

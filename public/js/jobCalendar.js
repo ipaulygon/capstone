@@ -8,6 +8,36 @@ var datePick = moment(new Date()).format("YYYY-MM-DD");
 $('#start').val(datePick);
 $('#calendar').fullCalendar({
     contentHeight: 600,
+    customButtons: {
+        legend: {
+            text: 'Legend',
+            click: function(){
+                $(this).popover({
+                    trigger: 'manual',
+                    container: 'body',
+                    content: function(){
+                        var content = '<div class="col-md-12"><div class="col-md-6"><small class="label bg-blue">&nbsp;</small>&nbsp;New<br><small class="label bg-orange">&nbsp;</small>&nbsp;Finalized<br></div><div class="col-md-6"><small class="label bg-teal">&nbsp;</small>&nbsp;Paid<br><small class="label bg-green">&nbsp;</small>&nbsp;Done<br></div></div><br><br><br>';
+                        return content;
+                    },
+                    html: true,
+                    placement: function(){
+                        var placement = 'left';
+                        return placement;
+                    },
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+                    title: function(){
+                        var title = 'Legend:';
+                        return title;
+                    }
+                });
+                $(this).popover('show');
+                var legendClick = $(this);
+                setTimeout(function(){
+                    legendClick.popover('hide');
+                },3000);
+            }
+        }
+    },
     dayClick: function(date,jsEvent,view){
         if(!$(this).hasClass('fc-future')){
             datePick = date.format();
@@ -26,9 +56,10 @@ $('#calendar').fullCalendar({
                 title: 'Cannot be selected'
             });
             $(this).tooltip('show');
+            var dayClicked = $(this);
             setTimeout(function(){
-                $(this).tooltip('hide');
-            },2000);
+                dayClicked.tooltip('hide');
+            },1000);
         }
     },
     eventClick: function(event,jsEvent,view){
@@ -36,8 +67,8 @@ $('#calendar').fullCalendar({
     },
     header: {
         left: 'prev,next today',
-        center: '',
-        right: 'title'
+        center: 'title',
+        right: 'legend'
     },
     viewRender: function(currentView){
         maxDate = moment().add(2,'weeks');
@@ -82,6 +113,7 @@ function clickEvent(id){
                 }
             }else{
                 $('#detailPDF').addClass('hidden');
+                $('#detailProcess').addClass('hidden');
                 $('#detailUpdate').removeClass('hidden');
                 $('#detailFinalize').removeClass('hidden');
             }

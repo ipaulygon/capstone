@@ -10,17 +10,16 @@ var fList = $('#finalizeList').DataTable({
 
 function finalizeModal(id){
     finalize = id;
-    $('#finalizeModal').modal('show');
+    fList.clear().draw();  
     $.ajax({
         type: "GET",
         url: "/job/get/"+id,
         dataType: "JSON",
         success:function(data){
-            fList.clear().draw();
             $.each(data.job.product,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/product/"+value.id,
+                    url: "/item/product/"+value.productId,
                     dataType: "JSON",
                     success:function(data){
                         part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
@@ -35,7 +34,7 @@ function finalizeModal(id){
             $.each(data.job.service,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/service/"+value.id,
+                    url: "/item/service/"+value.serviceId,
                     dataType: "JSON",
                     success:function(data){
                         row = fList.row.add([
@@ -49,7 +48,7 @@ function finalizeModal(id){
             $.each(data.job.package,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/package/"+value.id,
+                    url: "/item/package/"+value.packageId,
                     dataType: "JSON",
                     success:function(data){
                         row = fList.row.add([
@@ -74,7 +73,7 @@ function finalizeModal(id){
             $.each(data.job.promo,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/promo/"+value.id,
+                    url: "/item/promo/"+value.promoId,
                     dataType: "JSON",
                     success:function(data){
                         row = fList.row.add([
@@ -124,6 +123,7 @@ function finalizeModal(id){
             });
         }
     });
+    $('#finalizeModal').modal('show');
 }
 $('#finalize').on('click', function (){
     $('#fin'+finalize).submit();

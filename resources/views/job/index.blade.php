@@ -17,6 +17,7 @@
         <div class="carousel-inner" role="listbox">
             <div id="jobIndex" class="item active">
                 <div class="col-md-4">
+                    
                     <div id="actionBox" class="box box-primary box-solid">
                         <div class="box-header with-border">
                             <h3 id="dateSelected" class="box-title">{{$date}}</h3>
@@ -60,7 +61,7 @@
                                     <label>Job Id:</label> <span id="detailId"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <a id="detailPDF" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                    <a id="detailPDF" href="" target="_blank" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
@@ -143,7 +144,7 @@
                                                             {!! Form::open(['method'=>'patch','action' => ['JobController@finalize',$job->jobId],'id'=>'fin'.$job->jobId]) !!}
                                                             {!! Form::close() !!}
                                                         @else
-                                                            <a href="{{url('/job/pdf/'.$job->jobId)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                                            <a href="{{url('/job/pdf/'.$job->jobId)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                                                 <i class="glyphicon glyphicon-eye-open"></i>
                                                             </a>
                                                             <button onclick="process('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Process record">
@@ -231,31 +232,60 @@
                                 !!}</strong>
                             </div>
                             <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Details <i class="fa fa-caret-down"></i></a>
-                            <br><div class="collapse" id="viewDetails">
+                            <br>
+                            <div class="collapse" id="viewDetails">
                                 <div class="col-md-12">
-                                    <label class="col-md-6">Total Price: </label>
+                                    <label class="pull-left">Total Price: </label>
                                     <strong>{!! Form::input('text','totalPrice',0,[
-                                        'class' => 'col-md-6 prices',
+                                        'class' => 'prices pull-right',
                                         'id' => 'totalPrice',
                                         'style' => 'border: none!important;background: transparent!important',
                                         'readonly']) 
                                     !!}</strong>
                                 </div>
-                                <div id="paymentList">
-                                    <label>Payments:</label><br>
+                                <div class="dataTable_wrapper">
+                                    <label>Payments:</label>
+                                    <table id="paymentList" class="table table-striped responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%"></th>
+                                                <th width="5%" class="text-right">Amount</th>
+                                                <th width="5%">Method</th>
+                                                <th class="text-right">Date</th>>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                             <br>
-                            {{-- {!! Form::label('computed', 'Payments: ') !!} --}}
-                            {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
-                            <input type="hidden" id="paymentId">
-                            {!! Form::input('text','inputPayment',null,[
-                                'id'=>'inputPayment',
-                                'class' => 'form-control addPayment',
-                                'placeholder'=>'Payment']) 
-                            !!}
-                            <br><br>
-                            <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
+                            <div class="addPayment">
+                                {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
+                                <input type="hidden" id="paymentId">
+                                <input type="hidden" id="paymentMethod" value="0">
+                                {!! Form::input('text','inputPayment',null,[
+                                    'id'=>'inputPayment',
+                                    'class' => 'form-control',
+                                    'placeholder'=>'Payment']) 
+                                !!}
+                                <br>
+                                <div id="creditCard" class="hidden">
+                                    {!! Form::label('inputCredit', 'Credit Card: ') !!}
+                                    {!! Form::input('text','inputCredit',null,[
+                                        'id'=>'inputCredit',
+                                        'class' => 'form-control',
+                                        'placeholder'=>'Credit']) 
+                                    !!}<br>
+                                    {!! Form::label('inputPin', 'PIN: ') !!}
+                                    {!! Form::password('inputPin',[
+                                        'id' => 'inputPin',
+                                        'class' => 'form-control',
+                                        'name' => 'pin']) 
+                                    !!}
+                                </div>
+                                <br><br>
+                                <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
+                            </div>
                         </div>
                     </div>
                 </div>

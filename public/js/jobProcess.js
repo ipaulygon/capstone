@@ -6,7 +6,49 @@ var procList = $('#processList').DataTable({
     "info": false,
     "retrieve": true,
 });
-
+var payList = $('#paymentList').DataTable({
+    responsive: true,
+    "searching": false,
+    "paging": false,
+    "info": false,
+    "retrieve": true,
+});
+$('#inputCredit').inputmask('999 9999 9999 9999');
+function format ( d ) {
+    console.log(d);
+    // `d` is the original data object for the row
+    return '<table class="table table-hover table-bordered responsive" style="padding-left:50px">'+
+        '<thead><tr>'+
+        '<th></th>'+
+        '</tr></thead>'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d[1]+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d[2]+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+$('#processList tbody').on('click', 'td.push-details', function () {
+    var tr = $(this).parents('tr');
+    var row = procList.row(tr);
+    if ( row.child.isShown() ) {
+        // This row is already open - close it
+        row.child.hide();
+        tr.removeClass('shown');
+    }
+    else {
+        // Open this row (the format() function would return the data to be shown)
+        row.child( format(row.data()) ).show();
+        tr.addClass('shown');
+    }
+} );
 function process(id){
     $('#jobCarousel').carousel(2);
     $('#paymentId').val(id);
@@ -16,6 +58,7 @@ function process(id){
         dataType: "JSON",
         success:function(data){
             procList.clear().draw();
+            payList.clear().draw();
             $('.payment').remove();
             $('#totalPrice').val(data.job.total)
             balance = data.job.total-data.paid;
@@ -45,7 +88,7 @@ function process(id){
             $.each(data.job.product,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/product/"+value.id,
+                    url: "/item/product/"+value.productId,
                     dataType: "JSON",
                     success:function(data){
                         if(value.isComplete){
@@ -55,19 +98,19 @@ function process(id){
                         }
                         part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
                         row = procList.row.add([
-                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" href="#prod'+data.product.id+'" title="Update Item">' +
+                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" title="Update Item">' +
                                 '<i class="glyphicon glyphicon-menu-hamburger"></i>' +
                             '</button>',
-                            data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")" +
-                                '<div id="prod'+data.product.id+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="">' +
-                                '<div class="panel-body">' +
-                                data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")" +
-                                '</div>' +
-                                '</div>',
+                            data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                             value.quantity,
                             value.completed,
                             status,
                         ]).draw().node();
+                        procList.row($(row)).invalidate().draw();
+                        dataList = procList.row($(row)).data();
+                        dataList.push(data);
+                        procList.row($(row)).data(dataList);
+                        $(row).find('td').eq(0).addClass('push-details');
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
@@ -77,7 +120,7 @@ function process(id){
             $.each(data.job.service,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/service/"+value.id,
+                    url: "/item/service/"+value.serviceId,
                     dataType: "JSON",
                     success:function(data){
                         if(value.isComplete){
@@ -108,7 +151,7 @@ function process(id){
             $.each(data.job.package,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/package/"+value.id,
+                    url: "/item/package/"+value.packageId,
                     dataType: "JSON",
                     success:function(data){
                         if(value.isComplete){
@@ -150,7 +193,7 @@ function process(id){
             $.each(data.job.promo,function(key,value){
                 $.ajax({
                     type: "GET",
-                    url: "/item/promo/"+value.id,
+                    url: "/item/promo/"+value.promoId,
                     dataType: "JSON",
                     success:function(data){
                         if(value.isComplete){
@@ -204,12 +247,16 @@ function process(id){
                 });
             });
             $.each(data.job.payment,function(key,value){
-                $('#paymentList').append(
-                    '<div class="col-md-12 paymentList">' +
-                    '<input class="payment prices col-md-6" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>' +
-                    '<label>'+value.created_at+'</label>' +
-                    '</div>'
-                );
+                no = key+1;
+                method = (value.isCredit ? "Credit Card" : "Cash");
+                row = payList.row.add([
+                    no+'.',
+                    '<input class="prices" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>',
+                    method,
+                    value.created_at,
+                ]).draw().node();
+                $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(3).addClass('text-right');
             });
             $(".prices").inputmask({ 
                 alias: "currency",
@@ -224,8 +271,19 @@ function process(id){
 $(document).on('click','#savePayment', function(){
     balance = $('#balance').val().replace(',','');
     payment = $('#inputPayment').val().replace(',','');
+    method = $('#paymentMethod').val();
+    credit = $('#inputCredit').val();
+    pin = $('#inputPin').val();
     id = $('#paymentId').val();
-    if(payment!="0.00"){
+    passed = false;
+    if(method==1){
+        if(credit!='' && pin!=''){
+            passed = true;
+        }
+    }else{
+        passed = true;
+    }
+    if(payment!="0.00" && passed==true && payment<=balance){
         balance = eval(balance+"-"+payment);
         $('#balance').val(balance);
         $("#balance").inputmask({ 
@@ -250,7 +308,7 @@ $(document).on('click','#savePayment', function(){
         $.ajax({
             type: "POST",
             url: "job/pay",
-            data: {id: id,payment: payment},
+            data: {id: id,payment: payment,credit: credit,pin: pin,method: method},
             success:function(data){
                 $('#notif').append(
                     '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
@@ -259,12 +317,16 @@ $(document).on('click','#savePayment', function(){
                     data.message +
                     '</div>'
                 );
-                $('#paymentList').append(
-                    '<div class="col-md-12 paymentList">' +
-                    '<input class="payment prices col-md-6" value="'+data.payment+'" style="border:none!important;background: transparent!important" readonly>' +
-                    '<label>'+data.job.updated_at+'</label>' +
-                    '</div>'
-                );
+                no = data.job.payment.length+1;
+                method = (method ? "Credit Card" : "Cash");
+                row = payList.row.add([
+                    no+'.',
+                    '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',
+                    method,
+                    data.payment.created_at,
+                ]).draw().node();
+                $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(3).addClass('text-right');
                 $(".prices").inputmask({ 
                     alias: "currency",
                     prefix: 'PhP ',
@@ -284,25 +346,57 @@ $(document).on('click','#savePayment', function(){
     }
     setTimeout(function (){
         $('#alert').alert('close');
-    },3000);
+    },2000);
 });
 
 $(document).on('keyup', '#inputPayment' ,function (){
     if(Number($(this).val().replace(',','')) > Number($(this).attr('data-qty'))){
-        $(this).popover({
+        $(this).tooltip({
             trigger: 'manual',
-            content: function(){
+            title: function(){
                 var content = "Oops! Your input exceeds the price to be paid. The max value will be set.";
                 return content;
             },
             placement: function(){
-                var placement = 'top';
+                var placement = 'left';
                 return placement;
             },
-            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+            template: '<div class="tooltip alert-danger" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
         });
-        $(this).popover('show');
+        $(this).tooltip('show');
     }else{
-        $(this).popover('hide');
+        $(this).tooltip('hide');
     }
+});
+
+$(document).on('focus','#inputPayment',function(){
+    $(this).popover({
+        trigger: 'manual',
+        content: function(){
+            var content = '<button type="button" id="cashP" class="btn btn-primary btn-block">Cash</button><button type="button" id="creditP" class="btn btn-primary btn-block">Credit Card</button>';
+            return content;
+        },
+        html: true,
+        placement: function(){
+            var placement = 'top';
+            return placement;
+        },
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        title: function(){
+            var title = 'Choose mode of Payment:';
+            return title;
+        }
+    });
+    $(this).popover('show');
+});
+$(document).on('focusout','#inputPayment',function(){
+    $(this).popover('hide');
+});
+$(document).on('click','#cashP',function(){
+    $('#creditCard').addClass('hidden');
+    $('#paymentMethod').val(0);
+});
+$(document).on('click','#creditP',function(){
+    $('#creditCard').removeClass('hidden');
+    $('#paymentMethod').val(1);
 });

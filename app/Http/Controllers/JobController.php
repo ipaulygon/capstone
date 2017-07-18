@@ -203,11 +203,12 @@ class JobController extends Controller
                         'city' => trim($request->city),
                     ]
                 );
+                $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => str_replace(' km','',$request->mileage)
+                        'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
                 $time = date('H:i:s');
@@ -426,11 +427,12 @@ class JobController extends Controller
                         'city' => trim($request->city),
                     ]
                 );
+                $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => str_replace(' km','',$request->mileage)
+                        'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
                 $job = JobHeader::findOrFail($id);
@@ -543,11 +545,15 @@ class JobController extends Controller
     public function pay(Request $request){
         try{
             DB::beginTransaction();
-            $job = JobHeader::findOrFail($request->id);
+            $job = JobHeader::with('payment')->findOrFail($request->id);
             $payment = str_replace(',','',$request->payment);
-            JobPayment::create([
+            $method =  ($request->method == '0' ? 0 : 1);
+            $jp = JobPayment::create([
                 'jobId' => $job->id,
-                'paid' => $payment
+                'paid' => $payment,
+                'creditCard' => $request->credit,
+                'pin' => bcrypt($request->pin),
+                'isCredit' => $method
             ]);
             $now = $job->paid + $payment;
             $job->update([
@@ -558,7 +564,7 @@ class JobController extends Controller
             DB::rollBack();
             $errMess = $e->getMessage();
         }
-        return response()->json(['message'=>'Payment successfully added','job'=>$job,'payment'=>number_format($payment)]);
+        return response()->json(['message'=>'Payment successfully added','job'=>$job,'payment'=>$jp]);
     }
 
     public function finalize(Request $request, $id){

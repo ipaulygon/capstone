@@ -124,11 +124,12 @@ class InspectController extends Controller
                         'city' => trim($request->city),
                     ]
                 );
+                $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => str_replace(' km','',$request->mileage)
+                        'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
                 $inspection = InspectionHeader::create([
@@ -266,11 +267,12 @@ class InspectController extends Controller
                         'city' => trim($request->city),
                     ]
                 );
+                $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
                         'modelId' => $request->modelId,
-                        'mileage' => str_replace(' km','',$request->mileage)
+                        'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
                 $inspection = InspectionHeader::findOrFail($id);

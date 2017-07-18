@@ -18,6 +18,9 @@ class CreateJobPaymentTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('jobId');
             $table->double('paid',15,2);
+            $table->string('creditCard',20)->nullable();
+            $table->string('pin')->nullable();
+            $table->boolean('isCredit');
             $table->timestamps();
             $table->foreign('jobId')
                   ->references('id')->on('job_header')

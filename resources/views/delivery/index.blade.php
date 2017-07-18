@@ -34,7 +34,7 @@
                                 <td>{{$delivery->id}}</td>
                                 <td>{{$delivery->supplier}}</td>
                                 <td class="pull-right">
-                                    <a href="{{url('/delivery/pdf/'.$delivery->id)}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                    <a href="{{url('/delivery/pdf/'.$delivery->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                 </td>
