@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div id="models" class="box-body">
-                @if(empty($make->model))
+                @if(!empty($make->model))
                     @foreach($make->model as $model)
                         <div id="model" class="form-group">
                             @if($loop->index!=0)

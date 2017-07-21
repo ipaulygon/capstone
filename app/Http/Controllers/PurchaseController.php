@@ -95,6 +95,7 @@ class PurchaseController extends Controller
                 ]);
                 $products = $request->product;
                 $qtys = $request->qty;
+                $prices = $request->price;
                 $models = $request->modelId;
                 foreach($products as $key=>$product){
                     PurchaseDetail::create([
@@ -102,6 +103,7 @@ class PurchaseController extends Controller
                         'productId' => $product,
                         'modelId' => $models[$key],
                         'quantity' => $qtys[$key],
+                        'price' => $prices[$key],
                         'delivered' => 0,
                         'isActive'=> 1
                     ]);
@@ -199,12 +201,13 @@ class PurchaseController extends Controller
                 ]);
                 $products = $request->product;
                 $qtys = $request->qty;
+                $prices = $request->price;
                 $models = $request->modelId;
                 PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
                 foreach($products as $key=>$product){
                     PurchaseDetail::updateOrCreate(
                         ['purchaseId' => $id,'productId' => $product],
-                        ['modelId' => $models[$key],'quantity' => $qtys[$key],'isActive'=> 1]
+                        ['modelId' => $models[$key],'quantity' => $qtys[$key],'price' => $prices[$key],'isActive'=> 1]
                     );
                 }
                 DB::commit();

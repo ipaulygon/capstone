@@ -40,10 +40,7 @@
     @if($purchase->detail)
         <script>$('#compute').val(0)</script>
         @foreach($purchase->detail as $key=>$product)
-            <?php
-                $price = $product->product->priceRecord->where('created_at','<=',$purchase->created_at)->first()->price;
-            ?>
-            <script>retrieveProduct({{$price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}})</script>
+            <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}})</script>
         @endforeach
     @endif
 @stop

@@ -16,8 +16,7 @@
     <div id="jobCarousel" class="carousel slide">
         <div class="carousel-inner" role="listbox">
             <div id="jobIndex" class="item active">
-                <div class="col-md-4">
-                    
+                <div class="col-md-4">                    
                     <div id="actionBox" class="box box-primary box-solid">
                         <div class="box-header with-border">
                             <h3 id="dateSelected" class="box-title">{{$date}}</h3>
@@ -28,15 +27,15 @@
                         </div>
                         <div class="box-body">
                             <button id="addNew" class="btn btn-success btn-block">
-                                <i class="glyphicon glyphicon-plus"></i> Add New
+                                <i class="glyphicon glyphicon-plus"></i> Add Record
                             </button>
-                            <button id="viewMonth" class="btn btn-primary btn-block disabled">
+                            <button id="viewMonth" class="btn btn-primary btn-block">
                                 <i class="fa fa-calendar"></i> Month View
                             </button>
                             <button id="viewWeek" class="btn btn-warning btn-block">
                                 <i class="fa fa-calendar-minus-o"></i> Week View
                             </button>
-                            <button id="viewDay" class="btn btn-danger btn-block">
+                            <button id="viewDay" class="btn btn-danger btn-block disabled">
                                 <i class="fa fa-calendar-o"></i> Day View
                             </button>
                             <button id="viewTable" class="btn btn-info btn-block" href="#tabularTab" aria-controls="tabularTab" role="tab" data-toggle="tab">
@@ -61,6 +60,9 @@
                                     <label>Job Id:</label> <span id="detailId"></span>
                                 </div>
                                 <div class="col-md-6">
+                                    <a id="detailEstimate" href="" target="_blank" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
+                                        <i class="glyphicon glyphicon-list-alt"></i>
+                                    </a>
                                     <a id="detailPDF" href="" target="_blank" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
@@ -276,12 +278,6 @@
                                         'class' => 'form-control',
                                         'placeholder'=>'Credit']) 
                                     !!}<br>
-                                    {!! Form::label('inputPin', 'PIN: ') !!}
-                                    {!! Form::password('inputPin',[
-                                        'id' => 'inputPin',
-                                        'class' => 'form-control',
-                                        'name' => 'pin']) 
-                                    !!}
                                 </div>
                                 <br><br>
                                 <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
@@ -362,27 +358,29 @@
                     @endforeach
                 @endif
             ];
-            @foreach($jobs as $job)
-                event = {
-                    id: {{$job->jobId}},
-                    title: '{{$job->plate}}',
-                    start: '{{$job->start}}',
-                    @if($job->isComplete && $job->total==$job->paid)
-                        //success
-                        color: '#00a65a'
-                    @elseif(!$job->isComplete && $job->isFinalize && $job->total==$job->paid)
-                        //info
-                        color: '#00c0ef'
-                    @elseif(!$job->isComplete && $job->isFinalize && $job->total!=$job->paid)
-                        //warning
-                        color: '#f39c12'
-                    @else
-                        //primary
-                        color: '#3c8dbc'
-                    @endif
-                };
-                $('#calendar').fullCalendar('renderEvent', event);
-            @endforeach        
+            @if(!$jobs->isEmpty())
+                @foreach($jobs as $job)
+                    var events = {
+                        id: {{$job->jobId}},
+                        title: '{{$job->plate}}',
+                        start: '{{$job->start}}',
+                        @if($job->isComplete && $job->total==$job->paid)
+                            //success
+                            color: '#00a65a'
+                        @elseif(!$job->isComplete && $job->isFinalize && $job->total==$job->paid)
+                            //info
+                            color: '#00c0ef'
+                        @elseif(!$job->isComplete && $job->isFinalize && $job->total!=$job->paid)
+                            //warning
+                            color: '#f39c12'
+                        @else
+                            //primary
+                            color: '#3c8dbc'
+                        @endif
+                    };
+                @endforeach
+                $('#calendar').fullCalendar('renderEvent', events, true);
+            @endif
             $("#technician").val(activeTechnicians);
             @if(old('modelId'))
                 $("#model").val({{old('modelId')}});

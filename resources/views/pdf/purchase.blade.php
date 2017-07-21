@@ -99,7 +99,6 @@
                         }else{
                             $part = "";
                         }
-                        $price = $product->product->priceRecord->where('created_at','<=',$purchase->created_at)->first()->price;
                     ?>
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}})</td>
                     <td>
@@ -107,10 +106,20 @@
                         {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})
                         @endif
                     </td>
-                    <td class="text-right">{{number_format($price,2)}}</td>
-                    <td class="text-right">{{number_format($product->quantity*$price,2)}}</td>
+                    <td class="text-right">{{number_format($product->price,2)}}</td>
+                    <td class="text-right">{{number_format($product->quantity*$product->price,2)}}</td>
+                    <?php
+                        $total += $product->quantity*$product->price;
+                    ?>
                 </tr>
                 @endforeach
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td class="text-right">PhP {{number_format($total,2)}}</td>
+                </tr>
             </tbody>
         </table>
         <div class="footer">

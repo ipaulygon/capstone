@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('purchase/finalz/{id}','PurchaseController@finalz');
 	Route::resource('delivery','DeliveryController');
 	Route::resource('inspect','InspectController');
-	Route::resource('estimate','EstimateController');
+	//Route::resource('estimate','EstimateController');
 	Route::resource('job','JobController');
 	Route::resource('query','QueryController');
 

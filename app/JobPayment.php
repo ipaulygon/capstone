@@ -11,7 +11,6 @@ class JobPayment extends Model
     	'jobId',
         'paid',
         'creditCard',
-        'pin',
         'isCredit'
     ];
 

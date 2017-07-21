@@ -42,6 +42,7 @@
                             <textarea class="hidden" name="inspectionForm[]" id="inspectionForm" required>{{old('inspectionForm.'.$key)}}</textarea>
                             {!! Form::input('text',null,$item,[
                                 'class' => 'form-control ',
+                                'id' => 'inspectionItem',
                                 'name'=>'item[]',
                                 'placeholder'=>'Inspection Item',
                                 'maxlength'=>'50',
@@ -58,6 +59,7 @@
                         <textarea class="hidden" name="inspectionForm[]" id="inspectionForm" required></textarea>
                         {!! Form::input('text',null,null,[
                             'class' => 'form-control ',
+                            'id' => 'inspectionItem',
                             'name'=>'item[]',
                             'placeholder'=>'Inspection Item',
                             'maxlength'=>'50',
@@ -77,7 +79,7 @@
         <div class="col-md-7">
             <div id="formbox" class="box">
                 <div id="header" class="box-header with-border">
-                    <h3 class="box-title">Item Components</h3>
+                    <h3 class="box-title" id="itemComponent">Item Components</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                             <i class="fa fa-minus"></i>

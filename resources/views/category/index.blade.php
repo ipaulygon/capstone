@@ -17,7 +17,7 @@
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
                     <button type="button" data-toggle="modal" data-target="#createModal"  class="btn btn-success btn-md">
-                    <i class="glyphicon glyphicon-plus"></i> Add New</a>
+                    <i class="glyphicon glyphicon-plus"></i> Add Record</a>
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">
@@ -102,7 +102,7 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title">Add New</h4>
+                                <h4 class="modal-title">Add Record</h4>
                             </div>
                             <div class="modal-body">
                                 <h3>Category Information</h3>

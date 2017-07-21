@@ -69,8 +69,10 @@ $(document).on('keyup', '#qty', function (){
             template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
         });
         $(this).popover('show');
-    }else{
-        $(this).popover('hide');
+        pop = $(this);
+        setTimeout(function(){
+            pop.popover('hide');
+        },2000);
     }
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     price = $(this).attr('data-price');

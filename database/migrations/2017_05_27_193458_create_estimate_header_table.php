@@ -18,7 +18,6 @@ class CreateEstimateHeaderTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('vehicleId');
-            $table->boolean('isFinalize');
             $table->timestamps();
             $table->foreign('customerId')
                   ->references('id')->on('customer')

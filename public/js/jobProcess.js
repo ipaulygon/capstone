@@ -91,6 +91,7 @@ function process(id){
                     url: "/item/product/"+value.productId,
                     dataType: "JSON",
                     success:function(data){
+                        maxValue = (value.quantity>data.product.inventory.quantity ? data.product.inventory.quantity:value.quantity)
                         if(value.isComplete){
                             status = '<i class="glyphicon glyphicon-ok text-success"></i> Completed';
                         }else{
@@ -98,12 +99,10 @@ function process(id){
                         }
                         part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
                         row = procList.row.add([
-                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" title="Update Item">' +
-                                '<i class="glyphicon glyphicon-menu-hamburger"></i>' +
-                            '</button>',
+                            '',
                             data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                             value.quantity,
-                            value.completed,
+                            '<input class="qty form-control text-right" name="qty[]" data-tresh="'+maxValue+'" id="prod'+data.product.id+'" type="text" value="'+value.completed+'">',
                             status,
                         ]).draw().node();
                         procList.row($(row)).invalidate().draw();
@@ -114,6 +113,13 @@ function process(id){
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
+                        $('#prod'+data.product.id).inputmask({ 
+                            alias: "integer",
+                            prefix: '',
+                            allowMinus: false,
+                            min: 0,
+                            max: maxValue,
+                        });
                     }
                 });
             });
@@ -273,17 +279,16 @@ $(document).on('click','#savePayment', function(){
     payment = $('#inputPayment').val().replace(',','');
     method = $('#paymentMethod').val();
     credit = $('#inputCredit').val();
-    pin = $('#inputPin').val();
     id = $('#paymentId').val();
     passed = false;
     if(method==1){
-        if(credit!='' && pin!=''){
+        if(credit!=''){
             passed = true;
         }
     }else{
         passed = true;
     }
-    if(payment!="0.00" && passed==true && payment<=balance){
+    if(payment!="0.00" && passed && payment<=balance){
         balance = eval(balance+"-"+payment);
         $('#balance').val(balance);
         $("#balance").inputmask({ 
@@ -318,7 +323,7 @@ $(document).on('click','#savePayment', function(){
                     '</div>'
                 );
                 no = data.job.payment.length+1;
-                method = (method ? "Credit Card" : "Cash");
+                method = (method==1 ? "Credit Card" : "Cash");
                 row = payList.row.add([
                     no+'.',
                     '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',

@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div id="brands" class="box-body">
-                @if(empty($type->tb))
+                @if(!empty($type->tb))
                     @foreach($type->tb as $tb)
                         <div id="brand" class="form-group">
                             @if($loop->index!=0)

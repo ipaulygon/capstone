@@ -420,11 +420,11 @@ class JobController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => str_replace('_','',trim($request->contact)),
-                        'email' => $request->email,
-                        'street' => trim($request->street),
-                        'brgy' => trim($request->brgy),
-                        'city' => trim($request->city),
+                        'contact' => $job->customer->contact,
+                        'email' => $job->customer->email,
+                        'street' => $job->customer->street,
+                        'brgy' => $job->customer->brgy,
+                        'city' => $job->customer->city,
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
@@ -551,8 +551,7 @@ class JobController extends Controller
             $jp = JobPayment::create([
                 'jobId' => $job->id,
                 'paid' => $payment,
-                'creditCard' => $request->credit,
-                'pin' => bcrypt($request->pin),
+                'creditCard' => bcrypt($request->credit),
                 'isCredit' => $method
             ]);
             $now = $job->paid + $payment;

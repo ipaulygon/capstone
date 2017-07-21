@@ -13,6 +13,7 @@ class PurchaseDetail extends Model
         'modelId',
         'quantity',
         'delivered',
+        'price',
     	'isActive'  	
     ];
 

@@ -21,6 +21,7 @@ class CreatePurchaseDetailTable extends Migration
             $table->unsignedInteger('modelId')->nullable();
             $table->integer('quantity');
             $table->integer('delivered');
+            $table->double('price', 15,2);
             $table->timestamps();
             $table->boolean('isActive')->default(1);
             $table->foreign('purchaseId')

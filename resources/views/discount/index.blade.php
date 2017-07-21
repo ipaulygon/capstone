@@ -16,7 +16,7 @@
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
                     <a href="{{ URL::to('/discount/create') }}" class="btn btn-success btn-md">
-                    <i class="glyphicon glyphicon-plus"></i> Add New</a>
+                    <i class="glyphicon glyphicon-plus"></i> Add Record</a>
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">

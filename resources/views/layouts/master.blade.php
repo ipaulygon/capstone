@@ -191,7 +191,7 @@
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
-                    <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li>
+                    {{-- <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li> --}}
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li class="header">QUERIES</li>
                     <li id="query"><a href="{{url('/query')}}"><i class="fa  fa-bookmark-o"></i> <span>Queries</span></a></li>

@@ -31,7 +31,7 @@
                     @foreach($type->item as $item)
                         <div id="item" class="form-group">
                             @if($loop->index!=0)
-                                <button id="removeItem" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
+                                <button id="removeItemUpdate" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             @endif
@@ -43,6 +43,7 @@
                             <textarea class="hidden" name="inspectionForm[]" id="inspectionForm" required>{{$item->form}}</textarea>
                             {!! Form::input('text',null,$item->name,[
                                 'class' => 'form-control ',
+                                'id' => 'inspectionItem',
                                 'name'=>'item[]',
                                 'placeholder'=>'Inspection Item',
                                 'maxlength'=>'50',
@@ -62,7 +63,7 @@
         <div class="col-md-7">
             <div id="formbox" class="box">
                 <div id="header" class="box-header with-border">
-                    <h3 class="box-title">Item Components</h3>
+                    <h3 class="box-title" id="itemComponent">Item Components</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                             <i class="fa fa-minus"></i>

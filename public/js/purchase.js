@@ -37,16 +37,45 @@ $(document).on('keyup', '#qty', function (){
     if(qty=='' || qty==null || qty==0){
         qty = 1;
         $(this).val(1);
-    }
-    if(qty>100){
+    }else if(qty>100){
         qty = 100;
+        $(this).val(100);
+        $(this).popover({
+            trigger: 'manual',
+            content: function(){
+                var content = "Oops! Your input exceeds the max number of items. The max value will be set.";
+                return content;
+            },
+            placement: function(){
+                var placement = 'top';
+                return placement;
+            },
+            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+        $(this).popover('show');
+        pop = $(this);
+        setTimeout(function(){
+            pop.popover('hide');
+        },2000);
     }
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    price = this.title;
+    price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
+});
+
+$(document).on('keyup', '.price', function(){
+    inputQty = rowFinder(this).find('#qty').attr('data-price',$(this).val().replace(',',''));
+    if(inputQty.val()!='' || inputQty.val()!=null){
+        stack = $(inputQty).parents('tr').find('#stack').val().replace(',','');
+        price = $(inputQty).attr('data-price');
+        price = eval(price+"*"+qty);
+        final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
+        $(this).parents('tr').find('#stack').val(price);
+        $('#compute').val(final);
+    }
 });
 
 $(document).on('change', '#products', function(){
@@ -58,12 +87,12 @@ $(document).on('change', '#products', function(){
         success:function(data){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+data.product.price+'" class="form-control qty text-right" id="qty" name="qty[]" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="0" class="form-control qty text-right" id="qty" name="qty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.product.price+'" readonly></strong>',
+                '<strong><input class="price form-control text-right" name="price[]" id="price" type="text"></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
@@ -114,23 +143,22 @@ $(document).on('click','.pullProduct', function(){
     pList.row(row).remove().draw();
 });
 
-function oldProduct(id,qty,model){
+function oldProduct(id,qty,model,price){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
         url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
-            price = data.product.price
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
@@ -179,6 +207,7 @@ function oldProduct(id,qty,model){
 
 function retrieveProduct(price,id,qty,model){
     $('#products option[value="'+id+'"]').attr('disabled',true);
+    console.log(price);
     $.ajax({
         type: "GET",
         url: "/item/product/"+id,
@@ -187,12 +216,12 @@ function retrieveProduct(price,id,qty,model){
             part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" title="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
                 '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();

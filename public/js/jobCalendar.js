@@ -9,33 +9,17 @@ $('#start').val(datePick);
 $('#calendar').fullCalendar({
     contentHeight: 600,
     customButtons: {
-        legend: {
-            text: 'Legend',
-            click: function(){
-                $(this).popover({
-                    trigger: 'manual',
-                    container: 'body',
-                    content: function(){
-                        var content = '<div class="col-md-12"><div class="col-md-6"><small class="label bg-blue">&nbsp;</small>&nbsp;New<br><small class="label bg-orange">&nbsp;</small>&nbsp;Finalized<br></div><div class="col-md-6"><small class="label bg-teal">&nbsp;</small>&nbsp;Paid<br><small class="label bg-green">&nbsp;</small>&nbsp;Done<br></div></div><br><br><br>';
-                        return content;
-                    },
-                    html: true,
-                    placement: function(){
-                        var placement = 'left';
-                        return placement;
-                    },
-                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-                    title: function(){
-                        var title = 'Legend:';
-                        return title;
-                    }
-                });
-                $(this).popover('show');
-                var legendClick = $(this);
-                setTimeout(function(){
-                    legendClick.popover('hide');
-                },3000);
-            }
+        started: {
+            text: 'Started',
+        },
+        finalized: {
+            text: 'Finalized',
+        },
+        paid: {
+            text: 'Paid',
+        },
+        done: {
+            text: 'Done',
         }
     },
     dayClick: function(date,jsEvent,view){
@@ -62,13 +46,14 @@ $('#calendar').fullCalendar({
             },1000);
         }
     },
+    defaultView: 'agendaDay',
     eventClick: function(event,jsEvent,view){
         clickEvent(event.id);
     },
     header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'legend'
+        right: 'started,finalized,paid,done'
     },
     viewRender: function(currentView){
         maxDate = moment().add(2,'weeks');
@@ -81,6 +66,14 @@ $('#calendar').fullCalendar({
 		}
     }
 });
+$('.fc-started-button').addClass('btn-primary');
+$('.fc-started-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-left');
+$('.fc-finalized-button').addClass('btn-warning');
+$('.fc-finalized-button').removeClass('fc-button fc-state-default fc-state-hover');
+$('.fc-paid-button').addClass('btn-info');
+$('.fc-paid-button').removeClass('fc-button fc-state-default fc-state-hover');
+$('.fc-done-button').addClass('btn-success');
+$('.fc-done-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-right');
 
 function clickEvent(id){
     $('.detailTechs').remove();
@@ -121,6 +114,7 @@ function clickEvent(id){
     });
     $('#detailBox').removeClass('hidden');
     $('#detailUpdate').attr("href","/job/"+id+"/edit");
+    $('#detailEstimate').attr("href","/estimate/pdf/"+id);
     $('#detailPDF').attr("href","/job/pdf/"+id);
     $('#detailFinalize').attr("onclick","finalizeModal("+id+")");
     $('#detailProcess').attr("onclick","process("+id+")");
