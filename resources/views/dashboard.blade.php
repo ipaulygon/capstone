@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="box-body dataTable_wrapper">
-                    <table id="list" class="table table-striped responsive">
+                    <table id="list" class="table table-striped table-bordered responsive">
                         <thead>
                             <tr>
                                 <th>Product</th>

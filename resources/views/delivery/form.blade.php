@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <table id="productList" class="table table-striped responsive">
+            <table id="productList" class="table table-striped table-bordered responsive">
                 <thead>
                     <tr>
                         <th width="20%" class="text-right">Quantity Ordered</th>

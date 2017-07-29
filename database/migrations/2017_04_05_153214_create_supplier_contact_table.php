@@ -16,7 +16,7 @@ class CreateSupplierContactTable extends Migration
         Schema::create('supplier_contact', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->unsignedInteger('scId');
-            $table->string('scNo', 20);
+            $table->string('scNo', 30);
             $table->foreign('scId')
                   ->references('id')->on('supplier')
                   ->onUpdate('cascade')

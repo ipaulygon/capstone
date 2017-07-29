@@ -17,17 +17,17 @@
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
                     <a href="{{ URL::to('/purchase/create') }}" class="btn btn-success btn-md">
-                    <i class="glyphicon glyphicon-plus"></i> Add Record</a>
+                    <i class="glyphicon glyphicon-plus"></i> New Record</a>
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">
-                <table id="list" class="table table-striped responsive">
+                <table id="list" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
                             <th>Purchase Id</th>
                             <th>Supplier</th>
                             <th>Status</th>
-                            <th class="pull-right">Action</th>
+                            <th class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,7 +44,7 @@
                                     {{"All items delivered"}}
                                     @endif
                                 </td>
-                                <td class="pull-right">
+                                <td class="text-right">
                                     @if(!$purchase->isFinalize)
                                         <button onclick="finalizeModal('{{$purchase->id}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Finalize record">
                                             <i class="glyphicon glyphicon-ok"></i>
@@ -52,7 +52,7 @@
                                         <a href="{{url('/purchase/'.$purchase->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                             <i class="glyphicon glyphicon-edit"></i>
                                         </a>
-                                        <button onclick="showModal('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
+                                        <button onclick="deactivateShow('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
                                             <i class="glyphicon glyphicon-trash"></i>
                                         </button>
                                         {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
@@ -82,7 +82,7 @@
                                 <div style="text-align:center">Are you sure you want to finalize this record?</div>
                                 <br>
                                 <div class="dataTable_wrapper">
-                                    <table id="productList" class="table table-striped responsive">
+                                    <table id="productList" class="table table-striped table-bordered responsive">
                                         <thead>
                                             <tr>
                                                 <th class="text-right">Qty</th>
@@ -131,7 +131,7 @@
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/purchase.js') }}"></script>
     <script>
-        var deactivate = null;
+        
         var finalize = null;
         $(document).ready(function (){
             $('#list').DataTable({
@@ -139,7 +139,7 @@
             });
             $('#tPurchase').addClass('active');
         });
-        function showModal(id){
+        function deactivateShow(id){
 			deactivate = id;
 			$('#deactivateModal').modal('show');
 		}

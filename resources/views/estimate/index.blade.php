@@ -16,16 +16,16 @@
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
                     <a href="{{ URL::to('/estimate/create') }}" class="btn btn-success btn-md">
-                    <i class="glyphicon glyphicon-plus"></i> Add Record</a>
+                    <i class="glyphicon glyphicon-plus"></i> New Record</a>
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">
-                <table id="list" class="table table-striped responsive">
+                <table id="list" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
                             <th>Vehicle</th>
                             <th>Customer</th>
-                            <th class="pull-right">Action</th>
+                            <th class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,7 @@
                                     <li>{{$estimate->email}}</li>
                                     @endif
                                 </td>
-                                <td class="pull-right">
+                                <td class="text-right">
                                     <a href="{{url('/estimate/'.$estimate->estimateId.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>

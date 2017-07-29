@@ -17,6 +17,8 @@ class CreateSupplierPersonTable extends Migration
             $table->engine = 'InnoDB';
             $table->unsignedInteger('spId');
             $table->string('spName', 100);
+            $table->string('spContact', 30);
+            $table->boolean('isMain');
             $table->foreign('spId')
                   ->references('id')->on('supplier')
                   ->onUpdate('cascade')

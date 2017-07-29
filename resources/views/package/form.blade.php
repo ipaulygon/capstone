@@ -18,12 +18,12 @@
                 <div class="tab-content">
                     {{-- PRODUCTS --}}
                     <div role="tabpanel" class="tab-pane fade in active dataTable_wrapper" id="product">
-                        <table id="products" class="table table-striped responsive">
+                        <table id="products" class="table table-striped table-bordered responsive">
                             <thead>
                                 <tr>
                                     <th>Product</th>
                                     <th>Description</th>
-                                    <th class="pull-right">Action</th>
+                                    <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,7 +37,7 @@
                                         <li>{{$product->type}}</li>
                                         <li>{{$product->variance}}</li>
                                     </td>
-                                    <td class="pull-right">
+                                    <td class="text-right">
                                         <button id="{{$product->id}}" class="btn btn-primary btn-sm pushProduct" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                     </td>
                                 </tr>
@@ -47,12 +47,12 @@
                     </div>
                     {{-- SERVICES --}}
                     <div role="tabpanel" class="tab-pane fade in dataTable_wrapper" id="service">
-                        <table id="services" class="table table-striped responsive">
+                        <table id="services" class="table table-striped table-bordered responsive">
                             <thead>
                                 <tr>
                                     <th>Service</th>
                                     <th>Category</th>
-                                    <th class="pull-right">Action</th>
+                                    <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,7 +60,7 @@
                                 <tr>
                                     <td>{{$service->name}} - {{$service->size}}</td>
                                     <td>{{$service->category}}</td>
-                                    <td class="pull-right">
+                                    <td class="text-right">
                                         <button id="{{$service->id}}" class="btn btn-primary btn-sm pushService" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>
                                     </td>
                                 </tr>
@@ -111,22 +111,22 @@
                     </div>
                 </div>
                 <div class="dataTable_wrapper">
-                    <table id="productList" class="table table-striped responsive">
+                    <table id="productList" class="table table-striped table-bordered responsive">
                         <thead>
                             <tr>
                                 <th>Products</th>
                                 <th>Quantity</th>
-                                <th class="pull-right">Action</th>
+                                <th class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <table id="serviceList" class="table table-striped responsive">
+                    <table id="serviceList" class="table table-striped table-bordered responsive">
                         <thead>
                             <tr>
                                 <th>Services</th>
                                 <th>Category</th>
-                                <th class="pull-right">Action</th>
+                                <th class="text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

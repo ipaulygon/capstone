@@ -27,7 +27,7 @@
                         </div>
                         <div class="box-body">
                             <button id="addNew" class="btn btn-success btn-block">
-                                <i class="glyphicon glyphicon-plus"></i> Add Record
+                                <i class="glyphicon glyphicon-plus"></i> New Record
                             </button>
                             <button id="viewMonth" class="btn btn-primary btn-block">
                                 <i class="fa fa-calendar"></i> Month View
@@ -109,12 +109,12 @@
                         <div role="tabpanel" class="tab-pane fade" id="tabularTab">
                             <div class="box box-primary">
                                 <div class="box-body dataTable_wrapper">
-                                    <table id="list" class="table table-striped responsive">
+                                    <table id="list" class="table table-striped table-bordered responsive">
                                         <thead>
                                             <tr>
                                                 <th>Vehicle</th>
                                                 <th>Customer</th>
-                                                <th class="pull-right">Action</th>
+                                                <th class="text-right">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -135,7 +135,7 @@
                                                         <li>{{$job->email}}</li>
                                                         @endif
                                                     </td>
-                                                    <td class="pull-right">
+                                                    <td class="text-right">
                                                         @if(!$job->isFinalize)
                                                             <button onclick="finalizeModal('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm"  data-toggle="tooltip" data-placement="top" title="Finalize record">
                                                                 <i class="glyphicon glyphicon-check"></i>
@@ -195,7 +195,7 @@
                                 </div>
                             </div><br>
                             <div class="dataTable_wrapper">
-                                <table id="processList" class="table table-striped responsive">
+                                <table id="processList" class="table table-striped table-bordered responsive">
                                     <thead>
                                         <tr>
                                             <th width="5%"></th>
@@ -247,7 +247,7 @@
                                 </div>
                                 <div class="dataTable_wrapper">
                                     <label>Payments:</label>
-                                    <table id="paymentList" class="table table-striped responsive">
+                                    <table id="paymentList" class="table table-striped table-bordered responsive">
                                         <thead>
                                             <tr>
                                                 <th width="5%"></th>
@@ -300,7 +300,7 @@
                             <div style="text-align:center">Are you sure you want to finalize this record?</div>
                             <br>
                             <div class="dataTable_wrapper">
-                                <table id="finalizeList" class="table table-striped responsive">
+                                <table id="finalizeList" class="table table-striped table-bordered responsive">
                                     <thead>
                                         <tr>
                                             <th width="10%" class="text-right">Quantity</th>

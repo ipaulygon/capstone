@@ -30,7 +30,7 @@
                         </select>
                     </div>
                 </div>
-                <table id="list" class="table table-striped responsive">
+                <table id="list" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
                             <th>Item</th>

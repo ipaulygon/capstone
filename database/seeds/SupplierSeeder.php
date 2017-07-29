@@ -13,7 +13,9 @@ class SupplierSeeder extends Seeder
     {
         DB::table('supplier')->insert([
             'name' => 'Kwikparts',
-            'address' => 'San Juan City',
+            'street' => '',
+            'brgy' => '',
+            'city' => 'San Juan City',
             'isActive' => 1,
         ]);
     }

@@ -313,7 +313,7 @@ $(document).on('click','#savePayment', function(){
         $.ajax({
             type: "POST",
             url: "job/pay",
-            data: {id: id,payment: payment,credit: credit,pin: pin,method: method},
+            data: {id: id,payment: payment,credit: credit,method: method},
             success:function(data){
                 $('#notif').append(
                     '<div id="alert" class="alert alert-success alert-dismissible fade in">' +

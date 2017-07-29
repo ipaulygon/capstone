@@ -14,6 +14,8 @@ class SupplierPersonSeeder extends Seeder
         DB::table('supplier_person')->insert([
             'spId' => '1',
             'spName' => 'Paul Cruz',
+            'spContact' => '+63 905 4090 523',
+            'isMain' => 1
         ]);
     }
 }

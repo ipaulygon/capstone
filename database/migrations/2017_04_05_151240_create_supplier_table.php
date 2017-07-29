@@ -17,7 +17,9 @@ class CreateSupplierTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('name', 75);
-            $table->text('address');
+            $table->text('street');
+            $table->text('brgy');
+            $table->text('city');
             $table->boolean('isActive')->default(1);
         });
     }

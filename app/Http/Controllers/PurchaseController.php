@@ -103,7 +103,7 @@ class PurchaseController extends Controller
                         'productId' => $product,
                         'modelId' => $models[$key],
                         'quantity' => $qtys[$key],
-                        'price' => $prices[$key],
+                        'price' => str_replace(',','',$prices[$key]),
                         'delivered' => 0,
                         'isActive'=> 1
                     ]);
@@ -207,7 +207,7 @@ class PurchaseController extends Controller
                 foreach($products as $key=>$product){
                     PurchaseDetail::updateOrCreate(
                         ['purchaseId' => $id,'productId' => $product],
-                        ['modelId' => $models[$key],'quantity' => $qtys[$key],'price' => $prices[$key],'isActive'=> 1]
+                        ['modelId' => $models[$key],'quantity' => $qtys[$key],str_replace(',','',$prices[$key]),'isActive'=> 1]
                     );
                 }
                 DB::commit();

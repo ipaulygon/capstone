@@ -153,7 +153,7 @@
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li id="mVehicle"><a href="{{url('/vehicle')}}"><i class="fa fa-car"></i> <span>Vehicle</span></a></li>
+                            <li id="mVehicle"><a href="{{url('/vehicle')}}"><i class="fa fa-car"></i> <span>Vehicle Type</span></a></li>
                             <li id="mi" class="treeview">
                                 <a>
                                     <i class="fa fa-shopping-cart"></i>
@@ -214,9 +214,9 @@
             </section>
             <!-- /.content -->
         </div>
-        <footer class="main-footer">
+        {{-- <footer class="main-footer">
             <strong>Copyright © 2017 <a href="http://facebook.com">Rapide</a>.</strong> All rights reserved.
-        </footer>
+        </footer> --}}
     </div>
     <!-- Scripts -->
     <!-- jQuery 2.2.0 -->

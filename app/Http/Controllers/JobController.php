@@ -420,11 +420,11 @@ class JobController extends Controller
                         'middleName' => trim($request->middleName),
                         'lastName' => trim($request->lastName)
                     ],[
-                        'contact' => $job->customer->contact,
-                        'email' => $job->customer->email,
-                        'street' => $job->customer->street,
-                        'brgy' => $job->customer->brgy,
-                        'city' => $job->customer->city,
+                        'contact' => str_replace('_','',trim($request->contact)),
+                        'email' => $request->email,
+                        'street' => trim($request->street),
+                        'brgy' => trim($request->brgy),
+                        'city' => trim($request->city),
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);

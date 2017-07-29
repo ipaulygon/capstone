@@ -16,16 +16,16 @@
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
                     <a href="{{ URL::to('/delivery/create') }}" class="btn btn-success btn-md">
-                    <i class="glyphicon glyphicon-plus"></i> Add Record</a>
+                    <i class="glyphicon glyphicon-plus"></i> New Record</a>
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">
-                <table id="list" class="table table-striped responsive">
+                <table id="list" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
                             <th>Delivery Id</th>
                             <th>Supplier</th>
-                            <th class="pull-right">Action</th>
+                            <th class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,7 +33,7 @@
                             <tr>
                                 <td>{{$delivery->id}}</td>
                                 <td>{{$delivery->supplier}}</td>
-                                <td class="pull-right">
+                                <td class="text-right">
                                     <a href="{{url('/delivery/pdf/'.$delivery->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
@@ -52,14 +52,14 @@
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
     <script>
-        var deactivate = null;
+        
         $(document).ready(function (){
             $('#list').DataTable({
                 responsive: true,
             });
             $('#tDelivery').addClass('active');
         });
-        function showModal(id){
+        function deactivateShow(id){
 			deactivate = id;
 			$('#deactivateModal').modal('show');
 		}

@@ -12,5 +12,7 @@ class SupplierPerson extends Model
     protected $fillable = [
     	'spId',
     	'spName',
+        'spContact',
+        'isMain'
     ];
 }

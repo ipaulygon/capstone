@@ -10,7 +10,9 @@ class Supplier extends Model
     public $timestamps = false;
     protected $fillable = [
     	'name',
-    	'address',
+    	'street',
+        'brgy',
+        'city',
     	'isActive'  	
     ];
 
