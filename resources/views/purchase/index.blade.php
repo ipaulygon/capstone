@@ -100,25 +100,8 @@
                         </div>
                     </div>
                 </div>
-                {{-- Deactivate --}}
-                <div id="deactivateModal" class="modal fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title">Discard</h4>
-                            </div>
-                            <div class="modal-body" style="text-align:center">
-                                Are you sure you want to discard this record?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <button id="deactivate" type="button" class="btn btn-danger">Discard</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @include('layouts.deactivateModal')
+                @include('layouts.reactivateModal')
             </div>
         </div>
     </div>
@@ -130,8 +113,8 @@
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/purchase.js') }}"></script>
+    <script src="{{ URL::asset('js/record.js') }}"></script>
     <script>
-        
         var finalize = null;
         $(document).ready(function (){
             $('#list').DataTable({
@@ -139,13 +122,6 @@
             });
             $('#tPurchase').addClass('active');
         });
-        function deactivateShow(id){
-			deactivate = id;
-			$('#deactivateModal').modal('show');
-		}
-		$('#deactivate').on('click', function (){
-			$('#del'+deactivate).submit();
-		});
         function finalizeModal(id){
 			finalize = id;
 			$('#finalizeModal').modal('show');

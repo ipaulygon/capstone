@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Technician;
+use App\ServiceCategory;
+use App\TechnicianSkill;
 use Validator;
 use Redirect;
 use Session;
@@ -37,8 +39,12 @@ class TechnicianController extends Controller
     public function create()
     {
         $image = "pics/steve.jpg";
-        $date = date('m/d/Y');
-        return View('technician.create',compact('image','date'));
+        $date = date('m/d/Y', strtotime("-18 years -1 day"));
+        $categories = DB::table('service_category')
+            ->where('isActive',1)
+            ->select('service_category.*')
+            ->get();
+        return View('technician.create',compact('image','date','categories'));
     }
 
     /**
@@ -59,6 +65,7 @@ class TechnicianController extends Controller
             'city' => 'required|max:140',
             'contact' => 'required',
             'email' => 'nullable|email|unique:technician',
+            'skill' => 'required'
         ];
         $messages = [
             'firstName.unique' => 'Name is already taken',
@@ -75,6 +82,7 @@ class TechnicianController extends Controller
             'city' => 'City/Municipality',
             'contact' => 'Contact No.',
             'email' => 'Email Address',
+            'skill' => 'Technician Skill(s)'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -96,7 +104,7 @@ class TechnicianController extends Controller
                 }
                 $birthDate = explode('/',$request->birthdate); // MM[0] DD[1] YYYY[2] 
                 $finalBirthDate = "$birthDate[2]-$birthDate[0]-$birthDate[1]";
-                Technician::create([
+                $tech = Technician::create([
                     'firstName' => trim($request->firstName),
                     'middleName' => trim($request->middleName),
                     'lastName' => trim($request->lastName),
@@ -107,7 +115,20 @@ class TechnicianController extends Controller
                     'contact' => trim($request->contact),
                     'email' => trim($request->email),
                     'image' => $techPic,
+                    'username' => '',
+                    'password' => ''
                 ]);
+                $tech->update([
+                    'username' => $tech->lastName.'_'.$tech->id,
+                    'password' => bcrypt('password')
+                ]);
+                $skills = $request->skill;
+                foreach($skills as $skill){
+                    TechnicianSkill::create([
+                        'technicianId' => $tech->id,
+                        'categoryId' => $skill
+                    ]);
+                }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -142,7 +163,11 @@ class TechnicianController extends Controller
         $birthDate = explode('-',$technician->birthdate);
         $date = "$birthDate[1]/$birthDate[2]/$birthDate[0]";
         $image = $technician->image;
-        return View('technician.edit',compact('technician','date','image'));
+        $categories = DB::table('service_category')
+            ->where('isActive',1)
+            ->select('service_category.*')
+            ->get();
+        return View('technician.edit',compact('technician','date','image','categories'));
     }
 
     /**
@@ -164,6 +189,7 @@ class TechnicianController extends Controller
             'city' => 'required|max:140',
             'contact' => 'required',
             'email' => ['nullable','email',Rule::unique('technician')->ignore($id)],
+            'skill' => 'required'
         ];
         $messages = [
             'firstName.unique' => 'Name is already taken',
@@ -180,6 +206,7 @@ class TechnicianController extends Controller
             'city' => 'City/Municipality',
             'contact' => 'Contact No.',
             'email' => 'Email Address',
+            'skill' => 'Technician Skill(s)'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -214,6 +241,14 @@ class TechnicianController extends Controller
                     'email' => trim($request->email),
                     'image' => $techPic,
                 ]);
+                $skills = $request->skill;
+                TechnicianSkill::where('technicianId',$technician->id)->delete();
+                foreach($skills as $skill){
+                    TechnicianSkill::create([
+                        'technicianId' => $technician->id,
+                        'categoryId' => $skill
+                    ]);
+                }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

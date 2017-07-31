@@ -5,15 +5,32 @@ var pList = $('#productList').DataTable({
     "info": false,
     "retrieve": true,
 });
-
 $('#date').datepicker({
     format: 'mm/dd/yyyy',
     endDate: new Date,
     startDate: '-7d',
-    autoclose: false,
+    autoclose: true,
     todayHighlight: true,
 });
 $('#date').inputmask("99/99/9999");
+$('#date').on('show', function(e){
+    console.debug('show', e.date, $(this).data('stickyDate'));
+    if ( e.date ) {
+         $(this).data('stickyDate', e.date);
+    }
+    else {
+         $(this).data('stickyDate', null);
+    }
+});
+$('#date').on('hide', function(e){
+    console.debug('hide', e.date, $(this).data('stickyDate'));
+    var stickyDate = $(this).data('stickyDate');
+    if ( !e.date && stickyDate ) {
+        console.debug('restore stickyDate', stickyDate);
+        $(this).datepicker('setDate', stickyDate);
+        $(this).data('stickyDate', null);
+    }
+});
 
 function rowFinder(row){
     if($(row).closest('table').hasClass("collapsed")) {
@@ -143,7 +160,11 @@ $(document).on('change','#purchase',function(){
                             max: stack,
                         });
                     }else{
-                        part = (value.isOriginal!=null ? ' - '+value.isOriginal : '')
+                        if(value.isOriginal!=null){
+                            part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        }else{
+                            part = '';
+                        }
                         balance = value.quantity - value.delivered;
                         row = pList.row.add([
                             '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><strong><input class="qo" id="qo'+value.productId+'" style="border: none!important;background: transparent!important" type="text" value="'+balance+'" readonly> pcs.</strong>',

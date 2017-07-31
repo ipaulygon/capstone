@@ -19,6 +19,12 @@ class Technician extends Model
         'contact',
         'email',
         'image',
+        'username',
+        'password',
     	'isActive'  	
     ];
+
+    public function skill(){
+        return $this->hasMany('App\TechnicianSkill','technicianId');
+    }
 }

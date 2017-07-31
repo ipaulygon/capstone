@@ -31,11 +31,12 @@
                                 <tr>
                                     <td>{{$product->brand}} - {{$product->name}}</td>
                                     <td>
-                                        @if($product->isOriginal!=NULL)
-                                            <li>{{$product->isOriginal}}</li>
-                                        @endif
                                         <li>{{$product->type}}</li>
                                         <li>{{$product->variance}}</li>
+                                        @if($product->isOriginal!=null)
+                                            <?php $type = ($product->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
+                                            <li>Part Information: {{$type}}</li>
+                                        @endif
                                     </td>
                                     <td class="text-right">
                                         <button id="{{$product->id}}" class="btn btn-primary btn-sm pushProduct" type="button" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>

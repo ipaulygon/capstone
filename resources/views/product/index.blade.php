@@ -38,6 +38,10 @@
                                         <td>
                                             <li>Type: {{$product->type}}</li>
                                             <li>Size: {{$product->variance}}</li>
+                                            @if($product->isOriginal!=null)
+                                                <?php $type = ($product->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
+                                                <li>Part Information: {{$type}}</li>
+                                            @endif
                                             @if($product->description!=null || $product->description!="")
                                                 <li>{{$product->description}}</li>
                                             @endif
@@ -77,6 +81,10 @@
                                         <td>
                                             <li>Type: {{$product->type}}</li>
                                             <li>Size: {{$product->variance}}</li>
+                                            @if($product->isOriginal!=null)
+                                                <?php $type = ($product->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
+                                                <li>Part Information: {{$type}}</li>
+                                            @endif
                                             @if($product->description!=null || $product->description!="")
                                                 <li>{{$product->description}}</li>
                                             @endif

@@ -22,7 +22,11 @@ function finalizeModal(id){
                     url: "/item/product/"+value.productId,
                     dataType: "JSON",
                     success:function(data){
-                        part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+                        if(data.product.isOriginal!=null){
+                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        }else{
+                            part = '';
+                        }
                         row = fList.row.add([
                             value.quantity,
                             data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")"

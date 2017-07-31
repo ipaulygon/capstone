@@ -95,12 +95,12 @@
                 <tr>
                     <?php
                         if($product->product->isOriginal!=null){
-                            $part = "- ".$product->product->isOriginal;
+                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
                         }else{
-                            $part = "";
+                            $type = "";
                         }
                     ?>
-                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}})</td>
+                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                 </tr>
                 @endforeach

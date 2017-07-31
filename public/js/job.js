@@ -107,7 +107,11 @@ $(document).on('change', '#products', function(){
                 price = data.product.price;
                 discountString = '';
             }
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
@@ -151,7 +155,11 @@ function oldProduct(id,qty){
                 price = data.product.price;
                 discountString = '';
             }
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             stack = eval(price+"*"+qty);
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
@@ -179,7 +187,11 @@ function retrieveProduct(id,qty,price,discountString){
         url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             stack = eval(price+'*'+qty);
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
@@ -333,7 +345,11 @@ $(document).on('change', '#packages', function(){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#packageItems'+data.package.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -377,7 +393,11 @@ function oldPackage(id,qty){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#packageItems'+data.package.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -413,7 +433,11 @@ function retrievePackage(id,qty,price){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#packageItems'+data.package.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -450,7 +474,11 @@ $(document).on('change', '#promos', function(){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -464,7 +492,11 @@ $(document).on('change', '#promos', function(){
                 '<label>Free:</label>'
             );
             $.each(data.promo.free_product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -508,7 +540,11 @@ function oldPromo(id,qty){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -522,7 +558,11 @@ function oldPromo(id,qty){
                 '<label>Free:</label>'
             );
             $.each(data.promo.free_product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -560,7 +600,11 @@ function retrievePromo(id,qty,price){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -574,7 +618,11 @@ function retrievePromo(id,qty,price){
                 '<label>Free:</label>'
             );
             $.each(data.promo.free_product,function(key,value){
-                part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                if(value.product.isOriginal!=null){
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }  
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                 );
@@ -600,7 +648,7 @@ function masking(){
         prefix: '',
         allowMinus: false,
         min: 1,
-        max: 100,
+        max: maxValue,
     });
     $(".price").inputmask({ 
         alias: "currency",

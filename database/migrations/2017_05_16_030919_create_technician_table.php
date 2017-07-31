@@ -26,6 +26,8 @@ class CreateTechnicianTable extends Migration
             $table->string('contact', 30);
             $table->string('email', 45)->nullable();
             $table->text('image')->nullable();
+            $table->string('username',100);
+            $table->string('password');
             $table->unique(['firstName', 'middleName','lastName']);
             $table->boolean('isActive')->default(1);
         });

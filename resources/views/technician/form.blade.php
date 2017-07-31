@@ -42,7 +42,8 @@
                                 'id' => 'bday',
                                 'placeholder'=>'Birthdate',
                                 'required']) 
-                            !!}
+                            !!}<br>
+                            <label id="labelAge">Age: </label>
                         </div>
                         <div class="form-group col-md-4">
                             {!! Form::label('contact', 'Contact No.') !!}<span>*</span>
@@ -93,6 +94,14 @@
                                 'required']) 
                             !!}
                         </div>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('skill', 'Technician Skill(s)') !!}<span>*</span>
+                        <select id="ts" name="skill[]" class="select2 form-control" multiple required>
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-4">

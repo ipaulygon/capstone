@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(InspectionTypeSeeder::class);
         $this->call(InspectionItemSeeder::class);
         $this->call(TechnicianSeeder::class);
+        $this->call(TechnicianSkillSeeder::class);
         $this->call(PackageSeeder::class);
         $this->call(PackagePriceSeeder::class);
         $this->call(PackageProductSeeder::class);

@@ -5,15 +5,32 @@ var pList = $('#productList').DataTable({
     "info": false,
     "retrieve": true,
 });
-
 $('#date').datepicker({
     format: 'mm/dd/yyyy',
     endDate: new Date,
     startDate: '-7d',
-    autoclose: false,
+    autoclose: true,
     todayHighlight: true,
 });
 $('#date').inputmask("99/99/9999");
+$('#date').on('show', function(e){
+    console.debug('show', e.date, $(this).data('stickyDate'));
+    if ( e.date ) {
+         $(this).data('stickyDate', e.date);
+    }
+    else {
+         $(this).data('stickyDate', null);
+    }
+});
+$('#date').on('hide', function(e){
+    console.debug('hide', e.date, $(this).data('stickyDate'));
+    var stickyDate = $(this).data('stickyDate');
+    if ( !e.date && stickyDate ) {
+        console.debug('restore stickyDate', stickyDate);
+        $(this).datepicker('setDate', stickyDate);
+        $(this).data('stickyDate', null);
+    }
+});
 $("#compute").inputmask({ 
     alias: "currency",
     prefix: '',
@@ -85,7 +102,11 @@ $(document).on('change', '#products', function(){
         url: "/item/product/"+this.value,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="0" class="form-control qty text-right" id="qty" name="qty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
@@ -111,7 +132,7 @@ $(document).on('change', '#products', function(){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -150,7 +171,11 @@ function oldProduct(id,qty,model,price){
         url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             stack = eval(price+'*'+qty);
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
@@ -184,7 +209,7 @@ function oldProduct(id,qty,model,price){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -213,7 +238,11 @@ function retrieveProduct(price,id,qty,model){
         url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             stack = eval(price+'*'+qty);
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
@@ -247,7 +276,7 @@ function retrieveProduct(price,id,qty,model){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -274,7 +303,11 @@ function detailProduct(id,qty){
         url: "/item/product/"+id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             row = pList.row.add([
                 qty,
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")"

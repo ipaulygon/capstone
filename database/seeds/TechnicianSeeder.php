@@ -22,6 +22,8 @@ class TechnicianSeeder extends Seeder
             'contact' => '+63 905 4090 523',
             'email' => 'paulandrei@ymail.com',
             'image' => 'pics/steve.jpg',
+            'username' => 'cruz1',
+            'password' => bcrypt('password'),
             'isActive' => 1,
         ]);
     }

@@ -54,6 +54,8 @@
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
+        var type1 = "{{$util->type1}}";
+        var type2 = "{{$util->type2}}";
         var maxValue = {{$util->max}};
     </script>
 </head>

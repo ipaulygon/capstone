@@ -107,9 +107,9 @@
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                     <?php
                         if($product->product->isOriginal!=null){
-                            $part = "- ".$product->product->isOriginal;
+                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
                         }else{
-                            $part = "";
+                            $type = "";
                         }
                         $discount = null;
                         if($product->product->discount!=null){
@@ -128,7 +128,7 @@
                             $discountString = '';
                         }
                     ?>
-                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}}) {{$discountString}}</td>
+                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) {{$discountString}}</td>
                     <td class="text-right">{{number_format($price,2)}}</td>
                     <td class="text-right">{{number_format($product->quantity*$price,2)}}</td>
                     <?php
@@ -175,12 +175,12 @@
                         @foreach($package->package->product as $product)
                             <?php
                                 if($product->product->isOriginal!=null){
-                                    $part = "- ".$product->product->isOriginal;
+                                    $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
                                 }else{
-                                    $part = "";
+                                    $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}}) x {{number_format($package->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($package->quantity)}} pcs.<br>
                         @endforeach
                         <br>
                         @foreach($package->package->service as $service)
@@ -206,12 +206,12 @@
                         @foreach($promo->promo->product as $product)
                             <?php
                                 if($product->product->isOriginal!=null){
-                                    $part = "- ".$product->product->isOriginal;
+                                    $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
                                 }else{
-                                    $part = "";
+                                    $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->service as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
@@ -220,12 +220,12 @@
                         @foreach($promo->promo->freeProduct as $product)
                             <?php
                                 if($product->product->isOriginal!=null){
-                                    $part = "- ".$product->product->isOriginal;
+                                    $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
                                 }else{
-                                    $part = "";
+                                    $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$part}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->freeService as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>

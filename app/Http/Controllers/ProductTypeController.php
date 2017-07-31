@@ -7,7 +7,6 @@ use App\ProductBrand;
 use App\TypeBrand;
 use App\TypeVariance;
 use App\Product;
-use App\Utilities;
 use Validator;
 use Redirect;
 use Session;

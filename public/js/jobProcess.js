@@ -97,7 +97,11 @@ function process(id){
                         }else{
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
                         }
-                        part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+                        if(data.product.isOriginal!=null){
+                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        }else{
+                            part = '';
+                        }
                         row = procList.row.add([
                             '',
                             data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
@@ -183,7 +187,11 @@ function process(id){
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
                         $.each(data.package.product,function(key,value){
-                            part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                            if(value.product.isOriginal!=null){
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            }else{
+                                part = '';
+                            }   
                             $('#packageItems'+data.package.id).append(
                                 '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                             );
@@ -225,7 +233,11 @@ function process(id){
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
                         $.each(data.promo.product,function(key,value){
-                            part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                            if(value.product.isOriginal!=null){
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            }else{
+                                part = '';
+                            }   
                             $('#promoItems'+data.promo.id).append(
                                 '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                             );
@@ -239,7 +251,11 @@ function process(id){
                             '<label>Free:</label>'
                         );
                         $.each(data.promo.free_product,function(key,value){
-                            part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
+                            if(value.product.isOriginal!=null){
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            }else{
+                                part = '';
+                            }   
                             $('#promoItems'+data.promo.id).append(
                                 '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
                             );

@@ -73,21 +73,18 @@ class ProductVarianceController extends Controller
                 DB::beginTransaction();
                 $sizes = implode(',', $request->dimension);
                 $units = implode(',', $request->unit);
-                ProductVariance::create([
+                $variance = ProductVariance::create([
                     'name' => trim($request->name),
                     'size' => $sizes,
                     'units' => $units,
-                    'isOriginal' => $request->isOriginal,
                 ]);
-                $variance = ProductVariance::all()->last();
-                $id = $variance->id;
                 $types = $request->type;
                 foreach ($types as $type) {
                     TypeVariance::updateOrCreate(
-                        ['typeId' => $type,'varianceId' => $id],
+                        ['typeId' => $type,'varianceId' => $variance->id],
                         [
                             'typeId' => $type,
-                            'varianceId' => $id
+                            'varianceId' => $variance->id
                         ]
                     );
                 }
@@ -168,7 +165,6 @@ class ProductVarianceController extends Controller
                     'name' => trim($request->name),
                     'size' => $sizes,
                     'units' => $units,
-                    'isOriginal' => $request->isOriginal,
                 ]);
                 TypeVariance::where('varianceId',$id)->delete();
                 $types = $request->type;

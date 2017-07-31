@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Delivery Order"}}
+    {{"Receive Delivery"}}
 @stop
 
 @section('style')

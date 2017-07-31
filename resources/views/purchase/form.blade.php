@@ -35,7 +35,12 @@
                             <select id="products" name="productId" class="select2 form-control">
                                 <option value=""></option>
                                 @foreach($products as $product)
-                                    <option value="{{$product->id}}">{{$product->brand}} - {{$product->name}} - {{$product->isOriginal}} ({{$product->variance}})</option>
+                                    @if($product->isOriginal!=null)
+                                        <?php $type = ($product->isOriginal=="type1" ? '- '.$util->type1 : '- '.$util->type2); ?>
+                                    @else
+                                        <?php $type = ''; ?>
+                                    @endif
+                                    <option value="{{$product->id}}">{{$product->brand}} - {{$product->name}} {{$type}} ({{$product->variance}})</option>
                                 @endforeach
                             </select>
                         </div>

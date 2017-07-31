@@ -133,7 +133,11 @@ $(document).on('click','.pushFreeProduct', function (){
         url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             fList.row.add([
                 '<input type="hidden" name="freeProduct[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required><input type="hidden" class="hidden stack" value="0">',
@@ -144,7 +148,7 @@ $(document).on('click','.pushFreeProduct', function (){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue
             });
         }
     });
@@ -178,7 +182,11 @@ $(document).on('click','.pushProduct', function (){
         url: "/item/product/"+this.id,
         dataType: "JSON",
         success:function(data){
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required><input type="hidden stack" class="hidden stack" value="0">',
@@ -189,7 +197,7 @@ $(document).on('click','.pushProduct', function (){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue
             });
         }
     });
@@ -304,7 +312,11 @@ function retrieveFreeProduct(id,qty){
         dataType: "JSON",
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             fList.row.add([
                 '<input type="hidden" name="freeProduct[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="freeQty[]" required value="'+qty+'"><input type="hidden" class="hidden stack" value="'+stack+'">',
@@ -315,7 +327,7 @@ function retrieveFreeProduct(id,qty){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue
             });
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
@@ -333,7 +345,11 @@ function retrieveProduct(id,qty){
         dataType: "JSON",
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
-            part = (data.product.isOriginal!=null ? ' - '+data.product.isOriginal : '')
+            if(data.product.isOriginal!=null){
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+            }else{
+                part = '';
+            }
             pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'">'+data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                 '<input type="text" data-price="'+data.product.price+'" id="qty" class="form-control qty" name="qty[]" required value="'+qty+'"><input type="hidden" class="hidden stack" value="'+stack+'">',
@@ -344,7 +360,7 @@ function retrieveProduct(id,qty){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: 100,
+                max: maxValue
             });
             // price
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
