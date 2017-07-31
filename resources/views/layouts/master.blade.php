@@ -40,12 +40,21 @@
         label{
             font-weight: 600;
         }
+        @media (min-width: 992px){
+            .dataTables_filter{
+                float:left;
+            }
+            .dataTables_length{
+                float:right;
+            }
+        }
     </style>
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
+        var maxValue = {{$util->max}};
     </script>
 </head>
 <body id="mainBody" class="fixed hold-transition skin-yellow sidebar-mini">
@@ -56,7 +65,7 @@
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini"><b></b></span>
                 <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>Rapide</b></span>
+                <span class="logo-lg"><b>{{$util->name}}</b></span>
             </a>
             <!-- Header Navbar: style can be found in header.less -->
             <nav class="navbar navbar-static-top">
@@ -139,7 +148,7 @@
                 </div>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu">
-                    <li class="treeview">
+                    <li id="dashboard">
                         <a href="{{url('/dashboard')}}">
                             <i class="fa fa-line-chart"></i>
                             <span>Dashboard</span>
@@ -193,8 +202,11 @@
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                     {{-- <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li> --}}
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
-                    <li class="header">QUERIES</li>
-                    <li id="query"><a href="{{url('/query')}}"><i class="fa  fa-bookmark-o"></i> <span>Queries</span></a></li>
+                    <li class="header">QUERIES & REPORTS</li>
+                    <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>
+                    <li id="report"><a href="{{url('/report')}}"><i class="fa fa-book"></i> <span>Reports</span></a></li>
+                    <li class="header">UTILITIES</li>
+                    <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Utilities</span></a></li>
                 </ul>
             </section>
             <!-- /.sidebar -->
@@ -248,10 +260,10 @@
                 checkboxClass: 'icheckbox_minimal-red',
                 radioClass: 'iradio_minimal-red'
             });
-            //Flat red color scheme for iCheck
-            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue'
+            //Flat blue color scheme for iCheck
+            $('input[type="checkbox"].flat-blue, input[type="radio"].flat-blue').iCheck({
+                checkboxClass: 'icheckbox_flat-blue',
+                radioClass: 'iradio_flat-blue'
             });
             //Square blue color scheme for icheck
             $('input[type="checkbox"].square-blue, input[type="radio"].square-blue').iCheck({

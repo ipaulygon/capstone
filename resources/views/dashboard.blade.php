@@ -80,6 +80,7 @@
             $('#list').DataTable({
                 responsive: true,
             });
+            $('#dashboard').addClass('active');
         });
     </script>
 @stop

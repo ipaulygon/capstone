@@ -3,8 +3,9 @@ $(document).on("click", "#addPerson", function (){
     var value = $("#person").clone().prepend(
         '<button id="removePerson" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
-        '</button>').appendTo('#persons');
-    $(value).find("input").val("");
+        '</button><br>').appendTo('#persons');
+    $(value).find("input").val('');
+    $(value).find(".contact").inputmask("+63 999 9999 999");
 });
 
 $(document).on("click", "#removePerson", function (){
@@ -16,7 +17,7 @@ $(document).on("click", "#addNumber", function (){
         '<button id="removeNumber" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button>').appendTo('#numbers');
-    $(value).find("input").val("");
+    $(value).find("input").val('');
     $(value).find("input").inputmask("+63 999 9999 999");
 });
 

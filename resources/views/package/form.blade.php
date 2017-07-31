@@ -83,7 +83,6 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    {{-- NAME --}}
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('name', 'Package') !!}<span>*</span>
@@ -97,15 +96,16 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('price', 'Price') !!}<span>*</span>
+                            {!! Form::label('computed', 'Computed Price') !!}
                             <div class="input-group">
-                                <span class="input-group-addon">PhP</span>
-                                {!! Form::input('text','price',null,[
+                                <span class="input-group-addon" style="border: none!important">PhP</span>
+                                <strong>{!! Form::input('text','computed',0,[
                                     'class' => 'form-control',
-                                    'id' => 'price',
-                                    'placeholder'=>'Price',
-                                    'required']) 
-                                !!}
+                                    'id' => 'compute',
+                                    'style' => 'border: none!important;background: transparent!important',
+                                    'placeholder'=>'0',
+                                    'readonly']) 
+                                !!}</strong>
                             </div>
                         </div>
                     </div>
@@ -136,16 +136,17 @@
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
                 <div class="form-inline pull-right">
-                    {!! Form::label('computed', 'Computed Price') !!}
-                    <div class="input-group">
-                        <span class="input-group-addon" style="border: none!important">PhP</span>
-                        <strong>{!! Form::input('text','computed',0,[
-                            'class' => 'form-control',
-                            'id' => 'compute',
-                            'style' => 'border: none!important;background: transparent!important',
-                            'placeholder'=>'0',
-                            'readonly']) 
-                        !!}</strong>
+                    <div class="form-group">
+                        {!! Form::label('price', 'Price') !!}<span>*</span>
+                        <div class="input-group">
+                            <span class="input-group-addon">PhP</span>
+                            {!! Form::input('text','price',null,[
+                                'class' => 'form-control',
+                                'id' => 'price',
+                                'placeholder'=>'Price',
+                                'required']) 
+                            !!}
+                        </div>
                     </div>
                 </div>
             </div>

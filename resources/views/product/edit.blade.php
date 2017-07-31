@@ -44,7 +44,6 @@
             changeType({{$product->typeId}});
             $('#pt').val({{$product->typeId}}).trigger("change");
         @endif
-        $('.square-blue').iCheck('check');
         $("#isOriginal[value={{$product->isOriginal}}]").prop('checked',true);
         $(document).ajaxStop(function() {
             @if($product)

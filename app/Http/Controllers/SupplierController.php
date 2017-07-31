@@ -45,9 +45,12 @@ class SupplierController extends Controller
     {
         $rules = [
             'name' => 'required|unique:supplier|max:75',
-            'address' => 'required|max:140',
+            'street' => 'nullable|max:140',
+            'brgy' => 'nullable|max:140',
+            'city' => 'required|max:140',
             'spName.*' => 'required|max:100',
-            'scNo.*' => 'required|max:20'
+            'spContact.*' => 'nullable|max:30',
+            'scNo.*' => 'required|max:30'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -56,9 +59,12 @@ class SupplierController extends Controller
         ];
         $niceNames = [
             'name' => 'Supplier',
-            'address' => 'Address',
+            'street' => 'No. & St./Bldg.',
+            'brgy' => 'Brgy./Subd.',
+            'city' => 'City/Municipality',
             'spName.*' => 'Contact Person',
-            'scNo.*' => 'Contact Number',
+            'spContact.*' => 'Contact Number',
+            'scNo.*' => 'Supplier Contact',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -70,14 +76,20 @@ class SupplierController extends Controller
                 DB::beginTransaction();
                 $supplier = Supplier::create([
                     'name' => trim($request->name),
-                    'address' => trim($request->address),
+                    'street' => trim($request->street),
+                    'brgy' => trim($request->brgy),
+                    'city' => trim($request->city),
                 ]);
                 $persons = $request->spName;
+                $personContact = $request->spContact;
                 $contacts = $request->scNo;
-                foreach ($persons as $person) {
+                foreach ($persons as $key=>$person) {
+                    $isMain = ($key==0 ? 1 : 0);
                     SupplierPerson::create([
                         'spId' => $supplier->id,
                         'spName' => $person,
+                        'spContact' => $personContact[$key],
+                        'isMain' => $isMain
                     ]);
                 }
                 foreach ($contacts as $contact) {
@@ -131,7 +143,9 @@ class SupplierController extends Controller
     {
         $rules = [
             'name' => ['required','max:75',Rule::unique('supplier')->ignore($id)],
-            'address' => 'required|max:140',
+            'street' => 'nullable|max:140',
+            'brgy' => 'nullable|max:140',
+            'city' => 'required|max:140',
             'spName.*' => 'required|max:100',
             'scNo.*' => 'required|max:20',
         ];
@@ -141,7 +155,9 @@ class SupplierController extends Controller
         ];
         $niceNames = [
             'name' => 'Supplier',
-            'address' => 'Address',
+            'street' => 'No. & St./Bldg.',
+            'brgy' => 'Brgy./Subd.',
+            'city' => 'City/Municipality',
             'spName.*' => 'Contact Person',
             'scNo.*' => 'Contact Number',
         ];
@@ -156,16 +172,21 @@ class SupplierController extends Controller
                 $supplier = Supplier::findOrFail($id);
                 $supplier->update([
                     'name' => trim($request->name),
-                    'address' => trim($request->address),
+                    'street' => trim($request->street),
+                    'brgy' => trim($request->brgy),
+                    'city' => trim($request->city),
                 ]);
                 SupplierPerson::where('spId',$id)->delete();
                 SupplierContact::where('scId',$id)->delete();
                 $persons = $request->spName;
+                $personContact = $request->spContact;
                 $contacts = $request->scNo;
                 foreach ($persons as $person) {
                     SupplierPerson::create([
                         'spId' => $id,
                         'spName' => $person,
+                        'spContact' => $personContact[$key],
+                        'isMain' => $isMain
                     ]);
                 }
                 foreach ($contacts as $contact) {

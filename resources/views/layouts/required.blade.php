@@ -1,0 +1,1 @@
+<i class="pull-right">Note: All inputs with <span>*</span> are required fields.</i>

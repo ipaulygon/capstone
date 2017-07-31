@@ -53,8 +53,8 @@
                 $('#pv').val({{old('varianceId')}}).trigger("change");
             @endif
         });
-        @if($types->first()->category=='Parts')
-            $("#isOriginal[value=Original]").prop('checked',true);
+        @if($types->first()->category=='category1')
+            $("#isOriginal[value=type1]").prop('checked',true);
         @endif
     </script>
     <script>
@@ -68,7 +68,7 @@
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
-                max: 500000,
+                max: 1000000,
             });
             $("#reorder").inputmask({ 
                 alias: "integer",

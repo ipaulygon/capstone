@@ -5,6 +5,33 @@
         </div>
         <div class="box-body">
             <div class="row">
+                {{-- Type, Brand, Variance --}}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {!! Form::label('type', 'Type') !!}<span>*</span>
+                        <select id="pt" onchange="changeType(this.value)" name="typeId" class="select2 form-control" required>
+                            @foreach($types as $type)
+                                <option value="{{$type->id}}">{{$type->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('type', 'Brand') !!}<span>*</span>
+                        <select id="pb" name="brandId" class="select2 form-control" required>
+                            @foreach($brands as $brand)
+                                <option value="{{$brand->brand->id}}">{{$brand->brand->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('type', 'Variance') !!}<span>*</span>
+                        <select id="pv" name="varianceId" class="select2 form-control" required>
+                            @foreach($variances as $variance)
+                                <option value="{{$variance->variance->id}}">{{$variance->variance->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 {{-- Main --}}
                 <div class="col-md-6">
                     <div class="form-group">
@@ -47,33 +74,6 @@
                         !!}
                     </div>
                 </div>
-                {{-- Type, Brand, Variance --}}
-                <div class="col-md-6">
-                    <div class="form-group">
-                        {!! Form::label('type', 'Type') !!}<span>*</span>
-                        <select id="pt" onchange="changeType(this.value)" name="typeId" class="select2 form-control" required>
-                            @foreach($types as $type)
-                                <option value="{{$type->id}}">{{$type->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('type', 'Brand') !!}<span>*</span>
-                        <select id="pb" name="brandId" class="select2 form-control" required>
-                            @foreach($brands as $brand)
-                                <option value="{{$brand->brand->id}}">{{$brand->brand->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('type', 'Variance') !!}<span>*</span>
-                        <select id="pv" name="varianceId" class="select2 form-control" required>
-                            @foreach($variances as $variance)
-                                <option value="{{$variance->variance->id}}">{{$variance->variance->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="box-footer">
@@ -81,7 +81,7 @@
         </div>
     </div>
 </div>
-@if($types->first()->category=='Parts')
+@if($types->first()->category=='category1')
 <div id="part" class="col-md-4">
     <div class="box">
         <div class="box-header with-border">
@@ -96,10 +96,10 @@
                 {!! Form::label('isOriginal', 'Part Type') !!}<span>*</span>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="isOriginal" type="radio" class="square-blue" name="isOriginal" value="Original"> Original
+                        <input id="isOriginal" type="radio" class="square-blue" name="isOriginal" value="type1"> {{$util->type1}}
                     </div>
                     <div class="col-md-6">
-                        <input id="isOriginal" type="radio" class="square-blue" name="isOriginal" value="Replacement"> Replacement
+                        <input id="isOriginal" type="radio" class="square-blue" name="isOriginal" value="type2"> {{$util->type2}}
                     </div>
                 </div>
             </div>

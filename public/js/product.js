@@ -16,11 +16,12 @@ function changeType(id){
             });
             $('#pb').select2();
             $('#pv').select2();
-            if(data.type.category=='Parts'){
+            if(data.type.category=='category1'){
                 $('#part').removeClass('hidden');
-                $("#isOriginal[value=Original]").prop('checked',true);
+                $("#isOriginal[value=type1]").prop('checked',true);
             }else{
-                $('.square-blue').iCheck('uncheck');
+                $("#isOriginal[value=type1]").prop('checked',false);
+                $("#isOriginal[value=type2]").prop('checked',false);
                 $('#vehicle').val('');
                 $('#vehicle').select2();
                 $('#part').addClass('hidden');

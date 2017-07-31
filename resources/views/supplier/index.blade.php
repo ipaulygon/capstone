@@ -38,7 +38,7 @@
                                         <td>{{$supplier->name}}</td>
                                         <td>
                                             @foreach($supplier->person as $person)
-                                                <li>{{$person->spName}}</li>
+                                                <li>{{$person->spName}} - {{$person->spContact}}</li>
                                             @endforeach
                                         </td>
                                         <td class="text-right">
@@ -46,7 +46,7 @@
                                                 {{$number->scNo}}<br>
                                             @endforeach
                                         </td>
-                                        <td>{{$supplier->city}}</td>
+                                        <td>{{$supplier->street}} {{$supplier->brgy}} {{$supplier->city}}</td>
                                         <td class="text-right">
                                             <a href="{{url('/supplier/'.$supplier->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                                 <i class="glyphicon glyphicon-edit"></i>
@@ -79,7 +79,7 @@
                                         <td>{{$supplier->name}}</td>
                                         <td>
                                             @foreach($supplier->person as $person)
-                                                <li>{{$person->spName}}</li>
+                                                <li>{{$person->spName}} - {{$person->spContact}}</li>
                                             @endforeach
                                         </td>
                                         <td class="text-right">
@@ -87,7 +87,7 @@
                                                 {{$number->scNo}}<br>
                                             @endforeach
                                         </td>
-                                        <td>{{$supplier->address}}</td>
+                                        <td>{{$supplier->street}} {{$supplier->brgy}} {{$supplier->city}}</td>
                                         <td class="text-right">
                                             <button onclick="reactivateShow({{$supplier->id}})"type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Reactivate record">
                                                 <i class="glyphicon glyphicon-refresh"></i>

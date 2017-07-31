@@ -33,9 +33,10 @@
                             </thead>
                             <tbody>
                                 @foreach($types as $type)
+                                    <?php $category = ($type->category=="category1" ? $util->category1 : $util->category2); ?>
                                     <tr>
                                         <td>{{$type->name}}</td>
-                                        <td>{{$type->category}}</td>
+                                        <td>{{$category}}</td>
                                         <td>
                                             @foreach($type->tb as $tb)
                                                 <li>{{$tb->brand->name}}</li>

@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function(){
 	//Route::resource('estimate','EstimateController');
 	Route::resource('job','JobController');
 	Route::resource('query','QueryController');
+	Route::resource('report','ReportController');
+	Route::resource('utility','UtilitiesController');
 
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
