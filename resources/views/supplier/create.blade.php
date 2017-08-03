@@ -6,6 +6,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'supplier']) !!}
+    @include('layouts.required')
     <div class="col-md-6">
         <div class="box">
             <div class="box-header with-border">
@@ -52,7 +53,6 @@
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
-                @include('layouts.required')
             </div>
         </div>
     </div>

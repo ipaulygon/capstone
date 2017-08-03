@@ -5,12 +5,13 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
 @stop
 
 @section('content')
     {!! Form::open(['url' => 'product']) !!}
+    @include('layouts.required')
     @include('product.form')
     {!! Form::close() !!}
 @stop

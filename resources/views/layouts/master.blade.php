@@ -40,6 +40,9 @@
         label{
             font-weight: 600;
         }
+        .select2-container{
+            width: 100%!important;
+        }
         @media (min-width: 992px){
             .dataTables_filter{
                 float:left;

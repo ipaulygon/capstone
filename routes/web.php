@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function(){
 	//GetJSON
 	Route::get('vehicle/remove/{id}','VehicleController@remove');
 	Route::get('type/remove/{id}','ProductTypeController@remove');
+	Route::get('variance/category/{id}','ProductVarianceController@category');
 	Route::get('product/type/{id}','ProductController@type');
 	Route::get('inspection/remove/{id}','InspectionController@remove');
 	Route::get('item/customer/{name}','ItemController@customer');

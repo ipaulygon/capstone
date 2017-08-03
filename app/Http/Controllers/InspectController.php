@@ -172,7 +172,7 @@ class InspectController extends Controller
      */
     public function show($id)
     {
-        return View('layout.404');
+        return View('layouts.404');
     }
 
     /**

@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
 @stop
 
 @section('content')
@@ -92,24 +93,39 @@
                                 <h4 class="modal-title">New Record</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="form-group">
-                                    {!! Form::label('name', 'Unit of Measurement') !!}<span>*</span>
-                                    {!! Form::input('text','name',null,[
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Name',
-                                        'maxlength'=>'20',
-                                        'required']) 
-                                    !!}
-                                </div>
-                                <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}<span>*</span>
-                                    {!! Form::textarea('description',null,[
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Description',
-                                        'maxlength'=>'50',
-                                        'rows'=>'3',
-                                        'required']) 
-                                    !!}
+                                <div class="row">
+                                    @include('layouts.required')
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {!! Form::label('name', 'Unit of Measurement') !!}<span>*</span>
+                                            {!! Form::input('text','name',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Name',
+                                                'maxlength'=>'20',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}<span>*</span>
+                                            {!! Form::textarea('description',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'2',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {!! Form::label('category', 'Unit Category') !!}<span>*</span><br>
+                                            <select id="category" name="category" class="select2 form-control" required>
+                                                <option value="1">Length</option>
+                                                <option value="2">Volume</option>
+                                                <option value="3">Mass</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -131,27 +147,42 @@
                                 <h4 class="modal-title">Update Record</h4>
                             </div>
                             <div class="modal-body">
-                                <input id="unitId" name="id" type="hidden">
-                                <div class="form-group">
-                                    {!! Form::label('name', 'Unit of Measurement') !!}<span>*</span>
-                                    {!! Form::input('text','name',null,[
-                                        'id'=>'unitName',
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Name',
-                                        'maxlength'=>'20',
-                                        'required']) 
-                                    !!}
-                                </div>
-                                <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}<span>*</span>
-                                    {!! Form::textarea('description',null,[
-                                        'id'=>'unitDesc',
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Description',
-                                        'maxlength'=>'50',
-                                        'rows'=>'3',
-                                        'required']) 
-                                    !!}
+                                <div class="row">
+                                    @include('layouts.required')
+                                    <input id="unitId" name="id" type="hidden">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {!! Form::label('name', 'Unit of Measurement') !!}<span>*</span>
+                                            {!! Form::input('text','name',null,[
+                                                'id'=>'unitName',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Name',
+                                                'maxlength'=>'20',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}<span>*</span>
+                                            {!! Form::textarea('description',null,[
+                                                'id'=>'unitDesc',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'2',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {!! Form::label('category', 'Unit Category') !!}<span>*</span><br>
+                                            <select id="uc" name="category" class="select2 form-control" required>
+                                                <option value="1">Length</option>
+                                                <option value="2">Volume</option>
+                                                <option value="3">Mass</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -174,6 +205,7 @@
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('js/record.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
@@ -184,6 +216,7 @@
             $('#dlist').DataTable({
                 responsive: true,
             });
+            $(".select2").select2();
             $('#maintenance').addClass('active');
             $('#mi').addClass('active');
             $('#mUnit').addClass('active');
@@ -197,6 +230,8 @@
                     $("#unitId").val(data.unit.id);
 					$("#unitName").val(data.unit.name);
                     $("#unitDesc").val(data.unit.description);
+                    $('#uc').val(data.unit.category);
+                    $(".select2").select2();
 				}
 			});
             $('#updateModal').modal('show');

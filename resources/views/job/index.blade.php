@@ -166,6 +166,7 @@
             </div>
             <div id="jobForm" class="item">
                 {!! Form::open(['url' => 'job']) !!}
+                @include('layouts.required')
                 {!! Form::hidden('start',null,[
                     'class' => 'form-control',
                     'id' => 'start']) 

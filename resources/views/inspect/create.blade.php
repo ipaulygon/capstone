@@ -13,6 +13,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'inspect']) !!}
+    @include('layouts.required')
     @include('inspect.formCreate')
     {!! Form::close() !!}
 @stop

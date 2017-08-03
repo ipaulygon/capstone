@@ -92,6 +92,7 @@
                                 <h4 class="modal-title">New Record</h4>
                             </div>
                             <div class="modal-body">
+                                @include('layouts.required')
                                 <div class="form-group">
                                     {!! Form::label('name', 'Service Category') !!}<span>*</span>
                                     {!! Form::input('text','name',null,[
@@ -130,6 +131,7 @@
                                 <h4 class="modal-title">Update Record</h4>
                             </div>
                             <div class="modal-body">
+                                @include('layouts.required')
                                 <input id="categoryId" name="id" type="hidden">
                                 <div class="form-group">
                                     {!! Form::label('name', 'Service Category') !!}<span>*</span>

@@ -13,6 +13,7 @@
 
 @section('content')
     {!! Form::model($promo , ['method' => 'patch', 'action' => ['PromoController@update',$promo->id]]) !!}
+    @include('layouts.required')
     @include('promo.form')
     {!! Form::close() !!}
 @stop

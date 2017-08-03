@@ -19,3 +19,20 @@ $(document).on("click", "#removeDimension", function (){
     $(this).parent().remove();
 });
 
+$(document).on('change','#uc',function(){
+    id = $('#uc').val()
+    $.ajax({
+        type: 'GET',
+        url: '/variance/category/'+id,
+        dataType: 'JSON',
+        success: function(data){
+            $.each(data.units,function(index, value){
+                $('select#unit').append($("<option></option>")
+                    .attr("value", value.id).text(value.name));
+            });
+        }
+    });
+    $('select#unit').empty();
+    
+});
+

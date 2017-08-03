@@ -6,7 +6,7 @@
 
 @section('style')
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
@@ -14,6 +14,7 @@
 
 @section('content')
     {!! Form::model($purchase , ['method' => 'patch', 'action' => ['PurchaseController@update',$purchase->id]]) !!}
+    @include('layouts.required')
     @include('purchase.form')
     {!! Form::close() !!}
 @stop

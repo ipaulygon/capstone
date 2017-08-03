@@ -12,6 +12,7 @@
 
 @section('content')
     {!! Form::model($package , ['method' => 'patch', 'action' => ['PackageController@update',$package->id]]) !!}
+    @include('layouts.required')
     @include('package.form')
     {!! Form::close() !!}
 @stop

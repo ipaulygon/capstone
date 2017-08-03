@@ -12,11 +12,10 @@
 @stop
 
 @section('content')
-    <div class="col-md-12">
-        {!! Form::model($job , ['method' => 'patch', 'action' => ['JobController@update',$job->id]]) !!}
-        @include('job.formEdit')
-        {!! Form::close() !!}
-    </div>
+    {!! Form::model($job , ['method' => 'patch', 'action' => ['JobController@update',$job->id]]) !!}
+    @include('layouts.required')
+    @include('job.formEdit')
+    {!! Form::close() !!}
 @stop
 
 @section('script')

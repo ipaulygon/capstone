@@ -18,6 +18,7 @@ class CreateProductUnitTable extends Migration
             $table->increments('id');
             $table->string('name', 20);
             $table->text('description', 50);
+            $table->tinyInteger('category');
             $table->boolean('isActive')->default(1);
         });
     }

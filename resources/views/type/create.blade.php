@@ -10,6 +10,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'type']) !!}
+    @include('layouts.required')
     @include('type.form')
     <div class="col-md-4">
         <div class="box">

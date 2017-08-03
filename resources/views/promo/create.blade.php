@@ -13,6 +13,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'promo']) !!}
+    @include('layouts.required')
     @include('promo.form')
     {!! Form::close() !!}
 @stop

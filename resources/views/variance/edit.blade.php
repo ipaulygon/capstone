@@ -5,11 +5,13 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
 @stop
 
 @section('content')
     {!! Form::model($variance , ['method' => 'patch', 'action' => ['ProductVarianceController@update',$variance->id]]) !!}
+    @include('layouts.required')
     @include('variance.form')
     <div class="col-md-4">
         <div class="box">
@@ -70,6 +72,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('js/variance.js') }}"></script>
     <script>
@@ -79,6 +82,7 @@
             @endforeach
         ];
         $("#pt").val(activeTypes);
+        $('#uc').val({{$category}});
         $(".select2").select2();
     </script>
     <script>

@@ -14,6 +14,14 @@
                 !!}
             </div>
             <div class="form-group">
+                {!! Form::label('category', 'Unit Category') !!}<span>*</span><br>
+                <select id="uc" name="category" class="select2 form-control" required>
+                    <option value="1">Length</option>
+                    <option value="2">Volume</option>
+                    <option value="3">Mass</option>
+                </select>
+            </div>
+            <div class="form-group">
                 {!! Form::label('type', 'Product Type(s)') !!}<span>*</span>
                 <select id="pt" name="type[]" class="select2 form-control" multiple required>
                     @foreach($types as $type)

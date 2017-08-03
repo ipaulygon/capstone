@@ -6,6 +6,7 @@
 
 @section('content')
     {!! Form::model($supplier , ['method' => 'patch', 'action' => ['SupplierController@update',$supplier->id]]) !!}
+    @include('layouts.required')
     <div class="col-md-6">
         <div class="box">
             <div class="box-header with-border">
@@ -38,7 +39,6 @@
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
-                @include('layouts.required')
             </div>
         </div>
     </div>

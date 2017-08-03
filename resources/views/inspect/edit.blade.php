@@ -13,6 +13,7 @@
 
 @section('content')
     {!! Form::model($inspect , ['method' => 'patch', 'action' => ['InspectController@update',$inspect->id]]) !!}
+    @include('layouts.required')
     @include('inspect.formEdit')
     {!! Form::close() !!}
 @stop

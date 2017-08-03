@@ -12,6 +12,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'package']) !!}
+    @include('layouts.required')
     @include('package.form')
     {!! Form::close() !!}
 @stop

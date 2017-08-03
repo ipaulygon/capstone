@@ -69,6 +69,7 @@ class ProductUnitController extends Controller
                 ProductUnit::create([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
+                    'category' => $request->category
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -137,6 +138,7 @@ class ProductUnitController extends Controller
                 $unit->update([
                     'name' => trim($request->name),
                     'description' => trim($request->description),
+                    'category' => $request->category
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

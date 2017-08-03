@@ -5,11 +5,12 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
 @stop
 
 @section('content')
     {!! Form::model($service , ['method' => 'patch', 'action' => ['ServiceController@update',$service->id]]) !!}
+    @include('layouts.required')
     @include('service.form')
     {!! Form::close() !!}
 @stop

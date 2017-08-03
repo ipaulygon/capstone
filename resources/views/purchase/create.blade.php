@@ -14,6 +14,7 @@
 
 @section('content')
     {!! Form::open(['url' => 'purchase']) !!}
+    @include('layouts.required')
     @include('purchase.form')
     {!! Form::close() !!}
 @stop

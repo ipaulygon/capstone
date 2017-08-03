@@ -10,6 +10,7 @@
 
 @section('content')
     {!! Form::model($type , ['method' => 'patch', 'action' => ['ProductTypeController@update',$type->id]]) !!}
+    @include('layouts.required')
     @include('type.form')
     <div class="col-md-4">
         <div class="box">

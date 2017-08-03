@@ -34,7 +34,7 @@ class ProductVarianceController extends Controller
      */
     public function create()
     {
-        $units = ProductUnit::where('isActive',1)->get();
+        $units = ProductUnit::where('category',1)->where('isActive',1)->get();
         $types = ProductType::where('isActive',1)->get();
         return View('variance.create',compact('units','types'));
     }
@@ -107,7 +107,7 @@ class ProductVarianceController extends Controller
      */
     public function show($id)
     {
-        return View('layout.404');
+        return View('layouts.404');
     }
 
     /**
@@ -119,11 +119,13 @@ class ProductVarianceController extends Controller
     public function edit($id)
     {
         $variance = ProductVariance::findOrFail($id);
-        $units = ProductUnit::where('isActive',1)->get();
-        $types = ProductType::where('isActive',1)->get();
         $activeSize = explode(',', $variance->size);
         $activeUnit = explode(',', $variance->units);
-        return View('variance.edit',compact('variance','units','types','activeSize','activeUnit'));
+        $unitTest = ProductUnit::find($activeUnit[0]);
+        $category = $unitTest->category;
+        $units = ProductUnit::where('category',$category)->where('isActive',1)->get();
+        $types = ProductType::where('isActive',1)->get();
+        return View('variance.edit',compact('variance','units','types','activeSize','activeUnit','category'));
     }
 
     /**
@@ -220,5 +222,12 @@ class ProductVarianceController extends Controller
         ]);
         $request->session()->flash('success', 'Successfully deactivated.'); 
         return Redirect::back();
+    }
+
+    public function category($id)
+    {
+        $units = [];
+        $units = ProductUnit::where('category',$id)->get();
+        return response()->json(['units'=>$units]);
     }
 }
