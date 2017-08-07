@@ -25,25 +25,24 @@ $('#calendar').fullCalendar({
     dayClick: function(date,jsEvent,view){
         if(!$(this).hasClass('fc-future')){
             datePick = date.format();
-            if(day!=null){
-                day.removeClass('day-click');
+            picked = new Date(datePick);
+            today = new Date();
+            sub = Math.abs(today.getTime() - picked.getTime());
+            sub = Math.ceil(sub/(1000*3600*24));
+            if(sub-1 <= backlog){
+                if(day!=null){
+                    day.removeClass('day-click');
+                }
+                $(this).addClass('day-click');
+                day = $(this);
+                $('#start').val(datePick);
+                $('#dateSelected').text(datePick);
+                $('#detailBox').addClass('hidden');
+            }else{
+                ping(this);
             }
-            $(this).addClass('day-click');
-            day = $(this);
-            $('#start').val(datePick);
-            $('#dateSelected').text(datePick);
-            $('#detailBox').addClass('hidden');
         }else{
-            $(this).tooltip({
-                container: 'body',
-                placement: 'auto',
-                title: 'Cannot be selected'
-            });
-            $(this).tooltip('show');
-            var dayClicked = $(this);
-            setTimeout(function(){
-                dayClicked.tooltip('hide');
-            },1000);
+            ping(this);
         }
     },
     defaultView: 'agendaDay',
@@ -63,9 +62,21 @@ $('#calendar').fullCalendar({
 		} else {
 			$(".fc-next-button").removeClass('fc-state-disabled'); 
 			$(".fc-next-button").prop('disabled', false); 
-		}
+        }
     }
 });
+function ping(comp){
+    $(comp).tooltip({
+        container: 'body',
+        placement: 'auto',
+        title: 'Cannot be selected'
+    });
+    $(comp).tooltip('show');
+    var dayClicked = $(comp);
+    setTimeout(function(){
+        dayClicked.tooltip('hide');
+    },1000);
+}
 $('.fc-started-button').addClass('btn-primary');
 $('.fc-started-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-left');
 $('.fc-finalized-button').addClass('btn-warning');
@@ -89,7 +100,8 @@ function clickEvent(id){
             $('#detailStart').text(data.job.start);
             $('#detailEnd').text(data.job.end);
             $('#detailPlate').text(data.job.vehicle.plate);
-            $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" ("+data.job.vehicle.model.transmission+")");
+            transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
+            $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
             $('#detailMileage').text(data.job.vehicle.mileage);
             $('#detailCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
             $.each(data.job.technician,function(key,value){

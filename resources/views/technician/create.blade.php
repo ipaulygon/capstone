@@ -5,7 +5,7 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
 @stop
 

@@ -60,11 +60,17 @@ class ProductController extends Controller
             $brands = TypeBrand::where('typeId',$types->first()->id)->get();
             $variances = TypeVariance::where('typeId',$types->first()->id)->get();
         }
-        $vehicles = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
             ->get();
-        return View('product.create',compact('products','types','brands','variances','vehicles'));
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
+            ->get();
+        return View('product.create',compact('products','types','brands','variances','autos','manuals'));
     }
 
     /**
@@ -133,9 +139,11 @@ class ProductController extends Controller
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
                     foreach($vehicles as $vehicle){
+                        $v = explode(',',$vehicle);
                         ProductVehicle::create([
                             'productId' => $product->id,
-                            'modelId' => $vehicle,
+                            'modelId' => $v[0],
+                            'isManual' => $v[1]
                         ]);
                     }
                 }
@@ -184,11 +192,17 @@ class ProductController extends Controller
         $types = ProductType::where('isActive',1)->orderBy('name')->get();
         $brands = TypeBrand::where('typeId',$product->typeId)->get();
         $variances = TypeVariance::where('typeId',$product->typeId)->get();
-        $vehicles = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
             ->get();
-        return View('product.edit',compact('product','products','types','brands','variances','vehicles'));
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
+            ->get();
+        return View('product.edit',compact('product','products','types','brands','variances','autos','manuals'));
     }
 
     /**
@@ -259,8 +273,11 @@ class ProductController extends Controller
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
                     foreach($vehicles as $vehicle){
+                        $v = explode(',',$vehicle);
                         ProductVehicle::updateOrCreate(
-                            ['productId' => $product->id,'modelId' => $vehicle],
+                            ['productId' => $product->id,
+                            'modelId' => $v[0],
+                            'isManual' => $v[1]],
                             ['isActive' => 1]
                         );
                     }

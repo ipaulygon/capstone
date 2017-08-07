@@ -39,10 +39,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('purchase/finalize/{id}','PurchaseController@finalize');
 	Route::get('purchase/finalz/{id}','PurchaseController@finalz');
 	Route::resource('delivery','DeliveryController');
+	Route::resource('return','ReturnController');
 	Route::resource('inspect','InspectController');
 	//Route::resource('estimate','EstimateController');
 	Route::resource('job','JobController');
 	Route::resource('query','QueryController');
+	Route::post('query/load','QueryController@load');
 	Route::resource('report','ReportController');
 	Route::resource('utility','UtilitiesController');
 
@@ -65,6 +67,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('item/package/{id}','ItemController@package');
 	Route::get('item/promo/{id}','ItemController@promo');
 	Route::get('item/discount/{id}','ItemController@discount');
+	Route::post('item/user','ItemController@user');
 	Route::get('delivery/header/{id}','DeliveryController@header');
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
 	Route::get('job/check/{id}','JobController@check');
@@ -88,4 +91,5 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('package/reactivate/{id}','PackageController@reactivate');
 	Route::patch('promo/reactivate/{id}','PromoController@reactivate');
 	Route::patch('discount/reactivate/{id}','DiscountController@reactivate');
+	Route::patch('purchase/reactivate/{id}','PurchaseController@reactivate');
 });

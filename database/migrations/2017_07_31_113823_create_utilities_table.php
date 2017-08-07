@@ -24,6 +24,7 @@ class CreateUtilitiesTable extends Migration
             $table->string('type1',50);
             $table->string('type2',50);
             $table->integer('max');
+            $table->integer('backlog');
             $table->timestamps();
         });
     }

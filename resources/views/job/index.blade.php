@@ -122,7 +122,8 @@
                                                 <tr>
                                                     <td>
                                                         <li>Plate: {{$job->plate}}</li>
-                                                        <li>Model: {{$job->make}} - {{$job->year}} {{$job->model}} ({{$job->transmission}})</li>
+                                                        <?php $transmission = ($job->transmission ? 'MT' : 'AT')?>
+                                                        <li>Model: {{$job->make}} - {{$job->year}} {{$job->model}} - {{$transmission}}</li>
                                                         @if($job->mileage!=null)
                                                         <li>Mileage: {{$job->mileage}}</li>
                                                         @endif

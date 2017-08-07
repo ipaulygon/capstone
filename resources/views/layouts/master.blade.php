@@ -21,8 +21,8 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
     <style>
-        form{
-            font-family: "Segoe UI"
+        body{
+            font-family: 'Segoe UI'
         }
         form span{
             font-weight: 580;
@@ -60,6 +60,7 @@
         var type1 = "{{$util->type1}}";
         var type2 = "{{$util->type2}}";
         var maxValue = {{$util->max}};
+        var backlog = {{$util->backlog}};
     </script>
 </head>
 <body id="mainBody" class="fixed hold-transition skin-yellow sidebar-mini">

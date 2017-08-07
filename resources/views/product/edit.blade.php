@@ -29,7 +29,7 @@
         var activeVehicles = [
             @if($product->vehicle)
                 @foreach($product->vehicle as $vehicle)
-                    "{{$vehicle->modelId}}",
+                    "{{$vehicle->modelId}},{{$vehicle->isManual}}",
                 @endforeach
             @endif
         ];

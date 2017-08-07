@@ -18,6 +18,7 @@ class CreateDeliveryHeaderTable extends Migration
             $table->string('id', 50)->primary();
             $table->unsignedInteger('supplierId');
             $table->date('dateMake');
+            $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('supplierId')
                   ->references('id')->on('supplier')

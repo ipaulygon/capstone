@@ -122,13 +122,24 @@
                             <label><span>*</span><i>Replacement/Low Quality</i></label>
                         </div>  
                     </div><br>
-                    {!! Form::label('max', 'Max Value for Numeric') !!}<span>*</span>
-                    {!! Form::input('text','max',$utilities->max,[
-                        'class' => 'form-control',
-                        'id' => 'max',
-                        'placeholder'=>'Max',
-                        'required']) 
-                    !!}
+                    <div class="form-group">
+                        {!! Form::label('max', 'Max Value for Numeric') !!}<span>*</span>
+                        {!! Form::input('text','max',$utilities->max,[
+                            'class' => 'form-control',
+                            'id' => 'max',
+                            'placeholder'=>'Max',
+                            'required']) 
+                        !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('backlog', 'Max Days for Backlog') !!}<span>*</span>
+                        {!! Form::input('text','backlog',$utilities->backlog,[
+                            'class' => 'form-control',
+                            'id' => 'backlog',
+                            'placeholder'=>'backlog',
+                            'required']) 
+                        !!}
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,6 +175,14 @@
             autoGroup: true,
             min: 20,
             max: 200
+        });
+        $("#backlog").inputmask({ 
+            alias: "integer",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: 1,
+            max: 30
         });
     </script>
 @endsection

@@ -25,7 +25,7 @@
                         <tr>
                             <th>Delivery Id</th>
                             <th>Supplier</th>
-                            <th class="text-right">Action</th>
+                            <th class="text-right ">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +42,8 @@
                         @endforeach
                     </tbody>
                 </table>
+                @include('layouts.deactivateModal')
+                @include('layouts.updateAdmin')
             </div>
         </div>
     </div>
@@ -51,8 +53,8 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script src="{{ URL::asset('js/record.js') }}"></script>
     <script>
-        
         $(document).ready(function (){
             $('#list').DataTable({
                 responsive: true,

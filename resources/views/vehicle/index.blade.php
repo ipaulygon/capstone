@@ -36,7 +36,16 @@
                                         <td>{{$make->name}}</td>
                                         <td>
                                             @foreach($make->model as $model)
-                                                <li>{{$model->year}} {{$model->name}} - {{$model->transmission}}</li>
+                                                <?php
+                                                    if($model->hasAuto && $model->hasManual){
+                                                        $transmission = "AT/MT";
+                                                    }elseif($model->hasAuto){
+                                                        $transmission = "AT";
+                                                    }else{
+                                                        $transmission = "MT";
+                                                    }
+                                                ?>
+                                                <li>{{$model->year}} {{$model->name}} - {{$transmission}}</li>
                                             @endforeach
                                         </td>
                                         <td class="text-right">

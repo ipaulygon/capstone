@@ -18,6 +18,7 @@ class CreateVehicleTable extends Migration
             $table->increments('id');
             $table->string('plate', 20);
             $table->unsignedInteger('modelId');
+            $table->boolean('isManual');
             $table->double('mileage', 10,2)->nullable();
             $table->foreign('modelId')
                   ->references('id')->on('vehicle_model')

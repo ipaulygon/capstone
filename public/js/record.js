@@ -1,5 +1,6 @@
 var deactivate = null;
 var reactivate = null;
+var update = null;
 function deactivateShow(id){
     deactivate = id;
     $('#deactivateModal').modal('show');
@@ -22,4 +23,65 @@ $(document).on('change','#showDeactivated',function(){
         $('#inactiveTable').removeClass('active');
         $('#activeTable').addClass('active');
     }
+});
+function deactivateAdmin(id){
+    deactivate = id;
+    $('#keyDeactivate').val('');
+    $('#deactivateAdmin').modal('show');
+}
+
+function updateAdmin(id){
+    update = id;
+    $('#keyUpdate').val('');
+    $('#updateAdmin').modal('show');
+}
+
+$('#adminUpdate').on('click',function(){
+    key = $('#keyUpdate').val();
+    $.ajax({
+        type: 'POST',
+        url: '/item/user',
+        data: {key: key},
+        success: function(data){
+            if(!data.message){
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+                    'Invalid Key' +
+                    '</div>'
+                );
+            }else{
+                window.location.replace('/purchase/'+update+'/edit');
+            }
+            setTimeout(function (){
+                $('#alert').alert('close');
+            },2000);
+        }
+    });
+});
+
+$('#adminDeactivate').on('click',function(){
+    key = $('#keyDeactivate').val();
+    $.ajax({
+        type: 'POST',
+        url: '/item/user',
+        data: {key: key},
+        success: function(data){
+            if(!data.message){
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+                    'Invalid Key' +
+                    '</div>'
+                );
+            }else{
+                $('#del'+deactivate).submit();
+            }
+            setTimeout(function (){
+                $('#alert').alert('close');
+            },2000);
+        }
+    });
 });

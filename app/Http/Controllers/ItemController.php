@@ -16,6 +16,9 @@ use Response;
 use Session;
 use DB;
 use Illuminate\Validation\Rule;
+use Auth;
+use Hash;
+use App\User;
 
 class ItemController extends Controller
 {
@@ -88,5 +91,17 @@ class ItemController extends Controller
         if(!empty($vehicle)){
             return response()->json(['vehicle'=>$vehicle]);
         }
+    }
+
+    public function user(Request $request)
+    {
+        $key = trim($request->key);
+        $id = Auth::id();
+        $user = DB::table('users')
+            ->where('id',$id)
+            ->select('users.*')
+            ->first();
+        $message = (Hash::check($key,$user->password) ? true : false);
+        return response()->json(['message'=>$message]);
     }
 }

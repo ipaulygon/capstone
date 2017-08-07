@@ -106,8 +106,11 @@
             <div class="form-group">
                 {!! Form::label('vehicle', 'Equipped in') !!}<span>*</span>
                 <select id="vehicle" name="vehicle[]" class="select2 form-control" multiple>
-                    @foreach($vehicles as $vehicle)
-                        <option value="{{$vehicle->id}}">{{$vehicle->make}} - {{$vehicle->year}} {{$vehicle->name}} ({{$vehicle->transmission}})</option>
+                    @foreach($autos as $vehicle)
+                        <option value="{{$vehicle->id}},0">{{$vehicle->make}} - {{$vehicle->year}} {{$vehicle->name}} - AT</option>
+                    @endforeach
+                    @foreach($manuals as $vehicle)
+                        <option value="{{$vehicle->id}},1">{{$vehicle->make}} - {{$vehicle->year}} {{$vehicle->name}} - MT</option>
                     @endforeach
                 </select>
             </div>

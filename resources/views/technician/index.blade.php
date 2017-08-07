@@ -49,6 +49,12 @@
                                             @if($technician->email)
                                             <li>Email: {{$technician->email}}</li>
                                             @endif
+                                            <li>Skills:</li>
+                                            <ul>
+                                                @foreach($technician->skill as $skill)
+                                                    <li>{{$skill->category->name}}</li>
+                                                @endforeach
+                                            </ul>
                                         </td>
                                         <td class="text-right">
                                             <a href="{{url('/technician/'.$technician->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
@@ -89,6 +95,12 @@
                                             @if($technician->email)
                                             <li>Email: {{$technician->email}}</li>
                                             @endif
+                                            <li>Skills:</li>
+                                            <ul>
+                                                @foreach($technician->skill as $skill)
+                                                    <li>{{$skill->category->name}}</li>
+                                                @endforeach
+                                            </ul>
                                         </td>
                                         <td class="text-right">
                                             <button onclick="reactivateShow({{$technician->id}})"type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Reactivate record">

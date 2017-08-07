@@ -8,7 +8,7 @@ var pList = $('#productList').DataTable({
 $('#date').datepicker({
     format: 'mm/dd/yyyy',
     endDate: new Date,
-    startDate: '-7d',
+    startDate: '-'+backlog+'d',
     autoclose: true,
     todayHighlight: true,
 });
@@ -78,14 +78,16 @@ $(document).on('change', '#supp', function(){
         dataType: "JSON",
         success:function(data){
             var start = new Date();
+            var startD = null;
             $('#purchase').append('<option value=""></option>');
             $.each(data.purchases,function(key, value){
                 $('#purchase').append('<option value="'+value.id+'">'+value.id+'</option>');
-                if(start > new Date(value.dateMake)){
-                    start = value.dateMake;
+                if(start < new Date(value.dateMake)){
+                    startD = value.dateMake;
+                    start = new Date(value.dateMake)
                 } 
             });
-            start = start.split('-');
+            start = startD.split('-');
             start = start[1]+"/"+start[2]+"/"+start[0];
             $('#date').datepicker('remove');
             $('#date').datepicker({

@@ -24,6 +24,7 @@ class DeliveryController extends Controller
     {
         $deliveries = DB::table('delivery_header as d')
             ->join('supplier as s','s.id','d.supplierId')
+            ->where('d.isActive',1)
             ->select('d.*','s.name as supplier')
             ->get();
         return View('delivery.index',compact('deliveries'));
@@ -182,7 +183,7 @@ class DeliveryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         return View('layouts.404');
     }

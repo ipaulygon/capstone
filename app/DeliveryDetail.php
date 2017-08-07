@@ -11,6 +11,7 @@ class DeliveryDetail extends Model
     	'deliveryId',
         'productId',
         'quantity',
+        'isActive'
     ];
 
     public function header(){

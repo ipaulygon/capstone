@@ -31,7 +31,7 @@
                                 </button><br>
                             @endif
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <input type="hidden" class="hidden" value="{{$model->id}}">
                                     {!! Form::label('model', 'Model') !!}<span>*</span>
                                     {!! Form::input('text',null,$model->name,[
@@ -51,18 +51,33 @@
                                         'required'])
                                     !!}
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        {!! Form::label('trasmission', 'Transmission') !!}<span>*</span>
-                                        <select id="transmission" name="transmission[]" class="form-control" required>
-                                            @if($model->transmission=='AT')
-                                                <option value="AT" selected>Automatic</option>
-                                                <option value="MT">Manual</option>
-                                            @else
-                                                <option value="AT">Automatic</option>
-                                                <option value="MT" selected>Manual</option>
-                                            @endif
-                                        </select>
+                                        {!! Form::label('transmission', 'Transmission') !!}<span>*</span>
+                                        <div class="row transmission">
+                                            <div class="col-md-6">
+                                                <label class="checkbox-inline">
+                                                    @if($model->hasAuto)
+                                                        <input type="checkbox" class="check auto" name="auto[]" value="1" checked> Automatic
+                                                        <input type="hidden" name="hasAuto[]" value="1">
+                                                    @else
+                                                        <input type="checkbox" class="check auto" name="auto[]" value="1"> Automatic
+                                                        <input type="hidden" name="hasAuto[]" value="0">
+                                                    @endif
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="checkbox-inline">
+                                                    @if($model->hasManual)
+                                                        <input type="checkbox" class="check manual" name="manual[]" value="1" checked> Manual
+                                                        <input type="hidden" name="hasManual[]" value="1">
+                                                    @else
+                                                        <input type="checkbox" class="check manual" name="manual[]" value="1"> Manual
+                                                        <input type="hidden" name="hasManual[]" value="0">
+                                                    @endif
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +86,7 @@
                 @else
                     <div id="model" class="form-group">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 {!! Form::label('model', 'Model') !!}<span>*</span>
                                 {!! Form::input('text',null,null,[
                                     'class' => 'form-control model',
@@ -90,13 +105,23 @@
                                     'required'])
                                 !!}
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('trasmission', 'Transmission') !!}<span>*</span>
-                                    <select id="transmission" name="transmission[]" class="form-control" required>
-                                        <option value="AT">Automatic</option>
-                                        <option value="MT">Manual</option>
-                                    </select>
+                                    {!! Form::label('transmission', 'Transmission') !!}<span>*</span>
+                                    <div class="row transmission">
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" class="check auto" name="auto[]" value="1" checked> Automatic
+                                                <input type="hidden" name="hasAuto[]" value="1">
+                                            </label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" class="check manual" name="manual[]" value="1"> Manual
+                                                <input type="hidden" name="hasManual[]" value="0">
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

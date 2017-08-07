@@ -44,7 +44,7 @@
                 @endforeach
             ];
             $("#technician").val(activeTechnicians);
-            $("#model").val({{$inspect->vehicle->modelId}});
+            $("#model").val({{$inspect->vehicle->modelId}}+','+{{$inspect->vehicle->isManual}});
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});
             @if($inspect->customer->contact[2] == '2' && strlen($inspect->customer->contact) >= 17)

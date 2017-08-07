@@ -82,11 +82,12 @@
             Email: {{$estimate->customer->email}}<br>
         </div>
         <div style="float:right" class="col-md-6">
+            <?php $transmission = ($estimate->vehicle->isManual ? 'MT' : 'AT')?>
             Plate: {{$estimate->vehicle->plate}}<br>
             Make: {{$estimate->vehicle->model->make->name}}<br>
             Model: {{$estimate->vehicle->model->name}}<br>
             Year: {{$estimate->vehicle->model->year}}<br>
-            Transmission: {{$estimate->vehicle->model->transmission}}<br>
+            Transmission: {{$transmission}}<br>
             Mileage: {{$estimate->vehicle->mileage}}<br>
         </div>
         <div style="clear:both"></div>

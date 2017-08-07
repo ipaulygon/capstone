@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PurchaseHeader;
 use App\PurchaseDetail;
+use App\DeliveryOrder;
 use Validator;
 use Redirect;
 use Session;
@@ -23,7 +24,12 @@ class PurchaseController extends Controller
             ->where('p.isActive',1)
             ->select('p.*','s.name as supplier')
             ->get();
-        return View('purchase.index',compact('purchases'));
+        $dpurchases = DB::table('purchase_header as p')
+            ->join('supplier as s','s.id','p.supplierId')
+            ->where('p.isActive',0)
+            ->select('p.*','s.name as supplier')
+            ->get();
+        return View('purchase.index',compact('purchases','dpurchases'));
     }
 
     /**
@@ -98,10 +104,17 @@ class PurchaseController extends Controller
                 $prices = $request->price;
                 $models = $request->modelId;
                 foreach($products as $key=>$product){
+                    if($models[$key]!=null){
+                        $model = explode(',',$models[$key]);
+                    }else{
+                        $model[0] = null;
+                        $model[1] = null;
+                    }
                     PurchaseDetail::create([
                         'purchaseId' => $purchase->id,
                         'productId' => $product,
-                        'modelId' => $models[$key],
+                        'modelId' => $model[0],
+                        'isManual' => $model[1],
                         'quantity' => $qtys[$key],
                         'price' => str_replace(',','',$prices[$key]),
                         'delivered' => 0,
@@ -139,9 +152,6 @@ class PurchaseController extends Controller
     public function edit($id)
     {
         $purchase = PurchaseHeader::findOrFail($id);
-        if($purchase->isFinalize){
-            return View('layouts.404');
-        }
         $suppliers = DB::table('supplier')
             ->where('isActive',1)
             ->get();
@@ -205,9 +215,19 @@ class PurchaseController extends Controller
                 $models = $request->modelId;
                 PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
                 foreach($products as $key=>$product){
+                    if($models[$key]!=null){
+                        $model = explode(',',$models[$key]);
+                    }else{
+                        $model[0] = null;
+                        $model[1] = null;
+                    }
                     PurchaseDetail::updateOrCreate(
                         ['purchaseId' => $id,'productId' => $product],
-                        ['modelId' => $models[$key],'quantity' => $qtys[$key],str_replace(',','',$prices[$key]),'isActive'=> 1]
+                        ['modelId' => $model[0],
+                        'isManual' => $model[1],
+                        'quantity' => $qtys[$key],
+                        str_replace(',','',$prices[$key]),
+                        'isActive'=> 1]
                     );
                 }
                 DB::commit();
@@ -229,12 +249,30 @@ class PurchaseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        $checkOrder = DB::table('delivery_order')
+            ->where('purchaseId',$id)
+            ->select('delivery_order.*')
+            ->get();
+        if(count($checkOrder) > 0){
+            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+        }else{
+            $purchase = PurchaseHeader::findOrFail($id);
+            $purchase->update([
+                'isActive' => 0
+            ]);
+            PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
+            $request->session()->flash('success', 'Successfully deactivated.');  
+        }
+        return Redirect::back();
+    }
+
+    public function reactivate(Request $request, $id)
+    {
         $purchase = PurchaseHeader::findOrFail($id);
         $purchase->update([
-            'isActive' => 0
+            'isActive' => 1
         ]);
-        PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect::back();
     }
 

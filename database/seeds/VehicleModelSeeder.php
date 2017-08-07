@@ -15,42 +15,24 @@ class VehicleModelSeeder extends Seeder
             'name' => 'Corolla',
             'makeId' => 1,
             'year' => '1998',
-            'transmission' => 'AT',
+            'hasAuto' => 1,
+            'hasManual' => 1,
             'isActive' => 1,
         ]);
         DB::table('vehicle_model')->insert([
-            'name' => 'Camry',
+            'name' => 'Wigo',
             'makeId' => 1,
-            'year' => '2000',
-            'transmission' => 'AT',
+            'year' => '2010',
+            'hasAuto' => 1,
+            'hasManual' => 0,
             'isActive' => 1,
         ]);
         DB::table('vehicle_model')->insert([
-            'name' => 'Hi-Ace',
+            'name' => 'Vios',
             'makeId' => 1,
-            'year' => '2016',
-            'transmission' => 'AT',
-            'isActive' => 1,
-        ]);
-        DB::table('vehicle_model')->insert([
-            'name' => 'Corolla',
-            'makeId' => 1,
-            'year' => '1998',
-            'transmission' => 'MT',
-            'isActive' => 1,
-        ]);
-        DB::table('vehicle_model')->insert([
-            'name' => 'Camry',
-            'makeId' => 1,
-            'year' => '2000',
-            'transmission' => 'MT',
-            'isActive' => 1,
-        ]);
-        DB::table('vehicle_model')->insert([
-            'name' => 'Hi-Ace',
-            'makeId' => 1,
-            'year' => '2016',
-            'transmission' => 'MT',
+            'year' => '2012',
+            'hasAuto' => 1,
+            'hasManual' => 1,
             'isActive' => 1,
         ]);
     }

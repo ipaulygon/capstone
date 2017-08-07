@@ -127,6 +127,7 @@ class UtilitiesController extends Controller
                     'type1' => trim($request->type1),
                     'type2' => trim($request->type2),
                     'max' => $request->max,
+                    'backlog' => $request->backlog
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

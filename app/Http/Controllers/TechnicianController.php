@@ -20,14 +20,8 @@ class TechnicianController extends Controller
      */
     public function index()
     {
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
-        $deactivate = DB::table('technician')
-            ->where('isActive',0)
-            ->select('technician.*')
-            ->get();
+        $technicians = Technician::where('isActive',1)->get();
+        $deactivate = Technician::where('isActive',0)->get();
         return View('technician.index',compact('technicians','deactivate'));
     }
 

@@ -11,6 +11,7 @@ class PurchaseDetail extends Model
     	'purchaseId',
         'productId',
         'modelId',
+        'isManual',
         'quantity',
         'delivered',
         'price',

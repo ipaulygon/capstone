@@ -14,16 +14,19 @@ class ProductVehicleSeeder extends Seeder
         DB::table('product_vehicle')->insert([
             'productId' => 1,
             'modelId' => 1,
+            'isManual' => 0,
             'isActive' => 1,
         ]);
         DB::table('product_vehicle')->insert([
             'productId' => 1,
             'modelId' => 2,
+            'isManual' => 0,
             'isActive' => 1,
         ]);
         DB::table('product_vehicle')->insert([
             'productId' => 1,
             'modelId' => 3,
+            'isManual' => 0,
             'isActive' => 1,
         ]);
     }

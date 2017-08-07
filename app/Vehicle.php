@@ -11,6 +11,7 @@ class Vehicle extends Model
     protected $fillable = [
         'plate',
     	'modelId',
+        'isManual',
         'mileage', 	
     ];
 

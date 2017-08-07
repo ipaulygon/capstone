@@ -11,6 +11,7 @@ class ProductVehicle extends Model
     protected $fillable = [
     	'productId',
     	'modelId',
+        'isManual',
         'isActive'	
     ];
 

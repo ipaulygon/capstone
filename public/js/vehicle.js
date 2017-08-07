@@ -3,8 +3,7 @@ $(document).on("click", "#addModel", function (){
         '<button id="removeModel" type="button" class="btn btn-flat btn-danger btn-xs pull-right" data-toggle="tooltip" data-placement="top" title="Remove">' +
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button><br>').appendTo('#models');
-    $(value).find('input').val('');
-    $(value).find('select').val('AT');
+    $(value).find('input.form-control').val('');
     $('.year').inputmask({ 
         alias: "integer",
         prefix: '',
@@ -41,3 +40,19 @@ $(document).on("click", "#removeModel", function (){
     }
 });
 
+$(document).on('change','.check',function(){
+    current = $(this);
+    row = $(this).parents('.transmission');
+    if(current.prop('checked')==false){
+        current.next('input').val(0);
+        auto = row.find('input')[0];
+        manual = row.find('input')[2];
+        if($(auto).prop('checked')==false && $(manual).prop('checked')==false){
+            check = (current.context==auto ? manual : auto);
+            $(check).prop('checked',true);
+            $(check).next().val(1);
+        }
+    }else{
+        current.next().val(1);
+    }
+});

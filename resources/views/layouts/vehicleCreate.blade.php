@@ -23,8 +23,11 @@
     <div class="form-group col-md-4">
         {!! Form::label('modelId', 'Vehicle Model') !!}<span>*</span>
         <select id="model" name="modelId" class="select2 form-control" style="width:100%" required>
-            @foreach($models as $model)
-                <option value="{{$model->id}}">{{$model->make}} - {{$model->year}} {{$model->name}} ({{$model->transmission}})</option>
+            @foreach($autos as $model)
+                <option value="{{$model->id}},0">{{$model->make}} - {{$model->year}} {{$model->name}} - AT</option>
+            @endforeach
+            @foreach($manuals as $model)
+                <option value="{{$model->id}},1">{{$model->make}} - {{$model->year}} {{$model->name}} - MT</option>
             @endforeach
         </select>
     </div>

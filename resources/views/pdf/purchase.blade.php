@@ -72,7 +72,7 @@
         </div><br>
         <div style="float:left" class="col-md-6">
             Supplier: {{$purchase->supplier->name}}<br>
-            Address: {{$purchase->supplier->address}}
+            Address: {{$purchase->supplier->street}} {{$purchase->supplier->brgy}} {{$purchase->supplier->city}}
         </div>
         <div style="float:right"  class="col-md-6">
             Date: {{date('F j, Y', strtotime($purchase->dateMake))}}
@@ -99,11 +99,12 @@
                         }else{
                             $type = "";
                         }
+                        $transmission = ($product->isManual ? 'MT' : 'AT');
                     ?>
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                     <td>
                         @if($product->modelId!=null)
-                        {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$product->vehicle->transmission}})
+                        {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$transmission}})
                         @endif
                     </td>
                     <td class="text-right">{{number_format($product->price,2)}}</td>

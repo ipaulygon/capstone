@@ -11,7 +11,8 @@ class DeliveryHeader extends Model
     protected $fillable = [
         'id',
     	'supplierId',
-        'dateMake'
+        'dateMake',
+        'isActive'
     ];
 
     public function detail(){

@@ -21,54 +21,109 @@
                 </div>
             </div>
             <div class="box-body dataTable_wrapper">
-                <table id="list" class="table table-striped table-bordered responsive">
-                    <thead>
-                        <tr>
-                            <th>Purchase Id</th>
-                            <th>Supplier</th>
-                            <th>Status</th>
-                            <th class="text-right">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($purchases as $purchase)
-                            <tr>
-                                <td>{{$purchase->id}}</td>
-                                <td>{{$purchase->supplier}}</td>
-                                <td>
-                                    @if(!$purchase->isFinalize)
-                                    {{"Not yet finalized"}}
-                                    @elseif($purchase->isFinalize && !$purchase->isDelivered)
-                                    {{"Finalized"}}
-                                    @elseif($purchase->isDelivered)
-                                    {{"All items delivered"}}
-                                    @endif
-                                </td>
-                                <td class="text-right">
-                                    @if(!$purchase->isFinalize)
-                                        <button onclick="finalizeModal('{{$purchase->id}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Finalize record">
-                                            <i class="glyphicon glyphicon-ok"></i>
-                                        </button>
-                                        <a href="{{url('/purchase/'.$purchase->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
-                                            <i class="glyphicon glyphicon-edit"></i>
-                                        </a>
-                                        <button onclick="deactivateShow('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
-                                            <i class="glyphicon glyphicon-trash"></i>
-                                        </button>
-                                        {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
-                                        {!! Form::close() !!}
-                                        {!! Form::open(['method'=>'patch','action' => ['PurchaseController@finalize',$purchase->id],'id'=>'fin'.$purchase->id]) !!}
-                                        {!! Form::close() !!}
-                                    @else
-                                        <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                            <i class="glyphicon glyphicon-eye-open"></i>
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="activeTable">
+                        <table id="list" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Purchase Id</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($purchases as $purchase)
+                                    <tr>
+                                        <td>{{$purchase->id}}</td>
+                                        <td>{{$purchase->supplier}}</td>
+                                        <td>
+                                            @if(!$purchase->isFinalize)
+                                            {{"Not yet finalized"}}
+                                            @elseif($purchase->isFinalize && !$purchase->isDelivered)
+                                            {{"Finalized"}}
+                                            @elseif($purchase->isDelivered)
+                                            {{"All items delivered"}}
+                                            @endif
+                                        </td>
+                                        <td class="text-right">
+                                            @if(!$purchase->isFinalize)
+                                                <button onclick="finalizeModal('{{$purchase->id}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Finalize record">
+                                                    <i class="glyphicon glyphicon-ok"></i>
+                                                </button>
+                                                <a href="{{url('/purchase/'.$purchase->id.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                </a>
+                                                <button onclick="deactivateShow('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </button>
+                                                {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
+                                                {!! Form::close() !!}
+                                                {!! Form::open(['method'=>'patch','action' => ['PurchaseController@finalize',$purchase->id],'id'=>'fin'.$purchase->id]) !!}
+                                                {!! Form::close() !!}
+                                            @elseif($purchase->isFinalize)
+                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                </a>
+                                                <button onclick="updateAdmin('{{$purchase->id}}')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                </button>
+                                                <button onclick="deactivateAdmin('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
+                                                    <i class="glyphicon glyphicon-trash"></i>
+                                                </button>
+                                                {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
+                                                {!! Form::close() !!}
+                                            @else
+                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="inactiveTable">
+                        <table id="dlist" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Purchase Id</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($dpurchases as $purchase)
+                                    <tr>
+                                        <td>{{$purchase->id}}</td>
+                                        <td>{{$purchase->supplier}}</td>
+                                        <td>
+                                            @if(!$purchase->isFinalize)
+                                            {{"Not yet finalized"}}
+                                            @elseif($purchase->isFinalize && !$purchase->isDelivered)
+                                            {{"Finalized"}}
+                                            @elseif($purchase->isDelivered)
+                                            {{"All items delivered"}}
+                                            @endif
+                                        </td>
+                                        <td class="text-right">
+                                            <button onclick="reactivateShow('{{$purchase->id}}')"type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Reactivate record">
+                                                <i class="glyphicon glyphicon-refresh"></i>
+                                            </button>
+                                            {!! Form::open(['method'=>'patch','action' => ['PurchaseController@reactivate',$purchase->id],'id'=>'reactivate'.$purchase->id]) !!}
+                                            {!! Form::close() !!}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group pull-right">
+                    <label class="checkbox-inline"><input type="checkbox" id="showDeactivated"> Show deactivated records</label>
+                </div>
                 {{-- Finalize --}}
                 <div id="finalizeModal" class="modal fade">
                     <div class="modal-dialog">
@@ -102,6 +157,8 @@
                 </div>
                 @include('layouts.deactivateModal')
                 @include('layouts.reactivateModal')
+                @include('layouts.deactivateAdmin')
+                @include('layouts.updateAdmin')
             </div>
         </div>
     </div>
@@ -111,6 +168,10 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/purchase.js') }}"></script>
     <script src="{{ URL::asset('js/record.js') }}"></script>
@@ -118,6 +179,9 @@
         var finalize = null;
         $(document).ready(function (){
             $('#list').DataTable({
+                responsive: true,
+            });
+            $('#dlist').DataTable({
                 responsive: true,
             });
             $('#tPurchase').addClass('active');

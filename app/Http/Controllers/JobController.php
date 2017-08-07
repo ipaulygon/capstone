@@ -33,15 +33,21 @@ class JobController extends Controller
             ->join('vehicle as v','v.id','j.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
+            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
             ->get();
         $date = date('Y-m-d');
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
-        $models = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
+            ->get();
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
             ->get();
         $technicians = DB::table('technician')
             ->where('isActive',1)
@@ -74,7 +80,7 @@ class JobController extends Controller
             ->where('d.type','Whole')
             ->select('d.*')
             ->get();
-        return View('job.index',compact('jobs','customers','models','technicians','products','services','packages','promos','discounts','date'));
+        return View('job.index',compact('jobs','customers','autos','manuals','technicians','products','services','packages','promos','discounts','date'));
     }
 
     /**
@@ -204,10 +210,12 @@ class JobController extends Controller
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
+                $model = explode(',',$request->modelId);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
-                        'modelId' => $request->modelId,
+                        'modelId' => $model[0],
+                        'isManual' => $model[1],
                         'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
@@ -312,9 +320,15 @@ class JobController extends Controller
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
-        $models = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
+            ->get();
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
             ->get();
         $technicians = DB::table('technician')
             ->where('isActive',1)
@@ -347,7 +361,7 @@ class JobController extends Controller
             ->where('d.type','Whole')
             ->select('d.*')
             ->get();
-        return View('job.edit',compact('job','customers','models','technicians','products','services','packages','promos','discounts'));
+        return View('job.edit',compact('job','customers','autos','manuals','technicians','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -428,10 +442,12 @@ class JobController extends Controller
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
+                $model = explode(',',$request->modelId);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
-                        'modelId' => $request->modelId,
+                        'modelId' => $model[0],
+                        'isManual' => $model[1],
                         'mileage' => str_replace(' km','',$mileage)
                     ]
                 );

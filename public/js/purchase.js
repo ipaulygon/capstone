@@ -8,7 +8,7 @@ var pList = $('#productList').DataTable({
 $('#date').datepicker({
     format: 'mm/dd/yyyy',
     endDate: new Date,
-    startDate: '-7d',
+    startDate: '-'+backlog+'d',
     autoclose: true,
     todayHighlight: true,
 });
@@ -123,7 +123,8 @@ $(document).on('change', '#products', function(){
                 $('#'+data.product.id).addClass('hidden');
             }else{
                 $.each(data.product.vehicle,function(key, value){
-                    $('#'+data.product.id).append('<option value="'+value.model.id+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                    tr = (value.isManual ? 'MT' : 'AT');
+                    $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
                 });
                 $('#'+data.product.id).select2();
             }
@@ -193,10 +194,11 @@ function oldProduct(id,qty,model,price){
                 $('#'+data.product.id).addClass('hidden');
             }else{
                 $.each(data.product.vehicle,function(key, value){
-                    if(value.model.id==model){
-                        $('#'+data.product.id).append('<option value="'+value.model.id+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                    tr = (value.isManual ? 'MT' : 'AT');
+                    if((value.model.id+','+value.isManual)==model){
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
                     }else{
-                        $('#'+data.product.id).append('<option value="'+value.model.id+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
                     }
                 });
                 $('#'+data.product.id).select2();
@@ -230,9 +232,8 @@ function oldProduct(id,qty,model,price){
     $("#products").select2();
 }
 
-function retrieveProduct(price,id,qty,model){
+function retrieveProduct(price,id,qty,model,manual){
     $('#products option[value="'+id+'"]').attr('disabled',true);
-    console.log(price);
     $.ajax({
         type: "GET",
         url: "/item/product/"+id,
@@ -260,10 +261,11 @@ function retrieveProduct(price,id,qty,model){
                 $('#'+data.product.id).addClass('hidden');
             }else{
                 $.each(data.product.vehicle,function(key, value){
-                    if(value.model.id==model){
-                        $('#'+data.product.id).append('<option value="'+value.model.id+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                    tr = (value.isManual ? 'MT' : 'AT');
+                    if((value.model.id+','+value.isManual)==(model+','+manual)){
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
                     }else{
-                        $('#'+data.product.id).append('<option value="'+value.model.id+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+value.model.transmission+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
                     }
                 });
                 $('#'+data.product.id).select2();

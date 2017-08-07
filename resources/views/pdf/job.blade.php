@@ -82,11 +82,12 @@
             Email: {{$job->customer->email}}<br>
         </div>
         <div style="float:right" class="col-md-6">
+            <?php $transmission = ($job->vehicle->isManual ? 'MT' : 'AT')?>
             Plate: {{$job->vehicle->plate}}<br>
             Make: {{$job->vehicle->model->make->name}}<br>
             Model: {{$job->vehicle->model->name}}<br>
             Year: {{$job->vehicle->model->year}}<br>
-            Transmission: {{$job->vehicle->model->transmission}}<br>
+            Transmission: {{$transmission}}<br>
             Mileage: {{$job->vehicle->mileage}}<br>
         </div>
         <div style="clear:both"></div>

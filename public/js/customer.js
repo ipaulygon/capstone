@@ -130,7 +130,7 @@ $('#plate').on('change',function(){
             dataType: "JSON",
             success:function(data){
                 $('#plate').val(data.vehicle.plate);
-                $('#model').val(data.vehicle.modelId);
+                $('#model').val(data.vehicle.modelId+','+data.vehicle.isManual);
                 $('#mileage').val(data.vehicle.mileage);
                 $('#model').select2();
             }

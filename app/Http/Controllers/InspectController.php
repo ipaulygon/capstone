@@ -29,7 +29,7 @@ class InspectController extends Controller
             ->join('vehicle as v','v.id','i.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('i.*','i.id as inspectId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
+            ->select('i.*','i.id as inspectId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
             ->get();
         return View('inspect.index',compact('inspects'));
     }
@@ -45,15 +45,21 @@ class InspectController extends Controller
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
-        $models = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
+            ->get();
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
             ->get();
         $technicians = DB::table('technician')
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspect.create',compact('items','customers','models','technicians'));
+        return View('inspect.create',compact('items','customers','autos','manuals','technicians'));
     }
 
     /**
@@ -125,10 +131,12 @@ class InspectController extends Controller
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
+                $model = explode(',',$request->modelId);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
-                        'modelId' => $request->modelId,
+                        'modelId' => $model[0],
+                        'isManual' => $model[1],
                         'mileage' => str_replace(' km','',$mileage)
                     ]
                 );
@@ -187,15 +195,21 @@ class InspectController extends Controller
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
-        $models = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
+            ->get();
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
             ->get();
         $technicians = DB::table('technician')
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspect.edit',compact('inspect','customers','models','technicians'));
+        return View('inspect.edit',compact('inspect','customers','autos','manuals','technicians'));
     }
 
     /**
@@ -268,10 +282,12 @@ class InspectController extends Controller
                     ]
                 );
                 $mileage = ($request->mileage==''||$request->mileage==null ? 0 : $request->mileage);
+                $model = explode(',',$request->modelId);
                 $vehicle = Vehicle::updateOrCreate(
                     ['plate' => str_replace('_','',trim($request->plate))],
                     [
-                        'modelId' => $request->modelId,
+                        'modelId' => $model[0],
+                        'isManual' => $model[1],
                         'mileage' => str_replace(' km','',$mileage)
                     ]
                 );

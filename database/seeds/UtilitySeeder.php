@@ -19,7 +19,8 @@ class UtilitySeeder extends Seeder
             'category2' => 'Supplies',
             'type1' => 'Original',
             'type2' => 'Replacement',
-            'max' => 100
+            'max' => 100,
+            'backlog' => 7,
         ]);
     }
 }

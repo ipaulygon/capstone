@@ -16,6 +16,7 @@ class Utilities extends Model
     	'category2',  	
         'type1',
     	'type2',
-        'max'  	
+        'max',
+        'backlog'
     ];
 }

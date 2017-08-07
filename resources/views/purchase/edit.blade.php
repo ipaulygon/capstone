@@ -5,7 +5,7 @@
 @stop
 
 @section('style')
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/datepicker/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
@@ -41,7 +41,11 @@
     @if($purchase->detail)
         <script>$('#compute').val(0)</script>
         @foreach($purchase->detail as $key=>$product)
-            <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}})</script>
+            @if($product->modelId==null)
+                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}})</script>
+            @else
+                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}},{{$product->isManual}})</script>
+            @endif
         @endforeach
     @endif
 @stop
