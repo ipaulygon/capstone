@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Receive Delivery"}}
+    {{"Return Items"}}
 @stop
 
 @section('style')
@@ -15,7 +15,7 @@
             <div class="box-header with-border">
                 <h3 class="box-title"></h3>
                 <div class="box-tools pull-right">
-                    <a href="{{ URL::to('/delivery/create') }}" class="btn btn-success btn-md">
+                    <a href="{{ URL::to('/return/create') }}" class="btn btn-success btn-md">
                     <i class="glyphicon glyphicon-plus"></i> New Record</a>
                 </div>
             </div>
@@ -23,18 +23,18 @@
                 <table id="list" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
-                            <th>Delivery Id</th>
+                            <th>Return Id</th>
                             <th>Supplier</th>
-                            <th class="text-right ">Action</th>
+                            <th class="text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($deliveries as $delivery)
+                        @foreach($returns as $return)
                             <tr>
-                                <td>{{$delivery->id}}</td>
-                                <td>{{$delivery->supplier}}</td>
+                                <td>{{$return->id}}</td>
+                                <td>{{$return->supplier}}</td>
                                 <td class="text-right">
-                                    <a href="{{url('/delivery/pdf/'.$delivery->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
+                                    <a href="{{url('/return/pdf/'.$return->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                 </td>
@@ -42,8 +42,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                @include('layouts.deactivateModal')
-                @include('layouts.updateAdmin')
             </div>
         </div>
     </div>
@@ -59,7 +57,7 @@
             $('#list').DataTable({
                 responsive: true,
             });
-            $('#tDelivery').addClass('active');
+            $('#tReturn').addClass('active');
         });
     </script>
 @stop

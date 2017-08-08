@@ -47,5 +47,10 @@ class DatabaseSeeder extends Seeder
         $this->call(DiscountRateSeeder::class);
         $this->call(DiscountProductSeeder::class);
         $this->call(DiscountServiceSeeder::class);
+        $this->call(PurchaseHeaderSeeder::class);
+        $this->call(PurchaseDetailSeeder::class);
+        $this->call(DeliveryHeaderSeeder::class);
+        $this->call(DeliveryDetailSeeder::class);
+        $this->call(DeliveryOrderSeeder::class);
     }
 }

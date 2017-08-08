@@ -70,6 +70,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('item/user','ItemController@user');
 	Route::get('delivery/header/{id}','DeliveryController@header');
 	Route::get('delivery/detail/{id}','DeliveryController@detail');
+	Route::get('return/header/{id}','ReturnController@header');
+	Route::get('return/detail/{id}','ReturnController@detail');
 	Route::get('job/check/{id}','JobController@check');
 	Route::get('job/get/{id}','JobController@get');
 	Route::patch('job/finalize/{id}','JobController@finalize');

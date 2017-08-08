@@ -70,22 +70,22 @@ $(document).on('focusout','.qr',function(){
 
 $(document).on('change', '#supp', function(){
     $('.hidden.order').remove();
-    $('#purchase option').remove();
+    $('#delivery option').remove();
     pList.clear().draw();
     $.ajax({
         type: "GET",
-        url: "/delivery/header/"+this.value,
+        url: "/return/header/"+this.value,
         dataType: "JSON",
         success:function(data){
             var start = new Date();
             var startD = null;
-            $('#purchase').append('<option value=""></option>');
-            $.each(data.purchases,function(key, value){
-                $('#purchase').append('<option value="'+value.id+'">'+value.id+'</option>');
-                if(start < new Date(value.dateMake)){
+            $('#delivery').append('<option value=""></option>');
+            $.each(data.deliveries,function(key, value){
+                $('#delivery').append('<option value="'+value.id+'">'+value.id+'</option>');
+                if(start > new Date(value.dateMake)){
                     startD = value.dateMake;
                     start = new Date(value.dateMake)
-                } 
+                }
             });
             start = startD.split('-');
             start = start[1]+"/"+start[2]+"/"+start[0];
@@ -98,19 +98,19 @@ $(document).on('change', '#supp', function(){
                 todayHighlight: true,
             });
             $('#date').datepicker('update');
-            $('#purchase').val('');
-            $("#purchase").select2();
+            $('#delivery').val('');
+            $("#delivery").select2();
         }
     });
 });
 
 $(document).on('click','.select2-results__option',function(){
     id = $(this).text();
-    $('#purchase option[value="'+id+'"]').attr('disabled',false);
+    $('#delivery option[value="'+id+'"]').attr('disabled',false);
     $('#order'+id).remove();
     $.ajax({
         type: "GET",
-        url: "/delivery/detail/"+id,
+        url: "/return/detail/"+id,
         dataType: "JSON",
         success:function(data){
             $.each(data.products,function(key,value){
@@ -134,66 +134,66 @@ $(document).on('click','.select2-results__option',function(){
             });
         }
     });
-    $('#purchase').val('');
-    $("#purchase").select2();
+    $('#delivery').val('');
+    $("#delivery").select2();
 });
 
-$(document).on('change','#purchase',function(){
-    $('#purchase option[value="'+this.value+'"]').attr('disabled',true);
-    $('#append').append('<input class="hidden order" id="o]rder'+this.value+'" name="order[]" value="'+this.value+'">');
+$(document).on('change','#delivery',function(){
+    var deliveryId = this.value;
+    $('#delivery option[value="'+this.value+'"]').attr('disabled',true);
+    $('#append').append('<input class="hidden order" id="order'+this.value+'" name="order[]" value="'+this.value+'">');
     $.ajax({
         type: "GET",
-        url: "/delivery/detail/"+this.value,
+        url: "/return/detail/"+this.value,
         dataType: "JSON",
         success:function(data){
             $.each(data.products,function(key,value){
-                if(value.quantity!=value.delivered){
-                    if(value.productId==$('#id'+value.productId).val()){
-                        balance = value.quantity - value.delivered;
-                        stack = eval($('#qo'+value.productId).val()+"+"+balance);
-                        $('#qo'+value.productId).val(stack);
-                        $('#rowDesc'+value.productId).append('<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+balance+" pcs."+'</li>');
-                        $('#qr'+value.product.id).attr('data-qty',stack);
-                        $('#qr'+value.productId).inputmask({ 
-                            alias: "integer",
-                            prefix: '',
-                            allowMinus: false,
-                            min: 1,
-                            max: stack,
-                        });
+                if(value.productId==$('#id'+value.productId).val()){
+                    balance = value.quantity;
+                    stack = eval($('#qo'+value.productId).val()+"+"+balance);
+                    $('#qo'+value.productId).val(stack);
+                    $('#rowDesc'+value.productId).append(
+                        '<div class="row"><div class="col-md-6">'+
+                        '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><input type="hidden" id="id'+deliveryId+'" name="delivery[]" value="'+deliveryId+'">' +
+                        '<li id="list'+value.deliveryId+'">'+value.deliveryId+' x '+balance+" pcs."+'</li></div>' +
+                        '<div class="col-md-6"><input type="text" data-qty="'+value.quantity+'" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required></div></div><br>',
+                        ''
+                    );
+                }else{
+                    if(value.isOriginal!=null){
+                        part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
                     }else{
-                        if(value.isOriginal!=null){
-                            part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
-                        }else{
-                            part = '';
-                        }
-                        balance = value.quantity - value.delivered;
-                        row = pList.row.add([
-                            '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><strong><input class="no-border-input qo" id="qo'+value.productId+'" type="text" value="'+balance+'" readonly> pcs.</strong>',
-                            value.brand+" - "+value.product+part+" ("+value.variance+")",
-                            '<li id="list'+value.purchaseId+'">'+value.purchaseId+' x '+balance+" pcs."+'</li>',
-                            '<input type="text" data-qty="'+value.quantity+'" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required>'
-                        ]).draw().node();
-                        $(row).find('td').eq(0).addClass('text-right');
-                        $(row).find('td').eq(2).attr('id','rowDesc'+value.productId);
-                        $(row).find('td').eq(3).addClass('text-right');
-                        $('#qo'+value.productId).inputmask({ 
-                            alias: "integer",
-                            prefix: '',
-                            allowMinus: false,
-                        });
-                        $('#qr'+value.productId).inputmask({ 
-                            alias: "integer",
-                            prefix: '',
-                            allowMinus: false,
-                            min: 0,
-                            max: balance,
-                        });
+                        part = '';
                     }
+                    balance = value.quantity;
+                    row = pList.row.add([
+                        '<strong><input class="qo no-border-input" id="qo'+value.productId+'" type="text" value="'+balance+'" readonly> pcs.</strong>',
+                        value.brand+" - "+value.product+part+" ("+value.variance+")",
+                        '<div class="row"><div class="col-md-6">'+
+                        '<input type="hidden" id="id'+value.productId+'" name="product[]" value="'+value.productId+'"><input type="hidden" id="id'+deliveryId+'" name="delivery[]" value="'+deliveryId+'">' +
+                        '<li id="list'+value.deliveryId+'">'+value.deliveryId+' x '+balance+" pcs."+'</li></div>' +
+                        '<div class="col-md-6"><input type="text" data-qty="'+value.quantity+'" class="form-control qr" id="qr'+value.productId+'" name="qty[]" required></div></div><br>',
+                        ''
+                    ]).draw().node();
+                    $(row).find('td').eq(0).addClass('text-right');
+                    $(row).find('td').eq(2).addClass('text-right');
+                    $(row).find('td').eq(2).attr('id','rowDesc'+value.productId);
+                    $('#qo'+value.productId).inputmask({ 
+                        alias: "integer",
+                        prefix: '',
+                        allowMinus: false,
+                    });
+                    $('#qr'+value.productId).inputmask({ 
+                        alias: "integer",
+                        prefix: '',
+                        allowMinus: false,
+                        min: 0,
+                        max: balance,
+                    });
                 }
             });
         }
     });
-    $('#purchase').val('');
-    $("#purchase").select2();
+    $('#delivery').val('');
+    $("#delivery").select2();
 });

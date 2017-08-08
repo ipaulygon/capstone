@@ -114,7 +114,7 @@ $(document).on('change', '#products', function(){
                 '<option value=""></option>' +
                 '</select>',
                 '<strong><input class="price form-control text-right" name="price[]" id="price" type="text"></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');
@@ -185,7 +185,7 @@ function oldProduct(id,qty,model,price){
                 '<option value=""></option>' +
                 '</select>',
                 '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');
@@ -252,7 +252,7 @@ function retrieveProduct(price,id,qty,model,manual){
                 '<option value=""></option>' +
                 '</select>',
                 '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(3).addClass('text-right');

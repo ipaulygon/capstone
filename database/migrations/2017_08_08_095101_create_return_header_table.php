@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePurchaseHeaderTable extends Migration
+class CreateReturnHeaderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreatePurchaseHeaderTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_header', function (Blueprint $table) {
+        Schema::create('return_header', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->string('id', 50)->primary();
             $table->unsignedInteger('supplierId');
-            $table->text('remarks');
             $table->date('dateMake');
+            $table->text('remarks')->nullable();
             $table->boolean('isActive')->default(1);
-            $table->boolean('isFinalize');
-            $table->boolean('isDelivered');
             $table->timestamps();
             $table->foreign('supplierId')
                   ->references('id')->on('supplier')
@@ -37,6 +35,6 @@ class CreatePurchaseHeaderTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_header');
+        Schema::dropIfExists('return_header');
     }
 }

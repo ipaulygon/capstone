@@ -115,8 +115,8 @@ $(document).on('change', '#products', function(){
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -164,8 +164,8 @@ function oldProduct(id,qty){
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -196,8 +196,8 @@ function retrieveProduct(id,qty,price,discountString){
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.product.id+'" type="button" class="btn btn-danger btn-sm pull-right pullProduct" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -234,8 +234,8 @@ $(document).on('change', '#services', function(){
             row = pList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">',
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -283,8 +283,8 @@ function oldService(id){
             row = pList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">',
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -312,8 +312,8 @@ function retrieveService(id,price,discountString){
             row = pList.row.add([
                 '<input type="hidden" name="service[]" value="'+data.service.id+'">',
                 data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -338,8 +338,8 @@ $(document).on('change', '#packages', function(){
             row = pList.row.add([
                 '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+data.package.price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
                 '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -386,8 +386,8 @@ function oldPackage(id,qty){
             row = pList.row.add([
                 '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.package.price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+data.package.price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -426,8 +426,8 @@ function retrievePackage(id,qty,price){
             row = pList.row.add([
                 '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.package.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPackage" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -467,8 +467,8 @@ $(document).on('change', '#promos', function(){
             row = pList.row.add([
                 '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="0" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+data.promo.price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
                 '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -533,8 +533,8 @@ function oldPromo(id,qty){
             row = pList.row.add([
                 '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+data.promo.price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+data.promo.price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -593,8 +593,8 @@ function retrievePromo(id,qty,price){
             row = pList.row.add([
                 '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
-                '<strong><input class="price" id="price" style="border: none!important;background: transparent!important" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack" id="stack" style="border: none!important;background: transparent!important" type="text" value="'+stack+'" readonly></strong>',
+                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
+                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
                 '<button id="'+data.promo.id+'" type="button" class="btn btn-danger btn-sm pull-right pullPromo" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -680,8 +680,8 @@ $(document).on('change', '#discounts', function(){
             row = pList.row.add([
                 '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
                 data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
-                '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
+                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong>',
+                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
                 '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -732,8 +732,8 @@ function oldDiscount(id){
             row = pList.row.add([
                 '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
                 data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+data.discount.rate+'" readonly></strong>',
-                '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
+                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong>',
+                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
                 '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
@@ -773,8 +773,8 @@ function retrieveDiscount(id,rate){
             row = pList.row.add([
                 '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
                 data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice" id="discountPrice" style="border: none!important;background: transparent!important" type="text" value="'+rate+'" readonly></strong>',
-                '<strong><input class="discountStack" id="discountStack" style="border: none!important;background: transparent!important" type="text" value="'+discountStack+'" readonly></strong>',
+                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+rate+'" readonly></strong>',
+                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
                 '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
