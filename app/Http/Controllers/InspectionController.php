@@ -221,14 +221,20 @@ class InspectionController extends Controller
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
-        $models = DB::table('vehicle_model as vd')
+        $autos = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
+            ->where('hasAuto',1)
+            ->get();
+        $manuals = DB::table('vehicle_model as vd')
+            ->join('vehicle_make as vk','vd.makeId','vk.id')
+            ->select('vd.*','vk.name as make')
+            ->where('hasManual',1)
             ->get();
         $technicians = DB::table('technician')
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspection.form',compact('items','customers','models','technicians'));
+        return View('inspection.form',compact('items','customers','autos','manuals','technicians'));
     }
 }

@@ -6,7 +6,7 @@
         </div>
         <div class="box-body">
             @include('layouts.vehicleEdit')
-            <div id="form-box" class="row">
+            <div id="form-box" class="panel-group" role="tab-list" aria-multiselectable="true">
             </div>
         </div>
         <div class="box-footer">

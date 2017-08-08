@@ -17,7 +17,7 @@
                 <div class="box-tools pull-right">
                     <a href="{{ URL::to('/inspection/create') }}" class="btn btn-success btn-md">
                     <i class="glyphicon glyphicon-plus"></i> New Record</a>
-                    <a href="{{ URL::to('/inspection/data/0') }}" class="btn btn-primary btn-md">
+                    <a href="{{ URL::to('/inspection/data/0') }}" target="_blank" class="btn btn-primary btn-md">
                     <i class="glyphicon glyphicon-eye-open"></i> View Form</a>
                 </div>
             </div>

@@ -15,5 +15,10 @@ class InspectionTypeSeeder extends Seeder
             'type' => 'Lights',
             'isActive' => 1
         ]);
+        
+        DB::table('inspection_type')->insert([
+            'type' => 'Tires',
+            'isActive' => 1
+        ]);
     }
 }

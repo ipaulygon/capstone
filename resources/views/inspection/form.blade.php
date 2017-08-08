@@ -13,7 +13,6 @@
 
 @section('content')
     <div class="col-md-12">
-        <a href="/inspection" type="button" class="btn btn-success btn-md"><i class="fa fa-angle-double-left"></i> Back</a><br><br>
         @include('layouts.customerCreate')
         <div class="box box-primary">
             <div class="box-header with-border">
@@ -21,7 +20,7 @@
             </div>
             <div class="box-body">
                 @include('layouts.vehicleCreate')
-                <div id="form-box" class="row">
+                <div id="form-box" class="panel-group" role="tab-list" aria-multiselectable="true">
                 </div>
             </div>
             <div class="box-footer">

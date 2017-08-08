@@ -1,11 +1,12 @@
 function popForm(typeId,typeName,itemId,itemName,form){
     if(!$('#panel'+typeId+'').length){
         $('#form-box').append(
-            '<div class="col-md-6">' +
             '<div id="panel'+typeId+'" class="panel panel-default">' +
-            '<div class="panel-heading">' +
-            '<h2 class="panel-title" style="font-weight:bold!important">'+typeName+'</h2>' +
+            '<div class="panel-heading" role="tab" id="heading'+typeId+'">' +
+            '<h2 class="panel-title" style="font-weight:bold!important">' +
+            '<a role="button" data-toggle="collapse" data-parent="#panel'+typeId+'" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">'+typeName+'</a></h2>' +
             '</div>' +
+            '<div id="collapse'+typeId+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+typeId+'">' +
             '<div id="body'+typeId+'" class="panel-body"></div>' +
             '</div>' +
             '</div>'
@@ -21,14 +22,14 @@ function popForm(typeId,typeName,itemId,itemName,form){
         formData: formData
     };
     formContainer.formRender(formRenderOpts);
-    formContainer.prepend('<span style="color:black!important;padding-left: 3%">'+itemName+':</span><br>');
+    formContainer.prepend('<label style="padding-left: 1.2%">'+itemName+':</label><br>');
     formContainer.append('<input type="text" class="hidden" name="typeId[]" id="typeId" value="'+typeId+'" required>');
     formContainer.append('<input type="text" class="hidden" name="typeName[]" id="typeName" value="'+typeName+'" required>');
     formContainer.append('<input type="text" class="hidden" name="itemId[]" id="itemId" value="'+itemId+'" required>');
     formContainer.append('<input type="text" class="hidden" name="itemName[]" id="itemName" value="'+itemName+'" required>');
     formContainer.append('<textarea class="hidden" name="form[]" id="form" required>'+formData+'</textarea>');
     formContainer.append('<hr>');
-    formContainer.children('.form-group').addClass('col-md-6')
+    formContainer.children('.form-group').addClass('col-md-3')
 }
 
 $(document).on('change', '.formed input', function(){
