@@ -16,5 +16,15 @@ class ServiceCategorySeeder extends Seeder
             'description' => '',
             'isActive' => 1
         ]);
+        DB::table('service_category')->insert([
+            'name' => 'Suspension',
+            'description' => '',
+            'isActive' => 1
+        ]);
+        DB::table('service_category')->insert([
+            'name' => 'Aircon',
+            'description' => '',
+            'isActive' => 1
+        ]);
     }
 }

@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('service','ServiceController');
 	Route::resource('inspection','InspectionController');
 	Route::get('/inspection/data/{id}','InspectionController@getData');
+	Route::resource('rack','RackController');
 	Route::resource('package','PackageController');
 	Route::resource('promo','PromoController');
 	Route::resource('discount','DiscountController');
@@ -89,6 +90,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('category/reactivate/{id}','ServiceCategoryController@reactivate');
 	Route::patch('service/reactivate/{id}','ServiceController@reactivate');
 	Route::patch('inspection/reactivate/{id}','InspectionController@reactivate');
+	Route::patch('rack/reactivate/{id}','RackController@reactivate');
 	Route::patch('technician/reactivate/{id}','TechnicianController@reactivate');
 	Route::patch('package/reactivate/{id}','PackageController@reactivate');
 	Route::patch('promo/reactivate/{id}','PromoController@reactivate');
