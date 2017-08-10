@@ -94,7 +94,7 @@ class ServiceController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('service');
         }
     }
 
@@ -174,7 +174,7 @@ class ServiceController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
-            return Redirect::back();
+            return Redirect('service');
         }
     }
 
@@ -203,7 +203,7 @@ class ServiceController extends Controller
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('service');
     }
     
     public function reactivate(Request $request, $id)
@@ -213,6 +213,6 @@ class ServiceController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
-        return Redirect::back();
+        return Redirect('service');
     }
 }

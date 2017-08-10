@@ -95,7 +95,7 @@ class ProductVarianceController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('variance');
         }
     }
 
@@ -186,7 +186,7 @@ class ProductVarianceController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
-            return Redirect::back();
+            return Redirect('variance');
         }
     }
 
@@ -211,7 +211,7 @@ class ProductVarianceController extends Controller
             TypeVariance::where('varianceId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('variance');
     }
 
     public function reactivate(Request $request, $id)
@@ -221,7 +221,7 @@ class ProductVarianceController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully deactivated.'); 
-        return Redirect::back();
+        return Redirect('variance');
     }
 
     public function category($id)

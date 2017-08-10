@@ -50,13 +50,13 @@
                             @foreach($stocks as $product)
                             <tr>
                                 <?php
-                                    if($product->original!=null){
-                                        $part = "- ".$product->original;
+                                    if($product->isOriginal!=null){
+                                        $type = ($product->isOriginal=="type1" ? $util->type1 : $util->type2);
                                     }else{
-                                        $part = "";
+                                        $type = "";
                                     }
                                 ?>
-                                <td>{{$product->brand}} - {{$product->product}} {{$part}} ({{$product->variance}})</td>
+                                <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
                                 <td class="text-right">{{number_format($product->quantity)}}</td>
                                 <td class="text-right">{{number_format($product->reorder)}}</td>
                             </tr>

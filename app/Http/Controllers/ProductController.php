@@ -162,7 +162,7 @@ class ProductController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
-            return Redirect::back();
+            return Redirect('product');
         }
     }
 
@@ -293,7 +293,7 @@ class ProductController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');
-            return Redirect::back();
+            return Redirect('product');
         }
     }
 
@@ -330,7 +330,7 @@ class ProductController extends Controller
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('product');
     }
     
     public function reactivate(Request $request, $id)
@@ -340,7 +340,7 @@ class ProductController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
-        return Redirect::back();
+        return Redirect('product');
     }
 
     public function type($id){

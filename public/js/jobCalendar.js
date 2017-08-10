@@ -45,7 +45,7 @@ $('#calendar').fullCalendar({
             ping(this);
         }
     },
-    defaultView: 'agendaDay',
+    defaultView: 'listDay',
     eventClick: function(event,jsEvent,view){
         clickEvent(event.id);
     },
@@ -216,7 +216,7 @@ $(document).on('click','#viewWeek',function(){
 });
 
 $(document).on('click','#viewDay',function(){
-    $('#calendar').fullCalendar('changeView', 'agendaDay',datePick);
+    $('#calendar').fullCalendar('changeView', 'listDay',datePick);
     $('#viewDay').addClass('disabled');
     $('#viewMonth').removeClass('disabled');
     $('#viewWeek').removeClass('disabled');

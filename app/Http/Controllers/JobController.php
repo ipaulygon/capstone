@@ -293,7 +293,7 @@ class JobController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('job');
         }
     }
 
@@ -532,7 +532,7 @@ class JobController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
-            return Redirect::back();
+            return Redirect('job');
         }
     }
 
@@ -588,7 +588,7 @@ class JobController extends Controller
             'isFinalize' => 1
         ]);
         $request->session()->flash('success', 'Successfully finalized.');  
-        return Redirect::back();
+        return Redirect('job');
     }
 
     public function check($id){

@@ -6,6 +6,7 @@ $(document).on("click", "#addPerson", function (){
         '</button><br>').appendTo('#persons');
     $(value).find("input").val('');
     $(value).find(".contact").inputmask("+63 999 9999 999");
+    $(value).find('label').eq(0).text('Contact Person');
 });
 
 $(document).on("click", "#removePerson", function (){

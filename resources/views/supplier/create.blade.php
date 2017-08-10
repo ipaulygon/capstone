@@ -103,7 +103,7 @@
                     <div id="person" class="form-group">
                         <div class="row">
                             <div class="col-md-6">
-                                {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
+                                {!! Form::label('spName', 'Main Contact Person') !!}<span>*</span>
                                 {!! Form::input('text',null,null,[
                                     'class' => 'form-control',
                                     'name' => 'spName[]',

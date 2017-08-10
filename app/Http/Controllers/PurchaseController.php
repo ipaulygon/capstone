@@ -128,7 +128,7 @@ class PurchaseController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
-            return Redirect::back();
+            return Redirect('purchase');
         }
     }
 
@@ -237,7 +237,7 @@ class PurchaseController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');
-            return Redirect::back();
+            return Redirect('purchase');
         }
     }
 
@@ -263,7 +263,7 @@ class PurchaseController extends Controller
             PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('purchase');
     }
 
     public function reactivate(Request $request, $id)
@@ -273,7 +273,7 @@ class PurchaseController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
-        return Redirect::back();
+        return Redirect('purchase');
     }
 
     public function finalize(Request $request, $id){
@@ -282,7 +282,7 @@ class PurchaseController extends Controller
             'isFinalize' => 1
         ]);
         $request->session()->flash('success', 'Successfully finalized.');  
-        return Redirect::back();
+        return Redirect('purchase');
     }
 
     public function finalz($id){

@@ -89,7 +89,7 @@ class ProductBrandController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('brand');
         }
     }
 
@@ -168,7 +168,7 @@ class ProductBrandController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
-            return Redirect::back();
+            return Redirect('brand');
         }
     }
 
@@ -193,7 +193,7 @@ class ProductBrandController extends Controller
             TypeBrand::where('brandId',$id)->delete();
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('brand');
     }
 
     public function reactivate(Request $request,$id)
@@ -203,6 +203,6 @@ class ProductBrandController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
-        return Redirect::back();
+        return Redirect('brand');
     }
 }

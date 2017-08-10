@@ -67,7 +67,7 @@
         var backlog = {{$util->backlog}};
     </script>
 </head>
-<body id="mainBody" class="fixed hold-transition skin-yellow sidebar-mini">
+<body id="mainBody" class="fixed hold-transition skin-red sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->

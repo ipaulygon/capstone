@@ -168,7 +168,7 @@ class InspectController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('inspect');
         }
     }
 
@@ -330,7 +330,7 @@ class InspectController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
-            return Redirect::back();
+            return Redirect('inspect');
         }
     }
 

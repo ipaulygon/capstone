@@ -219,7 +219,7 @@
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
             <div class="form-inline pull-right">
                 <div class="form-group">
-                    {!! Form::label('price', 'Price') !!}<span>*</span>
+                    {!! Form::label('price', 'Promo Price') !!}<span>*</span>
                     <div class="input-group">
                         <span class="input-group-addon">PhP</span>
                         {!! Form::input('text','price',null,[

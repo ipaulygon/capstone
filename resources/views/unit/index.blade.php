@@ -105,16 +105,6 @@
                                                 'required']) 
                                             !!}
                                         </div>
-                                        <div class="form-group">
-                                            {!! Form::label('description', 'Description') !!}<span>*</span>
-                                            {!! Form::textarea('description',null,[
-                                                'class' => 'form-control',
-                                                'placeholder'=>'Description',
-                                                'maxlength'=>'50',
-                                                'rows'=>'2',
-                                                'required']) 
-                                            !!}
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -124,6 +114,18 @@
                                                 <option value="2">Volume</option>
                                                 <option value="3">Mass</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}<span>*</span>
+                                            {!! Form::textarea('description',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'2',
+                                                'required']) 
+                                            !!}
                                         </div>
                                     </div>
                                 </div>
@@ -161,17 +163,6 @@
                                                 'required']) 
                                             !!}
                                         </div>
-                                        <div class="form-group">
-                                            {!! Form::label('description', 'Description') !!}<span>*</span>
-                                            {!! Form::textarea('description',null,[
-                                                'id'=>'unitDesc',
-                                                'class' => 'form-control',
-                                                'placeholder'=>'Description',
-                                                'maxlength'=>'50',
-                                                'rows'=>'2',
-                                                'required']) 
-                                            !!}
-                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -181,6 +172,18 @@
                                                 <option value="2">Volume</option>
                                                 <option value="3">Mass</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}<span>*</span>
+                                            {!! Form::textarea('description',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'2',
+                                                'required']) 
+                                            !!}
                                         </div>
                                     </div>
                                 </div>

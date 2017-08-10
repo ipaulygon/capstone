@@ -157,7 +157,7 @@ class ReturnController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
-            return Redirect::back();
+            return Redirec('return');
         }
     }
 

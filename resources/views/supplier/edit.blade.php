@@ -61,7 +61,7 @@
                         @endif
                         <div class="row">
                         <div class="col-md-6">
-                            {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
+                            {!! Form::label('spName', 'Main Contact Person') !!}<span>*</span>
                             {!! Form::input('text',null,$person->spName,[
                                 'class' => 'form-control',
                                 'name' => 'spName[]',
