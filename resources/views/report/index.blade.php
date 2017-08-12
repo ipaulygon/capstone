@@ -41,12 +41,12 @@
                             <div class="input-group-addon" >
                                 <i class="fa fa-calendar"></i>
                             </div>
-                           {{--  {!! Form::input('text','date',$date,[
+                            {!! Form::input('text','date',null,[
                                 'class' => 'form-control',
                                 'id'=>'date',
                                 'placeholder'=>'Date',
                                 'required'])
-                            !!} --}}
+                            !!}
                         </div>
                     </div>
                 </div>
@@ -68,6 +68,10 @@
     <script src="{{ URL::asset('assets/chart/Chart.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script>
          var ctx = document.getElementById("myChart").getContext('2d');
 
@@ -201,7 +205,7 @@
             }
         });
     </script>
- {{--    <script>
+    <script>
         $('#reportId').on('change', function() {
           alert( this.value );
         })
@@ -226,5 +230,5 @@ $('#date').daterangepicker({
 }, cb);
 
 cb(start, end);
-    </script> --}}
+    </script>
 @stop

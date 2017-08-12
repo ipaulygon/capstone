@@ -132,7 +132,7 @@ class QueryController extends Controller
 				vehicle_model.id = vehicle.modelId JOIN vehicle_make ON vehicle_make.id = 
 				vehicle_model.makeId JOIN job_header ON job_header.vehicleId = vehicle.id WHERE 
 				job_header.isFinalize = 1 AND job_header.total = job_header.paid GROUP BY vehicle.plate, 
-				vehicle.mileage, vehicle_model.name, vehicle_model.year, vehicle_model.transmission, 
+				vehicle.mileage, vehicle_model.name, vehicle_model.year, 
 				vehicle_make.name")
              );
             return response()->json(['query'=>$query]);

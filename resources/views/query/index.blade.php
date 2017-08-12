@@ -75,6 +75,8 @@
                         'ajax': data.query,
                         'destroy': true,
                         'columns': [{
+                            "className":      'details-control',
+                            "orderable":      false,
                             'data': null,
                             'defaultContent': ''
                         },
