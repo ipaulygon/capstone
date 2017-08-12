@@ -98,7 +98,7 @@ class QueryController extends Controller
             // ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
             // ->get();
             $query = DB::select(DB::raw("
-				SELECT COUNT(*), product.name as product, product_brand.name as brand, product_variance.name as variance FROM product 
+				SELECT COUNT(*) as count, product.name as product, product_brand.name as brand, product_variance.name as variance FROM product 
 				JOIN product_brand on product.brandId = product_brand.id 
 				JOIN product_variance on product.varianceId = product_variance.id
 				JOIN job_product ON product.id = job_product.productId 
@@ -110,7 +110,7 @@ class QueryController extends Controller
         }
         else if($id==2){
              $query = DB::select(DB::raw("
-				SELECT COUNT(*), service.name FROM `service` JOIN job_service ON 
+				SELECT COUNT(*) as count, service.name as service FROM `service` JOIN job_service ON 
 				service.id = job_service.serviceId JOIN job_header ON job_header.id = job_service.serviceId 
 				WHERE job_header.isFinalize = 1 AND job_header.total = job_header.paid
 				 GROUP BY service.name LIMIT 1 ")
@@ -119,7 +119,7 @@ class QueryController extends Controller
         }
         else if($id==3){
              $query = DB::select(DB::raw("
-				SELECT COUNT(*), technician.firstName, technician.middleName, technician.lastName 
+				SELECT COUNT(*) as count, technician.firstName, technician.middleName, technician.lastName 
 				FROM technician JOIN job_technician ON technician.id = job_technician.technicianId 
 				JOIN job_header ON job_header.id = job_technician.technicianId WHERE job_header.isFinalize 
 				= '1' GROUP BY technician.firstName, technician.middleName, technician.lastName LIMIT 1")
@@ -128,8 +128,7 @@ class QueryController extends Controller
         }
         else if($id==4){
              $query = DB::select(DB::raw("
-				SELECT COUNT(*), vehicle.plate, vehicle.mileage, vehicle_model.name, vehicle_model.year, 
-				vehicle_model.transmission, vehicle_make.name FROM vehicle JOIN vehicle_model ON 
+				SELECT COUNT(*) as count, vehicle.plate, vehicle.mileage, vehicle_model.name, vehicle_model.year, vehicle_make.name FROM vehicle JOIN vehicle_model ON 
 				vehicle_model.id = vehicle.modelId JOIN vehicle_make ON vehicle_make.id = 
 				vehicle_model.makeId JOIN job_header ON job_header.vehicleId = vehicle.id WHERE 
 				job_header.isFinalize = 1 AND job_header.total = job_header.paid GROUP BY vehicle.plate, 
