@@ -52,11 +52,11 @@
                 </div>
                 </div>
 
-        <canvas id="myChart" width="400" height="100"></canvas>
+        <canvas id="myChart1" class="chart hidden" width="400" height="100"></canvas>
 
-        <canvas id="myChart2" width="400" height="100"></canvas>
+        <canvas id="myChart2" class="chart hidden" width="400" height="100"></canvas>
 
-        <canvas id="myChart3" width="400" height="100"></canvas>
+        <canvas id="myChart3" class="chart hidden" width="400" height="100"></canvas>
        
         </div>
     </div>
@@ -73,34 +73,33 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script>
-         var ctx = document.getElementById("myChart").getContext('2d');
+         var ctx = document.getElementById("myChart1").getContext('2d');
 
-        var myChart = new Chart(ctx, {
+
+        var myChart1 = new Chart(ctx, {
             type: 'bar',
             data: {
             labels: [
-              @foreach($data as $rows) 
-                    '{{$rows->brand}} - {{$rows->name}}', 
-              @endforeach
+                  @foreach($data as $rows) 
+                        '{{$rows->brand}} - {{$rows->name}}', 
+                  @endforeach
+                        ],
+                datasets: [{
+                    label: 'List of Products',
+                   
+                    data: [
+                      @foreach($data as $rows) 
+                        '{{$rows->quantity}}', 
+                      @endforeach
+                          ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
                     ],
-            datasets: [{
-            label: 'List of Products',
-           
-            data: [
-              @foreach($data as $rows) 
-                '{{$rows->quantity}}', 
-              @endforeach
-                  ],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-            ],
-            borderWidth: 1
-        }]
-
-  
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                    ],
+                    borderWidth: 1
+                }]
             },
             options: {
                 scales: {
@@ -112,6 +111,7 @@
                 }
             }
         });
+
 
         var ctx2 = document.getElementById("myChart2").getContext('2d');
         var myChart2 = new Chart(ctx2, {
@@ -206,29 +206,43 @@
         });
     </script>
     <script>
-        $('#reportId').on('change', function() {
-          alert( this.value );
+        $('#reportId').on('change', function() {          
+          $('.chart').addClass('hidden');
+          $('#myChart'+$(this).val()).removeClass('hidden');
         })
-$('#date').inputmask('99/99/9999-99/99/9999');
-        var start = moment();
-var end = moment();
 
-function cb(start, end) {
-    $('#date input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-}
+        $('#date').on('change', function() {
+              id = $('#date').val();
+                $.ajax({
+                type: 'POST',
+                url: '/report/where',
+                data: {id : id},
+                success: function(data){
+                    console.log(data);
+                },
+            });
+        });
 
-$('#date').daterangepicker({
-    minDate: start,
-    startDate: start,
-    endDate: end,
-    ranges: {
-        'Today': [moment(), moment()],
-        'Last for 7 Days': [moment(), moment().add(6, 'days')],
-        'Last for 30 Days': [moment(), moment().add(29, 'days')],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-    }
-}, cb);
+        $('#date').inputmask('99/99/9999-99/99/9999');
+                var start = moment();
+        var end = moment();
 
-cb(start, end);
+        function cb(start, end) {
+            $('#date input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+
+        $('#date').daterangepicker({
+            minDate: start,
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Last for 7 Days': [moment(), moment().add(6, 'days')],
+                'Last for 30 Days': [moment(), moment().add(29, 'days')],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+            }
+        }, cb);
+
+        cb(start, end);
     </script>
 @stop
