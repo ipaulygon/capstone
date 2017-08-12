@@ -85,7 +85,7 @@ class InspectionController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
-            return Redirect::back();
+            return Redirect('inspection');
         }
     }
 
@@ -164,7 +164,7 @@ class InspectionController extends Controller
                 return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.'); 
-            return Redirect::back();
+            return Redirect('inspection');
         }
     }
 
@@ -191,7 +191,7 @@ class InspectionController extends Controller
             ]);
             $request->session()->flash('success', 'Successfully deactivated.');  
         }
-        return Redirect::back();
+        return Redirect('inspection');
     }
     
     public function reactivate(Request $request, $id)
@@ -201,7 +201,7 @@ class InspectionController extends Controller
             'isActive' => 1
         ]);
         $request->session()->flash('success', 'Successfully reactivated.');  
-        return Redirect::back();
+        return Redirect('inspection');
     }
 
     public function remove(Request $request, $id){

@@ -183,13 +183,84 @@
                 <div class="col-md-8">
                     <div id="processBox" class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Process Job Order</h3>
+                            <h3 class="box-title">Job Order Details</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                                 <i class="fa fa-minus"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" style="border: none!important">
+                                        {!! Form::label('computed', 'Balance: ',[
+                                        'style' => 'font-size:18px']) !!}
+                                        PhP</span>
+                                        <strong>{!! Form::input('text','computed',0,[
+                                            'class' => 'form-control',
+                                            'id' => 'balance',
+                                            'style' => 'border: none!important;background: transparent!important',
+                                            'readonly']) 
+                                        !!}</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="collapse" id="viewDetails">
+                                        <div class="col-md-12">
+                                            <label class="pull-left">Total Price: </label>
+                                            <strong>{!! Form::input('text','totalPrice',0,[
+                                                'class' => 'prices pull-right',
+                                                'id' => 'totalPrice',
+                                                'style' => 'border: none!important;background: transparent!important',
+                                                'readonly']) 
+                                            !!}</strong>
+                                        </div>
+                                        <div class="dataTable_wrapper">
+                                            <label>Payments:</label>
+                                            <table id="paymentList" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%" class="text-right">Amount</th>
+                                                        <th width="5%">Method</th>
+                                                        <th class="text-right">Date</th>>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addPayment">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
+                                            <input type="hidden" id="paymentId">
+                                            <input type="hidden" id="paymentMethod" value="0">
+                                            {!! Form::input('text','inputPayment',null,[
+                                                'id'=>'inputPayment',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Payment']) 
+                                            !!}
+                                        </div>
+                                        <div id="creditCard" class="form-group hidden">
+                                            {!! Form::label('inputCredit', 'Credit Card: ') !!}
+                                            {!! Form::input('text','inputCredit',null,[
+                                                'id'=>'inputCredit',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Credit']) 
+                                            !!}
+                                        </div>
+                                        <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
                             <label>Progress:</label>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
@@ -223,67 +294,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <div class="input-group">
-                                <span class="input-group-addon" style="border: none!important">
-                                {!! Form::label('computed', 'Balance: ',[
-                                'style' => 'font-size:18px']) !!}
-                                PhP</span>
-                                <strong>{!! Form::input('text','computed',0,[
-                                    'class' => 'form-control',
-                                    'id' => 'balance',
-                                    'style' => 'border: none!important;background: transparent!important',
-                                    'readonly']) 
-                                !!}</strong>
-                            </div>
-                            <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Details <i class="fa fa-caret-down"></i></a>
-                            <br>
-                            <div class="collapse" id="viewDetails">
-                                <div class="col-md-12">
-                                    <label class="pull-left">Total Price: </label>
-                                    <strong>{!! Form::input('text','totalPrice',0,[
-                                        'class' => 'prices pull-right',
-                                        'id' => 'totalPrice',
-                                        'style' => 'border: none!important;background: transparent!important',
-                                        'readonly']) 
-                                    !!}</strong>
-                                </div>
-                                <div class="dataTable_wrapper">
-                                    <label>Payments:</label>
-                                    <table id="paymentList" class="table table-striped table-bordered responsive">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%"></th>
-                                                <th width="5%" class="text-right">Amount</th>
-                                                <th width="5%">Method</th>
-                                                <th class="text-right">Date</th>>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="addPayment">
-                                {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
-                                <input type="hidden" id="paymentId">
-                                <input type="hidden" id="paymentMethod" value="0">
-                                {!! Form::input('text','inputPayment',null,[
-                                    'id'=>'inputPayment',
-                                    'class' => 'form-control',
-                                    'placeholder'=>'Payment']) 
-                                !!}
-                                <br>
-                                <div id="creditCard" class="hidden">
-                                    {!! Form::label('inputCredit', 'Credit Card: ') !!}
-                                    {!! Form::input('text','inputCredit',null,[
-                                        'id'=>'inputCredit',
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Credit']) 
-                                    !!}<br>
-                                </div>
-                                <br><br>
-                                <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

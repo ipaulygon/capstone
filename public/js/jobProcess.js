@@ -1,13 +1,13 @@
 var procList = $('#processList').DataTable({
-    responsive: true,
-    ordering: false,
+    "responsive": true,
+    "ordering": false,
     "searching": false,
     "paging": false,
     "info": false,
     "retrieve": true,
 });
 var payList = $('#paymentList').DataTable({
-    responsive: true,
+    "responsive": true,
     "searching": false,
     "paging": false,
     "info": false,
@@ -269,10 +269,8 @@ function process(id){
                 });
             });
             $.each(data.job.payment,function(key,value){
-                no = key+1;
                 method = (value.isCredit ? "Credit Card" : "Cash");
                 row = payList.row.add([
-                    no+'.',
                     '<input class="prices" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>',
                     method,
                     value.created_at,
@@ -338,10 +336,8 @@ $(document).on('click','#savePayment', function(){
                     data.message +
                     '</div>'
                 );
-                no = data.job.payment.length+1;
                 method = (method==1 ? "Credit Card" : "Cash");
                 row = payList.row.add([
-                    no+'.',
                     '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',
                     method,
                     data.payment.created_at,

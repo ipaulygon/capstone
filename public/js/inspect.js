@@ -4,7 +4,7 @@ function popForm(typeId,typeName,itemId,itemName,form){
             '<div id="panel'+typeId+'" class="panel panel-default">' +
             '<div class="panel-heading" role="tab" id="heading'+typeId+'">' +
             '<h2 class="panel-title" style="font-weight:bold!important">' +
-            '<a role="button" data-toggle="collapse" data-parent="#panel'+typeId+'" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">'+typeName+'</a></h2>' +
+            '<a role="button" data-toggle="collapse" data-parent="#form-box" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">'+typeName+'</a></h2>' +
             '</div>' +
             '<div id="collapse'+typeId+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+typeId+'">' +
             '<div id="body'+typeId+'" class="panel-body"></div>' +
@@ -36,7 +36,7 @@ $(document).on('change', '.formed input', function(){
     valued = $(this).val();
     name = this.name;
     parent = $(this).parents('.formed');
-    textarea = parent.find('textarea');
+    textarea = parent.find('#form');
     form = JSON.parse(textarea.text());
     $.each(form,function(key,value){
         if(name==value.name){

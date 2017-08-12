@@ -53,5 +53,13 @@ class DatabaseSeeder extends Seeder
         $this->call(DeliveryHeaderSeeder::class);
         $this->call(DeliveryDetailSeeder::class);
         $this->call(DeliveryOrderSeeder::class);
+        $this->call(CustomerSeeder::class);
+        $this->call(VehicleSeeder::class);
+        $this->call(JobHeaderSeeder::class);
+        $this->call(JobProductSeeder::class);
+        $this->call(JobServiceSeeder::class);
+        $this->call(JobPackageSeeder::class);
+        $this->call(JobDiscountSeeder::class);
+        $this->call(JobTechnicianSeeder::class);
     }
 }
