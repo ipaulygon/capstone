@@ -65,7 +65,7 @@ function process(id){
             $('#balance').val(balance);
             $("#balance").inputmask({ 
                 alias: "currency",
-                prefix: '',
+                prefix: 'PhP ',
                 allowMinus: false,
                 autoGroup: true,
                 min: balance,
@@ -290,6 +290,7 @@ function process(id){
 
 $(document).on('click','#savePayment', function(){
     balance = $('#balance').val().replace(',','');
+    balance = balance.replace('PhP ','');
     payment = $('#inputPayment').val().replace(',','');
     method = $('#paymentMethod').val();
     credit = $('#inputCredit').val();
@@ -307,7 +308,7 @@ $(document).on('click','#savePayment', function(){
         $('#balance').val(balance);
         $("#balance").inputmask({ 
             alias: "currency",
-            prefix: '',
+            prefix: 'PhP ',
             allowMinus: false,
             autoGroup: true,
             min: balance,

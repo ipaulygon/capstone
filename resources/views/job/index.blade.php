@@ -192,16 +192,14 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" style="border: none!important">
-                                        {!! Form::label('computed', 'Balance: ',[
-                                        'style' => 'font-size:18px']) !!}
-                                        PhP</span>
+                                    <div class="form-group form-inline">
+                                        {!! Form::label('computed', 'Balance:',[
+                                            'style' => 'font-size:18px;margin-top:4px'
+                                        ]) !!}
                                         <strong>{!! Form::input('text','computed',0,[
-                                            'class' => 'form-control',
+                                            'class' => 'form-control no-border-input',
                                             'id' => 'balance',
-                                            'style' => 'border: none!important;background: transparent!important',
-                                            'readonly']) 
+                                            'readonly'])
                                         !!}</strong>
                                     </div>
                                 </div>
