@@ -194,13 +194,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group form-inline">
                                         {!! Form::label('computed', 'Balance:',[
-                                            'style' => 'font-size:14px'
+                                            'style' => 'font-size:18px;margin-top:4px'
                                         ]) !!}
-                                        {!! Form::input('text','computed',0,[
+                                        <strong>{!! Form::input('text','computed',0,[
                                             'class' => 'form-control no-border-input',
                                             'id' => 'balance',
                                             'readonly'])
-                                        !!}
+                                        !!}</strong>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
