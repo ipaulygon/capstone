@@ -25,6 +25,8 @@ class DashboardController extends Controller
             ->where('i.quantity','<=','p.reorder')
             ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
+
+          
         return View('dashboard',compact('stocks'));
     }
 

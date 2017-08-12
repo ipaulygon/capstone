@@ -38,10 +38,12 @@
                         <tr>
                             <th>Item</th>
                             <th>Count</th>
+                            <th>qwe</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -68,14 +70,18 @@
                 url: '/query/load',
                 data: {id : id},
                 success: function(data){
+                    console.log(data);
                     $('#list').DataTable({
                         'ajax': data.query,
+                        'destroy': true,
                         'columns': [{
+                            "className":      'details-control',
+                            "orderable":      false,
                             'data': null,
                             'defaultContent': ''
                         },
                         {'data': 'count'},
-                        {'data': 'name'},
+                        {'data': 'product'},
                         ]
                     });
                 },

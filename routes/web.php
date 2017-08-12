@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('query','QueryController');
 	Route::post('query/load','QueryController@load');
 	Route::resource('report','ReportController');
+	Route::post('report/where','ReportController@where');
 	Route::resource('utility','UtilitiesController');
 
 	//PDF
