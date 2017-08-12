@@ -20,42 +20,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/iCheck/all.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
-    <style>
-        body{
-            font-family: 'Segoe UI'
-        }
-        form span{
-            font-weight: 580;
-            color: red;
-        }
-        form input{
-            font-weight: 580;
-        }
-        form select{
-            font-weight: 580;
-        }
-        form textarea{
-            font-weight: 580;
-        }
-        label{
-            font-weight: 600;
-        }
-        .no-border-input{
-            border: none!important;
-            background: transparent!important
-        }
-        .select2-container{
-            width: 100%!important;
-        }
-        @media (min-width: 992px){
-            .dataTables_filter{
-                float:left;
-            }
-            .dataTables_length{
-                float:right;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ URL::asset('css/custom.css') }}">
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([

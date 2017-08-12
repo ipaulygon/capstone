@@ -53,6 +53,24 @@ function process(id){
     $('#jobCarousel').carousel(2);
     $('#paymentId').val(id);
     $.ajax({
+        type: 'GET',
+        url: '/job/check/'+id,
+        dataType: 'JSON',
+        success:function(data){
+            $('.processTechs').remove();
+            $('#processStart').text(data.job.start);
+            $('#processEnd').text(data.job.end);
+            $('#processPlate').text(data.job.vehicle.plate);
+            transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
+            $('#processModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
+            $('#processMileage').text(data.job.vehicle.mileage);
+            $('#processCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
+            $.each(data.job.technician,function(key,value){
+                $('#processTechs').append('<li class="processTechs">'+value.technician.firstName+' '+value.technician.lastName+'</li>');
+            });
+        }
+    })
+    $.ajax({
         type: "GET",
         url: "/job/get/"+id,
         dataType: "JSON",
@@ -139,15 +157,8 @@ function process(id){
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
                         }
                         row = procList.row.add([
-                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" href="#serv'+data.service.id+'" title="Update Item">' +
-                                '<i class="glyphicon glyphicon-menu-hamburger"></i>' +
-                            '</button>',
-                            data.service.name+" - "+data.service.size+" ("+data.service.category.name+")" +
-                                '<div id="serv'+data.service.id+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="">' +
-                                '<div class="panel-body">' +
-                                data.service.name+" - "+data.service.size+" ("+data.service.category.name+")" +
-                                '</div>' +
-                                '</div>',
+                            '',
+                            data.service.name+" - "+data.service.size+" ("+data.service.category.name+")",
                             '',
                             '',
                             status
@@ -375,6 +386,7 @@ $(document).on('keyup', '#inputPayment' ,function (){
                 var content = "Oops! Your input exceeds the price to be paid. The max value will be set.";
                 return content;
             },
+            container: 'body',
             placement: function(){
                 var placement = 'left';
                 return placement;
@@ -394,6 +406,7 @@ $(document).on('focus','#inputPayment',function(){
             var content = '<button type="button" id="cashP" class="btn btn-primary btn-block">Cash</button><button type="button" id="creditP" class="btn btn-primary btn-block">Credit Card</button>';
             return content;
         },
+        container: 'body',
         html: true,
         placement: function(){
             var placement = 'top';

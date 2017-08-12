@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/fullcalendar/fullcalendar.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/switch-css/bootstrap-switch.min.css') }}">
 @stop
 
 @section('content')
@@ -54,7 +55,7 @@
                                 <i class="fa fa-minus"></i></button>
                             </div>
                         </div>
-                        <div class="box-body" style="font-size: 15px">
+                        <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Job Id:</label> <span id="detailId"></span>
@@ -178,8 +179,41 @@
             <div id="processForm" class="item">
                 {!! Form::open(['method'=>'post','action' => ['JobController@process',0]]) !!}
                 <input id="processId" name="id" type="hidden">
-                <div class="col-md-8"><button id="backProcess" type="button" class="btn btn-success btn-md"><i class="fa fa-angle-double-left"></i> Back</button><br><br></div>
-                <div class="col-md-4"></div>
+                <div class="col-md-12">
+                    <button id="backProcess" type="button" class="btn btn-success btn-md pull-left"><i class="fa fa-angle-double-left"></i> Back</button>
+                    {!! Form::submit('Save', ['class'=>'btn btn-primary pull-right']) !!}
+                </div>
+                <br><br>
+                <div class="col-md-4">
+                    <div id="infoBox" class="box box-success">
+                        <div class="box-header with border">
+                            <h3 class="box-title">Customer Details</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6 pull-left">
+                                    <label>Start:</label><br><span class="pro" id="processStart"></span>
+                                </div>
+                                <div class="col-md-6 pull-right">
+                                    <label>End:</label><br><span class="pro" id="processEnd"></span>
+                                </div>
+                            </div>
+                            <label>Vehicle:</label><br>
+                            <ul>
+                                <li>Plate: <span class="pro" id="processPlate"></span></li>
+                                <li>Model: <span class="pro" id="processModel"></span></li>
+                                <li>Mileage: <span class="pro" id="processMileage"></span></li>
+                            </ul>
+                            <label>Customer:</label> <span class="pro" id="processCustomer"></span><br>
+                            <label>Technician(s):</label>
+                            <ul id="processTechs"></ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-8">
                     <div id="processBox" class="box box-primary">
                         <div class="box-header with-border">
@@ -193,30 +227,45 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-inline">
-                                        {!! Form::label('computed', 'Balance:',[
-                                            'style' => 'font-size:18px;margin-top:4px'
-                                        ]) !!}
+                                        {!! Form::label('computed', 'Balance:') !!}
                                         <strong>{!! Form::input('text','computed',0,[
                                             'class' => 'form-control no-border-input',
                                             'id' => 'balance',
                                             'readonly'])
                                         !!}</strong>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                </div>
+                                <div class="col-md-6 addPayment">
+                                    <div class="form-group form-inline">
+                                        {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
+                                        <input type="hidden" id="paymentId">
+                                        <input type="hidden" id="paymentMethod" value="0">
+                                        {!! Form::input('text','inputPayment',null,[
+                                            'id'=>'inputPayment',
+                                            'class' => 'form-control',
+                                            'placeholder'=>'Payment']) 
+                                        !!}
+                                    </div>
+                                    <div id="creditCard" class="form-group hidden">
+                                        {!! Form::label('inputCredit', 'Credit Card: ') !!}
+                                        {!! Form::input('text','inputCredit',null,[
+                                            'id'=>'inputCredit',
+                                            'class' => 'form-control',
+                                            'placeholder'=>'Credit']) 
+                                        !!}
+                                    </div>
+                                    <button onclick="" type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="collapse" id="viewDetails">
-                                        <div class="col-md-12">
-                                            <label class="pull-left">Total Price: </label>
-                                            <strong>{!! Form::input('text','totalPrice',0,[
-                                                'class' => 'prices pull-right',
-                                                'id' => 'totalPrice',
-                                                'style' => 'border: none!important;background: transparent!important',
-                                                'readonly']) 
-                                            !!}</strong>
-                                        </div>
+                                        <label>Total Price: </label>
+                                        <strong>{!! Form::input('text','totalPrice',0,[
+                                            'class' => 'prices',
+                                            'id' => 'totalPrice',
+                                            'style' => 'border: none!important;background: transparent!important',
+                                            'readonly']) 
+                                        !!}</strong>
                                         <div class="dataTable_wrapper">
                                             <label>Payments:</label>
                                             <table id="paymentList" class="table table-striped table-bordered responsive">
@@ -230,31 +279,6 @@
                                                 <tbody></tbody>
                                             </table>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="addPayment">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
-                                            <input type="hidden" id="paymentId">
-                                            <input type="hidden" id="paymentMethod" value="0">
-                                            {!! Form::input('text','inputPayment',null,[
-                                                'id'=>'inputPayment',
-                                                'class' => 'form-control',
-                                                'placeholder'=>'Payment']) 
-                                            !!}
-                                        </div>
-                                        <div id="creditCard" class="form-group hidden">
-                                            {!! Form::label('inputCredit', 'Credit Card: ') !!}
-                                            {!! Form::input('text','inputCredit',null,[
-                                                'id'=>'inputCredit',
-                                                'class' => 'form-control',
-                                                'placeholder'=>'Credit']) 
-                                            !!}
-                                        </div>
-                                        <button onclick="" type="button" id="savePayment" class="btn btn-primary btn-md">Add Payment</button>
                                     </div>
                                 </div>
                             </div>
@@ -279,20 +303,6 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div id="paymentBox" class="box box-success">
-                        <div class="box-header with border">
-                            <h3 class="box-title">Payment</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                <i class="fa fa-minus"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            
                         </div>
                     </div>
                 </div>
@@ -346,6 +356,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/switch-js/bootstrap-switch.min.js') }}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/job.js') }}"></script>
     <script src="{{ URL::asset('js/jobFinal.js') }}"></script>
