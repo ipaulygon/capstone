@@ -2,9 +2,9 @@ function popForm(typeId,typeName,itemId,itemName,form){
     if(!$('#panel'+typeId+'').length){
         $('#form-box').append(
             '<div id="panel'+typeId+'" class="panel panel-default">' +
-            '<div class="panel-heading" role="tab" id="heading'+typeId+'">' +
-            '<h2 class="panel-title" style="font-weight:bold!important">' +
-            '<a role="button" data-toggle="collapse" data-parent="#form-box" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">'+typeName+'</a></h2>' +
+            '<div class="panel-heading" role="tab" id="heading'+typeId+'" data-toggle="collapse" data-parent="#form-box" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">' +
+            '<h2 class="panel-title" style="font-weight:bold!important;color:black!important">' +
+            '<a role="button">'+typeName+'</a></h2>' +
             '</div>' +
             '<div id="collapse'+typeId+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading'+typeId+'">' +
             '<div id="body'+typeId+'" class="panel-body"></div>' +
@@ -77,3 +77,31 @@ $(document).on('change', '.formed input', function(){
     });
     textarea.text(JSON.stringify(form));
 });
+
+function pdfForm(typeId,typeName,itemId,itemName,form){
+    if(!$('#panel'+typeId+'').length){
+        $('#form-box').append(
+            '<div id="panel'+typeId+'" class="panel panel-primary">' +
+            '<div class="panel-heading" role="tab" id="heading'+typeId+'" data-parent="#form-box" href="#collapse'+typeId+'" aria-expanded="true" aria-controls="collapse'+typeId+'">' +
+            '<h2 class="panel-title" style="font-weight:bold!important;color:white!important">' +
+            '<a role="button">'+typeName+'</a></h2>' +
+            '</div>' +
+            '<div id="collapse'+typeId+'" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading'+typeId+'">' +
+            '<div id="body'+typeId+'" class="panel-body"></div>' +
+            '</div>' +
+            '</div>'
+        );
+    }
+    $('#body'+typeId+'').append(
+        '<div id="item'+itemId+'" class="row formed"></div>'
+    );
+    var formContainer = $('#item'+itemId+'');
+    var formData = form;
+    var formRenderOpts = {
+        dataType: 'json',
+        formData: formData
+    };
+    formContainer.formRender(formRenderOpts);
+    formContainer.prepend('<label style="padding-left: 1.2%">'+itemName+':</label><br>');
+    formContainer.children('.form-group').addClass('col-md-3')
+}

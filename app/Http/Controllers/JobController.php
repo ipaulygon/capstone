@@ -12,12 +12,14 @@ use App\JobTechnician;
 use App\JobPayment;
 use App\Vehicle;
 use App\Customer;
+use App\Inventory;
 use Validator;
 use Redirect;
 use Response;
 use Session;
 use DB;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon as Carbon;
 
 class JobController extends Controller
 {
@@ -554,8 +556,7 @@ class JobController extends Controller
     }
 
     public function process($id){
-        $job = JobHeader::findOrFail($id);
-        return $job;
+        return View('layouts.404');
     }
 
     public function pay(Request $request){
@@ -594,5 +595,236 @@ class JobController extends Controller
     public function check($id){
         $job = JobHeader::with('customer','vehicle.model.make','technician.technician')->findOrFail($id);
         return response()->json(['job'=>$job]);
+    }
+
+    public function jobProduct(Request $request){
+        try{
+            DB::beginTransaction();
+            $product = JobProduct::findOrFail($request->detailId);
+            $inventory = Inventory::where('productId',$request->productId)->first();
+            $stack = $inventory->quantity + $product->completed;
+            $inventory->update([
+                'quantity' => $stack
+            ]);
+            $completed = ($request->detailQty==$product->quantity ? 1 : 0);
+            $product->update([
+                'completed' => $request->detailQty,
+                'isComplete' => $completed
+            ]);
+            $stack = $inventory->quantity - $request->detailQty;
+            $inventory->update([
+                'quantity' => $stack
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Job successfully updated','completed'=>$completed]);
+    }
+
+    public function jobService(Request $request){
+        try{
+            DB::beginTransaction();
+            $service = JobService::findOrFail($request->detailId);
+            $completed = $request->detailDone;
+            $service->update([
+                'isComplete' => $completed
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Job successfully updated','completed'=>$completed]);
+    }
+    
+    public function jobPackage(Request $request){
+        try{
+            DB::beginTransaction();
+            $package = JobPackage::findOrFail($request->detailId);
+            $completed = ($request->detailQty==$package->quantity ? 1 : 0);
+            $check = 1;
+            foreach($package->package->product as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = ($product->quantity*$package->completed)+$inventory->quantity;
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            foreach($package->package->product as $product){
+                $total = $product->quantity*$request->detailQty;
+                if($product->product->inventory->quantity<$total){
+                    $check = 0;
+                }
+            }
+            foreach($package->package->product as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = $inventory->quantity-($product->quantity*$package->completed);
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            if($check==1){
+                foreach($package->package->product as $product){
+                    $inventory = Inventory::where('productId',$product->productId)->first();
+                    $reset = ($product->quantity*$package->completed)+$inventory->quantity;
+                    $total = $product->quantity*$request->detailQty;
+                    $inventory->update([
+                        'quantity' => $reset
+                    ]);
+                    $total = $inventory->quantity - $total;
+                    $inventory->update([
+                        'quantity' => $total
+                    ]);
+                }
+                $package->update([
+                    'completed' => $request->detailQty,
+                    'isComplete' => $completed
+                ]);   
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        if($check){
+            return response()->json(['error'=>0,'message'=>'Job successfully updated','completed'=>$completed]);
+        }else{
+            return response()->json(['error'=>1,'message'=>'Insufficient resources','completed'=>$completed]);
+        }
+    }
+
+    public function jobPromo(Request $request){
+        try{
+            DB::beginTransaction();
+            $promo = JobPromo::findOrFail($request->detailId);
+            $completed = ($request->detailQty==$promo->quantity ? 1 : 0);
+            $check = 1;
+            foreach($promo->promo->product as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            foreach($promo->promo->freeProduct as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            foreach($promo->promo->product as $product){
+                $total = $product->quantity*$request->detailQty;
+                if($product->product->inventory->quantity<$total){
+                    $check = 0;
+                }
+            }
+            foreach($promo->promo->freeProduct as $product){
+                $total = $product->quantity*$request->detailQty;
+                if($product->product->inventory->quantity<$total){
+                    $check = 0;
+                }
+            }
+            foreach($promo->promo->product as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = $inventory->quantity-($product->quantity*$promo->completed);
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            foreach($promo->promo->freeProduct as $product){
+                $inventory = Inventory::where('productId',$product->productId)->first();
+                $reset = $inventory->quantity-($product->quantity*$promo->completed);
+                $inventory->update([
+                    'quantity' => $reset
+                ]);
+            }
+            if($check){
+                foreach($promo->promo->product as $product){
+                    $inventory = Inventory::where('productId',$product->productId)->first();
+                    $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
+                    $total = $product->quantity*$request->detailQty;
+                    $inventory->update([
+                        'quantity' => $reset
+                    ]);
+                    $total = $inventory->quantity - $total;
+                    $inventory->update([
+                        'quantity' => $total
+                    ]);
+                }
+                foreach($promo->promo->freeProduct as $product){
+                    $inventory = Inventory::where('productId',$product->productId)->first();
+                    $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
+                    $total = $product->quantity*$request->detailQty;
+                    $inventory->update([
+                        'quantity' => $reset
+                    ]);
+                    $total = $inventory->quantity - $total;
+                    $inventory->update([
+                        'quantity' => $total
+                    ]);
+                }
+                $promo->update([
+                    'completed' => $request->detailQty,
+                    'isComplete' => $completed
+                ]);   
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        if($check){
+            return response()->json(['error'=>0,'message'=>'Job successfully updated','completed'=>$completed]);
+        }else{
+            return response()->json(['error'=>1,'message'=>'Insufficient resources','completed'=>$completed]);
+        }
+    }
+
+    public function jobFinal(Request $request){
+        try{
+            DB::beginTransaction();
+             $job = JobHeader::findOrFail($request->id);
+            $check = 1;
+            foreach($job->product as $product){
+                if(!$product->isComplete){
+                    $check = 0;
+                }
+            }
+            foreach($job->service as $service){
+                if(!$service->isComplete){
+                    $check = 0;
+                }
+            }
+            foreach($job->package as $package){
+                if(!$package->isComplete){
+                    $check = 0;
+                }
+            }
+            foreach($job->promo as $promo){
+                if(!$promo->isComplete){
+                    $check = 0;
+                }
+            }
+            $end = ($check ? Carbon::now() : null);
+            $job->update([
+                'isComplete' => $check,
+                'end' => $end
+            ]);
+            $jobs = DB::table('job_header as j')
+                ->join('customer as c','c.id','j.customerId')
+                ->join('vehicle as v','v.id','j.vehicleId')
+                ->join('vehicle_model as vd','vd.id','v.modelId')
+                ->join('vehicle_make as vk','vk.id','vd.makeId')
+                ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
+                ->get();
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Job finished','jobs'=>$jobs]);
     }
 }

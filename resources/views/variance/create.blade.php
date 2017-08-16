@@ -102,7 +102,6 @@
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('js/variance.js') }}"></script>
     <script>
-        $(".select2").select2();
         var activeTypes = [
             @if(old('type'))
                 @foreach(old('type') as $type)
@@ -111,6 +110,10 @@
             @endif
         ];
         $("#pt").val(activeTypes);
+        @if(old('category'))
+            $('#uc').val({{old('category')}});
+        @endif
+        $(".select2").select2();
     </script>
     <script>
         $(document).ready(function (){

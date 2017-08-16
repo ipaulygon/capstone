@@ -21,6 +21,9 @@ label{
     border: none!important;
     background: transparent!important
 }
+.panel-heading {
+    cursor: pointer;
+}
 .select2-container{
     width: 100%!important;
 }
@@ -35,3 +38,4 @@ span.pro{
         float:right;
     }
 }
+

@@ -72,7 +72,7 @@
         </div><br>
         <div style="float:left" class="col-md-6">
             Supplier: {{$delivery->supplier->name}}<br>
-            Address: {{$delivery->supplier->address}}
+            Address: {{$delivery->supplier->street}} {{$delivery->supplier->brgy}} {{$delivery->supplier->city}}
         </div>
         <div style="float:right"  class="col-md-6">
             Date: {{date('F j, Y',strtotime($delivery->dateMake))}}<br>

@@ -11,6 +11,7 @@ use PDF;
 //MODELS
 use App\PurchaseHeader;
 use App\DeliveryHeader;
+use App\InspectionHeader;
 use App\EstimateHeader;
 use App\EstimateProduct;
 use App\EstimateService;
@@ -36,6 +37,15 @@ class PdfController extends Controller
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         $pdf = PDF::loadview('pdf.delivery',compact('delivery','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('delivery.pdf');
+    }
+    
+    public function inspect($id){
+        $date = date('Y-m-d H:i:s');
+        $inspect = InspectionHeader::findOrFail($id);
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        // $pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
+        // return $pdf->stream('inspect.pdf');
+        return View('pdf.inspect',compact('inspect','date'));
     }
 
     public function estimate($id){

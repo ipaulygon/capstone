@@ -45,7 +45,7 @@ $('#calendar').fullCalendar({
             ping(this);
         }
     },
-    defaultView: 'listDay',
+    defaultView: 'month',
     eventClick: function(event,jsEvent,view){
         clickEvent(event.id);
     },

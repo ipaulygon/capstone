@@ -14,44 +14,47 @@ var payList = $('#paymentList').DataTable({
     "retrieve": true,
 });
 $('#inputCredit').inputmask('999 9999 9999 9999');
-function format ( d ) {
-    console.log(d);
-    // `d` is the original data object for the row
-    return '<table class="table table-hover table-bordered responsive" style="padding-left:50px">'+
-        '<thead><tr>'+
-        '<th></th>'+
-        '</tr></thead>'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d[1]+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+d[2]+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
-}
+
 $('#processList tbody').on('click', 'td.push-details', function () {
-    var tr = $(this).parents('tr');
-    var row = procList.row(tr);
+    var tr = $(this).closest('tr');
+    var row = procList.row( tr );
+
     if ( row.child.isShown() ) {
         // This row is already open - close it
         row.child.hide();
         tr.removeClass('shown');
     }
     else {
-        // Open this row (the format() function would return the data to be shown)
+        // Open this row
         row.child( format(row.data()) ).show();
         tr.addClass('shown');
     }
 } );
+
+function format (d) {
+    console.log(d);
+    var toReturn;
+    toReturn = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr><label>Products:</label></tr><br>';
+    $.each(d[5].package.product,function(key,value){
+        maxInput = (value.quantity>value.product.inventory.quantity ? value.product.inventory.quantity:value.quantity);
+        if(value.product.isOriginal!=null){
+            part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+        }else{
+            part = '';
+        }
+        toReturn += '<tr>'+value.product.brand.name+' - '+value.product.name+part+' ('+value.product.variance.name+')</td></tr>' + 
+        '<tr><td>Quantity:'+value.quantity*d[6].quantity+'</td></tr>' +
+        '<tr><input class="qty form-control text-right prodPack" name="prodPack[]" data-tresh="'+maxInput+'" type="text" value="'+value.completed+'"></tr>';
+    });
+    toReturn += '</table>';
+    return toReturn;
+    //  +'</table>'
+}
+
 function process(id){
     $('#jobCarousel').carousel(2);
-    $('#paymentId').val(id);
+    $('#processId').val(id);
     $.ajax({
         type: 'GET',
         url: '/job/check/'+id,
@@ -109,7 +112,7 @@ function process(id){
                     url: "/item/product/"+value.productId,
                     dataType: "JSON",
                     success:function(data){
-                        maxValue = (value.quantity>data.product.inventory.quantity ? data.product.inventory.quantity:value.quantity)
+                        maxInput = (value.quantity>data.product.inventory.quantity ? data.product.inventory.quantity:value.quantity)
                         if(value.isComplete){
                             status = '<i class="glyphicon glyphicon-ok text-success"></i> Completed';
                         }else{
@@ -121,26 +124,26 @@ function process(id){
                             part = '';
                         }
                         row = procList.row.add([
-                            '',
                             data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
                             value.quantity,
-                            '<input class="qty form-control text-right" name="qty[]" data-tresh="'+maxValue+'" id="prod'+data.product.id+'" type="text" value="'+value.completed+'">',
-                            status,
+                            '<input class="qty form-control text-right" name="prodQty[]" data-tresh="'+maxInput+'" id="prod'+value.id+'" type="text" value="'+value.completed+'">',
+                            '<p id="prodStatus'+value.id+'">'+status+'</>',
+                            '<button data-id="'+value.id+'" data-item="'+data.product.id+'" type="button" class="procProduct btn btn-primary btn-sm"><i class="glyphicon glyphicon-refresh"></i> Update</button>'
                         ]).draw().node();
                         procList.row($(row)).invalidate().draw();
                         dataList = procList.row($(row)).data();
                         dataList.push(data);
                         procList.row($(row)).data(dataList);
-                        $(row).find('td').eq(0).addClass('push-details');
+                        $(row).find('td').eq(1).addClass('text-right');
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
-                        $('#prod'+data.product.id).inputmask({ 
+                        $('#prod'+value.id).inputmask({ 
                             alias: "integer",
                             prefix: '',
                             allowMinus: false,
                             min: 0,
-                            max: maxValue,
+                            max: maxInput,
                         });
                     }
                 });
@@ -153,21 +156,25 @@ function process(id){
                     success:function(data){
                         if(value.isComplete){
                             status = '<i class="glyphicon glyphicon-ok text-success"></i> Completed';
+                            ifStatus = "checked";
                         }else{
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
+                            ifStatus = "";
                         }
                         row = procList.row.add([
-                            '',
                             data.service.name+" - "+data.service.size+" ("+data.service.category.name+")",
                             '',
-                            '',
-                            status
+                            '<input class="serviceCheck" type="checkbox" '+ifStatus+'>' +
+                            '<input type="hidden" class="serviceDone" id="serv'+value.id+'" name="serviceDone[]" value="'+value.isComplete+'">',
+                            '<p id="servStatus'+value.id+'">'+status+'</>',
+                            '<button data-id="'+value.id+'" data-item="'+data.service.id+'" type="button" class="procService btn btn-primary btn-sm"><i class="glyphicon glyphicon-refresh"></i> Update</button>'
                         ]).draw().node();
+                        $(row).find('td').eq(1).addClass('text-right');
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
                     }
-                });
+                }); 
             });
             $.each(data.job.package,function(key,value){
                 $.ajax({
@@ -175,28 +182,30 @@ function process(id){
                     url: "/item/package/"+value.packageId,
                     dataType: "JSON",
                     success:function(data){
+                        maxInput = value.quantity;
                         if(value.isComplete){
                             status = '<i class="glyphicon glyphicon-ok text-success"></i> Completed';
                         }else{
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
                         }
                         row = procList.row.add([
-                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" href="#pack'+data.package.id+'" title="Update Item">' +
-                                '<i class="glyphicon glyphicon-menu-hamburger"></i>' +
-                            '</button>',
-                            data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>' +
-                                '<div id="pack'+data.package.id+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="">' +
-                                '<div class="panel-body">' +
-                                data.package.name +
-                                '</div>' +
-                                '</div>',
+                            data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                             value.quantity,
-                            value.completed,
-                            status
+                            '<input class="qty form-control text-right" name="packQty[]" data-tresh="'+maxInput+'" id="pack'+value.id+'" type="text" value="'+value.completed+'">',
+                            '<p id="packStatus'+value.id+'">'+status+'</>',
+                            '<button data-id="'+value.id+'" data-item="'+data.package.id+'" type="button" class="procPackage btn btn-primary btn-sm"><i class="glyphicon glyphicon-refresh"></i> Update</button>'
                         ]).draw().node();
+                        $(row).find('td').eq(1).addClass('text-right');
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
+                        $('#pack'+value.id).inputmask({ 
+                            alias: "integer",
+                            prefix: '',
+                            allowMinus: false,
+                            min: 0,
+                            max: maxInput,
+                        });
                         $.each(data.package.product,function(key,value){
                             if(value.product.isOriginal!=null){
                                 part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
@@ -221,28 +230,30 @@ function process(id){
                     url: "/item/promo/"+value.promoId,
                     dataType: "JSON",
                     success:function(data){
+                        maxInput = value.quantity;
                         if(value.isComplete){
                             status = '<i class="glyphicon glyphicon-ok text-success"></i> Completed';
                         }else{
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
                         }
                         row = procList.row.add([
-                            '<button id="" type="button" class="btn btn-success btn-xs process" data-toggle="collapse" data-parent="#processList" href="#promo'+data.promo.id+'" title="Update Item">' +
-                                '<i class="glyphicon glyphicon-menu-hamburger"></i>' +
-                            '</button>',
-                            data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>' +
-                                '<div id="promo'+data.promo.id+'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="">' +
-                                '<div class="panel-body">' +
-                                data.promo.name +
-                                '</div>' +
-                                '</div>',
+                            data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                             value.quantity,
-                            value.completed,
-                            status
+                            '<input class="qty form-control text-right" name="promoQty[]" data-tresh="'+maxInput+'" id="promo'+value.id+'" type="text" value="'+value.completed+'">',
+                            '<p id="promoStatus'+value.id+'">'+status+'</>',
+                            '<button data-id="'+value.id+'" data-item="'+data.promo.id+'" type="button" class="procPromo btn btn-primary btn-sm"><i class="glyphicon glyphicon-refresh"></i> Update</button>'
                         ]).draw().node();
+                        $(row).find('td').eq(1).addClass('text-right');
                         $(row).find('td').eq(2).addClass('text-right');
                         $(row).find('td').eq(3).addClass('text-right');
                         $(row).find('td').eq(4).addClass('text-right');
+                        $('#promo'+value.id).inputmask({ 
+                            alias: "integer",
+                            prefix: '',
+                            allowMinus: false,
+                            min: 0,
+                            max: maxInput,
+                        });
                         $.each(data.promo.product,function(key,value){
                             if(value.product.isOriginal!=null){
                                 part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
@@ -305,7 +316,7 @@ $(document).on('click','#savePayment', function(){
     payment = $('#inputPayment').val().replace(',','');
     method = $('#paymentMethod').val();
     credit = $('#inputCredit').val();
-    id = $('#paymentId').val();
+    id = $('#processId').val();
     passed = false;
     if(method==1){
         if(credit!=''){
@@ -364,6 +375,7 @@ $(document).on('click','#savePayment', function(){
                 });
             }
         });
+        checkJob(id);
     }else{
         $('#notif').append(
             '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
@@ -420,14 +432,210 @@ $(document).on('focus','#inputPayment',function(){
     });
     $(this).popover('show');
 });
+
 $(document).on('focusout','#inputPayment',function(){
     $(this).popover('hide');
+    $(this).tooltip('hide');
 });
+
 $(document).on('click','#cashP',function(){
     $('#creditCard').addClass('hidden');
     $('#paymentMethod').val(0);
 });
+
 $(document).on('click','#creditP',function(){
     $('#creditCard').removeClass('hidden');
     $('#paymentMethod').val(1);
 });
+
+$(document).on('change','.serviceCheck',function(){
+    if($(this).prop('checked')){
+        $(this).parent().find('.serviceDone').val(1);
+    }else{
+        $(this).parent().find('.serviceDone').val(0);
+    }
+})
+
+$(document).on('keyup','.qty',function(){
+    if(Number($(this).val()) > Number($(this).attr('data-tresh'))){
+        $(this).tooltip({
+            trigger: 'manual',
+            title: function(){
+                var content = "Oops! Your input exceeds the availability of the item. The max value will be set.";
+                return content;
+            },
+            container: 'body',
+            placement: function(){
+                var placement = 'left';
+                return placement;
+            },
+            template: '<div class="tooltip alert-danger" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+        });
+        $(this).tooltip('show');
+    }else{
+        $(this).tooltip('hide');
+    }
+})
+
+$(document).on('focusout','.qty',function(){
+    $(this).popover('hide');
+    $(this).tooltip('hide');
+})
+
+$(document).on('click','.procProduct',function(){
+    jobId = $('#processId').val();
+    detailId = $(this).attr('data-id');
+    productId = $(this).attr('data-item');
+    detailQty = $('#prod'+detailId).val();
+    $.ajax({
+        type: 'POST',
+        url: '/job/product',
+        data: {detailId:detailId,productId:productId,detailQty:detailQty},
+        success: function(data){
+            $('#notif').append(
+                '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                data.message +
+                '</div>'
+            );
+            status = (data.completed ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
+            $('#prodStatus'+detailId).html(status);
+        }
+    });
+    checkJob(jobId);
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },2000);
+})
+
+$(document).on('click','.procService',function(){
+    jobId = $('#processId').val();
+    detailId = $(this).attr('data-id');
+    serviceId = $(this).attr('data-item');
+    detailDone = $('#serv'+detailId).val();
+    $.ajax({
+        type: 'POST',
+        url: '/job/service',
+        data: {detailId:detailId,serviceId:serviceId,detailDone:detailDone},
+        success: function(data){
+            $('#notif').append(
+                '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                data.message +
+                '</div>'
+            );
+            status = (data.completed==1 ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
+            $('#servStatus'+detailId).html(status);
+        }
+    });
+    checkJob(jobId);
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },2000);
+})
+
+$(document).on('click','.procPackage',function(){
+    jobId = $('#processId').val();
+    detailId = $(this).attr('data-id');
+    packageId = $(this).attr('data-item');
+    detailQty = $('#pack'+detailId).val();
+    $.ajax({
+        type: 'POST',
+        url: '/job/package',
+        data: {detailId:detailId,packageId:packageId,detailQty:detailQty},
+        success: function(data){
+            if(data.error==0){
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+                status = (data.completed==1 ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
+                $('#packStatus'+detailId).html(status);
+            }else{
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+            }
+        }
+    });
+    checkJob(jobId);
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },2000);
+})
+
+$(document).on('click','.procPromo',function(){
+    jobId = $('#processId').val();
+    detailId = $(this).attr('data-id');
+    promoId = $(this).attr('data-item');
+    detailQty = $('#promo'+detailId).val();
+    $.ajax({
+        type: 'POST',
+        url: '/job/promo',
+        data: {detailId:detailId,promoId:promoId,detailQty:detailQty},
+        success: function(data){
+            if(data.error==0){
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+                status = (data.completed==1 ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
+                $('#promoStatus'+detailId).html(status);
+            }else{
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+            }
+        }
+    });
+    checkJob(jobId);
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },2000);
+})
+
+function checkJob(id){
+    $.ajax({
+        type: 'POST',
+        url: '/job/final',
+        data: {id:id},
+        success: function(data){
+            $.each(data.jobs,function(key,value){
+                if(value.isComplete && value.total==value.paid){
+                    colors = "#00a65a";
+                }else if(!value.isComplete && value.isFinalize && value.total==value.paid){
+                    colors = "#00c0ef";
+                }else if(!value.isComplete && value.isFinalize && value.total!=value.paid){
+                    colors = "#f39c12";
+                }else{
+                    colors = "#3c8dbc";
+                }
+                var events = {
+                    id: value.id,
+                    title: value.plate,
+                    start: value.start,
+                    end: value.end,
+                    color: colors
+                };
+                $("#calendar").fullCalendar('removeEventSources');
+                $('#calendar').fullCalendar('renderEvent', events, true);
+            });
+        }
+    });
+}

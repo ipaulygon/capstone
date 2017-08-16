@@ -32,19 +32,25 @@ class ProductUnitSeeder extends Seeder
         DB::table('product_unit')->insert([
             'name' => 'mL',
             'description' => 'Milliliter',
-            'category' => 2,
+            'category' => 3,
             'isActive' => 1
         ]);
         DB::table('product_unit')->insert([
-            'name' => 'L',
-            'description' => 'L',
-            'category' => 2,
+            'name' => 'l',
+            'description' => 'Liter',
+            'category' => 3,
             'isActive' => 1
         ]);
         DB::table('product_unit')->insert([
-            'name' => 'Ribs',
+            'name' => 'ribs',
             'description' => 'Ribs',
             'category' => 1,
+            'isActive' => 1
+        ]);
+        DB::table('product_unit')->insert([
+            'name' => 'kg',
+            'description' => 'Kilogram',
+            'category' => 2,
             'isActive' => 1
         ]);
     }

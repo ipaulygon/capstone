@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Rapide | @yield('title')</title>
+    <title>{{$util->name}} | @yield('title')</title>
 
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}
@@ -222,9 +222,9 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
-    {{--  <script>
+     {{--  <script>
         $('#mainBody').addClass('sidebar-collapse');
-    </script>  --}}
+    </script>   --}}
     <script>
         $(function () {
             //iCheck for checkbox and radio inputs

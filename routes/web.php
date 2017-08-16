@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function(){
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
 	Route::get('delivery/pdf/{id}','PdfController@delivery');
+	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
 	Route::get('job/pdf/{id}','PdfController@job');
 
@@ -79,6 +80,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('job/finalize/{id}','JobController@finalize');
 	Route::patch('job/process/{id}','JobController@process');
 	Route::post('job/pay','JobController@pay');
+	Route::post('job/product','JobController@jobProduct');
+	Route::post('job/service','JobController@jobService');
+	Route::post('job/package','JobController@jobPackage');
+	Route::post('job/promo','JobController@jobPromo');
+	Route::post('job/final','JobController@jobFinal');
 
 	// Reactivate
 	Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

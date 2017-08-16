@@ -10,7 +10,6 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/fullcalendar/fullcalendar.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('assets/switch-css/bootstrap-switch.min.css') }}">
 @stop
 
 @section('content')
@@ -30,13 +29,13 @@
                             <button id="addNew" class="btn btn-success btn-block">
                                 <i class="glyphicon glyphicon-plus"></i> New Record
                             </button>
-                            <button id="viewMonth" class="btn btn-primary btn-block">
+                            <button id="viewMonth" class="btn btn-primary btn-block disabled">
                                 <i class="fa fa-calendar"></i> Month View
                             </button>
                             <button id="viewWeek" class="btn btn-warning btn-block">
                                 <i class="fa fa-calendar-minus-o"></i> Week View
                             </button>
-                            <button id="viewDay" class="btn btn-danger btn-block disabled">
+                            <button id="viewDay" class="btn btn-danger btn-block">
                                 <i class="fa fa-calendar-o"></i> Day View
                             </button>
                             <button id="viewTable" class="btn btn-info btn-block" href="#tabularTab" aria-controls="tabularTab" role="tab" data-toggle="tab">
@@ -181,9 +180,9 @@
                 <input id="processId" name="id" type="hidden">
                 <div class="col-md-12">
                     <button id="backProcess" type="button" class="btn btn-success btn-md pull-left"><i class="fa fa-angle-double-left"></i> Back</button>
-                    {!! Form::submit('Save', ['class'=>'btn btn-primary pull-right']) !!}
                 </div>
                 <br><br>
+                {{-- CUSTOMER DETAILS --}}
                 <div class="col-md-4">
                     <div id="infoBox" class="box box-success">
                         <div class="box-header with border">
@@ -224,6 +223,7 @@
                             </div>
                         </div>
                         <div class="box-body">
+                            {{-- PAYMENT --}}
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group form-inline">
@@ -239,7 +239,6 @@
                                 <div class="col-md-6 addPayment">
                                     <div class="form-group form-inline">
                                         {!! Form::label('inputPayment', 'Add Payment: ',['class'=>'addPayment']) !!}
-                                        <input type="hidden" id="paymentId">
                                         <input type="hidden" id="paymentMethod" value="0">
                                         {!! Form::input('text','inputPayment',null,[
                                             'id'=>'inputPayment',
@@ -255,7 +254,7 @@
                                             'placeholder'=>'Credit']) 
                                         !!}
                                     </div>
-                                    <button onclick="" type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
+                                    <button type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="collapse" id="viewDetails">
@@ -293,11 +292,11 @@
                                 <table id="processList" class="table table-striped table-bordered responsive">
                                     <thead>
                                         <tr>
-                                            <th width="5%"></th>
                                             <th>Item</th>
                                             <th width="10%" class="text-right">Quantity</th>
                                             <th width="10%" class="text-right">Completed</th>
                                             <th class="text-right">Status</th>
+                                            <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -356,7 +355,6 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
-    <script src="{{ URL::asset('assets/switch-js/bootstrap-switch.min.js') }}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/job.js') }}"></script>
     <script src="{{ URL::asset('js/jobFinal.js') }}"></script>
@@ -401,7 +399,7 @@
                         @endif
                     };
                 @endforeach
-                $('#calendar').fullCalendar('renderEvent', events, true);
+                $('#calendar').fullCalendar('renderEvent', events, false);
             @endif
             $("#technician").val(activeTechnicians);
             @if(old('modelId'))

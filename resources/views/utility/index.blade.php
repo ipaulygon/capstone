@@ -9,7 +9,8 @@
 @stop
 
 @section('content')
-     {!! Form::open(['method'=>'patch','action' => ['UtilitiesController@update',1],'files' => true]) !!}
+    {!! Form::open(['method'=>'patch','action' => ['UtilitiesController@update',1],'files' => true]) !!}
+    @include('layouts.required')
     <div class="col-md-6">
         <div class="box box-primary">
             <div class="box-header with-border">
@@ -52,7 +53,6 @@
             </div>
             <div class="box-footer">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
-                @include('layouts.required')
             </div>
         </div>
     </div>

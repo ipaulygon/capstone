@@ -37,7 +37,8 @@ class TechnicianController extends Controller
         $categories = DB::table('service_category')
             ->where('isActive',1)
             ->select('service_category.*')
-            ->get();
+            ->get()
+            ->sortBy('name');
         return View('technician.create',compact('image','date','categories'));
     }
 
@@ -160,7 +161,8 @@ class TechnicianController extends Controller
         $categories = DB::table('service_category')
             ->where('isActive',1)
             ->select('service_category.*')
-            ->get();
+            ->get()
+            ->sortBy('name');
         return View('technician.edit',compact('technician','date','image','categories'));
     }
 

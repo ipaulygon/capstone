@@ -42,7 +42,7 @@ class ReportController extends Controller
             ->join('job_service as js','j.id','js.jobId')
             ->join('service as s','s.id','js.serviceId')
             ->join('service_category as sc','sc.id','s.categoryId')
-            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vk.name as make','p.*','pt.name as type','pb.name as brand','pv.name as variance','s.*','s.name as name','sc.name as category','s.size as size')
+            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vk.name as make','p.*','pt.name as type','pb.name as brand','pv.name as variance','s.*','s.name as name','sc.name as category','s.size as size', 'v.plate as plate', 'v.isManual as transmission', 's.name as service', 'p.name as product')
             ->get();
         return view('report.index',compact('data','services','jobs'));
        
@@ -122,6 +122,7 @@ class ReportController extends Controller
      public function where(Request $request)
      {
         $id = $request->id;
+        $date = date('m/d/Y').'-'.date('m/d/Y');
         $data = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')

@@ -111,8 +111,8 @@
                                             {!! Form::label('category', 'Unit Category') !!}<span>*</span><br>
                                             <select id="category" name="category" class="select2 form-control" required>
                                                 <option value="1">Length</option>
-                                                <option value="2">Volume</option>
-                                                <option value="3">Mass</option>
+                                                <option value="2">Mass</option>
+                                                <option value="3">Volume</option>
                                             </select>
                                         </div>
                                     </div>
@@ -169,8 +169,8 @@
                                             {!! Form::label('category', 'Unit Category') !!}<span>*</span><br>
                                             <select id="uc" name="category" class="select2 form-control" required>
                                                 <option value="1">Length</option>
-                                                <option value="2">Volume</option>
-                                                <option value="3">Mass</option>
+                                                <option value="2">Mass</option>
+                                                <option value="3">Volume</option>
                                             </select>
                                         </div>
                                     </div>

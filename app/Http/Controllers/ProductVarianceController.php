@@ -34,8 +34,8 @@ class ProductVarianceController extends Controller
      */
     public function create()
     {
-        $units = ProductUnit::where('category',1)->where('isActive',1)->get();
-        $types = ProductType::where('isActive',1)->get();
+        $units = ProductUnit::where('category',1)->where('isActive',1)->get()->sortBy('name');
+        $types = ProductType::where('isActive',1)->get()->sortBy('name');
         return View('variance.create',compact('units','types'));
     }
 
@@ -123,8 +123,8 @@ class ProductVarianceController extends Controller
         $activeUnit = explode(',', $variance->units);
         $unitTest = ProductUnit::find($activeUnit[0]);
         $category = $unitTest->category;
-        $units = ProductUnit::where('category',$category)->where('isActive',1)->get();
-        $types = ProductType::where('isActive',1)->get();
+        $units = ProductUnit::where('category',$category)->where('isActive',1)->get()->sortBy('name');
+        $types = ProductType::where('isActive',1)->get()->sortBy('name');
         return View('variance.edit',compact('variance','units','types','activeSize','activeUnit','category'));
     }
 
