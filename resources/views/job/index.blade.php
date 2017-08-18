@@ -29,13 +29,13 @@
                             <button id="addNew" class="btn btn-success btn-block">
                                 <i class="glyphicon glyphicon-plus"></i> New Record
                             </button>
-                            <button id="viewMonth" class="btn btn-primary btn-block disabled">
+                            <button id="viewMonth" class="btn btn-primary btn-block">
                                 <i class="fa fa-calendar"></i> Month View
                             </button>
                             <button id="viewWeek" class="btn btn-warning btn-block">
                                 <i class="fa fa-calendar-minus-o"></i> Week View
                             </button>
-                            <button id="viewDay" class="btn btn-danger btn-block">
+                            <button id="viewDay" class="btn btn-danger btn-block disabled">
                                 <i class="fa fa-calendar-o"></i> Day View
                             </button>
                             <button id="viewTable" class="btn btn-info btn-block" href="#tabularTab" aria-controls="tabularTab" role="tab" data-toggle="tab">
@@ -57,7 +57,8 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Job Id:</label> <span id="detailId"></span>
+                                    <label>Job Id:</label> <span id="detailId"></span><br>
+                                    <label>Rack:</label> <span id="detailRack"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <a id="detailEstimate" href="" target="_blank" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
@@ -399,7 +400,7 @@
                         @endif
                     };
                 @endforeach
-                $('#calendar').fullCalendar('renderEvent', events, false);
+                $('#calendar').fullCalendar('renderEvent', events, true);
             @endif
             $("#technician").val(activeTechnicians);
             @if(old('modelId'))

@@ -15,12 +15,14 @@ class JobHeaderSeeder extends Seeder
         DB::table('job_header')->insert([
             'customerId' => 1,
             'vehicleId' => 1,
+            'rackId' => 1,
             'isFinalize' => 1,
             'isComplete' => 0,
             'total' => 7289.09,
             'paid' => 0.00,
             'start' => Carbon::now(),
             'end' => null,
+            'release' => null,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);

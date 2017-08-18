@@ -62,23 +62,23 @@
         <div class="center header">
             {{$util->name}}
         </div>
-        <label style="float:right;color:red">{{$delivery->id}}</label>
+        <label style="float:right;color:red">{{$return->id}}</label>
         <div style="clear:both"></div>
         <div class="center">
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            RECEIVE DELIVERY
+            RETURN ITEMS
         </div><br>
         <div style="float:left" class="col-md-6">
-            Supplier: {{$delivery->supplier->name}}<br>
-            Address: {{$delivery->supplier->street}} {{$delivery->supplier->brgy}} {{$delivery->supplier->city}}
+            Supplier: {{$return->supplier->name}}<br>
+            Address: {{$return->supplier->street}} {{$return->supplier->brgy}} {{$return->supplier->city}}
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y',strtotime($delivery->dateMake))}}<br>
-            Reference Orders: 
-            @foreach($delivery->order as $order)
-                {{$order->purchaseId}}|
+            Date: {{date('F j, Y',strtotime($return->dateMake))}}<br>
+            Reference Deliveries: 
+            @foreach($return->delivery as $delivery)
+                {{$delivery->deliveryId}}|
             @endforeach
         </div>
         <div style="clear:both"></div>
@@ -87,34 +87,28 @@
             <thead>
                 <tr>
                     <th>Product</th>
-                    <th width="20%" class="text-right">Quantity Delivered</th>
+                    <th width="20%" class="text-right">Quantity Returned</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($delivery->detail as $product)
-                <tr>
-                    <?php
-                        if($product->product->isOriginal!=null){
-                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
-                        }else{
-                            $type = "";
-                        }
-                    ?>
-                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
-                    <td class="text-right">{{number_format($product->quantity)}}</td>
-                </tr>
+                @foreach($return->detail as $product)
+                    @if(!$product->quantity==0)
+                        <tr>
+                            <?php
+                                if($product->product->isOriginal!=null){
+                                    $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
+                                }else{
+                                    $type = "";
+                                }
+                            ?>
+                            <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
+                            <td class="text-right">{{number_format($product->quantity)}}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>
         <div class="footer">
-            <div class="col-md-6">
-                Received by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br>
-                Counter Checked by: ______________________<br> 
-            </div>
-            <div class="col-md-6">
-                Returns: {{$attachments}}
-            </div>
-            <br><br>
             <div class="footerd">Printed by: Admin {{$date}}</div>
         </div>
     </body>

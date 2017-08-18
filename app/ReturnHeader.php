@@ -20,8 +20,8 @@ class ReturnHeader extends Model
     	return $this->hasMany('App\ReturnDetail', 'returnId');
     }
 
-    public function order(){
-    	return $this->hasMany('App\ReturnOrder', 'returnId');
+    public function delivery(){
+    	return $this->hasMany('App\ReturnDelivery', 'returnId');
     }
     
     public function supplier(){

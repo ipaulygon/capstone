@@ -10,12 +10,14 @@ class JobHeader extends Model
     protected $fillable = [
     	'customerId',
         'vehicleId',
+        'rackId',
     	'isFinalize',
         'isComplete',
         'total',
         'paid',
         'start',
-        'end'
+        'end',
+        'release'
     ];
 
     public function product(){
@@ -52,5 +54,9 @@ class JobHeader extends Model
 
     public function payment(){
         return $this->hasMany('App\JobPayment','jobId');
+    }
+
+    public function rack(){
+        return $this->belongsTo('App\Rack', 'rackId');
     }
 }

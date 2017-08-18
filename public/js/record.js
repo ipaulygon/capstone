@@ -1,6 +1,7 @@
 var deactivate = null;
 var reactivate = null;
 var update = null;
+var updateLink = null;
 function deactivateShow(id){
     deactivate = id;
     $('#deactivateModal').modal('show');
@@ -30,8 +31,9 @@ function deactivateAdmin(id){
     $('#deactivateAdmin').modal('show');
 }
 
-function updateAdmin(id){
+function updateAdmin(id,type){
     update = id;
+    updateLink = type;
     $('#keyUpdate').val('');
     $('#updateAdmin').modal('show');
 }
@@ -52,7 +54,7 @@ $('#adminUpdate').on('click',function(){
                     '</div>'
                 );
             }else{
-                window.location.replace('/purchase/'+update+'/edit');
+                window.location.replace('/'+updateLink+'/'+update+'/edit');
             }
             setTimeout(function (){
                 $('#alert').alert('close');

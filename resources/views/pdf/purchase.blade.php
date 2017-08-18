@@ -60,7 +60,7 @@
     </style>
     <body>
         <div class="center header">
-            Rapide
+            {{$util->name}}
         </div>
         <label style="float:right;color:red">{{$purchase->id}}</label>
         <div style="clear:both"></div>
@@ -125,7 +125,7 @@
         </table>
         <div class="footer">
             <div class="col-md-6">
-                Please deliver to: ______________________<br>
+                Please deliver to: {{$util->address}}<br>
                 Approved by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br> 
             </div>
             <br>

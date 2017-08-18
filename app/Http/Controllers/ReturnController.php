@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ReturnHeader;
 use App\ReturnDetail;
-use App\ReturnOrder;
+use App\ReturnDelivery;
 use App\DeliveryHeader;
 use App\DeliveryDetail;
 use App\DeliveryOrder;
@@ -104,12 +104,6 @@ class ReturnController extends Controller
                         'deliveryId' => $deliverys[$key],
                         'quantity' => $qtys[$key],
                     ]);
-                    $deliveryDetail = DeliveryDetail::where('productId',$product)->where('deliveryId',$deliverys[$key])->first();
-                    $qty = $deliveryDetail->quantity;
-                    $qty = $qty-$qtys[$key];
-                    $deliveryDetail->update([
-                        'quantity' => $qty
-                    ]);
                     $inventory = Inventory::where('productId',$product)->first();
                     $qty = $inventory->quantity;
                     $qty = $qty-$qtys[$key];
@@ -149,6 +143,10 @@ class ReturnController extends Controller
                             PurchaseHeader::where('id',''.$ordered->purchaseId)->update(['isDelivered'=>0]);
                         }
                     }
+                    ReturnDelivery::create([
+                        'returnId' => $return->id,
+                        'deliveryId' => $order
+                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
@@ -169,7 +167,7 @@ class ReturnController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -180,7 +178,7 @@ class ReturnController extends Controller
      */
     public function edit($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -192,7 +190,7 @@ class ReturnController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -203,7 +201,7 @@ class ReturnController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
     }
 
     public function header($id){

@@ -249,38 +249,62 @@ class PurchaseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkOrder = DB::table('delivery_order')
-            ->where('purchaseId',$id)
-            ->select('delivery_order.*')
-            ->get();
-        if(count($checkOrder) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $purchase = PurchaseHeader::findOrFail($id);
-            $purchase->update([
-                'isActive' => 0
-            ]);
-            PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkOrder = DB::table('delivery_order')
+                ->where('purchaseId',$id)
+                ->select('delivery_order.*')
+                ->get();
+            if(count($checkOrder) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $purchase = PurchaseHeader::findOrFail($id);
+                $purchase->update([
+                    'isActive' => 0
+                ]);
+                PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('purchase');
     }
 
     public function reactivate(Request $request, $id)
     {
-        $purchase = PurchaseHeader::findOrFail($id);
-        $purchase->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $purchase = PurchaseHeader::findOrFail($id);
+            $purchase->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('purchase');
     }
 
     public function finalize(Request $request, $id){
-        $purchase = PurchaseHeader::findOrFail($id);
-        $purchase->update([
-            'isFinalize' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $purchase = PurchaseHeader::findOrFail($id);
+            $purchase->update([
+                'isFinalize' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully finalized.');  
         return Redirect('purchase');
     }

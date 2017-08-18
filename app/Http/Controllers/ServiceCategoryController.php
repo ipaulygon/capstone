@@ -154,28 +154,44 @@ class ServiceCategoryController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkService = DB::table('service')
-            ->where('categoryId',$id)
-            ->where('isActive',1)
-            ->get();
-        if(count($checkService) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $category = ServiceCategory::findOrFail($id);
-            $category->update([
-                'isActive' => 0
-            ]);
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkService = DB::table('service')
+                ->where('categoryId',$id)
+                ->where('isActive',1)
+                ->get();
+            if(count($checkService) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $category = ServiceCategory::findOrFail($id);
+                $category->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('category');
     }
     
     public function reactivate(Request $request, $id)
     {
-        $category = ServiceCategory::findOrFail($id);
-        $category->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $category = ServiceCategory::findOrFail($id);
+            $category->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('category');
     }

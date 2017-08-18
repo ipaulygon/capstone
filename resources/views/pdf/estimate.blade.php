@@ -62,7 +62,7 @@
     </style>
     <body>
         <div class="center header">
-            Rapide
+            {{$util->name}}
         </div>
         <div style="float:right">
             {{date('F j, Y', strtotime($estimate->created_at))}}<br>

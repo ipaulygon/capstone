@@ -42,9 +42,9 @@
         <script>$('#compute').val(0)</script>
         @foreach($purchase->detail as $key=>$product)
             @if($product->modelId==null)
-                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}})</script>
+                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->delivered}})</script>
             @else
-                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->modelId}},{{$product->isManual}})</script>
+                <script>retrieveProduct({{$product->price}},{{$product->productId}},{{$product->quantity}},{{$product->delivered}},{{$product->modelId}},{{$product->isManual}})</script>
             @endif
         @endforeach
     @endif

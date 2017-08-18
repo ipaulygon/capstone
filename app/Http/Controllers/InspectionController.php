@@ -176,30 +176,46 @@ class InspectionController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkInspect = DB::table('inspection_detail as id')
-            ->join('inspection_item as ii','ii.id','id.itemId')
-            ->join('inspection_type as it','it.id','ii.typeId')
-            ->where('it.id',$id)
-            ->where('id.isActive',1)
-            ->get();
-        if(count($checkInspect) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $type = InspectionType::findOrFail($id);
-            $type->update([
-                'isActive' => 0
-            ]);
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkInspect = DB::table('inspection_detail as id')
+                ->join('inspection_item as ii','ii.id','id.itemId')
+                ->join('inspection_type as it','it.id','ii.typeId')
+                ->where('it.id',$id)
+                ->where('id.isActive',1)
+                ->get();
+            if(count($checkInspect) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $type = InspectionType::findOrFail($id);
+                $type->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('inspection');
     }
     
     public function reactivate(Request $request, $id)
     {
-        $type = InspectionType::findOrFail($id);
-        $type->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $type = InspectionType::findOrFail($id);
+            $type->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('inspection');
     }

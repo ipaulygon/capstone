@@ -180,28 +180,44 @@ class ProductBrandController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkProduct = DB::table('product')
-            ->where('brandId',$id)
-            ->get();
-        if(count($checkProduct) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $brand = ProductBrand::findOrFail($id);
-            $brand->update([
-                'isActive' => 0
-            ]);
-            TypeBrand::where('brandId',$id)->delete();
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkProduct = DB::table('product')
+                ->where('brandId',$id)
+                ->get();
+            if(count($checkProduct) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $brand = ProductBrand::findOrFail($id);
+                $brand->update([
+                    'isActive' => 0
+                ]);
+                TypeBrand::where('brandId',$id)->delete();
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('brand');
     }
 
     public function reactivate(Request $request,$id)
     {
-        $brand = ProductBrand::findOrFail($id);
-        $brand->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $brand = ProductBrand::findOrFail($id);
+            $brand->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('brand');
     }

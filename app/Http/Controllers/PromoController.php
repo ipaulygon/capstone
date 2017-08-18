@@ -230,85 +230,99 @@ class PromoController extends Controller
             return Redirect::back()->withErrors($validator);
         }
         else{
-            try{
-                DB::beginTransaction();
-                $dates = explode('-',$request->date); // two dates MM/DD/YYYY-MM/DD/YYYY
-                $startDate = explode('/',$dates[0]); // MM[0] DD[1] YYYY[2] 
-                $finalStartDate = "$startDate[2]-$startDate[0]-$startDate[1]";
-                $endDate = explode('/',$dates[1]); // MM[0] DD[1] YYYY[2] 
-                $finalEndDate = "$endDate[2]-$endDate[0]-$endDate[1]";
-                $stock = (trim($request->stock) == '' ? 0 : trim($request->stock));
-                $promo = Promo::findOrFail($id);
-                $promo->update([
-                    'name' => trim($request->name),
-                    'price' => trim(str_replace(',','',$request->price)),
-                    'dateStart' => $finalStartDate,
-                    'dateEnd' => $finalEndDate,
-                    'stock' => $stock,
-                ]);
-                $products = $request->product;
-                $qty = $request->qty;
-                $services = $request->service;
-                $fproducts = $request->freeProduct;
-                $fqty = $request->freeQty;
-                $fservices = $request->freeService;
-                PromoProduct::where('promoId',$id)->update(['isActive'=>0]);
-                PromoService::where('promoId',$id)->update(['isActive'=>0]); 
-                if(!empty($products)){
-                    foreach ($products as $key=>$product) {
-                        PromoProduct::updateOrCreate([
-                            'promoId' => $id,
-                            'productId' => $product,
-                            'isFree' => 0,
-                        ],[
-                            'quantity' => $qty[$key],
-                            'isActive' => 1
-                        ]);
+            $checkEstimate = DB::table('estimate_header as eh')
+                ->join('estimate_promo as ep','ep.estimateId','eh.id')
+                ->where('ep.isActive',1)
+                ->where('ep.promoId',$id)
+                ->get();
+            $checkJob = DB::table('job_header as jh')
+                ->join('job_promo as jp','jp.jobId','jh.id')
+                ->where('jp.promoId',$id)
+                ->get();
+            if(count($checkEstimate) > 0 || count($checkJob) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+                return Redirect('promo');
+            }else{
+                try{
+                    DB::beginTransaction();
+                    $dates = explode('-',$request->date); // two dates MM/DD/YYYY-MM/DD/YYYY
+                    $startDate = explode('/',$dates[0]); // MM[0] DD[1] YYYY[2] 
+                    $finalStartDate = "$startDate[2]-$startDate[0]-$startDate[1]";
+                    $endDate = explode('/',$dates[1]); // MM[0] DD[1] YYYY[2] 
+                    $finalEndDate = "$endDate[2]-$endDate[0]-$endDate[1]";
+                    $stock = (trim($request->stock) == '' ? 0 : trim($request->stock));
+                    $promo = Promo::findOrFail($id);
+                    $promo->update([
+                        'name' => trim($request->name),
+                        'price' => trim(str_replace(',','',$request->price)),
+                        'dateStart' => $finalStartDate,
+                        'dateEnd' => $finalEndDate,
+                        'stock' => $stock,
+                    ]);
+                    $products = $request->product;
+                    $qty = $request->qty;
+                    $services = $request->service;
+                    $fproducts = $request->freeProduct;
+                    $fqty = $request->freeQty;
+                    $fservices = $request->freeService;
+                    PromoProduct::where('promoId',$id)->update(['isActive'=>0]);
+                    PromoService::where('promoId',$id)->update(['isActive'=>0]); 
+                    if(!empty($products)){
+                        foreach ($products as $key=>$product) {
+                            PromoProduct::updateOrCreate([
+                                'promoId' => $id,
+                                'productId' => $product,
+                                'isFree' => 0,
+                            ],[
+                                'quantity' => $qty[$key],
+                                'isActive' => 1
+                            ]);
+                        }
                     }
-                }
-                if(!empty($fproducts)){
-                    foreach ($fproducts as $key=>$product) {
-                        PromoProduct::updateOrCreate([
-                            'promoId' => $id,
-                            'productId' => $product,
-                            'isFree' => 1,
-                        ],[
-                            'quantity' => $fqty[$key],
-                            'isActive' => 1
-                        ]);
+                    if(!empty($fproducts)){
+                        foreach ($fproducts as $key=>$product) {
+                            PromoProduct::updateOrCreate([
+                                'promoId' => $id,
+                                'productId' => $product,
+                                'isFree' => 1,
+                            ],[
+                                'quantity' => $fqty[$key],
+                                'isActive' => 1
+                            ]);
+                        }
                     }
-                }
-                if(!empty($services)){
-                    foreach ($services as $service) {
-                        PromoService::updateOrCreate([
-                            'promoId' => $id,
-                            'serviceId' => $service,
-                            'isFree' => 0,
-                        ],[
-                            'isActive' => 1
-                        ]);
+                    if(!empty($services)){
+                        foreach ($services as $service) {
+                            PromoService::updateOrCreate([
+                                'promoId' => $id,
+                                'serviceId' => $service,
+                                'isFree' => 0,
+                            ],[
+                                'isActive' => 1
+                            ]);
+                        }
                     }
-                }
-                if(!empty($fservices)){
-                    foreach ($fservices as $service) {
-                        PromoService::updateOrCreate([
-                            'promoId' => $id,
-                            'serviceId' => $service,
-                            'isFree' => 1,
-                        ],[
-                            'isActive' => 1
-                        ]);
+                    if(!empty($fservices)){
+                        foreach ($fservices as $service) {
+                            PromoService::updateOrCreate([
+                                'promoId' => $id,
+                                'serviceId' => $service,
+                                'isFree' => 1,
+                            ],[
+                                'isActive' => 1
+                            ]);
+                        }
                     }
+                    PromoPrice::create([
+                        'promoId' => $id,
+                        'price' => trim(str_replace(',','',$request->price))
+                    ]);
+                    DB::commit();
+                }catch(\Illuminate\Database\QueryException $e){
+                    DB::rollBack();
+                    $errMess = $e->getMessage();
+                    return Redirect::back()->withErrors($errMess);
                 }
-                PromoPrice::create([
-                    'promoId' => $id,
-                    'price' => trim(str_replace(',','',$request->price))
-                ]);
-                DB::commit();
-            }catch(\Illuminate\Database\QueryException $e){
-                DB::rollBack();
-                $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect('promo');
@@ -323,20 +337,49 @@ class PromoController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $item = Promo::findOrFail($id);
-        $item->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkEstimate = DB::table('estimate_header as eh')
+                ->join('estimate_promo as ep','ep.estimateId','eh.id')
+                ->where('ep.isActive',1)
+                ->where('ep.promoId',$id)
+                ->get();
+            $checkJob = DB::table('job_header as jh')
+                ->join('job_promo as jp','jp.jobId','jh.id')
+                ->where('jp.promoId',$id)
+                ->get();
+            if(count($checkEstimate) > 0 || count($checkJob) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $item = Promo::findOrFail($id);
+                $item->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         return Redirect('promo');
     }
     
     public function reactivate(Request $request,$id)
     {
-        $item = Promo::findOrFail($id);
-        $item->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $item = Promo::findOrFail($id);
+            $item->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('promo');
     }

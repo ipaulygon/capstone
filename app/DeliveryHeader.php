@@ -26,4 +26,8 @@ class DeliveryHeader extends Model
     public function supplier(){
     	return $this->belongsTo('App\Supplier', 'supplierId');
     }
+    
+    public function return(){
+        return $this->hasMany('App\ReturnDelivery', 'deliveryId');
+    }
 }

@@ -82,7 +82,7 @@ $(document).on('change', '#supp', function(){
             $('#purchase').append('<option value=""></option>');
             $.each(data.purchases,function(key, value){
                 $('#purchase').append('<option value="'+value.id+'">'+value.id+'</option>');
-                if(start < new Date(value.dateMake)){
+                if(start > new Date(value.dateMake)){
                     startD = value.dateMake;
                     start = new Date(value.dateMake)
                 } 
@@ -92,7 +92,7 @@ $(document).on('change', '#supp', function(){
             $('#date').datepicker('remove');
             $('#date').datepicker({
                 format: 'mm/dd/yyyy',
-                endDate: new Date,
+                endDate: new Date(),
                 startDate: start+'',
                 autoclose: false,
                 todayHighlight: true,
@@ -140,7 +140,7 @@ $(document).on('click','.select2-results__option',function(){
 
 $(document).on('change','#purchase',function(){
     $('#purchase option[value="'+this.value+'"]').attr('disabled',true);
-    $('#append').append('<input class="hidden order" id="o]rder'+this.value+'" name="order[]" value="'+this.value+'">');
+    $('#append').append('<input class="hidden order" id="order'+this.value+'" name="order[]" value="'+this.value+'">');
     $.ajax({
         type: "GET",
         url: "/delivery/detail/"+this.value,

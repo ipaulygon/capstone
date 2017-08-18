@@ -45,7 +45,7 @@ $('#calendar').fullCalendar({
             ping(this);
         }
     },
-    defaultView: 'month',
+    defaultView: 'listDay',
     eventClick: function(event,jsEvent,view){
         clickEvent(event.id);
     },
@@ -97,6 +97,7 @@ function clickEvent(id){
         success:function(data){
             var jobId = String("00000" + data.job.id).slice(-5);
             $('#detailId').text('JOB'+jobId);
+            $('#detailRack').text(data.job.rack.name);
             $('#detailStart').text(data.job.start);
             $('#detailEnd').text(data.job.end);
             $('#detailPlate').text(data.job.vehicle.plate);

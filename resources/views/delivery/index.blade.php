@@ -42,8 +42,6 @@
                         @endforeach
                     </tbody>
                 </table>
-                @include('layouts.deactivateModal')
-                @include('layouts.updateAdmin')
             </div>
         </div>
     </div>

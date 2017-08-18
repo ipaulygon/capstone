@@ -232,7 +232,7 @@ function oldProduct(id,qty,model,price){
     $("#products").select2();
 }
 
-function retrieveProduct(price,id,qty,model,manual){
+function retrieveProduct(price,id,qty,delivered,model,manual){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
@@ -277,7 +277,7 @@ function retrieveProduct(price,id,qty,model,manual){
                 alias: "integer",
                 prefix: '',
                 allowMinus: false,
-                min: 1,
+                min: delivered,
                 max: maxValue,
             });
             $(".price").inputmask({ 

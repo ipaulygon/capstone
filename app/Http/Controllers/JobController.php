@@ -584,16 +584,24 @@ class JobController extends Controller
     }
 
     public function finalize(Request $request, $id){
-        $job = JobHeader::findOrFail($id);
-        $job->update([
-            'isFinalize' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $job = JobHeader::findOrFail($id);
+            $job->update([
+                'isFinalize' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully finalized.');  
         return Redirect('job');
     }
 
     public function check($id){
-        $job = JobHeader::with('customer','vehicle.model.make','technician.technician')->findOrFail($id);
+        $job = JobHeader::with('rack','customer','vehicle.model.make','technician.technician')->findOrFail($id);
         return response()->json(['job'=>$job]);
     }
 

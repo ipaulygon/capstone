@@ -186,32 +186,48 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkPackage = DB::table('package_service')
-            ->where('serviceId',$id)
-            ->where('isActive',1)
-            ->get();
-        $checkPromo = DB::table('promo_service')
-            ->where('serviceId',$id)
-            ->where('isActive',1)
-            ->get();
-        if(count($checkPackage) > 0 || count($checkPromo) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $service = Service::findOrFail($id);
-            $service->update([
-                'isActive' => 0
-            ]);
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkPackage = DB::table('package_service')
+                ->where('serviceId',$id)
+                ->where('isActive',1)
+                ->get();
+            $checkPromo = DB::table('promo_service')
+                ->where('serviceId',$id)
+                ->where('isActive',1)
+                ->get();
+            if(count($checkPackage) > 0 || count($checkPromo) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $service = Service::findOrFail($id);
+                $service->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('service');
     }
     
     public function reactivate(Request $request, $id)
     {
-        $service = Service::findOrFail($id);
-        $service->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $service = Service::findOrFail($id);
+            $service->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('service');
     }

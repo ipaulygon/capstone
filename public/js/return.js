@@ -92,7 +92,7 @@ $(document).on('change', '#supp', function(){
             $('#date').datepicker('remove');
             $('#date').datepicker({
                 format: 'mm/dd/yyyy',
-                endDate: new Date,
+                endDate: new Date(),
                 startDate: start+'',
                 autoclose: false,
                 todayHighlight: true,

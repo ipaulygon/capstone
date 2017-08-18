@@ -18,12 +18,14 @@ class CreateJobHeaderTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('vehicleId');
+            $table->unsignedInteger('rackId');
             $table->boolean('isFinalize')->default(0);
             $table->boolean('isComplete')->default(0);
             $table->double('total',15,2);
             $table->double('paid',15,2);
             $table->timestamp('start');
             $table->timestamp('end')->nullable();
+            $table->timestamp('release')->nullable();
             $table->timestamps();
             $table->foreign('customerId')
                   ->references('id')->on('customer')

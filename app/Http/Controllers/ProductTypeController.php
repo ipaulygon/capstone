@@ -188,34 +188,50 @@ class ProductTypeController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkBrand = DB::table('type_brand')
-            ->where('typeId',$id)
-            ->get();
-        $checkVariance = DB::table('type_variance')
-            ->where('typeId',$id)
-            ->get();
-        $checkProduct = DB::table('product')
-            ->where('typeId',$id)
-            ->where('isActive',1)
-            ->get();
-        if(count($checkBrand) > 0 || count($checkVariance) > 0 || count($checkProduct) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $type = ProductType::findOrFail($id);
-            $type->update([
-                'isActive' => 0
-            ]);
-            $request->session()->flash('success', 'Successfully deactivated.');
+        try{
+            DB::beginTransaction();
+            $checkBrand = DB::table('type_brand')
+                ->where('typeId',$id)
+                ->get();
+            $checkVariance = DB::table('type_variance')
+                ->where('typeId',$id)
+                ->get();
+            $checkProduct = DB::table('product')
+                ->where('typeId',$id)
+                ->where('isActive',1)
+                ->get();
+            if(count($checkBrand) > 0 || count($checkVariance) > 0 || count($checkProduct) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $type = ProductType::findOrFail($id);
+                $type->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('type');
     }
 
     public function reactivate(Request $request,$id)
     {
-        $type = ProductType::findOrFail($id);
-        $type->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $type = ProductType::findOrFail($id);
+            $type->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('type');
     }

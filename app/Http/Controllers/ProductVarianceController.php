@@ -198,28 +198,44 @@ class ProductVarianceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $checkProduct = DB::table('product')
-            ->where('varianceId',$id)
-            ->get();
-        if(count($checkProduct) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $variance = Productvariance::findOrFail($id);
-            $variance->update([
-                'isActive' => 0
-            ]);
-            TypeVariance::where('varianceId',$id)->delete();
-            $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkProduct = DB::table('product')
+                ->where('varianceId',$id)
+                ->get();
+            if(count($checkProduct) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $variance = Productvariance::findOrFail($id);
+                $variance->update([
+                    'isActive' => 0
+                ]);
+                TypeVariance::where('varianceId',$id)->delete();
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('variance');
     }
 
     public function reactivate(Request $request, $id)
     {
-        $variance = Productvariance::findOrFail($id);
-        $variance->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $variance = Productvariance::findOrFail($id);
+            $variance->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully deactivated.'); 
         return Redirect('variance');
     }

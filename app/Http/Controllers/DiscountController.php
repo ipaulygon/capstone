@@ -279,20 +279,36 @@ class DiscountController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $discount = Discount::findOrFail($id);
-        $discount->update([
-            'isActive' => 0
-        ]);
+        try{
+            DB::beginTransaction();
+            $discount = Discount::findOrFail($id);
+            $discount->update([
+                'isActive' => 0
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully deactivated.');  
         return Redirect('discount');
     }
     
     public function reactivate(Request $request, $id)
     {
-        $discount = Discount::findOrFail($id);
-        $discount->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $discount = Discount::findOrFail($id);
+            $discount->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('discount');
     }

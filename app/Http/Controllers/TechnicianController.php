@@ -264,20 +264,48 @@ class TechnicianController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $technician = Technician::findOrFail($id);
-        $technician->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkJob = DB::table('job_header as jh')
+                ->join('job_technician as jt','jt.jobId','jh.id')
+                ->join('technician as t','t.id','jt.technicianId')
+                ->where('jh.isFinalize',1)
+                ->where('jh.isComplete',0)
+                ->where('jh.isActive',1)
+                ->where('t.id',$id)
+                ->get();
+            if(count($checkJob) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $technician = Technician::findOrFail($id);
+                $technician->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         return Redirect('technician');
     }
     
     public function reactivate(Request $request,$id)
     {
-        $technician = Technician::findOrFail($id);
-        $technician->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $technician = Technician::findOrFail($id);
+            $technician->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('technician');
     }

@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function(){
 	//PDF
 	Route::get('purchase/pdf/{id}','PdfController@purchase');
 	Route::get('delivery/pdf/{id}','PdfController@delivery');
+	Route::get('return/pdf/{id}','PdfController@return');
 	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
 	Route::get('job/pdf/{id}','PdfController@job');

@@ -214,28 +214,44 @@ class SupplierController extends Controller
      */
     public function destroy(Request $request,$id)
     {
-        $checkPurchase = DB::table('purchase_header as ph')
-            ->join('supplier as s','s.id','ph.supplierId')
-            ->where('ph.supplierId',$id)
-            ->get();
-        if(count($checkPurchase) > 0){
-            $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
-        }else{
-            $supplier = Supplier::findOrFail($id);
-            $supplier->update([
-                'isActive' => 0
-            ]);
-            $request->session()->flash('success', 'Successfully deactivated.');
+        try{
+            DB::beginTransaction();
+            $checkPurchase = DB::table('purchase_header as ph')
+                ->join('supplier as s','s.id','ph.supplierId')
+                ->where('ph.supplierId',$id)
+                ->get();
+            if(count($checkPurchase) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $supplier = Supplier::findOrFail($id);
+                $supplier->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('supplier');
     }
     
     public function reactivate(Request $request,$id)
     {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $supplier = Supplier::findOrFail($id);
+            $supplier->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('supplier');
     }

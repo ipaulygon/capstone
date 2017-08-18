@@ -186,49 +186,63 @@ class PackageController extends Controller
             return Redirect::back()->withErrors($validator);
         }
         else{
-            try{
-                DB::beginTransaction();
-                $package = Package::findOrFail($id);
-                $package->update([
-                    'name' => trim($request->name),
-                    'price' => trim(str_replace(',','',$request->price)),
-                ]);
-                $products = $request->product;
-                $qty = $request->qty;
-                $services = $request->service;
-                PackageProduct::where('packageId',$id)->update(['isActive'=>0]);
-                PackageService::where('packageId',$id)->update(['isActive'=>0]);
-                if(!empty($products)){
-                    foreach ($products as $key=>$product) {
-                        PackageProduct::updateOrCreate([
-                            'packageId' => $package->id,
-                            'productId' => $product,
-                        ],[
-                            'quantity' => $qty[$key],
-                            'isActive' => 1
-                        ]
-                        );
+            $checkEstimate = DB::table('estimate_header as eh')
+                ->join('estimate_package as ep','ep.estimateId','eh.id')
+                ->where('ep.isActive',1)
+                ->where('ep.packageId',$id)
+                ->get();
+            $checkJob = DB::table('job_header as jh')
+                ->join('job_package as jp','jp.jobId','jh.id')
+                ->where('jp.packageId',$id)
+                ->get();
+            if(count($checkEstimate) > 0 || count($checkJob) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Update failed.');
+                return Redirect('package');
+            }else{
+                try{
+                    DB::beginTransaction();
+                    $package = Package::findOrFail($id);
+                    $package->update([
+                        'name' => trim($request->name),
+                        'price' => trim(str_replace(',','',$request->price)),
+                    ]);
+                    $products = $request->product;
+                    $qty = $request->qty;
+                    $services = $request->service;
+                    PackageProduct::where('packageId',$id)->update(['isActive'=>0]);
+                    PackageService::where('packageId',$id)->update(['isActive'=>0]);
+                    if(!empty($products)){
+                        foreach ($products as $key=>$product) {
+                            PackageProduct::updateOrCreate([
+                                'packageId' => $package->id,
+                                'productId' => $product,
+                            ],[
+                                'quantity' => $qty[$key],
+                                'isActive' => 1
+                            ]
+                            );
+                        }
                     }
-                }
-                if(!empty($services)){
-                    foreach ($services as $service) {
-                        PackageService::updateOrCreate([
-                            'packageId' => $id,
-                            'serviceId' => $service,
-                        ],[
-                            'isActive' => 1
-                        ]);
+                    if(!empty($services)){
+                        foreach ($services as $service) {
+                            PackageService::updateOrCreate([
+                                'packageId' => $id,
+                                'serviceId' => $service,
+                            ],[
+                                'isActive' => 1
+                            ]);
+                        }
                     }
+                    PackagePrice::create([
+                        'packageId' => $id,
+                        'price' => trim(str_replace(',','',$request->price))
+                    ]);
+                    DB::commit();
+                }catch(\Illuminate\Database\QueryException $e){
+                    DB::rollBack();
+                    $errMess = $e->getMessage();
+                    return Redirect::back()->withErrors($errMess);
                 }
-                PackagePrice::create([
-                    'packageId' => $id,
-                    'price' => trim(str_replace(',','',$request->price))
-                ]);
-                DB::commit();
-            }catch(\Illuminate\Database\QueryException $e){
-                DB::rollBack();
-                $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect('package');
@@ -243,20 +257,49 @@ class PackageController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $item = Package::findOrFail($id);
-        $item->update([
-            'isActive' => 0
-        ]);
-        $request->session()->flash('success', 'Successfully deactivated.');  
+        try{
+            DB::beginTransaction();
+            $checkEstimate = DB::table('estimate_header as eh')
+                ->join('estimate_package as ep','ep.estimateId','eh.id')
+                ->where('ep.isActive',1)
+                ->where('ep.packageId',$id)
+                ->get();
+            $checkJob = DB::table('job_header as jh')
+                ->join('job_package as jp','jp.jobId','jh.id')
+                ->where('jp.packageId',$id)
+                ->get();
+            if(count($checkEstimate) > 0 || count($checkJob) > 0){
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }else{
+                $item = Package::findOrFail($id);
+                $item->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         return Redirect('package');
     }
     
     public function reactivate(Request $request, $id)
     {
-        $item = Package::findOrFail($id);
-        $item->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $item = Package::findOrFail($id);
+            $item->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('package');
     }

@@ -32,7 +32,7 @@
         var backlog = {{$util->backlog}};
     </script>
 </head>
-<body id="mainBody" class="fixed hold-transition skin-red sidebar-mini">
+<body id="mainBody" class="fixed hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
@@ -55,7 +55,7 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-primary">10</span>
+                                <span class="label label-success">10</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">You have 10 notifications</li>
@@ -222,9 +222,9 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
-     {{--  <script>
+    {{--  <script>
         $('#mainBody').addClass('sidebar-collapse');
-    </script>   --}}
+    </script>    --}}
     <script>
         $(function () {
             //iCheck for checkbox and radio inputs

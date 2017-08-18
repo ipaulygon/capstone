@@ -65,7 +65,7 @@
                                                 <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
                                                     <i class="glyphicon glyphicon-eye-open"></i>
                                                 </a>
-                                                <button onclick="updateAdmin('{{$purchase->id}}')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                                <button onclick="updateAdmin('{{$purchase->id}}','purchase')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                                     <i class="glyphicon glyphicon-edit"></i>
                                                 </button>
                                                 <button onclick="deactivateAdmin('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">

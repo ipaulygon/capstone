@@ -8,9 +8,11 @@ use Session;
 use DB;
 use Illuminate\Validation\Rule;
 use PDF;
+use PDFF;
 //MODELS
 use App\PurchaseHeader;
 use App\DeliveryHeader;
+use App\ReturnHeader;
 use App\InspectionHeader;
 use App\EstimateHeader;
 use App\EstimateProduct;
@@ -34,17 +36,29 @@ class PdfController extends Controller
     public function delivery($id){
         $date = date('Y-m-d H:i:s');
         $delivery = DeliveryHeader::findOrFail($id);
+        $attachments = "";
+        foreach($delivery->return as $return){
+            $attachments .= $return->returnId.'|';
+        }
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.delivery',compact('delivery','date'))->setPaper([0,0,612,396]);
+        $pdf = PDF::loadview('pdf.delivery',compact('delivery','attachments','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('delivery.pdf');
+    }
+
+    public function return($id){
+        $date = date('Y-m-d H:i:s');
+        $return = ReturnHeader::findOrFail($id);
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.return',compact('return','date'))->setPaper([0,0,612,396]);
+        return $pdf->stream('return.pdf');
     }
     
     public function inspect($id){
         $date = date('Y-m-d H:i:s');
         $inspect = InspectionHeader::findOrFail($id);
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        // $pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
-        // return $pdf->stream('inspect.pdf');
+        //$pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
+        //return $pdf->stream('inspect.pdf');
         return View('pdf.inspect',compact('inspect','date'));
     }
 

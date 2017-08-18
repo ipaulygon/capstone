@@ -159,20 +159,36 @@ class ProductUnitController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $unit = ProductUnit::findOrFail($id);
-        $unit->update([
-            'isActive' => 0
-        ]);
+        try{
+            DB::beginTransaction();
+            $unit = ProductUnit::findOrFail($id);
+            $unit->update([
+                'isActive' => 0
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully deactivated.');  
         return Redirect('unit');
     }
 
     public function reactivate(Request $request, $id)
     {
-        $unit = ProductUnit::findOrFail($id);
-        $unit->update([
-            'isActive' => 1
-        ]);
+        try{
+            DB::beginTransaction();
+            $unit = ProductUnit::findOrFail($id);
+            $unit->update([
+                'isActive' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('unit');
     }
