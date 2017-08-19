@@ -18,6 +18,7 @@ class CreateInspectionHeaderTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('vehicleId');
+            $table->unsignedInteger('rackId');
             $table->text('remarks');
             $table->timestamps();
             $table->foreign('customerId')
@@ -26,6 +27,10 @@ class CreateInspectionHeaderTable extends Migration
                   ->onDelete('restrict');
             $table->foreign('vehicleId')
                   ->references('id')->on('vehicle')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('rackId')
+                  ->references('id')->on('rack')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });

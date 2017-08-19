@@ -162,8 +162,8 @@
                                 <ul class="treeview-menu">
                                     <li id="mCategory"><a href="{{url('/category')}}"><i class="fa fa-circle-o"></i> Service Category</a></li>
                                     <li id="mService"><a href="{{url('/service')}}"><i class="fa fa-circle-o"></i> Service</a></li>
-                                    <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
                                     <li id="mRack"><a href="{{url('/rack')}}"><i class="fa fa-circle-o"></i> Rack</a></li>
+                                    <li id="mInspection"><a href="{{url('/inspection')}}"><i class="fa fa-circle-o"></i> Inspection</a></li>
                                     <li id="mTechnician"><a href="{{url('/technician')}}"><i class="fa fa-circle-o"></i>Technician</a></li>
                                 </ul>
                             </li>
@@ -253,6 +253,9 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        setTimeout(function(){
+            $('#successAlert').alert('close');
+        },4000)
     </script>
     @yield('script')
 </body>

@@ -46,6 +46,9 @@
                 @endif
             ];
             $("#technician").val(activeTechnicians);
+            @if(old('rackId'))
+                $("#rack").val({{old('rackId')}});
+            @endif
             @if(old('modelId'))
                 $("#model").val({{old('modelId')}});
             @endif

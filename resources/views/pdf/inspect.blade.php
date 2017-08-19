@@ -9,10 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{$util->name}} | Basic Inspection Form</title>
-
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}
-    @yield('style')
     <link rel="stylesheet" href="{{ URL::asset('assets/jquery/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/font-awesome.css') }}">
@@ -37,14 +35,16 @@
                         <center><h2 class="panel-title">Customer Details</h2></center>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
+                        <div class="row" style="width:100%">
+                            <div class="col-md-6" style="float:left;width:50%">
                                 Customer: {{$inspect->customer->firstName}} {{$inspect->customer->middleName}} {{$inspect->customer->lastName}}<br>
                                 Address: {{$inspect->customer->street}} {{$inspect->customer->brgy}} {{$inspect->customer->city}}<br>
                                 Phone Number: {{$inspect->customer->contact}}<br>
                                 Email: {{$inspect->customer->email}}<br>
+                                <br>
+                                <br>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" style="float:right:width:50%">
                                 <?php $transmission = ($inspect->vehicle->isManual ? 'MT' : 'AT')?>
                                 Plate: {{$inspect->vehicle->plate}}<br>
                                 Make: {{$inspect->vehicle->model->make->name}}<br>

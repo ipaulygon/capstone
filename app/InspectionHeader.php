@@ -10,6 +10,7 @@ class InspectionHeader extends Model
     protected $fillable = [
     	'customerId',
         'vehicleId',
+        'rackId',
     	'remarks',
     ];
 

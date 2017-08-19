@@ -20,7 +20,10 @@ $('#calendar').fullCalendar({
         },
         done: {
             text: 'Done',
-        }
+        },
+        released: {
+            text: 'Released',
+        },
     },
     dayClick: function(date,jsEvent,view){
         if(!$(this).hasClass('fc-future')){
@@ -52,7 +55,7 @@ $('#calendar').fullCalendar({
     header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'started,finalized,paid,done'
+        right: 'started,finalized,paid,done,released'
     },
     viewRender: function(currentView){
         maxDate = moment().add(2,'weeks');
@@ -85,6 +88,9 @@ $('.fc-paid-button').addClass('btn-info');
 $('.fc-paid-button').removeClass('fc-button fc-state-default fc-state-hover');
 $('.fc-done-button').addClass('btn-success');
 $('.fc-done-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-right');
+$('.fc-released-button').addClass('btn-success');
+$('.fc-released-button').css('background-color','#6f5499!important');
+$('.fc-released-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-right');
 
 function clickEvent(id){
     $('.detailTechs').remove();
@@ -110,12 +116,17 @@ function clickEvent(id){
             });
             if(data.job.isFinalize){
                 $('#detailPDF').removeClass('hidden');
+                $('#detailProcess').removeClass('hidden');
                 $('#detailUpdate').addClass('hidden');
                 $('#detailFinalize').addClass('hidden');
-                if(data.job.isCompleted){
-                    $('#detailProcess').addClass('hidden');
+                if(data.job.isComplete){
+                    $('#detailRelease').removeClass('hidden');
                 }else{
-                    $('#detailProcess').removeClass('hidden');
+                    $('#detailRelease').addClass('hidden');
+                }
+                if(data.job.release!=null){
+                    $('#detailRelease').addClass('hidden');
+                    $('#detailProcess').addClass('hidden');
                 }
             }else{
                 $('#detailPDF').addClass('hidden');
@@ -131,6 +142,7 @@ function clickEvent(id){
     $('#detailPDF').attr("href","/job/pdf/"+id);
     $('#detailFinalize').attr("onclick","finalizeModal("+id+")");
     $('#detailProcess').attr("onclick","process("+id+")");
+    $('#detailRelease').attr("onclick","releaseVehicle("+id+")");
 }
 
 function hoverEvent(id,element){

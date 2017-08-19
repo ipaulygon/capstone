@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
 	Route::get('job/pdf/{id}','PdfController@job');
+	Route::get('job/receipt/pdf/{id}','PdfController@jobReceipt');
 
 	//GetJSON
 	Route::get('vehicle/remove/{id}','VehicleController@remove');
@@ -79,6 +80,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('job/check/{id}','JobController@check');
 	Route::get('job/get/{id}','JobController@get');
 	Route::patch('job/finalize/{id}','JobController@finalize');
+	Route::patch('job/release/{id}','JobController@release');
 	Route::patch('job/process/{id}','JobController@process');
 	Route::post('job/pay','JobController@pay');
 	Route::post('job/product','JobController@jobProduct');

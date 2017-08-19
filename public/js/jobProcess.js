@@ -15,43 +15,6 @@ var payList = $('#paymentList').DataTable({
 });
 $('#inputCredit').inputmask('999 9999 9999 9999');
 
-$('#processList tbody').on('click', 'td.push-details', function () {
-    var tr = $(this).closest('tr');
-    var row = procList.row( tr );
-
-    if ( row.child.isShown() ) {
-        // This row is already open - close it
-        row.child.hide();
-        tr.removeClass('shown');
-    }
-    else {
-        // Open this row
-        row.child( format(row.data()) ).show();
-        tr.addClass('shown');
-    }
-} );
-
-function format (d) {
-    console.log(d);
-    var toReturn;
-    toReturn = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr><label>Products:</label></tr><br>';
-    $.each(d[5].package.product,function(key,value){
-        maxInput = (value.quantity>value.product.inventory.quantity ? value.product.inventory.quantity:value.quantity);
-        if(value.product.isOriginal!=null){
-            part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
-        }else{
-            part = '';
-        }
-        toReturn += '<tr>'+value.product.brand.name+' - '+value.product.name+part+' ('+value.product.variance.name+')</td></tr>' + 
-        '<tr><td>Quantity:'+value.quantity*d[6].quantity+'</td></tr>' +
-        '<tr><input class="qty form-control text-right prodPack" name="prodPack[]" data-tresh="'+maxInput+'" type="text" value="'+value.completed+'"></tr>';
-    });
-    toReturn += '</table>';
-    return toReturn;
-    //  +'</table>'
-}
-
 function process(id){
     $('#jobCarousel').carousel(2);
     $('#processId').val(id);
@@ -78,6 +41,8 @@ function process(id){
         url: "/job/get/"+id,
         dataType: "JSON",
         success:function(data){
+            var count = 0;
+            var completed = 0;
             procList.clear().draw();
             payList.clear().draw();
             $('.payment').remove();
@@ -107,6 +72,8 @@ function process(id){
                 max: balance
             });
             $.each(data.job.product,function(key,value){
+                count += value.quantity;
+                completed += value.completed;
                 $.ajax({
                     type: "GET",
                     url: "/item/product/"+value.productId,
@@ -149,6 +116,8 @@ function process(id){
                 });
             });
             $.each(data.job.service,function(key,value){
+                count++;
+                completed += value.isComplete;
                 $.ajax({
                     type: "GET",
                     url: "/item/service/"+value.serviceId,
@@ -177,6 +146,8 @@ function process(id){
                 }); 
             });
             $.each(data.job.package,function(key,value){
+                count += value.quantity;
+                completed += value.completed;
                 $.ajax({
                     type: "GET",
                     url: "/item/package/"+value.packageId,
@@ -225,6 +196,8 @@ function process(id){
                 });
             });
             $.each(data.job.promo,function(key,value){
+                count += value.quantity;
+                completed += value.completed;
                 $.ajax({
                     type: "GET",
                     url: "/item/promo/"+value.promoId,
@@ -296,6 +269,9 @@ function process(id){
                     '<input class="prices" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>',
                     method,
                     value.created_at,
+                    '<a href="job/receipt/pdf/'+value.id+'" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Receipt">'+
+                    '<i class="glyphicon glyphicon-file"></i>'+
+                    '</a>'
                 ]).draw().node();
                 $(row).find('td').eq(1).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
@@ -306,6 +282,10 @@ function process(id){
                 allowMinus: false,
                 autoGroup: true,
             });
+            var percentage = Math.round((completed/count)*100);
+            $('#progress-bar').text(percentage+'%');
+            $('#progress-bar').attr('aria-valuenow',percentage+'');
+            $('#progress-bar').css('width',percentage+'%');
         }
     });
 }
@@ -364,6 +344,9 @@ $(document).on('click','#savePayment', function(){
                     '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',
                     method,
                     data.payment.created_at,
+                    '<a href="job/receipt/pdf/'+data.payment.id+'" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Receipt">'+
+                    '<i class="glyphicon glyphicon-file"></i>'+
+                    '</a>'
                 ]).draw().node();
                 $(row).find('td').eq(1).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
@@ -617,7 +600,9 @@ function checkJob(id){
         data: {id:id},
         success: function(data){
             $.each(data.jobs,function(key,value){
-                if(value.isComplete && value.total==value.paid){
+                if(value.release!=null){
+                    colors = '#6f5499';
+                }else if(value.isComplete && value.total==value.paid){
                     colors = "#00a65a";
                 }else if(!value.isComplete && value.isFinalize && value.total==value.paid){
                     colors = "#00c0ef";
@@ -636,6 +621,10 @@ function checkJob(id){
                 $("#calendar").fullCalendar('removeEventSources');
                 $('#calendar').fullCalendar('renderEvent', events, true);
             });
+            var percentage = Math.round((data.completed/data.count)*100);
+            $('#progress-bar').text(percentage+'%');
+            $('#progress-bar').attr('aria-valuenow',percentage+'');
+            $('#progress-bar').css('width',percentage+'%');
         }
     });
 }

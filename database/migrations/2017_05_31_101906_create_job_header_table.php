@@ -35,6 +35,10 @@ class CreateJobHeaderTable extends Migration
                   ->references('id')->on('vehicle')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
+            $table->foreign('rackId')
+                  ->references('id')->on('rack')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
         });
     }
 

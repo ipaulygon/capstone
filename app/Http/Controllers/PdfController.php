@@ -22,6 +22,7 @@ use App\EstimatePromo;
 use App\EstimateDiscount;
 use App\EstimateTechnician;
 use App\JobHeader;
+use App\JobPayment;
 class PdfController extends Controller
 {
     public function purchase($id){
@@ -57,8 +58,8 @@ class PdfController extends Controller
         $date = date('Y-m-d H:i:s');
         $inspect = InspectionHeader::findOrFail($id);
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        //$pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
-        //return $pdf->stream('inspect.pdf');
+        // $pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
+        // return $pdf->stream('inspect.pdf');
         return View('pdf.inspect',compact('inspect','date'));
     }
 
@@ -69,6 +70,7 @@ class PdfController extends Controller
             $estimate = EstimateHeader::create([
                 'customerId' => $job->customer->id,
                 'vehicleId' => $job->vehicle->id,
+                'rackId' => $job->rackId,
             ]);
             $products = $job->product;
             $services = $job->service;
@@ -148,5 +150,16 @@ class PdfController extends Controller
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discounts','date'))->setPaper([0,0,612,792]);
         return $pdf->stream('job.pdf');
+    }
+    
+    public function jobReceipt($id){
+        $payment = JobPayment::findOrFail($id);
+        $date = date('Y-m-d H:i:s');
+        $paymentId = 'No. '.str_pad($payment->id, 5, '0', STR_PAD_LEFT); 
+        $jobId = 'JOB'.str_pad($payment->jobId, 5, '0', STR_PAD_LEFT); 
+        $job = JobHeader::findOrFail($payment->jobId);
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.payment',compact('paymentId','payment','jobId','job','date'))->setPaper([0,0,459,306]);
+        return $pdf->stream('payment.pdf');
     }
 }

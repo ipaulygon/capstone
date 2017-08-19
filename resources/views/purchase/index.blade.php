@@ -62,8 +62,8 @@
                                                 {!! Form::open(['method'=>'patch','action' => ['PurchaseController@finalize',$purchase->id],'id'=>'fin'.$purchase->id]) !!}
                                                 {!! Form::close() !!}
                                             @elseif($purchase->isFinalize)
-                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                    <i class="glyphicon glyphicon-file"></i>
                                                 </a>
                                                 <button onclick="updateAdmin('{{$purchase->id}}','purchase')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                                     <i class="glyphicon glyphicon-edit"></i>
@@ -74,8 +74,8 @@
                                                 {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
                                                 {!! Form::close() !!}
                                             @else
-                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                    <i class="glyphicon glyphicon-file"></i>
                                                 </a>
                                             @endif
                                         </td>

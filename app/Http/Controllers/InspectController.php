@@ -59,7 +59,11 @@ class InspectController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspect.create',compact('items','customers','autos','manuals','technicians'));
+        $racks = DB::table('rack')
+            ->where('isActive',1)
+            ->select('rack.*')
+            ->get();
+        return View('inspect.create',compact('items','customers','autos','manuals','technicians','racks'));
     }
 
     /**
@@ -143,6 +147,7 @@ class InspectController extends Controller
                 $inspection = InspectionHeader::create([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
+                    'rackId' => $request->rackId,
                     'remarks' => trim($request->remarks)
                 ]);
                 $forms = $request->form;
@@ -209,7 +214,11 @@ class InspectController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspect.edit',compact('inspect','customers','autos','manuals','technicians'));
+        $racks = DB::table('rack')
+            ->where('isActive',1)
+            ->select('rack.*')
+            ->get();
+        return View('inspect.edit',compact('inspect','customers','autos','manuals','technicians','racks'));
     }
 
     /**
@@ -295,6 +304,7 @@ class InspectController extends Controller
                 $inspection->update([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
+                    'rackId' => $request->rackId,
                     'remarks' => trim($request->remarks)
                 ]);
                 $forms = $request->form;

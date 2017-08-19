@@ -9,6 +9,16 @@
             </select>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            {!! Form::label('rack', 'Rack') !!}<span>*</span><br>
+            <select id="rack" name="rackId" class="select2 form-control" required>
+                @foreach($racks as $rack)
+                    <option value="{{$rack->id}}">{{$rack->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
 </div>
 <div class="row">
     <div class="form-group col-md-4">

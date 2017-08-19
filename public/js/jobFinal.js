@@ -1,4 +1,5 @@
 var finalize = null;
+var release = null;
 var fList = $('#finalizeList').DataTable({
     responsive: true,
     ordering: false,
@@ -131,4 +132,13 @@ function finalizeModal(id){
 }
 $('#finalize').on('click', function (){
     $('#fin'+finalize).submit();
+});
+
+function releaseVehicle(id){
+    release = id;
+    $('#releaseModal').modal('show');
+}
+
+$('#release').on('click', function (){
+    $('#rel'+release).submit();
 });

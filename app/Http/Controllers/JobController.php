@@ -55,6 +55,10 @@ class JobController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
+        $racks = DB::table('rack')
+            ->where('isActive',1)
+            ->select('rack.*')
+            ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
@@ -82,7 +86,7 @@ class JobController extends Controller
             ->where('d.type','Whole')
             ->select('d.*')
             ->get();
-        return View('job.index',compact('jobs','customers','autos','manuals','technicians','products','services','packages','promos','discounts','date'));
+        return View('job.index',compact('jobs','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts','date'));
     }
 
     /**
@@ -225,6 +229,7 @@ class JobController extends Controller
                 $job = JobHeader::create([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
+                    'rackId' => $request->rackId,
                     'total' => str_replace(',','',$request->computed),
                     'paid' => 0,
                     'start' => $request->start." ".$time
@@ -336,6 +341,10 @@ class JobController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
+        $racks = DB::table('rack')
+            ->where('isActive',1)
+            ->select('rack.*')
+            ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
@@ -363,7 +372,7 @@ class JobController extends Controller
             ->where('d.type','Whole')
             ->select('d.*')
             ->get();
-        return View('job.edit',compact('job','customers','autos','manuals','technicians','products','services','packages','promos','discounts'));
+        return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -457,6 +466,7 @@ class JobController extends Controller
                 $job->update([
                     'customerId' => $customer->id,
                     'vehicleId' => $vehicle->id,
+                    'rackId' => $request->rackId,
                     'total' => str_replace(',','',$request->computed),
                 ]);
                 $products = $request->product;
@@ -597,6 +607,23 @@ class JobController extends Controller
             return Redirect::back()->withErrors($errMess);
         }
         $request->session()->flash('success', 'Successfully finalized.');  
+        return Redirect('job');
+    }
+
+    public function release(Request $request, $id){
+        try{
+            DB::beginTransaction();
+            $job = JobHeader::findOrFail($id);
+            $job->update([
+                'release' => Carbon::now()
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
+        $request->session()->flash('success', 'Successfully released.');  
         return Redirect('job');
     }
 
@@ -794,24 +821,34 @@ class JobController extends Controller
     public function jobFinal(Request $request){
         try{
             DB::beginTransaction();
-             $job = JobHeader::findOrFail($request->id);
+            $job = JobHeader::findOrFail($request->id);
+            $count = 0;
+            $completed = 0;
             $check = 1;
             foreach($job->product as $product){
+                $count += $product->quantity;
+                $completed += $product->completed;
                 if(!$product->isComplete){
                     $check = 0;
                 }
             }
             foreach($job->service as $service){
+                $count++;
+                $completed += $service->isComplete;
                 if(!$service->isComplete){
                     $check = 0;
                 }
             }
             foreach($job->package as $package){
+                $count += $package->quantity;
+                $completed += $package->completed;
                 if(!$package->isComplete){
                     $check = 0;
                 }
             }
             foreach($job->promo as $promo){
+                $count += $promo->quantity;
+                $completed += $promo->completed;
                 if(!$promo->isComplete){
                     $check = 0;
                 }
@@ -833,6 +870,6 @@ class JobController extends Controller
             DB::rollBack();
             $errMess = $e->getMessage();
         }
-        return response()->json(['message'=>'Job finished','jobs'=>$jobs]);
+        return response()->json(['message'=>'Job updated','jobs'=>$jobs,'count'=>$count,'completed'=>$completed]);
     }
 }

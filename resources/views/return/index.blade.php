@@ -34,8 +34,8 @@
                                 <td>{{$return->id}}</td>
                                 <td>{{$return->supplier}}</td>
                                 <td class="text-right">
-                                    <a href="{{url('/return/pdf/'.$return->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    <a href="{{url('/return/pdf/'.$return->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                        <i class="glyphicon glyphicon-file"></i>
                                     </a>
                                 </td>
                             </tr>

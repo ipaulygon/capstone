@@ -64,14 +64,17 @@
                                     <a id="detailEstimate" href="" target="_blank" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
                                         <i class="glyphicon glyphicon-list-alt"></i>
                                     </a>
-                                    <a id="detailPDF" href="" target="_blank" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    <a id="detailPDF" href="" target="_blank" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                        <i class="glyphicon glyphicon-file"></i>
                                     </a>
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
                                     <button onclick="" id="detailProcess" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Process record">
                                         <i class="glyphicon glyphicon-tasks"></i>
+                                    </button>
+                                    <button onclick="" id="detailRelease" type="button" class="btn btn-warning btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Release">
+                                        <i class="glyphicon glyphicon-export"></i>
                                     </button>
                                     <button onclick="" id="detailFinalize" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Finalize record">
                                         <i class="glyphicon glyphicon-check"></i>
@@ -148,12 +151,14 @@
                                                             {!! Form::open(['method'=>'patch','action' => ['JobController@finalize',$job->jobId],'id'=>'fin'.$job->jobId]) !!}
                                                             {!! Form::close() !!}
                                                         @else
-                                                            <a href="{{url('/job/pdf/'.$job->jobId)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                                                <i class="glyphicon glyphicon-eye-open"></i>
+                                                            <a href="{{url('/job/pdf/'.$job->jobId)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                                <i class="glyphicon glyphicon-file"></i>
                                                             </a>
                                                             <button onclick="process('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Process record">
                                                                 <i class="glyphicon glyphicon-tasks"></i>
                                                             </button>
+                                                            {!! Form::open(['method'=>'patch','action' => ['JobController@release',$job->jobId],'id'=>'rel'.$job->jobId]) !!}
+                                                            {!! Form::close() !!}
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -273,7 +278,8 @@
                                                     <tr>
                                                         <th width="5%" class="text-right">Amount</th>
                                                         <th width="5%">Method</th>
-                                                        <th class="text-right">Date</th>>
+                                                        <th class="text-right">Date</th>
+                                                        <th class="text-right">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -285,8 +291,8 @@
                             <br>
                             <label>Progress:</label>
                             <div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
-                                    0% Complete
+                                <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
+                                    0%
                                 </div>
                             </div><br>
                             <div class="dataTable_wrapper">
@@ -307,6 +313,25 @@
                     </div>
                 </div>
                 {!! Form::close() !!}
+            </div>
+            {{-- Release --}}
+            <div id="releaseModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">Release</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div style="text-align:center">Are you sure you want to release this vehicle?</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                            <button id="release" type="button" class="btn btn-warning">Release</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             {{-- Finalize --}}
             <div id="finalizeModal" class="modal fade">
@@ -385,7 +410,10 @@
                         id: {{$job->jobId}},
                         title: '{{$job->plate}}',
                         start: '{{$job->start}}',
-                        @if($job->isComplete && $job->total==$job->paid)
+                        end: '{{$job->end}}',
+                        @if($job->isComplete && $job->total==$job->paid && $job->release!=null)
+                            color: '#6f5499'
+                        @elseif($job->isComplete && $job->total==$job->paid)
                             //success
                             color: '#00a65a'
                         @elseif(!$job->isComplete && $job->isFinalize && $job->total==$job->paid)
@@ -403,6 +431,9 @@
                 $('#calendar').fullCalendar('renderEvent', events, true);
             @endif
             $("#technician").val(activeTechnicians);
+            @if(old('rackId'))
+                $("#rack").val({{old('rackId')}});
+            @endif
             @if(old('modelId'))
                 $("#model").val({{old('modelId')}});
             @endif

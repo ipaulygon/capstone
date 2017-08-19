@@ -53,8 +53,8 @@
                                     <a href="{{url('/inspect/'.$inspect->inspectId.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <a href="javascript: w=window.open('{{url('/inspect/pdf/'.$inspect->inspectId)}}'); w.print()" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="View PDF">
-                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    <a href="javascript: w=window.open('{{url('/inspect/pdf/'.$inspect->inspectId)}}'); w.print()" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                        <i class="glyphicon glyphicon-file"></i>
                                     </a>
                                 </td>
                             </tr>

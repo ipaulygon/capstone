@@ -44,6 +44,7 @@
                 @endforeach
             ];
             $("#technician").val(activeTechnicians);
+            $("#rack").val({{$inspect->rackId}});
             $("#model").val({{$inspect->vehicle->modelId}}+','+{{$inspect->vehicle->isManual}});
             $(".select2").select2();
             $('#firstName').autocomplete({source: customers});

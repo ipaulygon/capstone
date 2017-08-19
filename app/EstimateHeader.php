@@ -10,6 +10,7 @@ class EstimateHeader extends Model
     protected $fillable = [
     	'customerId',
         'vehicleId',
+        'rackId',
     	'isFinalize',
     ];
 
