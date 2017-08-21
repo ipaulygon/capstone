@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('inspect','InspectController');
 	//Route::resource('estimate','EstimateController');
 	Route::resource('job','JobController');
+	Route::resource('sales','SalesController');
 	Route::resource('query','QueryController');
 	Route::post('query/load','QueryController@load');
 	Route::resource('report','ReportController');
@@ -83,6 +84,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('job/release/{id}','JobController@release');
 	Route::patch('job/process/{id}','JobController@process');
 	Route::post('job/pay','JobController@pay');
+	Route::post('job/updatePay','JobController@updatePay');
 	Route::post('job/product','JobController@jobProduct');
 	Route::post('job/service','JobController@jobService');
 	Route::post('job/package','JobController@jobPackage');

@@ -15,7 +15,8 @@ class JobServiceSeeder extends Seeder
             'jobId' => 1,
             'serviceId' => 1,
             'isActive' => 1,
-            'isComplete' => 0
+            'isComplete' => 0,
+            'isVoid' => 0,
         ]);
     }
 }

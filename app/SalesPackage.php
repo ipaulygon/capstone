@@ -4,17 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class JobPackage extends Model
+class SalesPackage extends Model
 {
-    protected $table = 'job_package';
+    protected $table = 'sales_package';
     public $timestamps = false;
     protected $fillable = [
-    	'jobId',
+    	'salesId',
     	'packageId',
         'quantity',
-        'completed',
     	'isActive',
-        'isComplete',
         'isVoid',
     ];
 
@@ -23,6 +21,6 @@ class JobPackage extends Model
     }
 
     public function header(){
-        return $this->belongsTo('App\JobHeader','jobId');
+        return $this->belongsTo('App\SalesHeader','salesId');
     }
 }

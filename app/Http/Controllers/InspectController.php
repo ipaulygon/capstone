@@ -129,6 +129,7 @@ class InspectController extends Controller
                     ],[
                         'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
+                        'card' => $request->card,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
                         'city' => trim($request->city),
@@ -285,6 +286,7 @@ class InspectController extends Controller
                     ],[
                         'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
+                        'card' => $request->card,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
                         'city' => trim($request->city),

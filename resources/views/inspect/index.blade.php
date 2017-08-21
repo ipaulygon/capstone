@@ -45,7 +45,10 @@
                                     <li>Address: {{$inspect->street}} {{$inspect->brgy}} {{$inspect->city}}</li>
                                     <li>Contact No.: {{$inspect->contact}}</li>
                                     @if($inspect->email!=null)
-                                    <li>{{$inspect->email}}</li>
+                                    <li>Email: {{$inspect->email}}</li>
+                                    @endif
+                                    @if($inspect->card!=null)
+                                    <li>Senior Citizen/PWD ID: {{$inspect->card}}</li>
                                     @endif
                                 </td>
                                 <td>{{$inspect->remarks}}</td>

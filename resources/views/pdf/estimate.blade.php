@@ -181,7 +181,7 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($package->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
                         @endforeach
                         <br>
                         @foreach($package->package->service as $service)
@@ -212,7 +212,7 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->service as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
@@ -226,7 +226,7 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->freeService as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>

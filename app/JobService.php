@@ -12,7 +12,8 @@ class JobService extends Model
     	'jobId',
     	'serviceId',
     	'isActive',
-        'isComplete'
+        'isComplete',
+        'isVoid'
     ];
 
     public function service(){

@@ -17,7 +17,8 @@ class JobPackageSeeder extends Seeder
             'quantity' => 5,
             'completed' => 0,
             'isActive' => 1,
-            'isComplete' => 0
+            'isComplete' => 0,
+            'isVoid' => 0,
         ]);
     }
 }

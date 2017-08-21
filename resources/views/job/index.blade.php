@@ -15,7 +15,9 @@
 @section('content')
     <div id="jobCarousel" class="carousel slide">
         <div class="carousel-inner" role="listbox">
+            {{-- INDEX --}}
             <div id="jobIndex" class="item active">
+                {{--  DETAIL BOX  --}}
                 <div class="col-md-4">                    
                     <div id="actionBox" class="box box-primary box-solid">
                         <div class="box-header with-border">
@@ -70,6 +72,9 @@
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
+                                    <button onclick="" id="detailView" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
+                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    </button>
                                     <button onclick="" id="detailProcess" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Process record">
                                         <i class="glyphicon glyphicon-tasks"></i>
                                     </button>
@@ -101,8 +106,10 @@
                         </div>
                     </div>
                 </div>
+                {{-- CALENDAR/DATATABLE --}}
                 <div class="col-md-8">
                     <div class="tab-content">
+                        {{-- CALENDAR --}}
                         <div role="tabpanel" class="tab-pane fade in active" id="calendarTab">
                             <div class="box box-primary">
                                 <div class="box-body no-padding">
@@ -110,6 +117,7 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- DATATABLE --}}
                         <div role="tabpanel" class="tab-pane fade" id="tabularTab">
                             <div class="box box-primary">
                                 <div class="box-body dataTable_wrapper">
@@ -137,7 +145,10 @@
                                                         <li>Address: {{$job->street}} {{$job->brgy}} {{$job->city}}</li>
                                                         <li>Contact No.: {{$job->contact}}</li>
                                                         @if($job->email!=null)
-                                                        <li>{{$job->email}}</li>
+                                                        <li>Email: {{$job->email}}</li>
+                                                        @endif
+                                                        @if($job->card!=null)
+                                                        <li>Senior Citizen/PWD ID: {{$job->card}}</li>
                                                         @endif
                                                     </td>
                                                     <td class="text-right">
@@ -171,6 +182,7 @@
                     </div>
                 </div>
             </div>
+            {{--  CREATE  --}}
             <div id="jobForm" class="item">
                 {!! Form::open(['url' => 'job']) !!}
                 @include('layouts.required')
@@ -181,6 +193,7 @@
                 @include('job.formCreate')
                 {!! Form::close() !!}
             </div>
+            {{--  PROCESS  --}}
             <div id="processForm" class="item">
                 {!! Form::open(['method'=>'post','action' => ['JobController@process',0]]) !!}
                 <input id="processId" name="id" type="hidden">
@@ -219,6 +232,7 @@
                         </div>
                     </div>
                 </div>
+                {{--  PROGRESS DETAILS  --}}
                 <div class="col-md-8">
                     <div id="processBox" class="box box-primary">
                         <div class="box-header with-border">
@@ -240,7 +254,7 @@
                                             'readonly'])
                                         !!}</strong>
                                     </div>
-                                    <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewDetails" aria-expanded="false" aria-controls="viewDetails">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                    <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#listPayments" aria-expanded="false" aria-controls="listPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
                                 </div>
                                 <div class="col-md-6 addPayment">
                                     <div class="form-group form-inline">
@@ -263,7 +277,7 @@
                                     <button type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="collapse" id="viewDetails">
+                                    <div class="collapse" id="listPayments">
                                         <label>Total Price: </label>
                                         <strong>{!! Form::input('text','totalPrice',0,[
                                             'class' => 'prices',
@@ -276,7 +290,7 @@
                                             <table id="paymentList" class="table table-striped table-bordered responsive">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%" class="text-right">Amount</th>
+                                                        <th width="5%" class="text-right">Amount (PhP)</th>
                                                         <th width="5%">Method</th>
                                                         <th class="text-right">Date</th>
                                                         <th class="text-right">Action</th>
@@ -313,6 +327,113 @@
                     </div>
                 </div>
                 {!! Form::close() !!}
+            </div>
+            {{-- Viewing --}}
+            <div id="viewModal" class="modal fade bs-example-modal-lg">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">View Job Order</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-4">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h2 class="panel-title">Customer Details</h2>
+                                    </div>
+                                    <div class="panel-body">
+                                        <label>Job Id:</label> <span id="viewId"></span><br>
+                                        <label>Rack:</label> <span id="viewRack"></span>
+                                        <div class="row">
+                                            <div class="col-md-6 pull-left">
+                                                <label>Start:</label><br><span id="viewStart"></span>
+                                            </div>
+                                            <div class="col-md-6 pull-right">
+                                                <label>End:</label><br><span id="viewEnd"></span>
+                                            </div>
+                                        </div>
+                                        <label>Vehicle:</label><br>
+                                        <ul>
+                                            <li>Plate: <span id="viewPlate"></span></li>
+                                            <li>Model: <span id="viewModel"></span></li>
+                                            <li>Mileage: <span id="viewMileage"></span></li>
+                                        </ul>
+                                        <label>Customer:</label> <span id="viewCustomer"></span><br>
+                                        <label>Technician(s):</label>
+                                        <ul id="viewTechs"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h2 class="panel-title">Progress Details</h2>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="form-group form-inline">
+                                            {!! Form::label('computed', 'Balance:') !!}
+                                            <strong>{!! Form::input('text','computed',0,[
+                                                'class' => 'form-control no-border-input',
+                                                'id' => 'viewBalance',
+                                                'readonly'])
+                                            !!}</strong>
+                                        </div>
+                                        <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#viewPayments" aria-expanded="false" aria-controls="viewPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                        <br><div class="col-md-12">
+                                            <div class="collapse" id="viewPayments">
+                                                <label>Total Price: </label>
+                                                <strong>{!! Form::input('text','viewPrice',0,[
+                                                    'class' => 'prices',
+                                                    'id' => 'viewPrice',
+                                                    'style' => 'border: none!important;background: transparent!important',
+                                                    'readonly']) 
+                                                !!}</strong>
+                                                <div class="dataTable_wrapper">
+                                                    <label>Payments:</label>
+                                                    <table id="paymentView" class="table table-striped table-bordered responsive">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="5%" class="text-right">Amount (PhP)</th>
+                                                                <th width="5%">Method</th>
+                                                                <th class="text-right">Date</th>
+                                                                <th class="text-right">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <label>Progress:</label>
+                                        <div class="progress">
+                                            <div id="progress-view" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
+                                                0%
+                                            </div>
+                                        </div>
+                                        <div class="dataTable_wrapper">
+                                            <table id="processView" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th width="10%" class="text-right">Quantity</th>
+                                                        <th width="10%" class="text-right">Completed</th>
+                                                        <th class="text-right">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             {{-- Release --}}
             <div id="releaseModal" class="modal fade">
@@ -410,7 +531,7 @@
                         id: {{$job->jobId}},
                         title: '{{$job->plate}}',
                         start: '{{$job->start}}',
-                        end: '{{$job->end}}',
+                        end: '{{$job->release}}',
                         @if($job->isComplete && $job->total==$job->paid && $job->release!=null)
                             color: '#6f5499'
                         @elseif($job->isComplete && $job->total==$job->paid)

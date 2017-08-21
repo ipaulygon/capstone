@@ -19,7 +19,8 @@ class CustomerSeeder extends Seeder
             'brgy' => '',
             'city' => 'San Juan City',
             'contact' => '+63 998 4123 460',
-            'email' => null
+            'email' => null,
+            'card' => null
         ]);
     }
 }

@@ -18,7 +18,7 @@ class JobHeaderSeeder extends Seeder
             'rackId' => 1,
             'isFinalize' => 1,
             'isComplete' => 0,
-            'total' => 7289.09,
+            'total' => 6217.18,
             'paid' => 0.00,
             'start' => Carbon::now(),
             'end' => null,

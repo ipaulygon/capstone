@@ -97,46 +97,6 @@ class JobController extends Controller
     public function create()
     {
         return View('layouts.404');
-        $date = date('Y-m-d');
-        $customers = DB::table('customer')
-            ->select('customer.*')
-            ->get();
-        $models = DB::table('vehicle_model as vd')
-            ->join('vehicle_make as vk','vd.makeId','vk.id')
-            ->select('vd.*','vk.name as make')
-            ->get();
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
-        $products = DB::table('product as p')
-            ->join('product_type as pt','pt.id','p.typeId')
-            ->join('product_brand as pb','pb.id','p.brandId')
-            ->join('product_variance as pv','pv.id','p.varianceId')
-            ->where('p.isActive',1)
-            ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance')
-            ->get();
-        $services = DB::table('service as s')
-            ->join('service_category as c','c.id','s.categoryId')
-            ->where('s.isActive',1)
-            ->select('s.*','c.name as category')
-            ->get();
-        $packages = DB::table('package as p')
-            ->where('p.isActive',1)
-            ->select('p.*')
-            ->get();
-        $promos = DB::table('promo as p')
-            ->where('dateStart','>=',$date)
-            ->where('dateEnd','<=',$date)
-            ->where('p.isActive',1)
-            ->select('p.*')
-            ->get();
-        $discounts = DB::table('discount as d')
-            ->where('d.isActive',1)
-            ->where('d.type','Whole')
-            ->select('d.*')
-            ->get();
-        return View('job.create',compact('customers','models','technicians','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -210,6 +170,7 @@ class JobController extends Controller
                     ],[
                         'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
+                        'card' => $request->card,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
                         'city' => trim($request->city),
@@ -447,6 +408,7 @@ class JobController extends Controller
                     ],[
                         'contact' => str_replace('_','',trim($request->contact)),
                         'email' => $request->email,
+                        'card' => $request->card,
                         'street' => trim($request->street),
                         'brgy' => trim($request->brgy),
                         'city' => trim($request->city),
@@ -591,6 +553,28 @@ class JobController extends Controller
             $errMess = $e->getMessage();
         }
         return response()->json(['message'=>'Payment successfully added','job'=>$job,'payment'=>$jp]);
+    }
+
+    public function updatePay(Request $request){
+        try{
+            DB::beginTransaction();
+            $job = JobHeader::findOrFail($request->jobId);
+            $jp = JobPayment::findOrFail($request->id);
+            $less = str_replace(',','',$request->less);
+            $add = str_replace(',','',$request->add);
+            $now = $job->paid-$less+$add;
+            $jp->update([
+                'paid' => $add,
+            ]);
+            $job->update([
+                'paid' => $now
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Payment successfully updated','job'=>$job]);
     }
 
     public function finalize(Request $request, $id){

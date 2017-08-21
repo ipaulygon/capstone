@@ -16,6 +16,7 @@ class Customer extends Model
         'brgy',
         'city',
         'contact',
-        'email',	
+        'email',
+        'card',
     ];
 }

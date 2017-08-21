@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 {!! Form::label('contact', 'Contact No.') !!}<span>*</span>
                 {!! Form::input('text','contact',null,[
                     'class' => 'form-control',
@@ -48,13 +48,22 @@
                     'required']) 
                 !!}
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 {!! Form::label('email', 'Email') !!}
                 {!! Form::input('text','email',null,[
                     'class' => 'form-control',
                     'id' => 'email',
                     'maxlength' => '45',
                     'placeholder'=>'Email']) 
+                !!}
+            </div>
+            <div class="form-group col-md-4">
+                {!! Form::label('card', 'Senior Citizen/PWD ID') !!}
+                {!! Form::input('text','card',null,[
+                    'class' => 'form-control',
+                    'id' => 'card',
+                    'maxlength' => '45',
+                    'placeholder'=>'Senior Citizen/PWD ID']) 
                 !!}
             </div>
         </div>

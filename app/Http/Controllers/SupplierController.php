@@ -181,9 +181,10 @@ class SupplierController extends Controller
                 $persons = $request->spName;
                 $personContact = $request->spContact;
                 $contacts = $request->scNo;
-                foreach ($persons as $person) {
+                foreach ($persons as $key=>$person) {
+                    $isMain = ($key==0 ? 1 : 0);
                     SupplierPerson::create([
-                        'spId' => $id,
+                        'spId' => $supplier->id,
                         'spName' => $person,
                         'spContact' => $personContact[$key],
                         'isMain' => $isMain

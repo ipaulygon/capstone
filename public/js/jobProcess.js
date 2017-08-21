@@ -14,7 +14,7 @@ var payList = $('#paymentList').DataTable({
     "retrieve": true,
 });
 $('#inputCredit').inputmask('999 9999 9999 9999');
-
+var lessPayment = null;
 function process(id){
     $('#jobCarousel').carousel(2);
     $('#processId').val(id);
@@ -25,7 +25,7 @@ function process(id){
         success:function(data){
             $('.processTechs').remove();
             $('#processStart').text(data.job.start);
-            $('#processEnd').text(data.job.end);
+            $('#processEnd').text(data.job.release);
             $('#processPlate').text(data.job.vehicle.plate);
             transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
             $('#processModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
@@ -41,6 +41,7 @@ function process(id){
         url: "/job/get/"+id,
         dataType: "JSON",
         success:function(data){
+            console.log(data);
             var count = 0;
             var completed = 0;
             procList.clear().draw();
@@ -266,19 +267,23 @@ function process(id){
             $.each(data.job.payment,function(key,value){
                 method = (value.isCredit ? "Credit Card" : "Cash");
                 row = payList.row.add([
-                    '<input class="prices" value="'+value.paid+'" style="border:none!important;background: transparent!important" readonly>',
+                    '<input class="form-control prices no-border-input" value="'+value.paid+'" id="payment'+value.id+'" readonly>',
                     method,
                     value.created_at,
+                    '<button type="button" data-id="'+value.id+'" class="btn btn-warning btn-sm edit-payment" data-toggle="tooltip" data-placement="top" title="Edit Payment">'+
+                    '<i class="glyphicon glyphicon-edit"></i>'+
+                    '</button>' +
                     '<a href="job/receipt/pdf/'+value.id+'" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Receipt">'+
                     '<i class="glyphicon glyphicon-file"></i>'+
                     '</a>'
                 ]).draw().node();
                 $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(2).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
             });
             $(".prices").inputmask({ 
                 alias: "currency",
-                prefix: 'PhP ',
+                prefix: '',
                 allowMinus: false,
                 autoGroup: true,
             });
@@ -289,6 +294,88 @@ function process(id){
         }
     });
 }
+
+$(document).on('click','.edit-payment', function(){
+    id = $(this).attr('data-id');
+    lessPayment = $('#payment'+id).val();
+    $('#payment'+id).removeClass('no-border-input');
+    $('#payment'+id).attr('readonly',false);
+    $(this).removeClass('edit-payment');
+    $(this).removeClass('btn-warning');
+    $(this).addClass('update-payment');
+    $(this).addClass('btn-success');
+    $(this).attr('title','Update Payment');
+    $(this).children().remove();
+    $(this).append('<i class="glyphicon glyphicon-ok"></i>');
+    $('#payment'+id).inputmask({
+        alias: "currency",
+        prefix: '',
+        allowMinus: false,
+        autoGroup: true,
+        min: 0,
+        max: $('#inputPayment').attr('data-qty')
+    });
+    $('.edit-payment').addClass('disabled');
+});
+
+$(document).on('click','.update-payment', function(){
+    id = $(this).attr('data-id');
+    jobId = $('#processId').val();
+    addPayment = $('#payment'+id).val();
+    $('.edit-payment').removeClass('disabled');
+    $('#payment'+id).addClass('no-border-input');
+    $('#payment'+id).attr('readonly',true);
+    $(this).removeClass('update-payment');
+    $(this).removeClass('btn-success');
+    $(this).addClass('edit-payment');
+    $(this).addClass('btn-warning');
+    $(this).attr('title','Edit Payment');
+    $(this).children().remove();
+    $(this).append('<i class="glyphicon glyphicon-edit"></i>');
+    $.ajax({
+        type: 'POST',
+        url: 'job/updatePay',
+        data: {id:id,jobId:jobId,less:lessPayment,add:addPayment},
+        success: function(data){
+            $('#notif').append(
+                '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                data.message +
+                '</div>'
+            );
+            balance = data.job.total-data.job.paid;
+            $('#balance').val(balance);
+            $("#balance").inputmask({ 
+                alias: "currency",
+                prefix: 'PhP ',
+                allowMinus: false,
+                autoGroup: true,
+                min: balance,
+                max: balance
+            });
+            if(balance==0){
+                $('.addPayment').addClass('hidden');
+            }else{
+                $('.addPayment').removeClass('hidden');
+            }
+            $('#inputPayment').attr('data-qty',balance);
+            $("#inputPayment").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: balance
+            });
+        }
+    });
+    lessPayment = addPayment;
+    checkJob(jobId);
+    setTimeout(function (){
+        $('#alert').alert('close');
+    },2000);
+});
 
 $(document).on('click','#savePayment', function(){
     balance = $('#balance').val().replace(',','');
@@ -344,6 +431,9 @@ $(document).on('click','#savePayment', function(){
                     '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',
                     method,
                     data.payment.created_at,
+                    '<button type="button" data-id="'+data.payment.id+'" class="btn btn-warning btn-sm edit-payment" data-toggle="tooltip" data-placement="top" title="Edit Payment">'+
+                    '<i class="glyphicon glyphicon-edit"></i>'+
+                    '</button>' +
                     '<a href="job/receipt/pdf/'+data.payment.id+'" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Receipt">'+
                     '<i class="glyphicon glyphicon-file"></i>'+
                     '</a>'
@@ -615,7 +705,7 @@ function checkJob(id){
                     id: value.id,
                     title: value.plate,
                     start: value.start,
-                    end: value.end,
+                    end: value.release,
                     color: colors
                 };
                 $("#calendar").fullCalendar('removeEventSources');

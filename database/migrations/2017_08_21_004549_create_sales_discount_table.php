@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJobServiceTable extends Migration
+class CreateSalesDiscountTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,18 @@ class CreateJobServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_service', function (Blueprint $table) {
+        Schema::create('sales_discount', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('jobId');
-            $table->unsignedInteger('serviceId');
+            $table->unsignedInteger('salesId');
+            $table->unsignedInteger('discountId');
             $table->boolean('isActive')->default(1);
-            $table->boolean('isComplete')->default(0);
-            $table->boolean('isVoid')->default(0);
-            $table->foreign('jobId')
-                  ->references('id')->on('job_header')
+            $table->foreign('salesId')
+                  ->references('id')->on('sales_header')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('serviceId')
-                  ->references('id')->on('service')
+            $table->foreign('discountId')
+                  ->references('id')->on('discount')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -39,6 +37,6 @@ class CreateJobServiceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_service');
+        Schema::dropIfExists('sales_discount');
     }
 }

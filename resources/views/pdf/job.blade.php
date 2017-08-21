@@ -181,7 +181,7 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($package->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
                         @endforeach
                         <br>
                         @foreach($package->package->service as $service)
@@ -212,7 +212,7 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->service as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
@@ -269,8 +269,8 @@
             </div>
             <div style="float:right" class="col-md-6">
                 <br>
-                CUSTOMER'S SIGNATURE: ___________________<br>
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discounts,2)}}<br> 
+                CUSTOMER'S SIGNATURE: ___________________<br>
             </div>
             <br><br>
             <div class="footerd">Printed by: Admin {{$date}}</div>
