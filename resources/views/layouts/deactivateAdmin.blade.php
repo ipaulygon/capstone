@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Deactivate</h4>
             </div>
             <div class="modal-body" style="text-align:center">
-                Are you sure you want to deactivate this record?
+                Are you sure you want to deactivate this record?  All items included in this record will also be deactivated.
                 <form action="">
                     <div class="form-group">
                         {!! Form::label('keyDeactivate', 'Admin Password:') !!}

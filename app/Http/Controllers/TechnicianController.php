@@ -271,7 +271,6 @@ class TechnicianController extends Controller
                 ->join('technician as t','t.id','jt.technicianId')
                 ->where('jh.isFinalize',1)
                 ->where('jh.isComplete',0)
-                ->where('jh.isActive',1)
                 ->where('t.id',$id)
                 ->get();
             if(count($checkJob) > 0){

@@ -87,6 +87,7 @@ class InspectController extends Controller
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
+            'rackId.*' => 'required',
             'remarks' => 'max:140',
             'form.*' => 'required',
             'item.*' => 'required',
@@ -109,6 +110,7 @@ class InspectController extends Controller
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
+            'rackId.*' => 'Rack',
             'remarks' => 'Remarks',
             'form.*' => 'Form',
             'item.*' => 'Item'
@@ -244,6 +246,7 @@ class InspectController extends Controller
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
+            'rackId.*' => 'required',
             'remarks' => 'max:140',
             'form.*' => 'required',
             'item.*' => 'required',
@@ -266,6 +269,7 @@ class InspectController extends Controller
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
+            'rackId.*' => 'Rack',
             'remarks' => 'Remarks',
             'form.*' => 'Form',
             'item.*' => 'Item'

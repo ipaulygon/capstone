@@ -25,9 +25,10 @@
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             <select id="reportId" name="reportId" class="form-control">
                                 <option value=""></option>
-                                <option value="1">Total stocks of Product</option>
-                                <option value="2">List of Service</option>
-                                <option value="3">LIst of Sales</option>
+                                <option value="1">Inventory Report</option>
+                                <option value="2">Services Availed Report</option>
+                                <option value="3">Sales Report</option>
+                                <option value="4">Products Availed Report</option>
                             </select>
                         </div>
                     </div>
@@ -100,6 +101,7 @@
                             <th>Service</th>
                             <th>Description</th>
                             <th class="text-right">Price</th>
+                            <th>Job Id</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -110,9 +112,8 @@
                                 <li>Category: {{$service->category}}</li>
                                 <li>Size: {{$service->size}}</li>
                             </td>
-                            <td class="text-right">
-                                {{number_format($service->price,2)}}
-                            </td>
+                            <td class="text-right">{{$service->price}}</td>
+                            <td id="detailId"></td>
                         </tr>
                         @endforeach
                    </tbody>
@@ -122,8 +123,7 @@
                         <tr>
                             <th>Vehicle</th>
                             <th>Customer</th>
-                            <th>Products Availed</th>
-                            <th>Services Availed</th>
+                            <th class="text-right">Total Purchased</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -145,8 +145,37 @@
                                 <li>{{$sales->email}}</li>
                                 @endif
                             </td>
-                            <td>{{$sales->brand}} - {{$sales->product}}</td>
-                            <td>{{$sales->service}}</td>
+                            <td class="text-right">{{number_format($sales->total,2)}}</td>
+                        </tr>
+                        @endforeach
+                   </tbody>
+        </table>
+        <table id="list4" class="table table-striped table-bordered responsive hidden">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Description</th>
+                            <th class="text-right">Price</th>
+                            <th>Job Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($products as $prod)
+                        <tr>
+                            <td>{{$prod->brand}} - {{$prod->product}}</td>
+                            <td>
+                                <li>Type: {{$prod->type}}</li>
+                                <li>Size: {{$prod->variance}}</li>
+                                @if($prod->isOriginal!=null)
+                                    <?php $type = ($prod->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
+                                    <li>Part Information: {{$type}}</li>
+                                @endif
+                                @if($prod->description!=null || $prod->description!="")
+                                    <li>{{$prod->description}}</li>
+                                @endif
+                            </td>
+                            <td class="text-right">{{number_format($prod->pprices,2)}}</td>
+                            <td id="detailIds"></td>
                         </tr>
                         @endforeach
                    </tbody>
@@ -159,6 +188,8 @@
         <canvas id="myChart2" class="chart hidden" width="400" height="100"></canvas>
 
         <canvas id="myChart3" class="chart hidden" width="400" height="100"></canvas>
+
+        <canvas id="myChart4" class="chart hidden" width="400" height="100"></canvas>
         </div>
         </div>
     </div>
@@ -177,6 +208,16 @@
     <script>
         $(document).ready(function(){
             $('#report').addClass('active');
+
+            @foreach($services as $id)
+                var jobId = String("00000" + {{$id->jobId}}).slice(-5);
+                $('#detailId').text('JOB'+jobId);
+            @endforeach
+
+            @foreach($products as $prod)
+                var jobId2 = String("00000" + {{$prod->jobId}}).slice(-5);
+                $('#detailIds').text('JOB'+jobId2);
+            @endforeach
         });
         var ctx = document.getElementById("myChart1").getContext('2d');
         var myChart1 = new Chart(ctx, {
@@ -235,7 +276,7 @@
                       @endforeach
                 ],
                 datasets: [{
-                    label: 'List of Services',
+                    label: 'Services Availed Report',
                     data: [
                          @foreach($services as $ser) 
                             '{{$ser->price}}', 
@@ -280,11 +321,55 @@
                      @endforeach
                 ],
                 datasets: [{
-                    label: 'List of Sales',
+                    label: 'Sales Report',
                     data: [
                         @foreach($jobs as $job) 
                             '{{$job->total}}', 
                         @endforeach
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        var ctx4 = document.getElementById("myChart4").getContext('2d');
+        var myChart4 = new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: [
+                     @foreach($products as $pro)
+                        '{{$prod->brand}} - {{$prod->product}}',
+                    
+                ],
+                datasets: [{
+                    label: 'Products Availed Report',
+                    data: [
+                      '{{$pro->pprices}}',
+                      @endforeach
                     ],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -350,5 +435,7 @@
             }
         }, cb);
         cb(start, end);
+
+
     </script>
 @stop

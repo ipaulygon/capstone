@@ -251,6 +251,10 @@ class InspectionController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        return View('inspection.form',compact('items','customers','autos','manuals','technicians'));
+        $racks = DB::table('rack')
+            ->where('isActive',1)
+            ->select('rack.*')
+            ->get();
+        return View('inspection.form',compact('items','customers','autos','manuals','technicians','racks'));
     }
 }

@@ -55,9 +55,10 @@ class JobController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        $racks = DB::table('rack')
-            ->where('isActive',1)
-            ->select('rack.*')
+        $racks = DB::table('rack as r')
+            ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL)'),0)
+            ->where('r.isActive',1)
+            ->select('r.*')
             ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
@@ -120,6 +121,7 @@ class JobController extends Controller
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
+            'rackId.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -146,6 +148,7 @@ class JobController extends Controller
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
+            'rackId.*' => 'Rack',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',
@@ -302,9 +305,10 @@ class JobController extends Controller
             ->where('isActive',1)
             ->select('technician.*')
             ->get();
-        $racks = DB::table('rack')
-            ->where('isActive',1)
-            ->select('rack.*')
+        $racks = DB::table('rack as r')
+            ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL AND r.id!='.$id.')'),0)
+            ->where('r.isActive',1)
+            ->select('r.*')
             ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
@@ -358,6 +362,7 @@ class JobController extends Controller
             'modelId' => 'required',
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
+            'rackId.*' => 'required',
             'product.*' => 'sometimes|required',
             'productQty.*' => 'sometimes|required|numeric',
             'service.*' => 'sometimes|required',
@@ -384,6 +389,7 @@ class JobController extends Controller
             'modelId' => 'Vehicle Model',
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
+            'rackId.*' => 'Rack',
             'product.*' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service.*' => 'Service',

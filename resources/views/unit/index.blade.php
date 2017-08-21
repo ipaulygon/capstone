@@ -178,6 +178,7 @@
                                         <div class="form-group">
                                             {!! Form::label('description', 'Description') !!}<span>*</span>
                                             {!! Form::textarea('description',null,[
+                                                'id'=>'unitDesc',
                                                 'class' => 'form-control',
                                                 'placeholder'=>'Description',
                                                 'maxlength'=>'50',

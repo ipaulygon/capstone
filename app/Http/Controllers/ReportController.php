@@ -20,13 +20,15 @@ class ReportController extends Controller
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->join('inventory as i','p.id','i.productId')
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance','i.quantity as quantity','p.name as name')
-            ->get(['type','quantity','name','brand']);
+            ->get();
         // $results = DB::select( DB::raw("select * from product join inventory on product.id = inventory.productId JOIN product_type on product.typeId = product_type.id JOIN product_brand on product.brandId = product_brand.id JOIN product_variance on product.varianceId = product_variance.id") );
 
-        $services = DB::table('service as s')
-            ->join('service_category as c','c.id','s.categoryId')
-            ->where('s.isActive',1)
-            ->select('s.*','s.name as name','c.name as category','s.size as size')
+        $services = DB::table('job_header as j')
+            ->join('customer as c','c.id','j.customerId')
+            ->join('job_service as js','j.id','js.jobId')
+            ->join('service as s','s.id','js.serviceId')
+            ->join('service_category as sc','sc.id','s.categoryId')
+            ->select('j.*','j.id as jobId','c.*','s.*','s.name as name','sc.name as category','s.size as size', 's.name as service')
             ->get();
 
         $jobs = DB::table('job_header as j')
@@ -44,7 +46,18 @@ class ReportController extends Controller
             ->join('service_category as sc','sc.id','s.categoryId')
             ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vk.name as make','p.*','pt.name as type','pb.name as brand','pv.name as variance','s.*','s.name as name','sc.name as category','s.size as size', 'v.plate as plate', 'v.isManual as transmission', 's.name as service', 'p.name as product')
             ->get();
-        return view('report.index',compact('data','services','jobs'));
+
+        $products = DB::table('job_header as j')
+            ->join('customer as c','c.id','j.customerId')
+            ->join('job_product as jp','j.id','jp.jobId')
+            ->join('product as p','p.id','jp.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->select('j.*','j.id as jobId','p.price as pprices','c.*','p.*','pt.name as type','pb.name as brand','pv.name as variance', 'p.name as product')
+            ->get();
+
+        return view('report.index',compact('data','services','jobs','products'));
        
     }
 
@@ -157,6 +170,8 @@ class ReportController extends Controller
             ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','vk.name as make','p.*','pt.name as type','pb.name as brand','pv.name as variance','s.*','s.name as name','sc.name as category','s.size as size')
             ->get();
              return response()->json(['jobs'=>$jobs]);
+
+
         return view('report.index',compact('data','services','jobs'));
      }
 }
