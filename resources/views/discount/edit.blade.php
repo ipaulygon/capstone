@@ -35,15 +35,39 @@
         $("#product").val(activeProduct);
         $("#service").val(activeService);
         $(".select2").select2();
-        $(".square-blue[value={{$discount->type}}").prop('checked',true);
+        $(".type[value={{$discount->isWhole}}]").prop('checked',true);
+        @if($discount->isWhole)
+            $(".vat").prop('disabled',false);
+            $('#product').val('');
+            $('#service').val('');
+            $('.select2').select2();
+            $(".select2").prop('disabled',true);
+        @endif
+        @if($discount->isVatExempt)
+            $(".vat").prop('checked',true);
+            $("#isVatExempt").val(1);
+        @endif
         $('#type1').on('ifChecked ifUnchecked', function(event){
             if(event.type=="ifChecked"){
                 $('#product').val('');
                 $('#service').val('');
                 $('.select2').select2();
                 $(".select2").prop('disabled',true);
+                $(".vat").prop('disabled',false);
+                $(".vat").prop('checked',false);
+                $("#isVatExempt").val(0);
             }else{
                 $(".select2").prop('disabled',false);
+                $(".vat").prop('disabled',true);
+                $(".vat").prop('checked',false);
+                $("#isVatExempt").val(0);
+            }
+        });
+        $('.vat').change(function(){
+            if($(this).prop('checked')){
+                $('#isVatExempt').val(1);
+            }else{
+                $('#isVatExempt').val(0);
             }
         });
     </script>

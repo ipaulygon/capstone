@@ -33,12 +33,19 @@
                 {!! Form::label('type', 'Type') !!}<span>*</span>
                 <div class="row">
                     <div class="col-md-6">
-                        <input id="type1" type="radio" class="square-blue" name="type" value="Whole" required> Whole
+                        <input id="type1" type="radio" class="square-blue type" name="isWhole" value="1" required> Whole
                     </div>
                     <div class="col-md-6">
-                        <input id="type2" type="radio" class="square-blue" name="type" value="Individual" required> Individual
+                        <input id="type2" type="radio" class="square-blue type" name="isWhole" value="0" required> Individual
                     </div>
                 </div>
+            </div>
+            <div class="form-group">
+                {!! Form::label('vat', 'VAT Terms') !!}<span>*</span><br>
+                <label class="checkbox-inline">
+                    <input type="checkbox" class="vat" name="hasVatExempt" value="1" disabled> VAT Exempted
+                    <input type="hidden" id="isVatExempt" name="isVatExempt" value="1">
+                </label>
             </div>
         </div>
         <div class="box-footer">

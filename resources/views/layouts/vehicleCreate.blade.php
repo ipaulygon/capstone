@@ -2,6 +2,7 @@
     <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('type', 'Technician(s) Assigned') !!}<span>*</span>
+            <i id="infoTechnician" class="fa fa-question-circle"></i>
             <select id="technician" name="technician[]" class="select2 form-control" style="width:100%" multiple required>
                 @foreach($technicians as $technician)
                     <option value="{{$technician->id}}">{{$technician->firstName}} {{$technician->middleName}} {{$technician->lastName}}</option>

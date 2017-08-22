@@ -17,6 +17,8 @@ class Utilities extends Model
         'type1',
     	'type2',
         'max',
-        'backlog'
+        'backlog',
+        'isVat',
+        'vat'
     ];
 }

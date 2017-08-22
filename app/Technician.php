@@ -27,4 +27,8 @@ class Technician extends Model
     public function skill(){
         return $this->hasMany('App\TechnicianSkill','technicianId');
     }
+
+    public function job(){
+        return $this->hasMany('App\JobTechnician','technicianId');
+    }
 }

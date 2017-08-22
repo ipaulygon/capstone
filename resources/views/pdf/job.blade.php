@@ -13,7 +13,7 @@
         }
         body{
             font-family: "SegoeUI","Sans-serif";
-            font-size: 14px;
+            font-size: 11px;
         }
         .header{
             font-size: 20px!important;
@@ -62,7 +62,7 @@
     </style>
     <body>
         <div class="center header">
-            Rapide
+            {{$util->name}}
         </div>
         <div style="float:right">
             {{date('F j, Y', strtotime($job->created_at))}}<br>

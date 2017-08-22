@@ -122,24 +122,51 @@
                             <label><span>*</span><i>Replacement/Low Quality</i></label>
                         </div>  
                     </div><br>
-                    <div class="form-group">
-                        {!! Form::label('max', 'Max Value for Numeric') !!}<span>*</span>
-                        {!! Form::input('text','max',$utilities->max,[
-                            'class' => 'form-control',
-                            'id' => 'max',
-                            'placeholder'=>'Max',
-                            'required']) 
-                        !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::label('backlog', 'Max Days for Backlog') !!}<span>*</span>
-                        {!! Form::input('text','backlog',$utilities->backlog,[
-                            'class' => 'form-control',
-                            'id' => 'backlog',
-                            'placeholder'=>'backlog',
-                            'required']) 
-                        !!}
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {!! Form::label('max', 'Max Value for Pieces') !!}<span>*</span>
+                                {!! Form::input('text','max',$utilities->max,[
+                                    'class' => 'form-control',
+                                    'id' => 'max',
+                                    'placeholder'=>'Max',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {!! Form::label('backlog', 'Max Days for Backlog') !!}<span>*</span>
+                                {!! Form::input('text','backlog',$utilities->backlog,[
+                                    'class' => 'form-control',
+                                    'id' => 'backlog',
+                                    'placeholder'=>'backlog',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <?php $vatChecked = ($utilities->isVat ? 'checked':'')?>
+                                {!! Form::label('hasVat', 'VAT / NON-VAT') !!}<span>*</span><br>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="vat" name="hasVat" value="1" {{$vatChecked}}> VAT
+                                    <input type="hidden" id="isVat" name="isVat" value="1">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {!! Form::label('vat', 'VAT %') !!}<span>*</span>
+                                {!! Form::input('text','vat',$utilities->vat,[
+                                    'class' => 'form-control',
+                                    'id' => 'vat',
+                                    'placeholder'=>'VAT',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -156,6 +183,11 @@
     <script>
         $(document).ready(function(){
             $('#utility').addClass('active');
+            console.log(isVat);
+            if(!isVat){
+                $('#vat').attr('readonly',true);
+                $('#vat').val(0);
+            }
         });
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -171,9 +203,10 @@
         $("#max").inputmask({ 
             alias: "integer",
             prefix: '',
+            suffix: ' pcs.',
             allowMinus: false,
             autoGroup: true,
-            min: 20,
+            min: 1,
             max: 200
         });
         $("#backlog").inputmask({ 
@@ -183,6 +216,26 @@
             autoGroup: true,
             min: 1,
             max: 30
+        });
+        $("#vat").inputmask({ 
+            alias: "integer",
+            prefix: '',
+            suffix: ' %',
+            allowMinus: false,
+            autoGroup: true,
+            min: 0,
+            max: 100
+        });
+        $('.vat').change(function(){
+            if($(this).prop('checked')){
+                $('#vat').attr('readonly',false);
+                $('#vat').val(vat);
+                $('#isVat').val(1);
+            }else{
+                $('#vat').attr('readonly',true);
+                $('#vat').val(0);
+                $('#isVat').val(0);
+            }
         });
     </script>
 @endsection

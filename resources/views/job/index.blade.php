@@ -72,16 +72,16 @@
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <button onclick="" id="detailView" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
+                                    <button id="detailView" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </button>
-                                    <button onclick="" id="detailProcess" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Process record">
+                                    <button id="detailProcess" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Process record">
                                         <i class="glyphicon glyphicon-tasks"></i>
                                     </button>
-                                    <button onclick="" id="detailRelease" type="button" class="btn btn-warning btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Release">
+                                    <button id="detailRelease" type="button" class="btn btn-warning btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Release">
                                         <i class="glyphicon glyphicon-export"></i>
                                     </button>
-                                    <button onclick="" id="detailFinalize" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Finalize record">
+                                    <button id="detailFinalize" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Finalize record">
                                         <i class="glyphicon glyphicon-check"></i>
                                     </button>
                                 </div>
@@ -485,6 +485,53 @@
                     </div>
                 </div>
             </div>
+            {{-- Technician --}}
+            <div id="techModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title">List of Technicians</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="dataTable_wrapper">
+                                <table id="techList" class="table table-striped table-bordered responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Technician</th>
+                                            <th>Skills</th>
+                                            <th>On going tasks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($technicians as $tech)
+                                        <tr>
+                                            <td>{{$tech->firstName}} {{$tech->middleName}} {{$tech->lastName}}</td>
+                                            <td>
+                                                @foreach($tech->skill as $skill)
+                                                    <li>{{$skill->category->name}}</li>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach($tech->job as $task)
+                                                    @if($task->header->release==null && $task->header->isFinalize)
+                                                        <li>{{'JOB'.str_pad($task->header->id, 5, '0', STR_PAD_LEFT)}}</li>
+                                                    @endif
+                                                @endforeach
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @stop
@@ -503,7 +550,8 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
-    <script src="{{ URL::asset('js/job.js') }}"></script>
+    <script src="{{ URL::asset('js/techList.js') }}"></script>
+    <script src="{{ URL::asset('js/item.js') }}"></script>
     <script src="{{ URL::asset('js/jobFinal.js') }}"></script>
     <script src="{{ URL::asset('js/jobProcess.js') }}"></script>
     <script src="{{ URL::asset('js/jobCalendar.js') }}"></script>

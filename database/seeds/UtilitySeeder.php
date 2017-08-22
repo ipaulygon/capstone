@@ -21,6 +21,8 @@ class UtilitySeeder extends Seeder
             'type2' => 'Replacement',
             'max' => 100,
             'backlog' => 7,
+            'isVat' => 1,
+            'vat' => 12
         ]);
     }
 }

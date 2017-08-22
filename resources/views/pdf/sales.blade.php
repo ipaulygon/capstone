@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{$util->name}} | Estimate</title>
+        <title>{{$util->name}} | Sales Invoice</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/style.css" rel="stylesheet">
@@ -65,32 +65,22 @@
             {{$util->name}}
         </div>
         <div style="float:right">
-            {{date('F j, Y', strtotime($estimate->created_at))}}<br>
-            <label style="color:red">{{$estId}}</label>
+            {{date('F j, Y', strtotime($sales->created_at))}}<br>
+            <label style="color:red">{{$salesId}}</label>
         </div>
         <div style="clear:both"></div>
         <div class="center">
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            ESTIMATE REPAIR
+            Sales Invoice
         </div><br>
-        <div style="float:left" class="col-md-6">
-            Customer: {{$estimate->customer->firstName}} {{$estimate->customer->middleName}} {{$estimate->customer->lastName}}<br>
-            Address: {{$estimate->customer->street}} {{$estimate->customer->brgy}} {{$estimate->customer->city}}<br>
-            Phone Number: {{$estimate->customer->contact}}<br>
-            Email: {{$estimate->customer->email}}<br>
+        <div class="col-md-12">
+            Customer: {{$sales->customer->firstName}} {{$sales->customer->middleName}} {{$sales->customer->lastName}}<br>
+            Address: {{$sales->customer->street}} {{$sales->customer->brgy}} {{$sales->customer->city}}<br>
+            Phone Number: {{$sales->customer->contact}}<br>
+            Email: {{$sales->customer->email}}<br>
         </div>
-        <div style="float:right" class="col-md-6">
-            <?php $transmission = ($estimate->vehicle->isManual ? 'MT' : 'AT')?>
-            Plate: {{$estimate->vehicle->plate}}<br>
-            Make: {{$estimate->vehicle->model->make->name}}<br>
-            Model: {{$estimate->vehicle->model->name}}<br>
-            Year: {{$estimate->vehicle->model->year}}<br>
-            Transmission: {{$transmission}}<br>
-            Mileage: {{$estimate->vehicle->mileage}}<br>
-        </div>
-        <div style="clear:both"></div>
         <br>
         <table width="100%">
             <thead>
@@ -103,7 +93,7 @@
             </thead>
             <tbody>
                 {{-- product --}}
-                @foreach($estimate->product as $product)
+                @foreach($sales->product as $product)
                 <tr>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                     <?php
@@ -114,14 +104,14 @@
                         }
                         $discount = null;
                         if($product->product->discount!=null){
-                            $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                            $discount = $product->product->discount->header->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate;
                         }else{
-                            $dis = $product->product->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
+                            $dis = $product->product->discountRecord->where('created_at','<=',$sales->created_at)->where('updated_at','>=',$sales->created_at);
                             if(count($dis) > 0){
-                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate;
                             }
                         }
-                        $price = $product->product->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $product->product->priceRecord->where('created_at','<=',$sales->created_at)->first()->price;
                         if($discount!=null){
                             $price = $price-($price*($discount/100));
                             $discountString = '['.$discount.' % discount]';
@@ -137,38 +127,8 @@
                     ?>
                 </tr>
                 @endforeach
-                {{-- service --}}
-                @foreach($estimate->service as $service)
-                <tr>
-                    <?php
-                        $discount = null;
-                        if($service->service->discount!=null){
-                            $discount = $service->service->discount->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
-                        }else{
-                            $dis = $service->service->discountRecord->where('created_at','<=',$estimate->created_at)->where('updated_at','>=',$estimate->created_at);
-                            if(count($dis) > 0){
-                                $discount = $dis->first()->header->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
-                            }
-                        }
-                        $price = $service->service->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
-                        if($discount!=null){
-                            $price = $price-($price*($discount/100));
-                            $discountString = '['.$discount.' % discount]';
-                        }else{
-                            $discountString = '';
-                        }
-                    ?>
-                    <td></td>
-                    <td>{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}}) {{$discountString}}</td>
-                    <td class="text-right">{{number_format($price,2)}}</td>
-                    <td class="text-right">{{number_format($price,2)}}</td>
-                    <?php
-                        $total += $price;
-                    ?>
-                </tr>
-                @endforeach
                 {{-- package --}}
-                @foreach($estimate->package as $package)
+                @foreach($sales->package as $package)
                 <tr>
                     <td class="text-right">{{number_format($package->quantity)}}</td>
                     <td>
@@ -189,7 +149,7 @@
                         @endforeach
                     </td>
                     <?php
-                        $price = $package->package->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $package->package->priceRecord->where('created_at','<=',$sales->created_at)->first()->price;
                     ?>
                     <td class="text-right">{{number_format($price,2)}}</td>
                     <td class="text-right">{{number_format($package->quantity*$price,2)}}</td>
@@ -199,7 +159,7 @@
                 </tr>
                 @endforeach
                 {{-- promo --}}
-                @foreach($estimate->promo as $promo)
+                @foreach($sales->promo as $promo)
                 <tr>
                     <td class="text-right">{{number_format($promo->quantity)}}</td>
                     <td>
@@ -226,14 +186,14 @@
                                     $type = "";
                                 }
                             ?>
-                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($product->quantity)}} pcs.<br>
+                            *{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}}) x {{number_format($promo->quantity)}} pcs.<br>
                         @endforeach
                         @foreach($promo->promo->freeService as $service)
                             *{{$service->service->name}} - {{$service->service->size}} ({{$service->service->category->name}})<br>
                         @endforeach
                     </td>
                     <?php
-                        $price = $promo->promo->priceRecord->where('created_at','<=',$estimate->created_at)->first()->price;
+                        $price = $promo->promo->priceRecord->where('created_at','<=',$sales->created_at)->first()->price;
                     ?>
                     <td class="text-right">{{number_format($price,2)}}</td>
                     <td class="text-right">{{number_format($promo->quantity*$price,2)}}</td>
@@ -242,14 +202,14 @@
                     ?>
                 </tr>
                 @endforeach
-                @if($estimate->discount)
+                @if($sales->discount)
                     <tr>
                         <td></td>
-                        <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
-                        <td class="text-right">{{$estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate}} %</td>
-                        <td class="text-right">-{{number_format($total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100),2)}}</td>
+                        <td>{{$sales->discount->discount->name}} - DISCOUNT</td>
+                        <td class="text-right">{{$sales->discount->discount->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate}} %</td>
+                        <td class="text-right">-{{number_format($total*($sales->discount->discount->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate/100),2)}}</td>
                         <?php 
-                            $discounts += $total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100);
+                            $discounts += $total*($sales->discount->discount->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate/100);
                         ?>
                     </tr>
                 @endif
@@ -263,14 +223,14 @@
         </table>
         <div class="footer">
             <div style="float:left" class="col-md-6">
-                This serves as an estimate only.<br>
+                This serves as an sales only.<br>
                 STORE MANAGER: ______________________<br>
                 ADMIN OFFICER: ______________________<br> 
             </div>
             <div style="float:right" class="col-md-6">
                 <br>
-                CUSTOMER'S SIGNATURE: ___________________<br>
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discounts,2)}}<br> 
+                CUSTOMER'S SIGNATURE: ___________________<br>
             </div>
             <br><br>
             <div class="footerd">Printed by: Admin {{$date}}</div>

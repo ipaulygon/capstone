@@ -80,7 +80,7 @@ class EstimateController extends Controller
             ->get();
         $discounts = DB::table('discount as d')
             ->where('d.isActive',1)
-            ->where('d.type','Whole')
+            ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
         return View('estimate.create',compact('customers','models','technicians','products','services','packages','promos','discounts'));
@@ -300,7 +300,7 @@ class EstimateController extends Controller
             ->get();
         $discounts = DB::table('discount as d')
             ->where('d.isActive',1)
-            ->where('d.type','Whole')
+            ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
         return View('estimate.edit',compact('estimate','customers','models','technicians','products','services','packages','promos','discounts'));

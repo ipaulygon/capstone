@@ -83,7 +83,9 @@ class UtilitiesController extends Controller
             'category2' => 'required|max:50',
             'type1' => 'required|max:50',
             'type2' => 'required|max:50',
-            'max' => 'required|integer|between:20,200'
+            'max' => 'required|between:0,200',
+            'isVat' => 'required',
+            'vat' => 'required|between:0,100',
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
@@ -97,7 +99,9 @@ class UtilitiesController extends Controller
             'category2' => 'Product Type Category no.2',
             'type1' => 'Part Type no.1',
             'type2' => 'Part Type no.2',
-            'max' => 'Max Value'
+            'max' => 'Max Pieces',
+            'isVat' => 'VAT/NON-VAT',
+            'vat' => 'VAT',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -126,8 +130,10 @@ class UtilitiesController extends Controller
                     'category2' => trim($request->category2),
                     'type1' => trim($request->type1),
                     'type2' => trim($request->type2),
-                    'max' => $request->max,
-                    'backlog' => $request->backlog
+                    'max' => str_replace(' pcs.','',$request->max),
+                    'backlog' => $request->backlog,
+                    'isVat' => $request->isVat,
+                    'vat' => str_replace(' %','',$request->vat)
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

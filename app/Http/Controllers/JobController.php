@@ -10,6 +10,7 @@ use App\JobPromo;
 use App\JobDiscount;
 use App\JobTechnician;
 use App\JobPayment;
+use App\Technician;
 use App\Vehicle;
 use App\Customer;
 use App\Inventory;
@@ -51,10 +52,7 @@ class JobController extends Controller
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
             ->get();
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
+        $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack as r')
             ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL)'),0)
             ->where('r.isActive',1)
@@ -84,7 +82,7 @@ class JobController extends Controller
             ->get();
         $discounts = DB::table('discount as d')
             ->where('d.isActive',1)
-            ->where('d.type','Whole')
+            ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
         return View('job.index',compact('jobs','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts','date'));
@@ -301,10 +299,7 @@ class JobController extends Controller
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
             ->get();
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
+        $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack as r')
             ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL AND r.id!='.$id.')'),0)
             ->where('r.isActive',1)
@@ -334,7 +329,7 @@ class JobController extends Controller
             ->get();
         $discounts = DB::table('discount as d')
             ->where('d.isActive',1)
-            ->where('d.type','Whole')
+            ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
         return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts'));

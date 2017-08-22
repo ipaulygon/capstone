@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
 	Route::get('job/pdf/{id}','PdfController@job');
 	Route::get('job/receipt/pdf/{id}','PdfController@jobReceipt');
+	Route::get('sales/pdf/{id}','PdfController@sales');
 
 	//GetJSON
 	Route::get('vehicle/remove/{id}','VehicleController@remove');

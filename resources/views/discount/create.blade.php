@@ -36,10 +36,10 @@
                 @endforeach
             @endif
         ];
-        @if(old('type'))
-            $(".square-blue[value={{old('type')}}]").prop('checked',true);
+        @if(old('isWhole'))
+            $(".square-blue[value={{old('isWhole')}}]").prop('checked',true);
         @else
-            $(".square-blue[value=Individual").prop('checked',true);
+            $(".square-blue[value=0]").prop('checked',true);
         @endif
         $("#product").val(activeProduct);
         $("#service").val(activeService);
@@ -50,8 +50,21 @@
                 $('#service').val('');
                 $('.select2').select2();
                 $(".select2").prop('disabled',true);
+                $(".vat").prop('disabled',false);
+                $(".vat").prop('checked',false);
+                $("#isVatExempt").val(0);
             }else{
                 $(".select2").prop('disabled',false);
+                $(".vat").prop('disabled',true);
+                $(".vat").prop('checked',false);
+                $("#isVatExempt").val(0);
+            }
+        });
+        $('.vat').change(function(){
+            if($(this).prop('checked')){
+                $('#isVatExempt').val(1);
+            }else{
+                $('#isVatExempt').val(0);
             }
         });
     </script>

@@ -155,11 +155,25 @@ function clickEvent(id){
     $('#detailUpdate').attr("href","/job/"+id+"/edit");
     $('#detailEstimate').attr("href","/estimate/pdf/"+id);
     $('#detailPDF').attr("href","/job/pdf/"+id);
-    $('#detailFinalize').attr("onclick","finalizeModal("+id+")");
-    $('#detailProcess').attr("onclick","process("+id+")");
-    $('#detailRelease').attr("onclick","releaseVehicle("+id+")");
-    $('#detailView').attr("onclick","view("+id+")");
+    $('#detailFinalize').attr("data-id",id);
+    $('#detailProcess').attr("data-id",id);
+    $('#detailRelease').attr("data-id",id);
+    $('#detailView').attr("data-id",id);
 }
+
+$('#detailFinalize').click(function(){
+    finalizeModal($(this).attr('data-id'));
+});
+
+$('#detailProcess').click(function(){
+    process($(this).attr('data-id'));
+});
+$('#detailRelease').click(function(){
+    releaseVehicle($(this).attr('data-id'));
+});
+$('#detailView').click(function(){
+    view($(this).attr('data-id'));
+});
 
 function hoverEvent(id,element){
     $.ajax({

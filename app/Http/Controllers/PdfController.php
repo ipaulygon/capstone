@@ -23,6 +23,7 @@ use App\EstimateDiscount;
 use App\EstimateTechnician;
 use App\JobHeader;
 use App\JobPayment;
+use App\SalesHeader;
 class PdfController extends Controller
 {
     public function purchase($id){
@@ -161,5 +162,16 @@ class PdfController extends Controller
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         $pdf = PDF::loadview('pdf.payment',compact('paymentId','payment','jobId','job','date'))->setPaper([0,0,459,306]);
         return $pdf->stream('payment.pdf');
+    }
+
+    public function sales($id){
+        $salesId = 'INV'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+        $date = date('Y-m-d H:i:s');
+        $sales = SalesHeader::findOrFail($id);
+        $total = 0;
+        $discounts = 0;
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.sales',compact('salesId','sales','total','discounts','date'))->setPaper([0,0,612,396]);
+        return $pdf->stream('sales.pdf');
     }
 }

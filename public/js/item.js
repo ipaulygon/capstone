@@ -5,13 +5,6 @@ $("#compute").inputmask({
     autoGroup: true,
     min: 0,
 });
-$("#totalPrice").inputmask({ 
-    alias: "currency",
-    prefix: '',
-    allowMinus: false,
-    autoGroup: true,
-    min: 0,
-});
 var pList = $('#productList').DataTable({
     'responsive': true,
     "searching": false,

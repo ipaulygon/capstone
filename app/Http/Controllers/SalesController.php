@@ -62,7 +62,7 @@ class SalesController extends Controller
             ->get();
         $discounts = DB::table('discount as d')
             ->where('d.isActive',1)
-            ->where('d.type','Whole')
+            ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
         return View('sales.create',compact('date','customers','products','packages','promos','discounts'));

@@ -13,6 +13,13 @@ var payList = $('#paymentList').DataTable({
     "info": false,
     "retrieve": true,
 });
+$("#totalPrice").inputmask({ 
+    alias: "currency",
+    prefix: '',
+    allowMinus: false,
+    autoGroup: true,
+    min: 0,
+});
 $('#inputCredit').inputmask('999 9999 9999 9999');
 var lessPayment = null;
 function process(id){

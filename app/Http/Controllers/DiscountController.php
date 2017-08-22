@@ -83,7 +83,8 @@ class DiscountController extends Controller
         $rules = [
             'name' => 'required|unique:discount|max:50',
             'rate' => 'required|between:0,100',
-            'type' => 'required'
+            'isWhole' => 'required',
+            'isVatExempt' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -93,7 +94,8 @@ class DiscountController extends Controller
         $niceNames = [
             'name' => 'Discount',
             'rate' => 'Rate',
-            'type' => 'Type'
+            'isWhole' => 'Type',
+            'isVatExempt' => 'VAT Exempted'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -106,7 +108,8 @@ class DiscountController extends Controller
                 $discount = Discount::create([
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
-                    'type' => $request->type,
+                    'isWhole' => $request->isWhole,
+                    'isVatExempt' => $request->isVatExempt,
                 ]);
                 $products = $request->product;
                 $services = $request->service;
@@ -210,7 +213,8 @@ class DiscountController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('discount')->ignore($id)],
             'rate' => 'required|between:0,100',
-            'type' => 'required'
+            'isWhole' => 'required',
+            'isVatExempt' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -220,7 +224,8 @@ class DiscountController extends Controller
         $niceNames = [
             'name' => 'Discount',
             'rate' => 'Rate',
-            'required' => 'Type'
+            'isWhole' => 'Type',
+            'isVatExempt' => 'VAT Exempted'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -234,7 +239,8 @@ class DiscountController extends Controller
                 $discount->update([
                     'name' => trim($request->name),
                     'rate' => trim(str_replace(' %','',$request->rate)),
-                    'type' => $request->type,
+                    'isWhole' => $request->isWhole,
+                    'isVatExempt' => $request->isVatExempt,
                 ]);
                 DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
                 DiscountService::where('discountId',$id)->update(['isActive'=>0]);
@@ -285,6 +291,8 @@ class DiscountController extends Controller
             $discount->update([
                 'isActive' => 0
             ]);
+            DiscountProduct::where('discountId',$id)->update(['isActive',0]);
+            DiscountService::where('discountId',$id)->update(['isActive',0]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
