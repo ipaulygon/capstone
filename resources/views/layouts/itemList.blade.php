@@ -71,4 +71,15 @@
         </tr>
     </thead>
     <tbody></tbody>
+    @if($util->isVat)
+    <tfoot id="vatFoot">
+        <tr>
+            <th></th>
+            <th>VAT</th>
+            <th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="{{$util->vat}}" readonly></strong></th>
+            <th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>
+            <th></th>
+        </tr>
+    <tfoot>
+    @endif
 </table>

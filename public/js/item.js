@@ -31,12 +31,30 @@ function discountReplenish(){
     }
 }
 
+function vatReplenish(){
+    if($('#vatStack').length!=0){
+        vated = eval($('#vatStack').val().replace(',','')+"*"+'-1');
+        final = eval($('#compute').val().replace(',','')+"+"+vated);
+        $('#compute').val(final);
+    }
+}
+
 function discountRecount(){
     if($('#discountStack').length!=0){
         final =  eval($('#compute').val().replace(',','')+"*"+($('#discountPrice').val().replace(' %','')/100));
         discountStack = 0-final;
         $('#discountStack').val(discountStack);
         final = eval($('#compute').val().replace(',','')+"-"+final);
+        $('#compute').val(final);
+    }
+}
+
+function vatRecount(){
+    if($('#vatStack').length!=0){
+        final =  eval($('#compute').val().replace(',','')+"*"+($('#vatRate').val().replace(' %','')/100));
+        vatStack = final;
+        $('#vatStack').val(vatStack);
+        final = eval($('#compute').val().replace(',','')+"+"+final);
         $('#compute').val(final);
     }
 }
@@ -70,12 +88,13 @@ $(document).on('keyup', '#qty', function (){
     stack = $(this).parents('tr').find('#stack').val().replace(',','');
     price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
-    console.log(stack);
     discountReplenish();
+    vatReplenish();
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
     discountRecount();
+    vatRecount();
 });
 
 $(document).on('focusout','#qty',function(){
@@ -128,6 +147,8 @@ $(document).on('click','.pullProduct', function(){
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
+    vatReplenish();
+    vatRecount();
 });
 
 function oldProduct(id,qty){
@@ -238,6 +259,8 @@ $(document).on('change', '#services', function(){
             final =  eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
             discountRecount();
+            vatReplenish();
+            vatRecount();
             masking();
         }
     });
@@ -252,6 +275,8 @@ $(document).on('click','.pullService', function(){
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
+    vatReplenish();
+    vatRecount();
 });
 
 function oldService(id){
@@ -366,6 +391,8 @@ $(document).on('click','.pullPackage', function(){
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
+    vatReplenish();
+    vatRecount();
 });
 
 function oldPackage(id,qty){
@@ -513,6 +540,8 @@ $(document).on('click','.pullPromo', function(){
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
+    vatReplenish();
+    vatRecount();
 });
 
 function oldPromo(id,qty){
@@ -673,7 +702,7 @@ $(document).on('change', '#discounts', function(){
             row = pList.row.add([
                 '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
                 data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong>',
+                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" data-vat="'+data.discount.isVatExempt+'" readonly></strong>',
                 '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
                 '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
             ]).draw().node();
@@ -694,6 +723,40 @@ $(document).on('change', '#discounts', function(){
                 min: -10000000,
                 max: 10000000,
             });
+            if(data.discount.isVatExempt){
+                vatReplenish();
+                $('#vatFoot').remove();
+            }else{
+                if($('#vatFoot').length==0){
+                    $('#productList').append(
+                        '<tfoot id="vatFoot">' +
+                        '<tr>' +
+                            '<th></th>' +
+                            '<th>VAT</th>' +
+                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
+                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
+                            '<th></th>' +
+                        '</tr>' +
+                    '<tfoot>'
+                    );
+                }
+                vatReplenish();
+                vatRecount();
+                $("#vatRate").inputmask({ 
+                    alias: "percentage",
+                    prefix: '',
+                    allowMinus: false,
+                    autoGroup: true,
+                    min: 0,
+                    max: 100,
+                });
+                $('#vatStack').inputmask({ 
+                    alias: "currency",
+                    prefix: '',
+                    allowMinus: true,
+                    min: 0,
+                });
+            }
         }
     });
 });
@@ -707,6 +770,35 @@ $(document).on('click','.pullDiscount', function(){
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
+    if($('#vatFoot').length==0){
+        $('#productList').append(
+            '<tfoot id="vatFoot">' +
+            '<tr>' +
+                '<th></th>' +
+                '<th>VAT</th>' +
+                '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
+                '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
+                '<th></th>' +
+            '</tr>' +
+        '<tfoot>'
+        );
+    }
+    vatReplenish();
+    vatRecount();
+    $("#vatRate").inputmask({ 
+        alias: "percentage",
+        prefix: '',
+        allowMinus: false,
+        autoGroup: true,
+        min: 0,
+        max: 100,
+    });
+    $('#vatStack').inputmask({ 
+        alias: "currency",
+        prefix: '',
+        allowMinus: true,
+        min: 0,
+    });
 });
 
 function oldDiscount(id){
@@ -746,6 +838,40 @@ function oldDiscount(id){
                 min: -10000000,
                 max: 10000000,
             });
+            if(data.discount.isVatExempt){
+                vatReplenish();
+                $('#vatFoot').remove();
+            }else{
+                if($('#vatFoot').length==0){
+                    $('#productList').append(
+                        '<tfoot id="vatFoot">' +
+                        '<tr>' +
+                            '<th></th>' +
+                            '<th>VAT</th>' +
+                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
+                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
+                            '<th></th>' +
+                        '</tr>' +
+                    '<tfoot>'
+                    );
+                }
+                vatReplenish();
+                vatRecount();
+                $("#vatRate").inputmask({ 
+                    alias: "percentage",
+                    prefix: '',
+                    allowMinus: false,
+                    autoGroup: true,
+                    min: 0,
+                    max: 100,
+                });
+                $('#vatStack').inputmask({ 
+                    alias: "currency",
+                    prefix: '',
+                    allowMinus: true,
+                    min: 0,
+                });
+            }
         }
     });
 }
@@ -787,6 +913,40 @@ function retrieveDiscount(id,rate){
                 min: -10000000,
                 max: 10000000,
             });
+            if(data.discount.isVatExempt){
+                vatReplenish();
+                $('#vatFoot').remove();
+            }else{
+                if($('#vatFoot').length==0){
+                    $('#productList').append(
+                        '<tfoot id="vatFoot">' +
+                        '<tr>' +
+                            '<th></th>' +
+                            '<th>VAT</th>' +
+                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
+                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
+                            '<th></th>' +
+                        '</tr>' +
+                    '<tfoot>'
+                    );
+                }
+                vatReplenish();
+                vatRecount();
+                $("#vatRate").inputmask({ 
+                    alias: "percentage",
+                    prefix: '',
+                    allowMinus: false,
+                    autoGroup: true,
+                    min: 0,
+                    max: 100,
+                });
+                $('#vatStack').inputmask({ 
+                    alias: "currency",
+                    prefix: '',
+                    allowMinus: true,
+                    min: 0,
+                });
+            }
         }
     });
 }

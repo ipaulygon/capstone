@@ -54,4 +54,22 @@
         });
     </script>
     @include('layouts.oldSales')
+    <script>
+        if(isVat){
+            $("#vatRate").inputmask({ 
+                alias: "percentage",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 100,
+            });
+            $('#vatStack').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+                min: 0,
+            });
+        }
+    </script>
 @stop

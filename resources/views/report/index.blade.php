@@ -363,13 +363,12 @@
                 labels: [
                      @foreach($products as $pro)
                         '{{$prod->brand}} - {{$prod->product}}',
-                    
+                      @endforeach
                 ],
                 datasets: [{
                     label: 'Products Availed Report',
                     data: [
                       '{{$pro->pprices}}',
-                      @endforeach
                     ],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -424,9 +423,6 @@
             $('#date input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         }
         $('#date').daterangepicker({
-            minDate: start,
-            startDate: start,
-            endDate: end,
             ranges: {
                 'Today': [moment(), moment()],
                 'Last for 7 Days': [moment(), moment().add(6, 'days')],

@@ -596,8 +596,8 @@
                             color: '#3c8dbc'
                         @endif
                     };
+                    $('#calendar').fullCalendar('renderEvent', events, true);
                 @endforeach
-                $('#calendar').fullCalendar('renderEvent', events, true);
             @endif
             $("#technician").val(activeTechnicians);
             @if(old('rackId'))
@@ -643,4 +643,22 @@
         });
     </script>
     @include('layouts.oldItems')
+    <script>
+        if(isVat){
+            $("#vatRate").inputmask({ 
+                alias: "percentage",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+                min: 0,
+                max: 100,
+            });
+            $('#vatStack').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+                min: 0,
+            });
+        }
+    </script>
 @stop

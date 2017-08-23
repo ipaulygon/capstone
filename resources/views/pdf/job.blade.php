@@ -13,7 +13,7 @@
         }
         body{
             font-family: "SegoeUI","Sans-serif";
-            font-size: 11px;
+            font-size: 12px;
         }
         .header{
             font-size: 20px!important;
@@ -252,12 +252,25 @@
                             $discounts += $total*($job->discount->discount->rateRecord->where('created_at','<=',$job->created_at)->first()->rate/100);
                         ?>
                     </tr>
+                    @if(!$job->discount->discount->isVatExempt)
+                        <?php $vat += $total*0.12;?>
+                    @else
+                        <?php $vat += 0;?>
+                    @endif
+                @else
+                    <?php $vat += $total*0.12;?>
                 @endif
+                <tr>
+                    <td></td>
+                    <td>VAT</td>
+                    <td class="text-right">{{$util->vat}} %</td>
+                    <td class="text-right">{{number_format($vat,2)}}</td>
+                </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total-$discounts,2)}}</td>
+                    <td class="text-right">PhP {{number_format($total-$discounts+$vat,2)}}</td>
                 </tr>
             </tbody>
         </table>

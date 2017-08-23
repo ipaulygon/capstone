@@ -137,8 +137,9 @@ class PdfController extends Controller
         $estimate = EstimateHeader::findOrFail($estimate->id);
         $total = 0;
         $discounts = 0;
+        $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','date'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','vat','date'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
     }
 
@@ -148,8 +149,9 @@ class PdfController extends Controller
         $job = JobHeader::findOrFail($id);
         $total = 0;
         $discounts = 0;
+        $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discounts','date'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discounts','vat','date'))->setPaper([0,0,612,792]);
         return $pdf->stream('job.pdf');
     }
     
@@ -170,8 +172,9 @@ class PdfController extends Controller
         $sales = SalesHeader::findOrFail($id);
         $total = 0;
         $discounts = 0;
+        $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.sales',compact('salesId','sales','total','discounts','date'))->setPaper([0,0,612,396]);
+        $pdf = PDF::loadview('pdf.sales',compact('salesId','sales','total','discounts','vat','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('sales.pdf');
     }
 }
