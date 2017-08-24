@@ -444,6 +444,7 @@ class JobController extends Controller
                 JobService::where('jobId',$id)->update(['isActive'=>0]);
                 JobPackage::where('jobId',$id)->update(['isActive'=>0]);
                 JobPromo::where('jobId',$id)->update(['isActive'=>0]);
+                JobTechnician::where('jobId',$id)->update(['isActive'=>0]);
                 if(!empty($products)){
                     foreach($products as $key=>$product){
                         JobProduct::create([
@@ -485,7 +486,7 @@ class JobController extends Controller
                 }
                 if(!empty($discounts)){
                     foreach($discounts as $key=>$discount){
-                        JobDiscount::create([
+                        JobDiscount::update([
                             'jobId' => $job->id,
                             'discountId' => $discount,
                             'isActive' => 1
@@ -494,9 +495,9 @@ class JobController extends Controller
                 }
                 $technicians = $request->technician;
                 foreach($technicians as $technician){
-                    JobTechnician::create([
+                    JobTechnician::updateOrCreate([
                         'jobId' => $job->id,
-                        'technicianId' => $technician,
+                        'technicianId' => $technician],[
                         'isActive' => 1
                     ]);
                 }

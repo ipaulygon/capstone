@@ -209,6 +209,17 @@
                 allowMinus: true,
                 min: 0,
             });
+            $('#vatSales').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+                min: 0,
+            });
+            $('#vatExempt').inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: true,
+            });
         }
     </script>
 @stop

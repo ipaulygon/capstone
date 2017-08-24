@@ -31,7 +31,7 @@
         var maxValue = {{$util->max}};
         var backlog = {{$util->backlog}};
         var isVat = {{$util->isVat}};
-        var vat = {{$util->vat}};
+        var vatRate = {{$util->vat}};
     </script>
 </head>
 <body id="mainBody" class="fixed hold-transition skin-blue sidebar-mini">

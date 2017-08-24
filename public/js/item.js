@@ -31,14 +31,6 @@ function discountReplenish(){
     }
 }
 
-function vatReplenish(){
-    if($('#vatStack').length!=0){
-        vated = eval($('#vatStack').val().replace(',','')+"*"+'-1');
-        final = eval($('#compute').val().replace(',','')+"+"+vated);
-        $('#compute').val(final);
-    }
-}
-
 function discountRecount(){
     if($('#discountStack').length!=0){
         final =  eval($('#compute').val().replace(',','')+"*"+($('#discountPrice').val().replace(' %','')/100));
@@ -49,15 +41,49 @@ function discountRecount(){
     }
 }
 
-function vatRecount(){
-    if($('#vatStack').length!=0){
-        final =  eval($('#compute').val().replace(',','')+"*"+($('#vatRate').val().replace(' %','')/100));
-        vatStack = final;
-        $('#vatStack').val(vatStack);
-        final = eval($('#compute').val().replace(',','')+"+"+final);
+function vatReplenish(){
+    if(isVat){
+        final = eval($('#vatSales').val().replace(',','')+"+"+$('#vatStack').val().replace(',',''));
         $('#compute').val(final);
     }
 }
+
+function vatRecount(){
+    if(isVat){
+        vat = 100 / (100+vatRate);
+        final = eval($('#compute').val().replace(',','')+"*"+vat);
+        $('#vatSales').val(final);
+        $('#vatStack').val(eval($('#compute').val().replace(',','')+"-"+final));
+        if(Number($('#discountExempt').val())==1){
+            $('#vatExempt').val(-Number($('#vatStack').val().replace(',','')));
+            $('#compute').val($('#vatSales').val().replace(',',''));
+        }else{
+            $('#vatExempt').val(0);
+        }
+    }
+}
+
+function pullItem(item){
+    discountReplenish();
+    vatReplenish();
+    stack = $(item).parents('tr').find('#stack').val().replace(',','');
+    final = eval($('#compute').val().replace(',','')+"-"+stack);
+    $('#compute').val(final);
+    vatRecount();
+    discountRecount();
+    var row = rowFinder(item);
+    pList.row(row).remove().draw();
+}
+
+function recount(stack){
+    discountReplenish();
+    vatReplenish();
+    final =  eval($('#compute').val().replace(',','')+"+"+stack);
+    $('#compute').val(final);
+    vatRecount();
+    discountRecount();
+}
+
 // QUANTITY
 $(document).on('keyup', '#qty', function (){
     qty = $(this).val();
@@ -93,8 +119,8 @@ $(document).on('keyup', '#qty', function (){
     final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
-    discountRecount();
     vatRecount();
+    discountRecount();
 });
 
 $(document).on('focusout','#qty',function(){
@@ -142,13 +168,7 @@ $(document).on('change', '#products', function(){
 
 $(document).on('click','.pullProduct', function(){
     $('#products option[value="'+this.id+'"]').attr('disabled',false);
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
-    $('#compute').val(final);
-    var row = rowFinder(this);
-    pList.row(row).remove().draw();
-    vatReplenish();
-    vatRecount();
+    pullItem(this);
 });
 
 function oldProduct(id,qty){
@@ -184,9 +204,7 @@ function oldProduct(id,qty){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -216,9 +234,7 @@ function retrieveProduct(id,qty,price,discountString){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -254,13 +270,7 @@ $(document).on('change', '#services', function(){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            // price
-            discountReplenish();
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
-            discountRecount();
-            vatReplenish();
-            vatRecount();
+            recount(stack);
             masking();
         }
     });
@@ -270,13 +280,7 @@ $(document).on('change', '#services', function(){
 
 $(document).on('click','.pullService', function(){
     $('#services option[value="'+this.id+'"]').attr('disabled',false);
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
-    $('#compute').val(final);
-    var row = rowFinder(this);
-    pList.row(row).remove().draw();
-    vatReplenish();
-    vatRecount();
+    pullItem(this);
 });
 
 function oldService(id){
@@ -307,11 +311,7 @@ function oldService(id){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            // price
-            discountReplenish();
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
-            discountRecount();
+            recount(stack);
             masking();
         }
     });
@@ -336,9 +336,7 @@ function retrieveService(id,price,discountString){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -386,13 +384,7 @@ $(document).on('change', '#packages', function(){
 
 $(document).on('click','.pullPackage', function(){
     $('#packages option[value="'+this.id+'"]').attr('disabled',false);
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
-    $('#compute').val(final);
-    var row = rowFinder(this);
-    pList.row(row).remove().draw();
-    vatReplenish();
-    vatRecount();
+    pullItem(this);
 });
 
 function oldPackage(id,qty){
@@ -427,9 +419,7 @@ function oldPackage(id,qty){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -467,9 +457,7 @@ function retrievePackage(id,qty,price){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -535,13 +523,7 @@ $(document).on('change', '#promos', function(){
 
 $(document).on('click','.pullPromo', function(){
     $('#promos option[value="'+this.id+'"]').attr('disabled',false);
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
-    $('#compute').val(final);
-    var row = rowFinder(this);
-    pList.row(row).remove().draw();
-    vatReplenish();
-    vatRecount();
+    pullItem(this);
 });
 
 function oldPromo(id,qty){
@@ -594,9 +576,7 @@ function oldPromo(id,qty){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -654,9 +634,7 @@ function retrievePromo(id,qty,price){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
-            // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
-            $('#compute').val(final);
+            recount(stack);
             masking();
         }
     });
@@ -695,19 +673,20 @@ $(document).on('change', '#discounts', function(){
         url: "/item/discount/"+this.value,
         dataType: "JSON",
         success:function(data){
+            vatExempt(data.discount.isVatExempt);
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
             discountStack = 0-final;
             final = eval($('#compute').val().replace(',','')+"-"+final);
             $('#compute').val(final);
-            row = pList.row.add([
-                '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
-                data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" data-vat="'+data.discount.isVatExempt+'" readonly></strong>',
-                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
+            $('#tFoot').append(
+                '<tr id="discountRow">' +
+                '<th><input type="hidden" id="discountExempt" value="'+data.discount.isVatExempt+'"><input type="hidden" name="discount[]" value="'+data.discount.id+'"></th>' +
+                '<th>'+data.discount.name+" - DISCOUNT</th>" +
+                '<th class="text-right"><strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong></th>' +
+                '<th class="text-right"><strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong></th>' +
+                '<th><button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button></th>' +
+                '</tr>'
+            );
             $("#discountPrice").inputmask({ 
                 alias: "percentage",
                 prefix: '',
@@ -723,40 +702,6 @@ $(document).on('change', '#discounts', function(){
                 min: -10000000,
                 max: 10000000,
             });
-            if(data.discount.isVatExempt){
-                vatReplenish();
-                $('#vatFoot').remove();
-            }else{
-                if($('#vatFoot').length==0){
-                    $('#productList').append(
-                        '<tfoot id="vatFoot">' +
-                        '<tr>' +
-                            '<th></th>' +
-                            '<th>VAT</th>' +
-                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
-                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
-                            '<th></th>' +
-                        '</tr>' +
-                    '<tfoot>'
-                    );
-                }
-                vatReplenish();
-                vatRecount();
-                $("#vatRate").inputmask({ 
-                    alias: "percentage",
-                    prefix: '',
-                    allowMinus: false,
-                    autoGroup: true,
-                    min: 0,
-                    max: 100,
-                });
-                $('#vatStack').inputmask({ 
-                    alias: "currency",
-                    prefix: '',
-                    allowMinus: true,
-                    min: 0,
-                });
-            }
         }
     });
 });
@@ -768,37 +713,9 @@ $(document).on('click','.pullDiscount', function(){
     discounted = eval($('#discountStack').val().replace(',','')+"*"+'-1');
     final = eval($('#compute').val().replace(',','')+"+"+discounted);
     $('#compute').val(final);
-    var row = rowFinder(this);
-    pList.row(row).remove().draw();
-    if($('#vatFoot').length==0){
-        $('#productList').append(
-            '<tfoot id="vatFoot">' +
-            '<tr>' +
-                '<th></th>' +
-                '<th>VAT</th>' +
-                '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
-                '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
-                '<th></th>' +
-            '</tr>' +
-        '<tfoot>'
-        );
-    }
+    $('#discountRow').remove();
     vatReplenish();
     vatRecount();
-    $("#vatRate").inputmask({ 
-        alias: "percentage",
-        prefix: '',
-        allowMinus: false,
-        autoGroup: true,
-        min: 0,
-        max: 100,
-    });
-    $('#vatStack').inputmask({ 
-        alias: "currency",
-        prefix: '',
-        allowMinus: true,
-        min: 0,
-    });
 });
 
 function oldDiscount(id){
@@ -810,19 +727,20 @@ function oldDiscount(id){
         url: "/item/discount/"+id,
         dataType: "JSON",
         success:function(data){
+            vatExempt(data.discount.isVatExempt);
             final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
             discountStack = 0-final;
             final = eval($('#compute').val().replace(',','')+"-"+final);
             $('#compute').val(final);
-            row = pList.row.add([
-                '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
-                data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong>',
-                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
+            $('#tFoot').append(
+                '<tr id="discountRow">' +
+                '<th><input type="hidden" name="discount[]" value="'+data.discount.id+'"></th>' +
+                '<th>'+data.discount.name+" - DISCOUNT</th>" +
+                '<th class="text-right"><strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+data.discount.rate+'" readonly></strong></th>' +
+                '<th class="text-right"><strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong></th>' +
+                '<th><button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button></th>' +
+                '</tr>'
+            );
             $("#discountPrice").inputmask({ 
                 alias: "percentage",
                 prefix: '',
@@ -838,40 +756,6 @@ function oldDiscount(id){
                 min: -10000000,
                 max: 10000000,
             });
-            if(data.discount.isVatExempt){
-                vatReplenish();
-                $('#vatFoot').remove();
-            }else{
-                if($('#vatFoot').length==0){
-                    $('#productList').append(
-                        '<tfoot id="vatFoot">' +
-                        '<tr>' +
-                            '<th></th>' +
-                            '<th>VAT</th>' +
-                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
-                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
-                            '<th></th>' +
-                        '</tr>' +
-                    '<tfoot>'
-                    );
-                }
-                vatReplenish();
-                vatRecount();
-                $("#vatRate").inputmask({ 
-                    alias: "percentage",
-                    prefix: '',
-                    allowMinus: false,
-                    autoGroup: true,
-                    min: 0,
-                    max: 100,
-                });
-                $('#vatStack').inputmask({ 
-                    alias: "currency",
-                    prefix: '',
-                    allowMinus: true,
-                    min: 0,
-                });
-            }
         }
     });
 }
@@ -885,19 +769,20 @@ function retrieveDiscount(id,rate){
         url: "/item/discount/"+id,
         dataType: "JSON",
         success:function(data){
+            vatExempt(data.discount.isVatExempt);
             final =  eval($('#compute').val().replace(',','')+"*"+(rate/100));
             discountStack = 0-final;
             final = eval($('#compute').val().replace(',','')+"-"+final);
             $('#compute').val(final);
-            row = pList.row.add([
-                '<input type="hidden" name="discount[]" value="'+data.discount.id+'">',
-                data.discount.name+" - DISCOUNT",
-                '<strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+rate+'" readonly></strong>',
-                '<strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong>',
-                '<button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
+            $('#tFoot').append(
+                '<tr id="discountRow">' +
+                '<th><input type="hidden" name="discount[]" value="'+data.discount.id+'"></th>' +
+                '<th>'+data.discount.name+" - DISCOUNT</th>" +
+                '<th class="text-right"><strong><input class="discountPrice no-border-input" id="discountPrice" type="text" value="'+rate+'" readonly></strong></th>' +
+                '<th class="text-right"><strong><input class="discountStack no-border-input" id="discountStack" type="text" value="'+discountStack+'" readonly></strong></th>' +
+                '<th><button id="'+data.discount.id+'" type="button" class="btn btn-danger btn-sm pull-right pullDiscount" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button></th>' +
+                '</tr>'
+            );
             $("#discountPrice").inputmask({ 
                 alias: "percentage",
                 prefix: '',
@@ -913,40 +798,15 @@ function retrieveDiscount(id,rate){
                 min: -10000000,
                 max: 10000000,
             });
-            if(data.discount.isVatExempt){
-                vatReplenish();
-                $('#vatFoot').remove();
-            }else{
-                if($('#vatFoot').length==0){
-                    $('#productList').append(
-                        '<tfoot id="vatFoot">' +
-                        '<tr>' +
-                            '<th></th>' +
-                            '<th>VAT</th>' +
-                            '<th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="'+vat+'" readonly></strong></th>' +
-                            '<th class="text-right"><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></strong></th>' +
-                            '<th></th>' +
-                        '</tr>' +
-                    '<tfoot>'
-                    );
-                }
-                vatReplenish();
-                vatRecount();
-                $("#vatRate").inputmask({ 
-                    alias: "percentage",
-                    prefix: '',
-                    allowMinus: false,
-                    autoGroup: true,
-                    min: 0,
-                    max: 100,
-                });
-                $('#vatStack').inputmask({ 
-                    alias: "currency",
-                    prefix: '',
-                    allowMinus: true,
-                    min: 0,
-                });
-            }
         }
     });
+}
+
+function vatExempt(isVatExempt){
+    if(isVat){
+        if(isVatExempt==1){
+            $('#vatExempt').val(-Number($('#vatStack').val().replace(',','')));
+            $('#compute').val($('#vatSales').val().replace(',',''));
+        }
+    }
 }

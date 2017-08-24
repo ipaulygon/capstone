@@ -116,7 +116,7 @@ function finalizeModal(id){
             });
             $.ajax({
                 type: "GET",
-                url: "/item/discount/"+data.job.discount.id,
+                url: "/item/discount/"+data.job.discount.discountId,
                 dataType: "JSON",
                 success:function(data){
                     row = fList.row.add([

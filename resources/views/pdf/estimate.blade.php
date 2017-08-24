@@ -242,37 +242,53 @@
                     ?>
                 </tr>
                 @endforeach
-                @if($estimate->discount)
-                    <tr>
-                        <td></td>
-                        <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
-                        <td class="text-right">{{$estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate}} %</td>
-                        <td class="text-right">-{{number_format($total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100),2)}}</td>
-                        <?php 
-                            $discounts += $total*($estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate/100);
-                        ?>
-                    </tr>
-                    @if(!$estimate->discount->discount->isVatExempt)
-                        <?php $vat += $total*0.12;?>
-                    @else
-                        <?php $vat += 0;?>
-                    @endif
-                @else
-                    <?php $vat += $total*0.12;?>
-                @endif
+            </tbody>
+            <tfoot id="tFoot">
+            <?php 
+                $getVat = 100 / (100+$util->vat);
+                $vatSales = $total*$getVat;
+                $vat = $vatSales*($util->vat/100);
+                $vatExempt = ($estimate->discount->discount->isVatExempt ? $vat : 0);
+            ?>
+            @if($util->isVat)
+                <tr>
+                    <th></th>
+                    <th>VAT Sales</th>
+                    <th></th>
+                    <th class="text-right">{{number_format($vatSales,2)}}</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>VAT</th>
+                    <th class="text-right">{{$util->vat}} %</th>
+                    <th class="text-right">{{number_format($vat,2)}}</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>VAT Exemption</th>
+                    <th></th>
+                    <th class="text-right">-{{number_format($vatExempt,2)}}</th>
+                </tr>
+            @endif
+            @if($estimate->discount)
+                <?php
+                    $discountRate = $estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
+                    $discount = ($util->isVat && $estimate->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
+                ?>
                 <tr>
                     <td></td>
-                    <td>VAT</td>
-                    <td class="text-right">{{$util->vat}} %</td>
-                    <td class="text-right">{{number_format($vat,2)}}</td>
+                    <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
+                    <td class="text-right">{{$discountRate}} %</td>
+                    <td class="text-right">-{{number_format($discount,2)}}</td>
                 </tr>
+            @endif
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total-$discounts+$vat,2)}}</td>
+                    <td class="text-right">PhP {{number_format($total-$discount-$vatExempt,2)}}</td>
                 </tr>
-            </tbody>
+            <tfoot>
         </table>
         <div class="footer">
             <div style="float:left" class="col-md-6">
@@ -283,7 +299,7 @@
             <div style="float:right" class="col-md-6">
                 <br>
                 CUSTOMER'S SIGNATURE: ___________________<br>
-                GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discounts,2)}}<br> 
+                GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
             </div>
             <br><br>
             <div class="footerd">Printed by: Admin {{$date}}</div>

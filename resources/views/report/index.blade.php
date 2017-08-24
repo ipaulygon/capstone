@@ -406,11 +406,12 @@
             $('#list'+$(this).val()).removeClass('hidden');
         });
         $('#date').on('change', function() {
-              id = $('#date').val();
+                id = $('#reportId').val();
+                date = $('#date').val();
                 $.ajax({
                 type: 'POST',
                 url: '/report/where',
-                data: {id : id},
+                data: {date:date,id:id},
                 success: function(data){
                     console.log(data);
                 },
