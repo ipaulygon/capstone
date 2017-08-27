@@ -11,11 +11,11 @@ class PromoServiceSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('promo_service')->insert([
-            'promoId' => 1,
-            'serviceId' => 1,
-            'isFree' => 1,
-            'isActive' => 1  
-        ]);
+        // DB::table('promo_service')->insert([
+        //     'promoId' => 1,
+        //     'serviceId' => 1,
+        //     'isFree' => 1,
+        //     'isActive' => 1  
+        // ]);
     }
 }

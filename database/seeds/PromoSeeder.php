@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon as Carbon;
 
 class PromoSeeder extends Seeder
 {
@@ -14,8 +15,8 @@ class PromoSeeder extends Seeder
         DB::table('promo')->insert([
             'name' => 'Summer Promo',
             'price' => 800.00,
-            'dateStart' => date('Y-m-d'),
-            'dateEnd' => date('Y-m-d'),
+            'dateStart' => Carbon::now(),
+            'dateEnd' => Carbon::now(),
             'stock' => null,
             'isActive' => 1,
         ]);

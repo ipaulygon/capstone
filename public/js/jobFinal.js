@@ -103,7 +103,7 @@ function finalizeModal(id){
                         $.each(data.promo.free_product,function(key,value){
                             part = (value.product.isOriginal!=null ? ' - '+value.product.isOriginal : '')
                             $('#promoItems'+data.promo.id).append(
-                                '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                                '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                             );
                         });
                         $.each(data.promo.free_service,function(key,value){

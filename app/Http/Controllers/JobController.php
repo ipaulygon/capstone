@@ -637,28 +637,20 @@ class JobController extends Controller
     public function jobProduct(Request $request){
         try{
             DB::beginTransaction();
+            $completed = 0;
             $product = JobProduct::findOrFail($request->detailId);
             $inventory = Inventory::where('productId',$request->productId)->first();
-            $stack = $inventory->quantity + $product->completed;
-            $inventory->update([
-                'quantity' => $stack
-            ]);
-            if($stack >= $request->detailQty){
+            $inventory->increment('quantity',$product->completed);
+            if($inventory->quantity >= $request->detailQty){
+                $inventory->decrement('quantity',$request->detailQty);
                 $completed = ($request->detailQty==$product->quantity ? 1 : 0);
                 $product->update([
                     'completed' => $request->detailQty,
                     'isComplete' => $completed
                 ]);
-                $stack = $inventory->quantity - $request->detailQty;
-                $inventory->update([
-                    'quantity' => $stack
-                ]);
                 $check = 1;
             }else{
-                $stack = $inventory->quantity - $product->completed;
-                $inventory->update([
-                    'quantity' => $stack
-                ]);
+                $inventory->decrement('quantity',$product->completed);
                 $check = 0;
             }
             DB::commit();
@@ -667,7 +659,7 @@ class JobController extends Controller
             $errMess = $e->getMessage();
         }
         if($check){
-            return response()->json(['error'=>1,'message'=>'Job successfully updated','completed'=>$completed]);
+            return response()->json(['error'=>0,'message'=>'Job successfully updated','completed'=>$completed]);
         }else{
             return response()->json(['error'=>1,'message'=>'Insufficient resources','completed'=>$completed]);
         }
@@ -692,15 +684,12 @@ class JobController extends Controller
     public function jobPackage(Request $request){
         try{
             DB::beginTransaction();
+            $completed = 0;
             $package = JobPackage::findOrFail($request->detailId);
-            $completed = ($request->detailQty==$package->quantity ? 1 : 0);
             $check = 1;
             foreach($package->package->product as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = ($product->quantity*$package->completed)+$inventory->quantity;
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->increment('quantity',$product->quantity*$package->completed);
             }
             foreach($package->package->product as $product){
                 $total = $product->quantity*$request->detailQty;
@@ -710,28 +699,19 @@ class JobController extends Controller
             }
             foreach($package->package->product as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = $inventory->quantity-($product->quantity*$package->completed);
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->decrement('quantity',$product->quantity*$package->completed);
             }
             if($check==1){
                 foreach($package->package->product as $product){
                     $inventory = Inventory::where('productId',$product->productId)->first();
-                    $reset = ($product->quantity*$package->completed)+$inventory->quantity;
-                    $total = $product->quantity*$request->detailQty;
-                    $inventory->update([
-                        'quantity' => $reset
-                    ]);
-                    $total = $inventory->quantity - $total;
-                    $inventory->update([
-                        'quantity' => $total
-                    ]);
+                    $inventory->increment('quantity',$product->quantity*$package->completed);
+                    $inventory->decrement('quantity',$product->quantity*$request->detailQty);
                 }
+                $completed = ($request->detailQty==$package->quantity ? 1 : 0);
                 $package->update([
                     'completed' => $request->detailQty,
                     'isComplete' => $completed
-                ]);   
+                ]);
             }
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
@@ -748,22 +728,16 @@ class JobController extends Controller
     public function jobPromo(Request $request){
         try{
             DB::beginTransaction();
+            $completed = 0;
             $promo = JobPromo::findOrFail($request->detailId);
-            $completed = ($request->detailQty==$promo->quantity ? 1 : 0);
             $check = 1;
             foreach($promo->promo->product as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->increment('quantity',$product->quantity*$promo->completed);
             }
             foreach($promo->promo->freeProduct as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->increment('quantity',$product->freeQuantity*$promo->completed);
             }
             foreach($promo->promo->product as $product){
                 $total = $product->quantity*$request->detailQty;
@@ -772,54 +746,35 @@ class JobController extends Controller
                 }
             }
             foreach($promo->promo->freeProduct as $product){
-                $total = $product->quantity*$request->detailQty;
+                $total = $product->freeQuantity*$request->detailQty;
                 if($product->product->inventory->quantity<$total){
                     $check = 0;
                 }
             }
             foreach($promo->promo->product as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = $inventory->quantity-($product->quantity*$promo->completed);
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->decrement('quantity',$product->quantity*$promo->completed);
             }
             foreach($promo->promo->freeProduct as $product){
                 $inventory = Inventory::where('productId',$product->productId)->first();
-                $reset = $inventory->quantity-($product->quantity*$promo->completed);
-                $inventory->update([
-                    'quantity' => $reset
-                ]);
+                $inventory->decrement('quantity',$product->freeQuantity*$promo->completed);
             }
-            if($check){
+            if($check==1){
                 foreach($promo->promo->product as $product){
                     $inventory = Inventory::where('productId',$product->productId)->first();
-                    $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
-                    $total = $product->quantity*$request->detailQty;
-                    $inventory->update([
-                        'quantity' => $reset
-                    ]);
-                    $total = $inventory->quantity - $total;
-                    $inventory->update([
-                        'quantity' => $total
-                    ]);
+                    $inventory->increment('quantity',$product->quantity*$promo->completed);
+                    $inventory->decrement('quantity',$product->quantity*$request->detailQty);
                 }
                 foreach($promo->promo->freeProduct as $product){
                     $inventory = Inventory::where('productId',$product->productId)->first();
-                    $reset = ($product->quantity*$promo->completed)+$inventory->quantity;
-                    $total = $product->quantity*$request->detailQty;
-                    $inventory->update([
-                        'quantity' => $reset
-                    ]);
-                    $total = $inventory->quantity - $total;
-                    $inventory->update([
-                        'quantity' => $total
-                    ]);
+                    $inventory->increment('quantity',$product->freeQuantity*$promo->completed);
+                    $inventory->decrement('quantity',$product->freeQuantity*$request->detailQty);
                 }
+                $completed = ($request->detailQty==$promo->quantity ? 1 : 0);
                 $promo->update([
                     'completed' => $request->detailQty,
                     'isComplete' => $completed
-                ]);   
+                ]);
             }
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){

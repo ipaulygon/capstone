@@ -17,12 +17,12 @@ class Promo extends Model
     	'isActive'  	
     ];
 
-    public function freeProduct(){
-        return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1)->where('isFree',1);
-    }
-
     public function product(){
-        return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1)->where('isFree',0);
+        return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1)->where('quantity','!=',0);
+    }
+    
+    public function freeProduct(){
+        return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1)->where('freeQuantity','!=',0);
     }
 
     public function allProduct(){

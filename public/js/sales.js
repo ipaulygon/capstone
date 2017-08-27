@@ -84,6 +84,14 @@ function pullItem(item){
                     iQty = eval(iQty+"+"+stack);
                     $('#inventory'+value.productId).val(iQty);
                 });
+            }else if(type='promo'){
+                $.each(data.promo.all_product,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    total = eval(value.quantity+"+"+value.freeQuantity);
+                    stack = eval(qty+"*"+total);
+                    iQty = eval(iQty+"+"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                });
             }
         }
     });
@@ -195,12 +203,13 @@ $(document).on('focusin','#qty',function(){
             }else if(type=='promo'){
                 minQty = 0;
                 maxQty = maxValue;
-                $.each(data.promo.allProduct,function(key,value){
+                $.each(data.promo.all_product,function(key,value){
                     iQty = $('#inventory'+value.productId).val().replace(',','');
-                    stack = eval(qty+"*"+value.quantity);
+                    total = eval(value.quantity+"+"+value.freeQuantity);
+                    stack = eval(qty+"*"+total);
                     iQty = eval(iQty+"+"+stack);
                     $('#inventory'+value.productId).val(iQty);
-                    div = Math.floor(iQty/value.quantity);
+                    div = Math.floor(iQty/total);
                     maxQty = (maxQty>=div ? div : maxQty);
                 });
                 minQty = (maxQty>=1 ? 1 : 0);
@@ -229,6 +238,14 @@ $(document).on('focusout','#qty',function(){
                 $.each(data.package.product,function(key,value){
                     iQty = $('#inventory'+value.productId).val().replace(',','');
                     stack = eval(qty+"*"+value.quantity);
+                    iQty = eval(iQty+"-"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                });
+            }else if(type=='promo'){
+                $.each(data.promo.all_product,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    total = eval(value.quantity+"+"+value.freeQuantity);
+                    stack = eval(qty+"*"+total);
                     iQty = eval(iQty+"-"+stack);
                     $('#inventory'+value.productId).val(iQty);
                 });
@@ -514,7 +531,7 @@ $(document).on('change', '#promos', function(){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){
@@ -576,7 +593,7 @@ function oldPromo(id,qty){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){
@@ -634,7 +651,7 @@ function retrievePromo(id,qty,price){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){

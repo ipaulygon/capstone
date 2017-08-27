@@ -106,22 +106,18 @@ class PromoController extends Controller
                 $fservices = $request->freeService;
                 if(!empty($products)){
                     foreach ($products as $key=>$product) {
-                        PromoProduct::create([
-                            'promoId' => $promo->id,
-                            'productId' => $product,
-                            'quantity' => $qty[$key],
-                            'isFree' => 0,
-                        ]);
+                        PromoProduct::updateOrCreate(
+                            ['promoId' => $promo->id,'productId' => $product],
+                            ['quantity' => $qty[$key]]
+                        );
                     }
                 }
                 if(!empty($fproducts)){
                     foreach ($fproducts as $key=>$product) {
-                        PromoProduct::create([
-                            'promoId' => $promo->id,
-                            'productId' => $product,
-                            'quantity' => $fqty[$key],
-                            'isFree' => 1,
-                        ]);
+                        PromoProduct::updateOrCreate(
+                            ['promoId' => $promo->id,'productId' => $product],
+                            ['freeQuantity' => $fqty[$key]]
+                        );
                     }
                 }
                 if(!empty($services)){
@@ -265,14 +261,13 @@ class PromoController extends Controller
                     $fproducts = $request->freeProduct;
                     $fqty = $request->freeQty;
                     $fservices = $request->freeService;
-                    PromoProduct::where('promoId',$id)->update(['isActive'=>0]);
+                    PromoProduct::where('promoId',$id)->update(['isActive'=>0,'quantity'=>0,'freeQuantity'=>0]);
                     PromoService::where('promoId',$id)->update(['isActive'=>0]); 
                     if(!empty($products)){
                         foreach ($products as $key=>$product) {
                             PromoProduct::updateOrCreate([
                                 'promoId' => $id,
                                 'productId' => $product,
-                                'isFree' => 0,
                             ],[
                                 'quantity' => $qty[$key],
                                 'isActive' => 1
@@ -284,9 +279,8 @@ class PromoController extends Controller
                             PromoProduct::updateOrCreate([
                                 'promoId' => $id,
                                 'productId' => $product,
-                                'isFree' => 1,
                             ],[
-                                'quantity' => $fqty[$key],
+                                'freeQuantity' => $fqty[$key],
                                 'isActive' => 1
                             ]);
                         }

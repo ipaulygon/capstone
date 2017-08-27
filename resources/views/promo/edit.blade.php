@@ -46,7 +46,7 @@
         @endif
         @if($promo->freeProduct)
             @foreach($promo->freeProduct as $key=>$product)
-                <script>retrieveFreeProduct({{$product->productId}},{{$product->quantity}})</script>
+                <script>retrieveFreeProduct({{$product->productId}},{{$product->freeQuantity}})</script>
             @endforeach
         @endif
         @if($promo->service)

@@ -95,11 +95,7 @@ class DeliveryController extends Controller
                         'quantity' => $qtys[$key],
                     ]);
                     $inventory = Inventory::where('productId',$product)->first();
-                    $qty = $inventory->quantity;
-                    $qty = $qty+$qtys[$key];
-                    $inventory->update([
-                        'quantity' => $qty
-                    ]);
+                    $inventory->increment('quantity', $qtys[$key]);
                 }
                 foreach($orders as $order){
                     DeliveryOrder::create([

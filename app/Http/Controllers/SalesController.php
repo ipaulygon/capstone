@@ -9,6 +9,9 @@ use App\SalesPromo;
 use App\SalesDiscount;
 use App\Customer;
 use App\Inventory;
+use App\Product;
+use App\Package;
+use App\Promo;
 use Validator;
 use Redirect;
 use Response;
@@ -163,6 +166,8 @@ class SalesController extends Controller
                                 'quantity' => $prodQty[$key],
                                 'isActive' => 1
                             ]);
+                            $inventory = Inventory::where('productId',$product)->first();
+                            $inventory->decrement('quantity',$prodQty[$key]);
                         }
                     }
                 }
@@ -174,6 +179,11 @@ class SalesController extends Controller
                                 'packageId' => $package,
                                 'quantity' => $packQty[$key],
                             ]);
+                            $package = Package::findOrFail($package);
+                            foreach($package->product as $product){
+                                $inventory = Inventory::where('productId',$product->productId)->first();
+                                $inventory->decrement('quantity',$product->quantity*$packQty[$key]);
+                            }
                         }
                     }
                 }
@@ -185,6 +195,11 @@ class SalesController extends Controller
                                 'promoId' => $promo,
                                 'quantity' => $promoQty[$key],
                             ]);
+                            $promo = Promo::findOrFail($promo);
+                            foreach($promo->allProduct as $product){
+                                $inventory = Inventory::where('productId',$product->productId)->first();
+                                $inventory->decrement('quantity',($product->quantity+$product->freeQuantity)*$promoQty[$key]);
+                            }
                         }
                     }
                 }

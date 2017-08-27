@@ -506,7 +506,7 @@ $(document).on('change', '#promos', function(){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){
@@ -568,7 +568,7 @@ function oldPromo(id,qty){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){
@@ -626,7 +626,7 @@ function retrievePromo(id,qty,price){
                     part = '';
                 }  
                 $('#promoItems'+data.promo.id).append(
-                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.quantity+' pcs. </li>'
+                    '<li>'+value.product.brand.name+" - "+value.product.name+part+" ("+value.product.variance.name+") x "+value.freeQuantity+' pcs. </li>'
                 );
             });
             $.each(data.promo.free_service,function(key,value){

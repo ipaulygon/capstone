@@ -12,7 +12,7 @@ class PromoProduct extends Model
     	'promoId',
     	'productId',
         'quantity',
-        'isFree',
+        'freeQuantity',
     	'isActive'  	
     ];
 

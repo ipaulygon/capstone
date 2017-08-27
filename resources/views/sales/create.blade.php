@@ -30,6 +30,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
     <script src="{{ URL::asset('js/sales.js') }}"></script>
     <script>

@@ -105,11 +105,7 @@ class ReturnController extends Controller
                         'quantity' => $qtys[$key],
                     ]);
                     $inventory = Inventory::where('productId',$product)->first();
-                    $qty = $inventory->quantity;
-                    $qty = $qty-$qtys[$key];
-                    $inventory->update([
-                        'quantity' => $qty
-                    ]);
+                    $inventory->decrement('quantity', $qtys[$key]);
                 }
                 foreach($orders as $order){
                     $ordered = DeliveryOrder::where('deliveryId',$order)->get();

@@ -53,7 +53,7 @@
                                         </td>
                                         <td>
                                             @foreach($promo->freeProduct as $product)
-                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} - {{$product->product->isOriginal}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
+                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} - {{$product->product->isOriginal}} ({{$product->product->variance->name}}) x {{$product->freeQuantity}} pcs.</li>
                                             @endforeach
                                             @foreach($promo->freeService as $service)
                                                 <li>{{$service->service->name}} - {{$service->service->size}}</li>
@@ -91,23 +91,23 @@
                                         <td>{{$promo->name}}</td>
                                         <td class="text-right">{{number_format($promo->price,2)}}</td>
                                         <td>
-                                            @foreach($promo->product as $product)
-                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
-                                            @endforeach
-                                            @if($promo->freeProduct->isNotEmpty())
-                                            <b>Free:</b>
+                                            @if($promo->product->isNotEmpty())
+                                                <b>Products:</b>
                                             @endif
-                                            @foreach($promo->freeProduct as $product)
-                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
+                                            @foreach($promo->product as $product)
+                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} - {{$product->product->isOriginal}} ({{$product->product->variance->name}}) x {{$product->quantity}} pcs.</li>
                                             @endforeach
-                                        </td>
-                                        <td>
+                                            @if($promo->service->isNotEmpty())
+                                                <b>Services:</b>
+                                            @endif
                                             @foreach($promo->service as $service)
                                                 <li>{{$service->service->name}} - {{$service->service->size}}</li>
                                             @endforeach
-                                            @if($promo->freeService->isNotEmpty())
-                                            <b>Free:</b>
-                                            @endif
+                                        </td>
+                                        <td>
+                                            @foreach($promo->freeProduct as $product)
+                                                <li>{{$product->product->brand->name}} - {{$product->product->name}} - {{$product->product->isOriginal}} ({{$product->product->variance->name}}) x {{$product->freeQuantity}} pcs.</li>
+                                            @endforeach
                                             @foreach($promo->freeService as $service)
                                                 <li>{{$service->service->name}} - {{$service->service->size}}</li>
                                             @endforeach
