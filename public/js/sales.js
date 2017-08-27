@@ -64,6 +64,29 @@ function vatRecount(){
 }
 
 function pullItem(item){
+    component = $(item).parents('tr').find('#qty');
+    qty = component.val().replace(',','');
+    qty = (qty=='' || qty==null ? 0 : qty);
+    type = component.attr('data-type');
+    id = component.attr('data-id');
+    $.ajax({
+        type: 'GET',
+        url: '/item/'+type+'/'+id,
+        dataType: 'JSON',
+        success:function(data){
+            if(type=='product'){
+                final = eval($('#inventory'+id).val().replace(',','')+"+"+qty);
+                $('#inventory'+id).val(final);
+            }else if(type=='package'){
+                $.each(data.package.product,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    stack = eval(qty+"*"+value.quantity);
+                    iQty = eval(iQty+"+"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                });
+            }
+        }
+    });
     discountReplenish();
     vatReplenish();
     stack = $(item).parents('tr').find('#stack').val().replace(',','');
@@ -84,15 +107,29 @@ function recount(stack){
     discountRecount();
 }
 
+function minMax(component,minQty,maxQty){
+    component.inputmask({ 
+        alias: "integer",
+        prefix: '',
+        allowMinus: false,
+        min: minQty,
+        max: maxQty,
+    });
+    component.attr('data-min',minQty);
+    component.attr('data-max',maxQty);
+}
+
 // QUANTITY
 $(document).on('keyup', '#qty', function (){
-    qty = $(this).val();
-    if(qty=='' || qty==null || qty<1){
-        qty = 1;
-        $(this).val(1);
-    }else if(qty>100){
-        qty = 100;
-        $(this).val(100);
+    qty = $(this).val().replace(',','');
+    min = $(this).attr('data-min');
+    max = $(this).attr('data-max');
+    if(qty=='' || qty==null){
+        qty = min;
+        $(this).val(min);
+    }else if(Number(qty)>=Number(max)){
+        qty = max;
+        $(this).val(max);
         $(this).popover({
             trigger: 'manual',
             content: function(){
@@ -121,10 +158,83 @@ $(document).on('keyup', '#qty', function (){
     $('#compute').val(final);
     vatRecount();
     discountRecount();
+    
+});
+
+$(document).on('focusin','#qty',function(){
+    component = $(this);
+    qty = $(this).val().replace(',','');
+    qty = (qty=='' || qty==null ? 0 : qty);
+    type = $(this).attr('data-type');
+    id = $(this).attr('data-id');
+    $.ajax({
+        type: 'GET',
+        url: '/item/'+type+'/'+id,
+        dataType: 'JSON',
+        success:function(data){
+            if(type=='product'){
+                iQty = $('#inventory'+id).val().replace(',','');
+                iQty = eval(qty+"+"+iQty);
+                $('#inventory'+id).val(iQty);
+                minQty = (1<=iQty ? 1 : iQty);
+                maxQty = (maxValue<=iQty ? maxValue : iQty);
+                minMax(component,minQty,maxQty);
+            }else if(type=='package'){
+                minQty = 0;
+                maxQty = maxValue;
+                $.each(data.package.product,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    stack = eval(qty+"*"+value.quantity);
+                    iQty = eval(iQty+"+"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                    div = Math.floor(iQty/value.quantity);
+                    maxQty = (maxQty>=div ? div : maxQty);
+                });
+                minQty = (maxQty>=1 ? 1 : 0);
+                minMax(component,minQty,maxQty);
+            }else if(type=='promo'){
+                minQty = 0;
+                maxQty = maxValue;
+                $.each(data.promo.allProduct,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    stack = eval(qty+"*"+value.quantity);
+                    iQty = eval(iQty+"+"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                    div = Math.floor(iQty/value.quantity);
+                    maxQty = (maxQty>=div ? div : maxQty);
+                });
+                minQty = (maxQty>=1 ? 1 : 0);
+                minMax(component,minQty,maxQty);
+            }
+        }
+    });
 });
 
 $(document).on('focusout','#qty',function(){
     $(this).popover('hide');
+    component = $(this);
+    qty = $(this).val().replace(',','');
+    qty = (qty=='' || qty==null ? 0 : qty);
+    type = $(this).attr('data-type');
+    id = $(this).attr('data-id');
+    $.ajax({
+        type: 'GET',
+        url: '/item/'+type+'/'+id,
+        dataType: 'JSON',
+        success:function(data){
+            if(type=='product'){
+                final = eval($('#inventory'+id).val().replace(',','')+"-"+qty);
+                $('#inventory'+id).val(final);
+            }else if(type=='package'){
+                $.each(data.package.product,function(key,value){
+                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    stack = eval(qty+"*"+value.quantity);
+                    iQty = eval(iQty+"-"+stack);
+                    $('#inventory'+value.productId).val(iQty);
+                });
+            }
+        }
+    });
 });
 // PRODUCTS
 $(document).on('change', '#products', function(){
@@ -151,7 +261,7 @@ $(document).on('change', '#products', function(){
                 part = '';
             }
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-id="'+data.product.id+'" data-type="product" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
@@ -196,7 +306,7 @@ function oldProduct(id,qty){
             }
             stack = eval(price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-id="'+data.product.id+'" data-type="product" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -226,7 +336,7 @@ function retrieveProduct(id,qty,price,discountString){
             }
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-id="'+data.product.id+'" data-type="product" data-price="'+price+'" class="form-control qty text-right" id="qty" name="productQty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+") "+discountString,
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -241,108 +351,6 @@ function retrieveProduct(id,qty,price,discountString){
     $('#products').val('');
     $("#products").select2();
 }
-// SERVICES
-$(document).on('change', '#services', function(){
-    $('#services option[value="'+this.value+'"]').attr('disabled',true);
-    $.ajax({
-        type: "GET",
-        url: "/item/service/"+this.value,
-        dataType: "JSON",
-        success:function(data){
-            var discount = null;
-            if(data.service.discount!=null){
-                discount = (data.service.discount.header.rate);
-            }
-            if(discount!=null){
-                price = (data.service.price)-(data.service.price*(discount/100));
-                discountString = '['+discount+' % discount]';
-            }else{
-                price = data.service.price;
-                discountString = '';
-            }
-            stack = price;
-            row = pList.row.add([
-                '<input type="hidden" name="service[]" value="'+data.service.id+'">',
-                data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
-                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
-            recount(stack);
-            masking();
-        }
-    });
-    $('#services').val('');
-    $("#services").select2();
-});
-
-$(document).on('click','.pullService', function(){
-    $('#services option[value="'+this.id+'"]').attr('disabled',false);
-    pullItem(this);
-});
-
-function oldService(id){
-    $('#services option[value="'+id+'"]').attr('disabled',true);
-    $.ajax({
-        type: "GET",
-        url: "/item/service/"+id,
-        dataType: "JSON",
-        success:function(data){
-            var discount = null;
-            if(data.service.discount!=null){
-                discount = (data.service.discount.header.rate);
-            }
-            if(discount!=null){
-                price = (data.service.price)-(data.service.price*(discount/100));
-                discountString = '['+discount+' % discount]';
-            }else{
-                price = data.service.price;
-                discountString = '';
-            }
-            stack = price;
-            row = pList.row.add([
-                '<input type="hidden" name="service[]" value="'+data.service.id+'">',
-                data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
-                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
-            recount(stack);
-            masking();
-        }
-    });
-    $('#services').val('');
-    $("#services").select2();
-}
-
-function retrieveService(id,price,discountString){
-    $('#services option[value="'+id+'"]').attr('disabled',true);
-    $.ajax({
-        type: "GET",
-        url: "/item/service/"+id,
-        dataType: "JSON",
-        success:function(data){
-            stack = price;
-            row = pList.row.add([
-                '<input type="hidden" name="service[]" value="'+data.service.id+'">',
-                data.service.name+" - "+data.service.size+" ("+data.service.category.name+") "+discountString,
-                '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
-                '<strong><input class="stack no-border-input" id="stack" type="text" value="'+price+'" readonly></strong>',
-                '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
-            ]).draw().node();
-            $(row).find('td').eq(2).addClass('text-right');
-            $(row).find('td').eq(3).addClass('text-right');
-            recount(stack);
-            masking();
-        }
-    });
-    $('#services').val('');
-    $("#services").select2();
-}
 // PACKAGES
 $(document).on('change', '#packages', function(){
     $('#packages option[value="'+this.value+'"]').attr('disabled',true);
@@ -352,7 +360,7 @@ $(document).on('change', '#packages', function(){
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-id="'+data.package.id+'" data-type="package" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
@@ -396,7 +404,7 @@ function oldPackage(id,qty){
         success:function(data){
             stack = eval(data.package.price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text"  data-id="'+data.package.id+'" data-type="package" data-price="'+data.package.price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+data.package.price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -434,7 +442,7 @@ function retrievePackage(id,qty,price){
         success:function(data){
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="package[]" value="'+data.package.id+'"><input type="text" data-id="'+data.package.id+'" data-type="package" data-price="'+price+'" class="form-control qty text-right" id="qty" name="packageQty[]" value="'+qty+'" required>',
                 data.package.name+'<br><div id="packageItems'+data.package.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -473,7 +481,7 @@ $(document).on('change', '#promos', function(){
         dataType: "JSON",
         success:function(data){
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-id="'+data.promo.id+'" data-type="promo" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="0" readonly></strong>',
@@ -535,7 +543,7 @@ function oldPromo(id,qty){
         success:function(data){
             stack = eval(data.promo.price+"*"+qty);
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-id="'+data.promo.id+'" data-type="promo" data-price="'+data.promo.price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+data.promo.price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -593,7 +601,7 @@ function retrievePromo(id,qty,price){
         success:function(data){
             stack = eval(price+'*'+qty);
             row = pList.row.add([
-                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
+                '<input type="hidden" name="promo[]" value="'+data.promo.id+'"><input type="text" data-id="'+data.promo.id+'" data-type="promo" data-price="'+price+'" class="form-control qty text-right" id="qty" name="promoQty[]" value="'+qty+'" required>',
                 data.promo.name+'<br><div id="promoItems'+data.promo.id+'"></div>',
                 '<strong><input class="price no-border-input" id="price" type="text" value="'+price+'" readonly></strong>',
                 '<strong><input class="stack no-border-input" id="stack" type="text" value="'+stack+'" readonly></strong>',
@@ -647,7 +655,7 @@ function masking(){
         alias: "integer",
         prefix: '',
         allowMinus: false,
-        min: 1,
+        min: 0,
         max: maxValue,
     });
     $(".price").inputmask({ 

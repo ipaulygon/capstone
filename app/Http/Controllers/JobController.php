@@ -58,6 +58,14 @@ class JobController extends Controller
             ->where('r.isActive',1)
             ->select('r.*')
             ->get();
+        $inventory = DB::table('inventory as i')
+            ->join('product as p','p.id','i.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('i.*','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
@@ -85,7 +93,7 @@ class JobController extends Controller
             ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
-        return View('job.index',compact('jobs','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts','date'));
+        return View('job.index',compact('jobs','customers','autos','manuals','technicians','racks','inventory','products','services','packages','promos','discounts','date'));
     }
 
     /**
@@ -305,6 +313,14 @@ class JobController extends Controller
             ->where('r.isActive',1)
             ->select('r.*')
             ->get();
+        $inventory = DB::table('inventory as i')
+            ->join('product as p','p.id','i.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('i.*','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
@@ -332,7 +348,7 @@ class JobController extends Controller
             ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
-        return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','products','services','packages','promos','discounts'));
+        return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','inventory','products','services','packages','promos','discounts'));
     }
 
     /**
@@ -627,21 +643,34 @@ class JobController extends Controller
             $inventory->update([
                 'quantity' => $stack
             ]);
-            $completed = ($request->detailQty==$product->quantity ? 1 : 0);
-            $product->update([
-                'completed' => $request->detailQty,
-                'isComplete' => $completed
-            ]);
-            $stack = $inventory->quantity - $request->detailQty;
-            $inventory->update([
-                'quantity' => $stack
-            ]);
+            if($stack >= $request->detailQty){
+                $completed = ($request->detailQty==$product->quantity ? 1 : 0);
+                $product->update([
+                    'completed' => $request->detailQty,
+                    'isComplete' => $completed
+                ]);
+                $stack = $inventory->quantity - $request->detailQty;
+                $inventory->update([
+                    'quantity' => $stack
+                ]);
+                $check = 1;
+            }else{
+                $stack = $inventory->quantity - $product->completed;
+                $inventory->update([
+                    'quantity' => $stack
+                ]);
+                $check = 0;
+            }
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
         }
-        return response()->json(['message'=>'Job successfully updated','completed'=>$completed]);
+        if($check){
+            return response()->json(['error'=>1,'message'=>'Job successfully updated','completed'=>$completed]);
+        }else{
+            return response()->json(['error'=>1,'message'=>'Insufficient resources','completed'=>$completed]);
+        }
     }
 
     public function jobService(Request $request){

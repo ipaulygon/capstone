@@ -16,6 +16,7 @@
     @include('layouts.required')
     @include('sales.formCreate')
     {!! Form::close() !!}
+    @include('layouts.inventoryList')
 @stop
 
 @section('script')
@@ -29,7 +30,8 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
-    <script src="{{ URL::asset('js/item.js') }}"></script>
+    <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
+    <script src="{{ URL::asset('js/sales.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#tSales').addClass('active');

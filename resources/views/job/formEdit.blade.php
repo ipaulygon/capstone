@@ -7,7 +7,7 @@
         </div>
         <div id="body" class="box-body">
             @include('layouts.vehicleEdit')
-            <h4>Job Order Information</h4>
+            <h4>Item List <i id="infoInventory" class="fa fa-question-circle"></i></h4>
             @include('layouts.itemList')
         </div>
         <div class="box-footer">

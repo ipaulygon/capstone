@@ -2,7 +2,7 @@
     @include('layouts.customerCreate')
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Item List</h3>
+            <h3 class="box-title">Item List</h3> <i id="infoInventory" class="fa fa-question-circle"></i>
         </div>
         <div id="body" class="box-body">
             @include('layouts.itemSales')

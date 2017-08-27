@@ -108,7 +108,6 @@ $('.fc-released-button').css('background-color','#6f5499!important');
 $('.fc-released-button').removeClass('fc-button fc-state-default fc-state-hover fc-corner-right');
 
 function clickEvent(id){
-    $('.detailTechs').remove();
     var finalize = null;
     var completed = null;
     $.ajax({
@@ -126,6 +125,7 @@ function clickEvent(id){
             $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
             $('#detailMileage').text(data.job.vehicle.mileage);
             $('#detailCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
+            $('.detailTechs').remove();
             $.each(data.job.technician,function(key,value){
                 $('#detailTechs').append('<li class="detailTechs">'+value.technician.firstName+' '+value.technician.lastName+'</li>');
             });
@@ -134,10 +134,8 @@ function clickEvent(id){
                 $('#detailProcess').removeClass('hidden');
                 $('#detailUpdate').addClass('hidden');
                 $('#detailFinalize').addClass('hidden');
-                if(data.job.isComplete){
+                if(data.job.isComplete && data.job.total==data.job.paid){
                     $('#detailRelease').removeClass('hidden');
-                }else{
-                    $('#detailRelease').addClass('hidden');
                 }
                 if(data.job.release!=null){
                     $('#detailRelease').addClass('hidden');

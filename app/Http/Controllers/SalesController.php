@@ -41,6 +41,14 @@ class SalesController extends Controller
         $customers = DB::table('customer')
             ->select('customer.*')
             ->get();
+        $inventory = DB::table('inventory as i')
+            ->join('product as p','p.id','i.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('i.*','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
         $products = DB::table('product as p')
             ->join('product_type as pt','pt.id','p.typeId')
             ->join('product_brand as pb','pb.id','p.brandId')
@@ -65,7 +73,7 @@ class SalesController extends Controller
             ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
-        return View('sales.create',compact('date','customers','products','packages','promos','discounts'));
+        return View('sales.create',compact('date','customers','inventory','products','packages','promos','discounts'));
     }
 
     /**
@@ -148,30 +156,36 @@ class SalesController extends Controller
                 $discounts = $request->discount;
                 if(!empty($products)){
                     foreach($products as $key=>$product){
-                        SalesProduct::create([
-                            'salesId' => $sales->id,
-                            'productId' => $product,
-                            'quantity' => $prodQty[$key],
-                            'isActive' => 1
-                        ]);
+                        if($prodQty[$key]!=0){
+                            SalesProduct::create([
+                                'salesId' => $sales->id,
+                                'productId' => $product,
+                                'quantity' => $prodQty[$key],
+                                'isActive' => 1
+                            ]);
+                        }
                     }
                 }
                 if(!empty($packages)){
                     foreach($packages as $key=>$package){
-                        SalesPackage::create([
-                            'salesId' => $sales->id,
-                            'packageId' => $package,
-                            'quantity' => $packQty[$key],
-                        ]);
+                        if($packQty[$key]!=0){
+                            SalesPackage::create([
+                                'salesId' => $sales->id,
+                                'packageId' => $package,
+                                'quantity' => $packQty[$key],
+                            ]);
+                        }
                     }
                 }
                 if(!empty($promos)){
                     foreach($promos as $key=>$promo){
-                        SalesPromo::create([
-                            'salesId' => $sales->id,
-                            'promoId' => $promo,
-                            'quantity' => $promoQty[$key],
-                        ]);
+                        if($promoQty[$key]!=0){
+                            SalesPromo::create([
+                                'salesId' => $sales->id,
+                                'promoId' => $promo,
+                                'quantity' => $promoQty[$key],
+                            ]);
+                        }
                     }
                 }
                 if(!empty($discounts)){
@@ -201,7 +215,7 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -212,7 +226,7 @@ class SalesController extends Controller
      */
     public function edit($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -224,7 +238,7 @@ class SalesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -235,6 +249,6 @@ class SalesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
     }
 }

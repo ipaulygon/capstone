@@ -25,6 +25,10 @@ class Promo extends Model
         return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1)->where('isFree',0);
     }
 
+    public function allProduct(){
+        return $this->hasMany('App\PromoProduct', 'promoId')->where('isActive',1);
+    }
+
     public function freeService(){
         return $this->hasMany('App\PromoService', 'promoId')->where('isActive',1)->where('isFree',1);
     }

@@ -73,21 +73,21 @@
     <tbody></tbody>
     <tfoot id="tFoot">
     @if($util->isVat)
-        <tr>
+        <tr class="hidden">
             <th></th>
             <th>VAT Sales</th>
             <th></th>
             <th class="text-right"><input class="no-border-input" id="vatSales" type="text" value="0" readonly></strong></strong></th>
             <th></th>
         </tr>
-        <tr>
+        <tr class="hidden">
             <th></th>
             <th>VAT</th>
             <th class="text-right"><strong><input class="no-border-input" id="vatRate" type="text" value="{{$util->vat}}" readonly></strong></th>
             <th class="text-right"><strong><input class="no-border-input" id="vatStack" type="text" value="0" readonly></strong></th>
             <th></th>
         </tr>
-        <tr>
+        <tr class="hidden">
             <th></th>
             <th>VAT Exemption</th>
             <th></th>

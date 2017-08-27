@@ -572,15 +572,25 @@ $(document).on('click','.procProduct',function(){
         url: '/job/product',
         data: {detailId:detailId,productId:productId,detailQty:detailQty},
         success: function(data){
-            $('#notif').append(
-                '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-                '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
-                data.message +
-                '</div>'
-            );
-            status = (data.completed ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
-            $('#prodStatus'+detailId).html(status);
+            if(data.error==0){
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+                status = (data.completed ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
+                $('#prodStatus'+detailId).html(status);
+            }else{
+                $('#notif').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    data.message +
+                    '</div>'
+                );
+            }
         }
     });
     checkJob(jobId);
@@ -697,11 +707,11 @@ function checkJob(id){
         data: {id:id},
         success: function(data){
             $.each(data.jobs,function(key,value){
-                if(value.release!=null){
+                if(value.release!=null && value.isComplete && value.total==value.paid){
                     colors = '#6f5499';
                 }else if(value.isComplete && value.total==value.paid){
                     colors = "#00a65a";
-                }else if(!value.isComplete && value.isFinalize && value.total==value.paid){
+                }else if(value.isComplete && value.total!=value.paid){
                     colors = "#00c0ef";
                 }else if(!value.isComplete && value.isFinalize && value.total!=value.paid){
                     colors = "#f39c12";
