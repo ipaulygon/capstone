@@ -10,16 +10,14 @@
             </div>
         </div>
         <div class="box-footer">
-            <div class="col-md-12">
-                <div class="form-group">
-                    {!! Form::label('remarks', 'Remarks') !!}
-                    {!! Form::textarea('remarks',null,[
-                        'class' => 'form-control',
-                        'placeholder'=>'Remarks',
-                        'maxlength'=>'140',
-                        'rows' => '1']) 
-                    !!}
-                </div>
+            <div class="form-group">
+                {!! Form::label('remarks', 'Remarks') !!}
+                {!! Form::textarea('remarks',null,[
+                    'class' => 'form-control',
+                    'placeholder'=>'Remarks',
+                    'maxlength'=>'140',
+                    'rows' => '1']) 
+                !!}
             </div>
             <div class="col-md-12">
                 {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}

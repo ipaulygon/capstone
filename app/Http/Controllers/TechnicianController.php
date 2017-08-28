@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\User;
 use App\Technician;
 use App\ServiceCategory;
 use App\TechnicianSkill;
@@ -110,12 +111,12 @@ class TechnicianController extends Controller
                     'contact' => trim($request->contact),
                     'email' => trim($request->email),
                     'image' => $techPic,
-                    'username' => '',
-                    'password' => ''
                 ]);
-                $tech->update([
-                    'username' => $tech->lastName.'_'.$tech->id,
-                    'password' => bcrypt('password')
+                $user = User::create([
+                    'name' => 'TECH-'.str_pad($tech->id,4,'0',STR_PAD_LEFT),
+                    'email' => trim($request->email),
+                    'password' => bcrypt('password'),
+                    'type' => 2
                 ]);
                 $skills = $request->skill;
                 foreach($skills as $skill){

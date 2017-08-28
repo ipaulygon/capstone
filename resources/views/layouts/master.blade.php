@@ -40,7 +40,7 @@
             <!-- Logo -->
             <a href="{{url('/dashboard')}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b></b></span>
+                <span class="logo-mini"><b>{{$util->image}}</b></span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg"><b>{{$util->name}}</b></span>
             </a>
@@ -54,7 +54,7 @@
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <!-- Notifications: style can be found in dropdown.less -->
-                        <li class="dropdown notifications-menu">
+                        {{--  <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
                                 <span class="label label-success">10</span>
@@ -78,18 +78,18 @@
                                 </li>
                                 <li class="footer"><a href="#">View all</a></li>
                             </ul>
-                        </li>
+                        </li>  --}}
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ URL::asset('pics/steve.jpg')}}" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Admin</span>
+                            <img src="{{ URL::asset($userPicture)}}" class="user-image" alt="User Image">
+                            <span class="hidden-xs">{{$userName}}</span>
                             </a>
                             <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="{{ URL::asset('pics/steve.jpg')}}" class="img-circle" alt="User Image">
-                                <p>Administrator</p>
+                                <img src="{{ URL::asset($userPicture)}}" class="img-circle" alt="User Image">
+                                <p>{{$wholeName}}</p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
@@ -117,10 +117,10 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="{{ URL::asset('pics/steve.jpg')}}" class="img-circle" alt="User Image">
+                        <img src="{{ URL::asset($userPicture)}}" class="img-circle" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>Admin</p>
+                        <p>{{$wholeName}}</p>
                     </div>
                 </div>
                 <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -131,6 +131,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    @if($user->type==1)
                     <li class="header">MAINTENANCE</li>
                     <li id="maintenance" class="treeview">
                         <a>
@@ -174,19 +175,23 @@
                             <li id="mDiscount"><a href="{{url('/discount')}}"><i class="fa fa-tags"></i> <span>Discounts</span></a></li>
                         </ul>
                     </li>
+                    @endif
                     <li class="header">TRANSACTIONS</li>
+                    @if($user->type==1)
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
                     <li id="tReturn"><a href="{{url('/return')}}"><i class="fa fa-share"></i> <span>Return Items</span></a></li>
-                    <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
-                    {{-- <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>Estimate Repair</span></a></li> --}}
-                    <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li id="tSales"><a href="{{url('/sales')}}"><i class="fa fa-money"></i> <span>Point of Sales</span></a></li>
+                    @endif
+                    <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
+                    <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
+                    @if($user->type==1)
                     <li class="header">QUERIES & REPORTS</li>
                     <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>
                     <li id="report"><a href="{{url('/report')}}"><i class="fa fa-book"></i> <span>Reports</span></a></li>
                     <li class="header">UTILITIES</li>
                     <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Utilities</span></a></li>
+                    @endif
                 </ul>
             </section>
             <!-- /.sidebar -->

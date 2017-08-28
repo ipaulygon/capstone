@@ -9,6 +9,7 @@ use App\InspectionDetail;
 use App\InspectionTechnician;
 use App\Vehicle;
 use App\Customer;
+use App\Technician;
 use Validator;
 use Redirect;
 use Response;
@@ -55,10 +56,7 @@ class InspectController extends Controller
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
             ->get();
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
+        $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack')
             ->where('isActive',1)
             ->select('rack.*')
@@ -213,10 +211,7 @@ class InspectController extends Controller
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
             ->get();
-        $technicians = DB::table('technician')
-            ->where('isActive',1)
-            ->select('technician.*')
-            ->get();
+        $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack')
             ->where('isActive',1)
             ->select('rack.*')

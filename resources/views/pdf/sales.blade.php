@@ -205,10 +205,15 @@
             </tbody>
             <tfoot id="tFoot">
             <?php 
-                $getVat = 100 / (100+$util->vat);
-                $vatSales = $total*$getVat;
-                $vat = $vatSales*($util->vat/100);
-                $vatExempt = ($sales->discount->discount->isVatExempt ? $vat : 0);
+                if($util->isVat){
+                    $getVat = 100 / (100+$util->vat);
+                    $vatSales = $total*$getVat;
+                    $vat = $vatSales*($util->vat/100);
+                    $vatExempt = 0;
+                    if($sales->discount){
+                        $vatExempt = ($sales->discount->discount->isVatExempt ? $vat : 0);
+                    }
+                }
             ?>
             @if($util->isVat)
                 <tr>

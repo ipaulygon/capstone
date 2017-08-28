@@ -12,8 +12,8 @@ class UtilitySeeder extends Seeder
     public function run()
     {
         DB::table('utilities')->insert([
-            'image' => '/pics/steve.jpg',
-            'name' => 'iRepair',
+            'image' => '/pics/logo.png',
+            'name' => 'iAyos',
             'address' => 'Anonas St., Sta. Mesa, Manila',
             'category1' => 'Parts',
             'category2' => 'Supplies',

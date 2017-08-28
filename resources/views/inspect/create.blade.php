@@ -5,6 +5,8 @@
 @stop
 
 @section('style')
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
@@ -16,9 +18,13 @@
     @include('layouts.required')
     @include('inspect.formCreate')
     {!! Form::close() !!}
+    @include('layouts.techList')
 @stop
 
 @section('script')
+    <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/formbuilder/form-builder.min.js') }}"></script>
@@ -29,6 +35,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
+    <script src="{{ URL::asset('js/techList.js') }}"></script>
     <script src="{{ URL::asset('js/inspect.js') }}"></script>
     <script>
         $(document).ready(function (){
@@ -38,6 +45,7 @@
                     '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
                 @endforeach
             ];    
+            @if($user->type==1)
             var activeTechnicians = [
                 @if(old('technician'))
                     @foreach(old('technician') as $technician)
@@ -46,6 +54,7 @@
                 @endif
             ];
             $("#technician").val(activeTechnicians);
+            @endif
             @if(old('rackId'))
                 $("#rack").val({{old('rackId')}});
             @endif

@@ -3,11 +3,17 @@
         <div class="form-group">
             {!! Form::label('type', 'Technician(s) Assigned') !!}<span>*</span>
             <i id="infoTechnician" class="fa fa-question-circle"></i>
+            @if($user->type==1)
             <select id="technician" name="technician[]" class="select2 form-control" style="width:100%" multiple required>
                 @foreach($technicians as $technician)
                     <option value="{{$technician->id}}">{{$technician->firstName}} {{$technician->middleName}} {{$technician->lastName}}</option>
                 @endforeach
             </select>
+            @else
+            <select id="technician" name="technician[]" class="select2 form-control" style="width:100%" required>
+                <option value="{{$techUser->id}}" checked>{{$techUser->firstName}} {{$techUser->middleName}} {{$techUser->lastName}}</option>
+            </select>
+            @endif
         </div>
     </div>
     <div class="col-md-6">

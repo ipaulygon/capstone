@@ -105,6 +105,10 @@ class ReturnController extends Controller
                         'quantity' => $qtys[$key],
                     ]);
                     $inventory = Inventory::where('productId',$product)->first();
+                    if($inventory->quantity<$qtys[$key]){
+                        $request->session()->flash('error', 'Insufficient inventory resources. Check your inventory status.');
+                        return Redirect::back()->withInput();
+                    }
                     $inventory->decrement('quantity', $qtys[$key]);
                 }
                 foreach($orders as $order){
