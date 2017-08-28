@@ -22,7 +22,7 @@ class DashboardController extends Controller
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->where('p.isActive',1)
-            ->where('i.quantity','<=','p.reorder')
+            ->where('i.quantity','>=','p.reorder')
             ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
             ->get();
         return View('dashboard',compact('stocks'));

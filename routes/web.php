@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('product/type/{id}','ProductController@type');
 		Route::get('inspection/remove/{id}','InspectionController@remove');
 		Route::get('delivery/header/{id}','DeliveryController@header');
+		Route::get('delivery/headerReturn/{id}','DeliveryController@headerReturn');
 		Route::get('delivery/detail/{id}','DeliveryController@detail');
 		Route::get('return/header/{id}','ReturnController@header');
 		Route::get('return/detail/{id}','ReturnController@detail');
@@ -86,7 +87,7 @@ Route::group(['middleware' => 'auth'], function(){
 	});
 	Route::resource('inspect','InspectController');
 	Route::resource('job','JobController');
-	
+
 	//PDF
 	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');

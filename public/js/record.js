@@ -53,6 +53,7 @@ $('#adminUpdate').on('click',function(){
                     'Invalid Key' +
                     '</div>'
                 );
+                $('#updateAdmin').modal('hide');
             }else{
                 window.location.replace('/'+updateLink+'/'+update+'/edit');
             }

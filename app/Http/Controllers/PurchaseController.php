@@ -149,7 +149,7 @@ class PurchaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $purchase = PurchaseHeader::findOrFail($id);
         $suppliers = DB::table('supplier')
@@ -164,7 +164,12 @@ class PurchaseController extends Controller
             ->get();
         $date = date('m/d/Y',strtotime($purchase->dateMake));
         $created = $purchase->created_at;
-        return View('purchase.edit',compact('purchase','suppliers','products','date','created'));
+        if($request->session()->has('admin')){
+            return View('purchase.edit',compact('purchase','suppliers','products','date','created'));
+        }else{
+            $request->session()->flash('error', 'Unauthorized access.');
+            return Redirect('purchase');
+        }
     }
 
     /**

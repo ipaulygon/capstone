@@ -181,7 +181,7 @@ function oldProduct(id,qty,model,price){
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
+                '<select id="'+data.product.id+'" name="modelId[]" width="100%" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
                 '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
@@ -248,7 +248,7 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
             row = pList.row.add([
                 '<input type="hidden" name="product[]" value="'+data.product.id+'"><input type="text" data-price="'+price+'" class="form-control qty text-right" id="qty" name="qty[]" value="'+qty+'" required>',
                 data.product.brand.name+" - "+data.product.name+part+" ("+data.product.variance.name+")",
-                '<select id="'+data.product.id+'" name="modelId[]" class="select2 form-control">'+
+                '<select id="'+data.product.id+'" name="modelId[]" width="100%" class="select2 form-control">'+
                 '<option value=""></option>' +
                 '</select>',
                 '<strong><input class="price form-control text-right" name="price[]" id="price" type="text" value="'+price+'"></strong>',
@@ -273,7 +273,7 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
             // price
             final = eval($('#compute').val().replace(',','')+"+"+stack);
             $('#compute').val(final);
-            $('.qty').inputmask({ 
+            $(row).find('.qty').inputmask({ 
                 alias: "integer",
                 prefix: '',
                 allowMinus: false,

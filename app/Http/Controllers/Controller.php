@@ -27,7 +27,7 @@ class Controller extends BaseController
             if($this->user->type==1){
                 $wholeName = 'Administrator';
                 $userName = 'Admin';
-                $userPicture = 'pics/steve.jpg';
+                $userPicture = $util->image;
             }else{
                 $id = str_replace('TECH-','',$this->user->name);
                 $id = (int)$id;

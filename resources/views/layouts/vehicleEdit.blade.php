@@ -10,8 +10,14 @@
                 @endforeach
             </select>
             @else
-            <select id="technician" name="technician[]" class="select2 form-control" style="width:100%" required>
-                <option value="{{$techUser->id}}" checked>{{$techUser->firstName}} {{$techUser->middleName}} {{$techUser->lastName}}</option>
+            <select id="technician" name="technician[]" class="select2 form-control" style="width:100%" multiple required>
+                @foreach($technicians as $technician)
+                    @if($technician->id==$techUser->id)
+                        <option value="{{$technician->id}}" checked>{{$technician->firstName}} {{$technician->middleName}} {{$technician->lastName}}</option>
+                    @else
+                    <option value="{{$technician->id}}">{{$technician->firstName}} {{$technician->middleName}} {{$technician->lastName}}</option>
+                    @endif
+                @endforeach
             </select
             @endif
         </div>

@@ -32,8 +32,13 @@
                         @foreach($deliveries as $delivery)
                             <tr>
                                 <td>{{$delivery->id}}</td>
-                                <td>{{$delivery->supplier}}</td>
+                                <td>{{$delivery->supplier->name}}</td>
                                 <td class="text-right">
+                                    @if(count($delivery->return)==0)
+                                        <button onclick="updateAdmin('{{$delivery->id}}','delivery')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
+                                            <i class="glyphicon glyphicon-edit"></i>
+                                        </button>
+                                    @endif
                                     <a href="{{url('/delivery/pdf/'.$delivery->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                         <i class="glyphicon glyphicon-file"></i>
                                     </a>
@@ -42,6 +47,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                @include('layouts.updateAdmin')
             </div>
         </div>
     </div>

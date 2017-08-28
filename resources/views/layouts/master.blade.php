@@ -40,7 +40,11 @@
             <!-- Logo -->
             <a href="{{url('/dashboard')}}" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>{{$util->image}}</b></span>
+                <span class="logo-mini">
+                    <b>
+                        <img src="{{ URL::asset($util->image)}}" width:"48px" height="48px" class="img-circle" alt="User Image">
+                    </b>
+                </span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg"><b>{{$util->name}}</b></span>
             </a>

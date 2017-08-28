@@ -109,6 +109,9 @@ class ItemController extends Controller
             ->select('users.*')
             ->first();
         $message = (Hash::check($key,$user->password) ? true : false);
+        if($message){
+            $request->session()->flash('admin',true);
+        }
         return response()->json(['message'=>$message]);
     }
 }

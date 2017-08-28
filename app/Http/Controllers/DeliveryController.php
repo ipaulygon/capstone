@@ -22,11 +22,7 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $deliveries = DB::table('delivery_header as d')
-            ->join('supplier as s','s.id','d.supplierId')
-            ->where('d.isActive',1)
-            ->select('d.*','s.name as supplier')
-            ->get();
+        $deliveries = DeliveryHeader::where('isActive',1)->get();
         return View('delivery.index',compact('deliveries'));
     }
 
@@ -156,9 +152,19 @@ class DeliveryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
-        return View('layouts.404');
+        $delivery = DeliveryHeader::findOrFail($id);
+        $suppliers = DB::table('supplier')
+        ->where('isActive',1)
+        ->get();
+        $date = date('m/d/Y',strtotime($delivery->dateMake));
+        if($request->session()->has('admin')){
+            return View('delivery.edit',compact('delivery','suppliers','date'));
+        }else{
+            $request->session()->flash('error', 'Unauthorized access.');
+            return Redirect('delivery');
+        }
     }
 
     /**
@@ -170,7 +176,94 @@ class DeliveryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return View('layouts.404');
+        $rules = [
+            'supplierId' => 'required',
+            'product.*' => 'required',
+            'qty.*' => 'required|integer|between:0,10000',
+        ];
+        $messages = [
+            'unique' => ':attribute already exists.',
+            'required' => 'The :attribute field is required.',
+            'max' => 'The :attribute field must be no longer than :max characters.',
+        ];
+        $niceNames = [
+            'supplierId' => 'Supplier',
+            'product.*' => 'Product',
+            'qty.*' => 'Quantity'
+        ];
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames); 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+        else{
+            try{
+                DB::beginTransaction();
+                $delivery = DeliveryHeader::findOrFail($id);
+                $created = explode('/',$request->date); // MM[0] DD[1] YYYY[2] 
+                $finalCreated = "$created[2]-$created[0]-$created[1]";
+                $delivery->update([
+                    'supplierId' => $request->supplierId,
+                    'dateMake' => $finalCreated
+                ]);
+                $products = $request->product;
+                $qtys = $request->qty;
+                $orders = $request->order;
+                sort($orders);
+                foreach($products as $key=>$product){
+                    $inventory = Inventory::where('productId',$product)->first();
+                    $detail = DeliveryDetail::where('deliveryId',$delivery->id)->where('productId',$product)->first();
+                    $inventory->decrement('quantity',$detail->quantity);
+                    $detail->update([
+                        'deliveryId' => $delivery->id,
+                        'productId' => $product,
+                        'quantity' => $qtys[$key],
+                    ]);
+                    $inventory->increment('quantity', $qtys[$key]);
+                    if($inventory->quantity<0){
+                        $request->session()->flash('error', 'Insufficient inventory resources. Check your inventory status.');
+                        return Redirect::back()->withInput();
+                    }
+                }
+                foreach($orders as $order){
+                    foreach($products as $key=>$product){
+                        $detail = PurchaseDetail::where('purchaseId',''.$order)->where('productId',$product)->where('isActive',1)->first();
+                        $detail->update([
+                            'delivered' => 0
+                        ]);
+                        if(!empty($detail)){
+                            $qty = $detail->quantity;
+                            $delivered = $detail->delivered;
+                            if($qty != $delivered){
+                                while($qty!=$delivered && $qtys[$key]!=0){
+                                    $delivered++;
+                                    $qtys[$key]--;
+                                }
+                                $detail->update([
+                                    'delivered' => $delivered
+                                ]);
+                            }
+                        }
+                    }
+                    $details = PurchaseDetail::where('purchaseId',''.$order)->where('isActive',1)->get();
+                    foreach($details as $detail){
+                        if($detail->quantity!=$detail->delivered){
+                            $delivery = false;
+                        }
+                    }
+                    if($delivery){
+                        PurchaseHeader::where('id',''.$order)->update(['isDelivered'=>1]);
+                    }
+                }
+                DB::commit();
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollBack();
+                $errMess = $e->getMessage();
+                return Redirect::back()->withErrors($errMess);
+            }
+            $request->session()->flash('success', 'Successfully updated.');
+            return Redirect('delivery');
+        }
     }
 
     /**
@@ -189,6 +282,16 @@ class DeliveryController extends Controller
         $purchases = DB::table('purchase_header as p')
             ->where('isFinalize',1)
             ->where('isDelivered',0)
+            ->where('supplierId',$id)
+            ->select('p.*')
+            ->get();
+        return response()->json(['purchases'=>$purchases]);
+    }
+    
+    public function headerReturn($id)
+    {
+        $purchases = DB::table('purchase_header as p')
+            ->where('isFinalize',1)
             ->where('supplierId',$id)
             ->select('p.*')
             ->get();
