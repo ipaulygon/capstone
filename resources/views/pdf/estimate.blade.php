@@ -62,7 +62,7 @@
     </style>
     <body>
         <div class="center header">
-            {{$util->name}}
+            {{$util->name}}<img src="{{$util->image}}" width="50px" height="50px">
         </div>
         <div style="float:right">
             {{date('F j, Y', strtotime($estimate->created_at))}}<br>
@@ -296,9 +296,8 @@
                 STORE MANAGER: ______________________<br>
                 ADMIN OFFICER: ______________________<br> 
             </div>
-            <div style="float:right" class="col-md-6">
-                <br>
-                CUSTOMER'S SIGNATURE: ___________________<br>
+            <div style="float:right;margin-top:-30px!important" class="col-md-6">
+                CUSTOMER'S SIGNATURE: <img width="250" src="{{$picPath}}"><br>
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
             </div>
             <br><br>

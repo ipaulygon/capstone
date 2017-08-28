@@ -25,7 +25,7 @@
                         <tr>
                             <th>Vehicle</th>
                             <th>Customer</th>
-                            <th>Assigned Technician</th>
+                            <th>Remarks</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>

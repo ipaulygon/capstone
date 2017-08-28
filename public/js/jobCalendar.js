@@ -151,13 +151,23 @@ function clickEvent(id){
     });
     $('#detailBox').removeClass('hidden');
     $('#detailUpdate').attr("href","/job/"+id+"/edit");
-    $('#detailEstimate').attr("href","/estimate/pdf/"+id);
-    $('#detailPDF').attr("href","/job/pdf/"+id);
+    $('#detailEstimate').attr("data-id",id);
+    $('#detailEstimate').attr("data-type",'estimate');
+    $('#detailPDF').attr("data-id",id);
+    $('#detailPDF').attr("data-type",'job');
     $('#detailFinalize').attr("data-id",id);
     $('#detailProcess').attr("data-id",id);
     $('#detailRelease').attr("data-id",id);
     $('#detailView').attr("data-id",id);
 }
+
+$('#detailEstimate').click(function(){
+    signatureModal($(this).attr('data-id'),$(this).attr('data-type'));
+});
+
+$('#detailPDF').click(function(){
+    signatureModal($(this).attr('data-id'),$(this).attr('data-type'));
+});
 
 $('#detailFinalize').click(function(){
     finalizeModal($(this).attr('data-id'));

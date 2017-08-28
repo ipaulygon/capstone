@@ -32,7 +32,7 @@ class Controller extends BaseController
                 $id = str_replace('TECH-','',$this->user->name);
                 $id = (int)$id;
                 $techUser = Technician::find($id);
-                $wholeName = $techUser->firstName.' '.$techUser->middleName.' '.$techUser->lastName;
+                $wholeName = $techUser->firstName.' '.$techUser->lastName;
                 $userName = $this->user->name;
                 $userPicture = $techUser->image;
                 View::share('techUser', $techUser);

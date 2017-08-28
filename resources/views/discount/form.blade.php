@@ -40,13 +40,17 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            @if($util->isVat)
+            <div class="form-group hidden" id="vatForm">
                 {!! Form::label('vat', 'VAT Terms') !!}<span>*</span><br>
                 <label class="checkbox-inline">
                     <input type="checkbox" class="vat" name="hasVatExempt" value="1" disabled> VAT Exempted
                     <input type="hidden" id="isVatExempt" name="isVatExempt" value="1">
                 </label>
             </div>
+            @else
+                <input type="hidden" id="isVatExempt" name="isVatExempt" value="0">
+            @endif
         </div>
         <div class="box-footer">
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}

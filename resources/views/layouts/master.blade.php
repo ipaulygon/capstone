@@ -29,7 +29,7 @@
         var type1 = "{{$util->type1}}";
         var type2 = "{{$util->type2}}";
         var maxValue = {{$util->max}};
-        var backlog = {{$util->backlog}};
+        var backlog = {{$util->backlog}}-1;
         var isVat = {{$util->isVat}};
         var vatRate = {{$util->vat}};
     </script>
@@ -42,7 +42,7 @@
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">
                     <b>
-                        <img src="{{ URL::asset($util->image)}}" width:"48px" height="48px" class="img-circle" alt="User Image">
+                        <img src="{{ URL::asset($util->image)}}" width:"48px" height="48px" style="margin-top: -5px!important" class="img-circle" alt="User Image">
                     </b>
                 </span>
                 <!-- logo for regular state and mobile devices -->

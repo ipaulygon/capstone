@@ -60,9 +60,6 @@
                                 </td>
                                 <td class="text-right">{{number_format($sale->total,2)}}</td>
                                 <td class="text-right">
-                                    <button onclick="updateAdmin('{{$sale->id}}','sales')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
-                                        <i class="glyphicon glyphicon-edit"></i>
-                                    </button>
                                     <a href="{{url('/sales/pdf/'.$sale->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                         <i class="glyphicon glyphicon-file"></i>
                                     </a>

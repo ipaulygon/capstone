@@ -63,12 +63,12 @@
                                     <label>Rack:</label> <span id="detailRack"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <a id="detailEstimate" href="" target="_blank" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
+                                    <button id="detailEstimate" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
                                         <i class="glyphicon glyphicon-list-alt"></i>
-                                    </a>
-                                    <a id="detailPDF" href="" target="_blank" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                    </button>
+                                    <button id="detailPDF" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                         <i class="glyphicon glyphicon-file"></i>
-                                    </a>
+                                    </button>
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
@@ -280,9 +280,8 @@
                                     <div class="collapse" id="listPayments">
                                         <label>Total Price: </label>
                                         <strong>{!! Form::input('text','totalPrice',0,[
-                                            'class' => 'prices',
+                                            'class' => 'prices no-border-input',
                                             'id' => 'totalPrice',
-                                            'style' => 'border: none!important;background: transparent!important',
                                             'readonly']) 
                                         !!}</strong>
                                         <div class="dataTable_wrapper">
@@ -385,9 +384,8 @@
                                             <div class="collapse" id="viewPayments">
                                                 <label>Total Price: </label>
                                                 <strong>{!! Form::input('text','viewPrice',0,[
-                                                    'class' => 'prices',
+                                                    'class' => 'prices no-border-input',
                                                     'id' => 'viewPrice',
-                                                    'style' => 'border: none!important;background: transparent!important',
                                                     'readonly']) 
                                                 !!}</strong>
                                                 <div class="dataTable_wrapper">
@@ -487,6 +485,7 @@
             </div>
             @include('layouts.techList')
             @include('layouts.inventoryList')
+            @include('layouts.signatureModal');
         </div>
     </div>
 @stop
@@ -504,6 +503,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/signature/jSignature.min.js') }}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
     <script src="{{ URL::asset('js/techList.js') }}"></script>

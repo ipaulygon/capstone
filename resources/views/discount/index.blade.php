@@ -34,8 +34,11 @@
                             <tbody>
                                 @foreach($discounts as $discount)
                                     <tr>
+                                        <?php
+                                            $type = ($discount->isWhole ? 'Whole' : 'Individual');
+                                        ?>
                                         <td>{{$discount->name}} - {{$discount->rate}} %</td>
-                                        <td>{{$discount->type}}</td>
+                                        <td>{{$type}}</td>
                                         <td>
                                             @if($discount->product->isNotEmpty())
                                                 <b>Products:</b>

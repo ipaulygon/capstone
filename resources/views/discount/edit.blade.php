@@ -37,15 +37,18 @@
         $(".select2").select2();
         $(".type[value={{$discount->isWhole}}]").prop('checked',true);
         @if($discount->isWhole)
-            $(".vat").prop('disabled',false);
+            if(isVat){
+                $('#vatForm').removeClass('hidden');
+                $(".vat").prop('disabled',false);
+                @if($discount->isVatExempt)
+                    $(".vat").prop('checked',true);
+                    $("#isVatExempt").val(1);
+                @endif
+            }
             $('#product').val('');
             $('#service').val('');
             $('.select2').select2();
             $(".select2").prop('disabled',true);
-        @endif
-        @if($discount->isVatExempt)
-            $(".vat").prop('checked',true);
-            $("#isVatExempt").val(1);
         @endif
         $('#type1').on('ifChecked ifUnchecked', function(event){
             if(event.type=="ifChecked"){
@@ -53,14 +56,20 @@
                 $('#service').val('');
                 $('.select2').select2();
                 $(".select2").prop('disabled',true);
-                $(".vat").prop('disabled',false);
-                $(".vat").prop('checked',false);
-                $("#isVatExempt").val(0);
+                if(isVat){
+                    $('#vatForm').removeClass('hidden');
+                    $(".vat").prop('disabled',false);
+                    $(".vat").prop('checked',false);
+                    $("#isVatExempt").val(0);
+                }
             }else{
                 $(".select2").prop('disabled',false);
-                $(".vat").prop('disabled',true);
-                $(".vat").prop('checked',false);
-                $("#isVatExempt").val(0);
+                if(isVat){
+                    $('#vatForm').addClass('hidden');
+                    $(".vat").prop('disabled',true);
+                    $(".vat").prop('checked',false);
+                    $("#isVatExempt").val(0);
+                }
             }
         });
         $('.vat').change(function(){

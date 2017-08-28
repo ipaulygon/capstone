@@ -50,14 +50,20 @@
                 $('#service').val('');
                 $('.select2').select2();
                 $(".select2").prop('disabled',true);
-                $(".vat").prop('disabled',false);
-                $(".vat").prop('checked',false);
-                $("#isVatExempt").val(0);
+                if(isVat){
+                    $('#vatForm').removeClass('hidden');
+                    $(".vat").prop('disabled',false);
+                    $(".vat").prop('checked',false);
+                    $("#isVatExempt").val(0);
+                }
             }else{
                 $(".select2").prop('disabled',false);
-                $(".vat").prop('disabled',true);
-                $(".vat").prop('checked',false);
-                $("#isVatExempt").val(0);
+                if(isVat){
+                    $('#vatForm').addClass('hidden');
+                    $(".vat").prop('disabled',true);
+                    $(".vat").prop('checked',false);
+                    $("#isVatExempt").val(0);
+                }
             }
         });
         $('.vat').change(function(){

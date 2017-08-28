@@ -1,3 +1,5 @@
+var signature = null;
+var signatureLink = null;
 $('#email').inputmask("email");
 $("#mileage").inputmask({ 
     alias: "decimal",
@@ -7,6 +9,32 @@ $("#mileage").inputmask({
     autoGroup: true,
     min: 0,
     max: 1000000
+});
+function signatureModal(id,type){
+    signature = id;
+    signatureLink = type;
+    $("#signatureCanvas").jSignature();
+    $('#signatureCanvas').find('canvas').attr('height','143');
+    $('#signatureCanvas').find('canvas').css('height','143px');
+    $('#signatureCanvas').find('canvas').attr('width','570');
+    $("#signatureCanvas").jSignature('reset');
+    $('#signatureModal').modal('show');
+}
+
+$(document).on('click','#signatureReset',function(){
+    $("#signatureCanvas").jSignature('reset');
+});
+
+$('#signature').on('click', function (){
+    pic = $('.jSignature').get(0).toDataURL();
+    $.ajax({
+        type: 'POST',
+        url: '/signature',
+        data: {pic:pic},
+        success:function(data){
+            window.location.replace('/'+signatureLink+'/pdf/'+signature);
+        }
+    })
 });
 
 $(document).on('focus','#contact',function(){

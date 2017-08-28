@@ -7,7 +7,7 @@
             <div class="col-md-row">
                 <div class="col-md-4">
                     <div id="append" class="form-group">
-                        {!! Form::label('date', 'Date') !!}    
+                        {!! Form::label('date', 'Date') !!}<span>*</span>   
                         <strong>{!! Form::input('text','date',$date,[
                                 'class' => 'form-control',
                                 'id' => 'date',
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        {!! Form::label('supplierId', 'Supplier') !!}
+                        {!! Form::label('supplierId', 'Supplier') !!}<span>*</span>
                         <select id="supp" name="supplierId" class="select2 form-control" required>
                             <option value=""></option>
                             @foreach($suppliers as $supplier)

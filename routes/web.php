@@ -91,6 +91,7 @@ Route::group(['middleware' => 'auth'], function(){
 	//PDF
 	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
+	Route::post('signature','PdfController@signature');
 	Route::get('job/pdf/{id}','PdfController@job');
 	Route::get('job/receipt/pdf/{id}','PdfController@jobReceipt');
 
