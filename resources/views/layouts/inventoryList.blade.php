@@ -27,7 +27,7 @@
                             ?>
                             <tr>
                                 <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
-                                <td class="text-right"><input type="text" class="no-border-input inventory" id="inventory{{$product->id}}" value="{{$product->quantity}}"></td>
+                                <td class="text-right"><input type="text" class="no-border-input inventory" id="inventory{{$product->id}}" value="{{$product->quantity}}" readonly></td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -19,6 +19,7 @@ class CreateDeliveryDetailTable extends Migration
             $table->string('deliveryId', 50);
             $table->unsignedInteger('productId');
             $table->integer('quantity');
+            $table->integer('returned')->default(0);
             $table->boolean('isActive')->default(1);
             $table->timestamps();
             $table->foreign('deliveryId')

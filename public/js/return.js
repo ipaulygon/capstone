@@ -149,7 +149,7 @@ $(document).on('change','#delivery',function(){
         success:function(data){
             $.each(data.products,function(key,value){
                 if(value.productId==$('#id'+value.productId).val()){
-                    balance = value.quantity;
+                    balance = value.quantity - value.returned;
                     stack = eval($('#qo'+value.productId).val()+"+"+balance);
                     $('#qo'+value.productId).val(stack);
                     $('#rowDesc'+value.productId).append(
@@ -165,7 +165,7 @@ $(document).on('change','#delivery',function(){
                     }else{
                         part = '';
                     }
-                    balance = value.quantity;
+                    balance = value.quantity - value.returned;
                     row = pList.row.add([
                         '<strong><input class="qo no-border-input" id="qo'+value.productId+'" type="text" value="'+balance+'" readonly> pcs.</strong>',
                         value.brand+" - "+value.product+part+" ("+value.variance+")",

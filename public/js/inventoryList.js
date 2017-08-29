@@ -9,3 +9,9 @@ var iList = $('#inventoryList').DataTable({
 $('#infoInventory').click(function(){
     $('#inventoryModal').modal('show');
 });
+
+$('.inventory').inputmask({ 
+    alias: "integer",
+    prefix: '',
+    allowMinus: false,
+});

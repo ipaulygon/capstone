@@ -104,6 +104,8 @@ class ReturnController extends Controller
                         'deliveryId' => $deliverys[$key],
                         'quantity' => $qtys[$key],
                     ]);
+                    $deliveryDetail = DeliveryDetail::where('productId',$product)->where('deliveryId',$deliverys[$key])->first();
+                    $deliveryDetail->increment('returned',$qtys[$key]);
                     $inventory = Inventory::where('productId',$product)->first();
                     if($inventory->quantity<$qtys[$key]){
                         $request->session()->flash('error', 'Insufficient inventory resources. Check your inventory status.');

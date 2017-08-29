@@ -82,7 +82,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $part = ProductType::findOrFail($request->typeId)->first()->category;
-        if($part=='Supplies'){
+        if($part=='category2'){
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)],
                 'description' => 'max:50',

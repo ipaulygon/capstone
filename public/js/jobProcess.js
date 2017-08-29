@@ -320,9 +320,10 @@ $(document).on('click','.edit-payment', function(){
         allowMinus: false,
         autoGroup: true,
         min: 0,
-        max: $('#inputPayment').attr('data-qty')
+        max: $('#inputPayment').attr('data-qty')+lessPayment
     });
     $('.edit-payment').addClass('disabled');
+    $('.addPayment').addClass('hidden');
 });
 
 $(document).on('click','.update-payment', function(){
@@ -382,6 +383,7 @@ $(document).on('click','.update-payment', function(){
     setTimeout(function (){
         $('#alert').alert('close');
     },2000);
+    $('.addPayment').removeClass('hidden');
 });
 
 $(document).on('click','#savePayment', function(){
@@ -399,7 +401,7 @@ $(document).on('click','#savePayment', function(){
     }else{
         passed = true;
     }
-    if(payment!="0.00" && passed && payment<=balance){
+    if(payment!="0.00" && passed && Number(payment)<=Number(balance)){
         balance = eval(balance+"-"+payment);
         $('#balance').val(balance);
         $("#balance").inputmask({ 
@@ -435,7 +437,7 @@ $(document).on('click','#savePayment', function(){
                 );
                 method = (method==1 ? "Credit Card" : "Cash");
                 row = payList.row.add([
-                    '<input class="prices" value="'+payment+'" style="border:none!important;background: transparent!important" readonly>',
+                    '<input class="form-control prices no-border-input" value="'+payment+'" id="payment'+data.payment.id+'" readonly>',
                     method,
                     data.payment.created_at,
                     '<button type="button" data-id="'+data.payment.id+'" class="btn btn-warning btn-sm edit-payment" data-toggle="tooltip" data-placement="top" title="Edit Payment">'+
@@ -446,10 +448,11 @@ $(document).on('click','#savePayment', function(){
                     '</a>'
                 ]).draw().node();
                 $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(2).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
                 $(".prices").inputmask({ 
                     alias: "currency",
-                    prefix: 'PhP ',
+                    prefix: '',
                     allowMinus: false,
                     autoGroup: true,
                 });
