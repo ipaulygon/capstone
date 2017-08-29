@@ -64,13 +64,13 @@ class ProductController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasAuto',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         return View('product.create',compact('products','types','brands','variances','autos','manuals'));
     }
@@ -195,16 +195,16 @@ class ProductController extends Controller
         $brands = TypeBrand::where('typeId',$product->typeId)->get();
         $variances = TypeVariance::where('typeId',$product->typeId)->get();
         $autos = DB::table('vehicle_model as vd')
-            ->join('vehicle_make as vk','vd.makeId','vk.id')
-            ->select('vd.*','vk.name as make')
-            ->where('hasAuto',1)
-            ->where('isActive',1)
-            ->get();
+        ->join('vehicle_make as vk','vd.makeId','vk.id')
+        ->select('vd.*','vk.name as make')
+        ->where('hasAuto',1)
+        ->where('vd.isActive',1)
+        ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         return View('product.edit',compact('product','products','types','brands','variances','autos','manuals'));
     }

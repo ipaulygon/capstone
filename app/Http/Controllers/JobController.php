@@ -46,13 +46,13 @@ class JobController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasAuto',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack as r')
@@ -303,13 +303,13 @@ class JobController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasAuto',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
-            ->where('isActive',1)
+            ->where('vd.isActive',1)
             ->get();
         $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack as r')
