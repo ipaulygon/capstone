@@ -43,6 +43,7 @@
                                                 $date = date_create($technician->birthdate);
                                                 $date = date_format($date,"F d,Y");
                                             ?>
+                                            <li>ID: {{'TECH-'.str_pad($technician->id,4,'0',STR_PAD_LEFT)}}</li>
                                             <li>Birthdate: {{$date}}</li>
                                             <li>Contact: {{$technician->contact}}</li>
                                             <li>Address: {{$technician->street}} {{$technician->brgy}} {{$technician->city}}</li>

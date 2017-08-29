@@ -7,6 +7,11 @@ use Redirect;
 use Session;
 use DB;
 use Illuminate\Validation\Rule;
+
+use App\JobHeader;
+use App\User;
+use App\Technician;
+use Auth;
 class DashboardController extends Controller
 {
     /**
@@ -16,16 +21,26 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $stocks = DB::table('inventory as i')
-            ->join('product as p','p.id','i.productId')
-            ->join('product_type as pt','pt.id','p.typeId')
-            ->join('product_brand as pb','pb.id','p.brandId')
-            ->join('product_variance as pv','pv.id','p.varianceId')
-            ->where('p.isActive',1)
-            ->where('i.quantity','>=','p.reorder')
-            ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
-            ->get();
-        return View('dashboard',compact('stocks'));
+        $user = User::find(Auth::id());
+        if($user->type==1){
+            $stocks = DB::table('inventory as i')
+                ->join('product as p','p.id','i.productId')
+                ->join('product_type as pt','pt.id','p.typeId')
+                ->join('product_brand as pb','pb.id','p.brandId')
+                ->join('product_variance as pv','pv.id','p.varianceId')
+                ->where('p.isActive',1)
+                ->where('i.quantity','>=','p.reorder')
+                ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+                ->get();
+            $jobs = JobHeader::get();
+            return View('dashboard',compact('stocks','jobs'));
+        }else{
+            $id = str_replace('TECH-','',$user->name);
+            $id = (int)$id;
+            $techUser = Technician::find($id);
+            $jobs = JobHeader::get();
+            return View('dashboard',compact('jobs'));
+        }
     }
 
     /**

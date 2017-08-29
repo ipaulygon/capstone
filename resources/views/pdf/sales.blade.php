@@ -47,7 +47,7 @@
         tr:nth-child(even) {
             background-color: #e6e6e6
         }
-        th{
+        thead th{
             background-color: black;
             color: white;
         }
@@ -261,9 +261,7 @@
                 ADMIN OFFICER: ______________________<br> 
             </div>
             <div style="float:right" class="col-md-6">
-                <br>
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
-                CUSTOMER'S SIGNATURE: ___________________<br>
             </div>
             <br><br>
             <div class="footerd">Printed by: Admin {{$date}}</div>

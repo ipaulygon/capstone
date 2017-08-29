@@ -46,7 +46,7 @@
         tr:nth-child(even) {
             background-color: #e6e6e6
         }
-        th{
+        thead th{
             background-color: black;
             color: white;
         }
@@ -59,6 +59,9 @@
         }
     </style>
     <body>
+        <div style="float:left">
+            <img src="{{$util->image}}" width="50px" height="50px">
+        </div>
         <div class="center header">
             {{$util->name}}
         </div>

@@ -65,9 +65,11 @@
                                                 <a href="{{url('/purchase/pdf/'.$purchase->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                                     <i class="glyphicon glyphicon-file"></i>
                                                 </a>
+                                                @if(!$purchase->isDelivered)
                                                 <button onclick="updateAdmin('{{$purchase->id}}','purchase')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                                     <i class="glyphicon glyphicon-edit"></i>
                                                 </button>
+                                                @endif
                                                 <button onclick="deactivateAdmin('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
                                                     <i class="glyphicon glyphicon-trash"></i>
                                                 </button>

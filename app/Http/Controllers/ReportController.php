@@ -23,6 +23,12 @@ class ReportController extends Controller
             ->get();
         // $results = DB::select( DB::raw("select * from product join inventory on product.id = inventory.productId JOIN product_type on product.typeId = product_type.id JOIN product_brand on product.brandId = product_brand.id JOIN product_variance on product.varianceId = product_variance.id") );
 
+        $inventory  = DB::select(DB::raw("select delivery_detail.created_at as datecreated from return_delivery join return_header on return_delivery.returnId = return_header.id join supplier on return_header.supplierId = supplier.id join delivery_header on delivery_header.supplierId = supplier.id join delivery_detail on delivery_detail.deliveryId = delivery_header.id join product on product.id = delivery_detail.productId join product_type on product_type.id = product.typeId join product_brand on product_brand.id = product.brandId join product_variance on product_variance.id = product.varianceId
+            UNION ALL
+            select sales_header.created_at as salescreated from sales_header join customer on customer.id = sales_header.customerId join sales_product on sales_product.salesId = sales_header.id join product on sales_product.id = product.id join product_type on product_type.id = product.typeId join product_brand on product_brand.id = product.brandId join product_variance on product_variance.id = product.varianceId
+            UNION ALL
+            Select job_header.total from job_header join customer on job_header.customerId = customer.id"));
+
         $services = DB::table('job_header as j')
             ->join('customer as c','c.id','j.customerId')
             ->join('job_service as js','j.id','js.jobId')
@@ -30,6 +36,15 @@ class ReportController extends Controller
             ->join('service_category as sc','sc.id','s.categoryId')
             ->select('j.*','j.id as jobId','c.*','s.*','s.name as name','sc.name as category','s.size as size', 's.name as service')
             ->get();
+
+        $pos = DB::table('customer as c')
+            ->join('sales_header as sh','c.id','sh.customerId')
+            ->join('sales_product as sp','sp.salesId','sh.id')
+            ->select('c.*','sh.id as invoId','sp.*','sh.*')
+            ->get();
+
+        $return = DB::select(DB::raw("SELECT supplier.*, return_detail.quantity as qtyre , product.*,return_header.id as id, return_header.*, product.name as product, product_brand.name as brand, product_type.name as type, product_variance.name as variance, supplier.name as supplier FROM supplier join return_header on supplier.id = return_header.supplierId join return_detail on return_detail.returnId = return_header.id join product on product.id = return_detail.productId join product_type on product_type.id = product.typeId join product_brand on product_brand.id = product.brandId join product_variance on product_variance.id = product.varianceId"));
+
 
         $jobs = DB::table('job_header as j')
             ->join('customer as c','c.id','j.customerId')
@@ -61,7 +76,7 @@ class ReportController extends Controller
             Select *, job_header.id as jobId from job_header JOIN customer on job_header.customerId = customer.id 
             WHERE job_header.total <> job_header.paid"));
 
-        return view('report.index',compact('data','services','jobs','products','customer'));
+        return view('report.index',compact('data','services','jobs','products','customer','pos','return','inventory'));
        
     }
 
@@ -151,7 +166,7 @@ class ReportController extends Controller
             ->join('product_brand as pb','pb.id','p.brandId')
             ->join('product_variance as pv','pv.id','p.varianceId')
             ->join('inventory as i','p.id','i.productId')
-            ->where('i.created_at','<=',$finalEndDate)
+            ->where('i.updated_at','>=',$finalEndDate)
             ->select('p.*','pt.name as type','pb.name as brand','pv.name as variance','i.quantity as quantity','p.name as name')
             ->get();
              return response()->json(['data'=>$data]);
