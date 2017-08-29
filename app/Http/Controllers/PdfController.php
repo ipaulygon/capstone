@@ -132,7 +132,7 @@ class PdfController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         $estId = 'ESTIMATE'.str_pad($estimate->id, 5, '0', STR_PAD_LEFT); 
         $estimate = EstimateHeader::findOrFail($estimate->id);

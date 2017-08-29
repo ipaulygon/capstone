@@ -50,11 +50,13 @@ class InspectController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasAuto',1)
+            ->where('isActive',1)
             ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
+            ->where('isActive',1)
             ->get();
         $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack')
@@ -171,7 +173,7 @@ class InspectController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully added.');  
             return Redirect('inspect');
@@ -205,11 +207,13 @@ class InspectController extends Controller
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasAuto',1)
+            ->where('isActive',1)
             ->get();
         $manuals = DB::table('vehicle_model as vd')
             ->join('vehicle_make as vk','vd.makeId','vk.id')
             ->select('vd.*','vk.name as make')
             ->where('hasManual',1)
+            ->where('isActive',1)
             ->get();
         $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack')
@@ -338,7 +342,7 @@ class InspectController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect('inspect');

@@ -92,7 +92,7 @@ class ProductVarianceController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully added.');  
             return Redirect('variance');
@@ -183,7 +183,7 @@ class ProductVarianceController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect('variance');
@@ -217,7 +217,7 @@ class ProductVarianceController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         return Redirect('variance');
     }
@@ -234,7 +234,7 @@ class ProductVarianceController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         $request->session()->flash('success', 'Successfully deactivated.'); 
         return Redirect('variance');
@@ -243,7 +243,7 @@ class ProductVarianceController extends Controller
     public function category($id)
     {
         $units = [];
-        $units = ProductUnit::where('category',$id)->get();
+        $units = ProductUnit::where('category',$id)->where('isActive',1)->get()->sortBy('name');
         return response()->json(['units'=>$units]);
     }
 }

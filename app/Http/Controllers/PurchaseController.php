@@ -125,7 +125,7 @@ class PurchaseController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully added.');
             return Redirect('purchase');
@@ -164,7 +164,7 @@ class PurchaseController extends Controller
             ->get();
         $date = date('m/d/Y',strtotime($purchase->dateMake));
         $created = $purchase->created_at;
-        if($request->session()->has('admin')){
+        if($request->session()->has('admin') || !$purchase->isFinalize){
             return View('purchase.edit',compact('purchase','suppliers','products','date','created'));
         }else{
             $request->session()->flash('error', 'Unauthorized access.');
@@ -239,7 +239,7 @@ class PurchaseController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully updated.');
             return Redirect('purchase');
@@ -274,7 +274,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         return Redirect('purchase');
     }
@@ -291,7 +291,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('purchase');
@@ -308,7 +308,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors($errMess);
+            return Redirect::back()->withErrors("Oops! This has not been developed yet");
         }
         $request->session()->flash('success', 'Successfully finalized.');  
         return Redirect('purchase');

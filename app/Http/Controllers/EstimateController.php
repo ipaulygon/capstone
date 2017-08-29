@@ -237,7 +237,7 @@ class EstimateController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully added.');  
             return Redirect::back();
@@ -462,7 +462,7 @@ class EstimateController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors($errMess);
+                return Redirect::back()->withErrors("Oops! This has not been developed yet");
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect::back();
