@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Signature</h4>
             </div>
             <div class="modal-body">
-                <center>Please draw your signature</center><br>
+                <center>Customer's Signature</center><br>
                 <div id="signatureCanvas"></div>
             </div>
             <div class="modal-footer">

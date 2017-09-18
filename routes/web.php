@@ -86,11 +86,14 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::patch('purchase/reactivate/{id}','PurchaseController@reactivate');
 	});
 	Route::resource('inspect','InspectController');
+	Route::resource('estimate','EstimateController',['only' => [
+		'index']]);
 	Route::resource('job','JobController');
 
 	//PDF
 	Route::get('inspect/pdf/{id}','PdfController@inspect');
 	Route::get('estimate/pdf/{id}','PdfController@estimate');
+	Route::get('estimateView/pdf/{id}','PdfController@estimateView');
 	Route::post('signature','PdfController@signature');
 	Route::get('job/pdf/{id}','PdfController@job');
 	Route::get('job/receipt/pdf/{id}','PdfController@jobReceipt');

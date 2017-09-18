@@ -134,10 +134,8 @@ $(document).on('keyup', '#qty', function (){
     max = $(this).attr('data-max');
     if(qty=='' || qty==null){
         qty = min;
-        $(this).val(min);
     }else if(Number(qty)>=Number(max)){
         qty = max;
-        $(this).val(max);
         $(this).popover({
             trigger: 'manual',
             content: function(){
@@ -219,7 +217,7 @@ $(document).on('focusin','#qty',function(){
     });
 });
 
-$(document).on('focusout','#qty',function(){
+$(document).on('change','#qty',function(){
     $(this).popover('hide');
     component = $(this);
     qty = $(this).val().replace(',','');

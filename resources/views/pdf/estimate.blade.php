@@ -251,7 +251,11 @@
                 $getVat = 100 / (100+$util->vat);
                 $vatSales = $total*$getVat;
                 $vat = $vatSales*($util->vat/100);
-                $vatExempt = ($estimate->discount->discount->isVatExempt ? $vat : 0);
+                if(count($estimate->discount) > 0){
+                    $vatExempt = ($estimate->discount->discount->isVatExempt ? $vat : 0);
+                }else{
+                    $vatExempt = 0;
+                }
             ?>
             @if($util->isVat)
                 <tr>
@@ -266,12 +270,14 @@
                     <th class="text-right">{{$util->vat}} %</th>
                     <th class="text-right">{{number_format($vat,2)}}</th>
                 </tr>
+                @if($vatExempt!=0)
                 <tr>
                     <th></th>
                     <th>VAT Exemption</th>
                     <th></th>
                     <th class="text-right">-{{number_format($vatExempt,2)}}</th>
                 </tr>
+                @endif
             @endif
             @if($estimate->discount)
                 <?php

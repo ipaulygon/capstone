@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Rapide | @yield('title')</title>
+    <title>{{$util->name}} | @yield('title')</title>
 
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="{{ URL::asset('assets/style.css') }}"> --}}

@@ -253,7 +253,7 @@
                     $vatSales = $total*$getVat;
                     $vat = $vatSales*($util->vat/100);
                     $vatExempt = 0;
-                    if($job->discount){
+                    if(count($job->discount)>0){
                         $vatExempt = ($job->discount->discount->isVatExempt ? $vat : 0);
                     }
                 }
@@ -271,12 +271,14 @@
                     <th class="text-right">{{$util->vat}} %</th>
                     <th class="text-right">{{number_format($vat,2)}}</th>
                 </tr>
+                @if($vatExempt!=0)
                 <tr>
                     <th></th>
                     <th>VAT Exemption</th>
                     <th></th>
                     <th class="text-right">-{{number_format($vatExempt,2)}}</th>
                 </tr>
+                @endif
             @endif
             @if($job->discount)
                 <?php

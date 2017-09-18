@@ -98,20 +98,22 @@ class ReturnController extends Controller
                 $orders = $request->order;
                 sort($orders);
                 foreach($products as $key=>$product){
-                    ReturnDetail::create([
-                        'returnId' => $return->id,
-                        'productId' => $product,
-                        'deliveryId' => $deliverys[$key],
-                        'quantity' => $qtys[$key],
-                    ]);
-                    $deliveryDetail = DeliveryDetail::where('productId',$product)->where('deliveryId',$deliverys[$key])->first();
-                    $deliveryDetail->increment('returned',$qtys[$key]);
-                    $inventory = Inventory::where('productId',$product)->first();
-                    if($inventory->quantity<$qtys[$key]){
-                        $request->session()->flash('error', 'Insufficient inventory resources. Check your inventory status.');
-                        return Redirect::back()->withInput();
+                    if($qtys[$key]){
+                        ReturnDetail::create([
+                            'returnId' => $return->id,
+                            'productId' => $product,
+                            'deliveryId' => $deliverys[$key],
+                            'quantity' => $qtys[$key],
+                        ]);
+                        $deliveryDetail = DeliveryDetail::where('productId',$product)->where('deliveryId',$deliverys[$key])->first();
+                        $deliveryDetail->increment('returned',$qtys[$key]);
+                        $inventory = Inventory::where('productId',$product)->first();
+                        if($inventory->quantity<$qtys[$key]){
+                            $request->session()->flash('error', 'Insufficient inventory resources. Check your inventory status.');
+                            return Redirect::back()->withInput();
+                        }
+                        $inventory->decrement('quantity', $qtys[$key]);
                     }
-                    $inventory->decrement('quantity', $qtys[$key]);
                 }
                 foreach($orders as $order){
                     $ordered = DeliveryOrder::where('deliveryId',$order)->get();
@@ -154,7 +156,7 @@ class ReturnController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
             return Redirect('return');

@@ -95,6 +95,7 @@
             </thead>
             <tbody>
                 @foreach($delivery->detail as $product)
+                @if($product->quantity!=0)
                 <tr>
                     <?php
                         if($product->product->isOriginal!=null){
@@ -106,6 +107,7 @@
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                 </tr>
+                @else
                 @endforeach
             </tbody>
         </table>

@@ -85,13 +85,15 @@ class DeliveryController extends Controller
                 $orders = $request->order;
                 sort($orders);
                 foreach($products as $key=>$product){
-                    DeliveryDetail::create([
-                        'deliveryId' => $delivery->id,
-                        'productId' => $product,
-                        'quantity' => $qtys[$key],
-                    ]);
-                    $inventory = Inventory::where('productId',$product)->first();
-                    $inventory->increment('quantity', $qtys[$key]);
+                    if($qtys[$key]!=0){
+                        DeliveryDetail::create([
+                            'deliveryId' => $delivery->id,
+                            'productId' => $product,
+                            'quantity' => $qtys[$key],
+                        ]);
+                        $inventory = Inventory::where('productId',$product)->first();
+                        $inventory->increment('quantity', $qtys[$key]);
+                    }
                 }
                 foreach($orders as $order){
                     DeliveryOrder::create([
@@ -99,18 +101,20 @@ class DeliveryController extends Controller
                         'deliveryId' => $id
                     ]);
                     foreach($products as $key=>$product){
-                        $detail = PurchaseDetail::where('purchaseId',''.$order)->where('productId',$product)->where('isActive',1)->first();
-                        if(!empty($detail)){
-                            $qty = $detail->quantity;
-                            $delivered = $detail->delivered;
-                            if($qty != $delivered){
-                                while($qty!=$delivered && $qtys[$key]!=0){
-                                    $delivered++;
-                                    $qtys[$key]--;
+                        if($qts[$key]!=0){
+                            $detail = PurchaseDetail::where('purchaseId',''.$order)->where('productId',$product)->where('isActive',1)->first();
+                            if(!empty($detail)){
+                                $qty = $detail->quantity;
+                                $delivered = $detail->delivered;
+                                if($qty != $delivered){
+                                    while($qty!=$delivered && $qtys[$key]!=0){
+                                        $delivered++;
+                                        $qtys[$key]--;
+                                    }
+                                    $detail->update([
+                                        'delivered' => $delivered
+                                    ]);
                                 }
-                                $detail->update([
-                                    'delivered' => $delivered
-                                ]);
                             }
                         }
                     }
@@ -128,7 +132,7 @@ class DeliveryController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
             return Redirect('delivery');
@@ -194,7 +198,7 @@ class DeliveryController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
@@ -259,7 +263,7 @@ class DeliveryController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');
             return Redirect('delivery');

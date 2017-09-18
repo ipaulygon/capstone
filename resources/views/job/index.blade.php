@@ -21,7 +21,8 @@
                 <div class="col-md-4">                    
                     <div id="actionBox" class="box box-primary box-solid">
                         <div class="box-header with-border">
-                            <h3 id="dateSelected" class="box-title">{{$date}}</h3>
+                            <h3 id="dateSelectedView" class="box-title">{{date('F j, Y')}}</h3>
+                            <h3 id="dateSelected" class="box-title hidden">{{$date}}</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                                 <i class="fa fa-minus"></i></button>
@@ -58,11 +59,11 @@
                         </div>
                         <div class="box-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <label>Job Id:</label> <span id="detailId"></span><br>
+                                <div class="col-md-5">
+                                    <label>Id:</label> <span id="detailId"></span><br>
                                     <label>Rack:</label> <span id="detailRack"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <button id="detailEstimate" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
                                         <i class="glyphicon glyphicon-list-alt"></i>
                                     </button>
@@ -152,8 +153,16 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-right">
+                                                        <button onclick="view('{{$job->jobId}}')" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
+                                                            <i class="glyphicon glyphicon-eye-open"></i>
+                                                        </button>
+                                                        @if($job->release==null)
+                                                        <button onclick="signatureModal('{{$job->jobId}}','estimate')" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
+                                                            <i class="glyphicon glyphicon-list-alt"></i>
+                                                        </button>
+                                                        @endif
                                                         @if(!$job->isFinalize)
-                                                            <button onclick="finalizeModal('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm"  data-toggle="tooltip" data-placement="top" title="Finalize record">
+                                                            <button onclick="finalizeModal('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Finalize record">
                                                                 <i class="glyphicon glyphicon-check"></i>
                                                             </button>
                                                             <a href="{{url('/job/'.$job->jobId.'/edit')}}" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
@@ -162,14 +171,21 @@
                                                             {!! Form::open(['method'=>'patch','action' => ['JobController@finalize',$job->jobId],'id'=>'fin'.$job->jobId]) !!}
                                                             {!! Form::close() !!}
                                                         @else
-                                                            <a href="{{url('/job/pdf/'.$job->jobId)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                            <button onclick="sinatureModal('{{$job->jobId}}','job')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                                                 <i class="glyphicon glyphicon-file"></i>
-                                                            </a>
-                                                            <button onclick="process('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Process record">
-                                                                <i class="glyphicon glyphicon-tasks"></i>
                                                             </button>
-                                                            {!! Form::open(['method'=>'patch','action' => ['JobController@release',$job->jobId],'id'=>'rel'.$job->jobId]) !!}
-                                                            {!! Form::close() !!}
+                                                            @if($job->isComplete && $job->total==$job->paid && $job->release==null)
+                                                                <button onclick="releaseVehicle('{{$job->jobId}}')" type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Release">
+                                                                    <i class="glyphicon glyphicon-export"></i>
+                                                                </button>
+                                                                {!! Form::open(['method'=>'patch','action' => ['JobController@release',$job->jobId],'id'=>'rel'.$job->jobId]) !!}
+                                                                {!! Form::close() !!}
+                                                            @endif
+                                                            @if($job->release==null)
+                                                                <button onclick="process('{{$job->jobId}}')" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Process record">
+                                                                    <i class="glyphicon glyphicon-tasks"></i>
+                                                                </button>
+                                                            @endif
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -343,7 +359,7 @@
                                         <h2 class="panel-title">Customer Details</h2>
                                     </div>
                                     <div class="panel-body">
-                                        <label>Job Id:</label> <span id="viewId"></span><br>
+                                        <label>Id:</label> <span id="viewId"></span><br>
                                         <label>Rack:</label> <span id="viewRack"></span>
                                         <div class="row">
                                             <div class="col-md-6 pull-left">
@@ -485,7 +501,7 @@
             </div>
             @include('layouts.techList')
             @include('layouts.inventoryList')
-            @include('layouts.signatureModal');
+            @include('layouts.signatureModal')
         </div>
     </div>
 @stop
@@ -539,16 +555,14 @@
                         @if($job->isComplete && $job->total==$job->paid && $job->release!=null)
                             color: '#6f5499'
                         @elseif($job->isComplete && $job->total==$job->paid)
-                            //success
                             color: '#00a65a'
                         @elseif($job->isComplete && $job->total!=$job->paid)
-                            //info
+                            color: '#00a65a'
+                        @elseif(!$job->isComplete && $job->total==$job->paid)
                             color: '#00c0ef'
                         @elseif(!$job->isComplete && $job->isFinalize && $job->total!=$job->paid)
-                            //warning
                             color: '#f39c12'
                         @else
-                            //primary
                             color: '#3c8dbc'
                         @endif
                     };

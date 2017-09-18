@@ -33,7 +33,7 @@
                         @foreach($sales as $sale)
                             <tr>
                                 <?php 
-                                    $salesId = 'INV'.str_pad($sale->salesId, 5, '0', STR_PAD_LEFT); 
+                                    $salesId = 'INV'.str_pad($sale->id, 5, '0', STR_PAD_LEFT); 
                                 ?>
                                 <td>{{$salesId}}</td>
                                 <td>

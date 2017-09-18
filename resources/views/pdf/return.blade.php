@@ -95,19 +95,19 @@
             </thead>
             <tbody>
                 @foreach($return->detail as $product)
-                    @if(!$product->quantity==0)
-                        <tr>
-                            <?php
-                                if($product->product->isOriginal!=null){
-                                    $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
-                                }else{
-                                    $type = "";
-                                }
-                            ?>
-                            <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
-                            <td class="text-right">{{number_format($product->quantity)}}</td>
-                        </tr>
-                    @endif
+                @if($product->quantity!=0)
+                <tr>
+                    <?php
+                        if($product->product->isOriginal!=null){
+                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
+                        }else{
+                            $type = "";
+                        }
+                    ?>
+                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
+                    <td class="text-right">{{number_format($product->quantity)}}</td>
+                </tr>
+                @endif
                 @endforeach
             </tbody>
         </table>

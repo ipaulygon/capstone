@@ -81,8 +81,7 @@
         </div>
     </div>
 </div>
-@if($types->first()->category=='category1')
-<div id="part" class="col-md-4">
+<div id="part" class="{{($types->first()->category=='category1' ? 'col-md-4' : 'col-md-4 hidden')}}">
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">Part Information</h3>
@@ -117,4 +116,3 @@
         </div>
     </div>
 </div>
-@endif

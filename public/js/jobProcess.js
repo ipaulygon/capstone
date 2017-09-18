@@ -715,6 +715,8 @@ function checkJob(id){
                 }else if(value.isComplete && value.total==value.paid){
                     colors = "#00a65a";
                 }else if(value.isComplete && value.total!=value.paid){
+                    colors = "#00a65a";
+                }else if(!value.isComplete && value.total==value.paid){
                     colors = "#00c0ef";
                 }else if(!value.isComplete && value.isFinalize && value.total!=value.paid){
                     colors = "#f39c12";

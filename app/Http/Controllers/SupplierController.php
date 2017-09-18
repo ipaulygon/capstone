@@ -102,7 +102,7 @@ class SupplierController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
             return Redirect('supplier');
@@ -164,7 +164,7 @@ class SupplierController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames);
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
@@ -200,7 +200,7 @@ class SupplierController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect('supplier');
@@ -234,7 +234,7 @@ class SupplierController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('supplier');
     }
@@ -251,7 +251,7 @@ class SupplierController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('supplier');

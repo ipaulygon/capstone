@@ -94,6 +94,7 @@
             </thead>
             <tbody>
                 @foreach($purchase->detail as $product)
+                @if($product->quantity!=0)
                 <tr>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                     <?php
@@ -116,6 +117,7 @@
                         $total += $product->quantity*$product->price;
                     ?>
                 </tr>
+                @else
                 @endforeach
                 <tr>
                     <td></td>

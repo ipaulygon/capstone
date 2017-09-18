@@ -132,10 +132,23 @@ class PdfController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         $estId = 'ESTIMATE'.str_pad($estimate->id, 5, '0', STR_PAD_LEFT); 
         $estimate = EstimateHeader::findOrFail($estimate->id);
+        $total = 0;
+        $discounts = 0;
+        $vat = 0;
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','vat','date','picPath'))->setPaper([0,0,612,792]);
+        return $pdf->stream('estimate.pdf');
+    }
+
+    public function estimateView(Request $request, $id){
+        $picPath = $request->session()->get('signature');
+        $date = date('Y-m-d H:i:s');
+        $estimate = EstimateHeader::findOrFail($id);
+        $estId = 'ESTIMATE'.str_pad($estimate->id, 5, '0', STR_PAD_LEFT); 
         $total = 0;
         $discounts = 0;
         $vat = 0;

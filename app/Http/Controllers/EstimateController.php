@@ -32,7 +32,7 @@ class EstimateController extends Controller
             ->join('vehicle as v','v.id','e.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('e.*','e.id as estimateId','c.*','v.*','vd.name as model','vd.year as year','vd.transmission as transmission','vk.name as make')
+            ->select('e.*','e.id as estimateId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
             ->get();
         return View('estimate.index',compact('estimates'));
     }
@@ -44,6 +44,7 @@ class EstimateController extends Controller
      */
     public function create()
     {
+        return View('layouts.404');
         $date = date('Y-m-d');
         $customers = DB::table('customer')
             ->select('customer.*')
@@ -94,6 +95,7 @@ class EstimateController extends Controller
      */
     public function store(Request $request)
     {
+        return View('layouts.404');
         $rules = [
             'firstName' => 'required|max:45',
             'middleName' => 'max:45',
@@ -237,7 +239,7 @@ class EstimateController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');  
             return Redirect::back();
@@ -263,6 +265,7 @@ class EstimateController extends Controller
      */
     public function edit($id)
     {
+        return View('layouts.404');
         $estimate = EstimateHeader::findOrFail($id);
         $date = date('Y-m-d');
         $customers = DB::table('customer')
@@ -315,6 +318,7 @@ class EstimateController extends Controller
      */
     public function update(Request $request, $id)
     {
+        return View('layouts.404');
         $rules = [
             'firstName' => 'required|max:45',
             'middleName' => 'max:45',
@@ -365,7 +369,7 @@ class EstimateController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
@@ -462,7 +466,7 @@ class EstimateController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');  
             return Redirect::back();

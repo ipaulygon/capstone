@@ -17,7 +17,7 @@ var payView = $('#paymentView').DataTable({
     "info": false,
     "retrieve": true,
 });
-
+var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var day = null;
 var datePick = moment(new Date()).format("YYYY-MM-DD");
 $('#start').val(datePick);
@@ -55,6 +55,7 @@ $('#calendar').fullCalendar({
                 day = $(this);
                 $('#start').val(datePick);
                 $('#dateSelected').text(datePick);
+                $('#dateSelectedView').text(monthNames[picked.getMonth()]+" "+picked.getDate()+", "+picked.getFullYear());
                 $('#detailBox').addClass('hidden');
             }else{
                 ping(this);
@@ -140,6 +141,7 @@ function clickEvent(id){
                 if(data.job.release!=null){
                     $('#detailRelease').addClass('hidden');
                     $('#detailProcess').addClass('hidden');
+                    $('#detailEstimate').addClass('hidden');
                 }
             }else{
                 $('#detailPDF').addClass('hidden');

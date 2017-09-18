@@ -104,28 +104,30 @@ class PurchaseController extends Controller
                 $prices = $request->price;
                 $models = $request->modelId;
                 foreach($products as $key=>$product){
-                    if($models[$key]!=null){
-                        $model = explode(',',$models[$key]);
-                    }else{
-                        $model[0] = null;
-                        $model[1] = null;
+                    if($qtys[$key]!=0){
+                        if($models[$key]!=null){
+                            $model = explode(',',$models[$key]);
+                        }else{
+                            $model[0] = null;
+                            $model[1] = null;
+                        }
+                        PurchaseDetail::create([
+                            'purchaseId' => $purchase->id,
+                            'productId' => $product,
+                            'modelId' => $model[0],
+                            'isManual' => $model[1],
+                            'quantity' => $qtys[$key],
+                            'price' => str_replace(',','',$prices[$key]),
+                            'delivered' => 0,
+                            'isActive'=> 1
+                        ]);
                     }
-                    PurchaseDetail::create([
-                        'purchaseId' => $purchase->id,
-                        'productId' => $product,
-                        'modelId' => $model[0],
-                        'isManual' => $model[1],
-                        'quantity' => $qtys[$key],
-                        'price' => str_replace(',','',$prices[$key]),
-                        'delivered' => 0,
-                        'isActive'=> 1
-                    ]);
                 }
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully added.');
             return Redirect('purchase');
@@ -201,7 +203,7 @@ class PurchaseController extends Controller
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
         if ($validator->fails()) {
-            return Redirect::back()->withErrors($validator);
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         else{
             try{
@@ -239,7 +241,7 @@ class PurchaseController extends Controller
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
-                return Redirect::back()->withErrors("Oops! This has not been developed yet");
+                return Redirect::back()->withErrors($errMess);
             }
             $request->session()->flash('success', 'Successfully updated.');
             return Redirect('purchase');
@@ -274,7 +276,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         return Redirect('purchase');
     }
@@ -291,7 +293,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         $request->session()->flash('success', 'Successfully reactivated.');  
         return Redirect('purchase');
@@ -308,7 +310,7 @@ class PurchaseController extends Controller
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
-            return Redirect::back()->withErrors("Oops! This has not been developed yet");
+            return Redirect::back()->withErrors($errMess);
         }
         $request->session()->flash('success', 'Successfully finalized.');  
         return Redirect('purchase');
