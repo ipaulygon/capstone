@@ -50,7 +50,7 @@ class DeliveryController extends Controller
     {
         $rules = [
             'supplierId' => 'required',
-            'product.*' => 'required',
+            'product' => 'required',
             'qty.*' => 'required|integer|between:0,10000',
         ];
         $messages = [
@@ -60,7 +60,7 @@ class DeliveryController extends Controller
         ];
         $niceNames = [
             'supplierId' => 'Supplier',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -101,7 +101,7 @@ class DeliveryController extends Controller
                         'deliveryId' => $id
                     ]);
                     foreach($products as $key=>$product){
-                        if($qts[$key]!=0){
+                        if($qtys[$key]!=0){
                             $detail = PurchaseDetail::where('purchaseId',''.$order)->where('productId',$product)->where('isActive',1)->first();
                             if(!empty($detail)){
                                 $qty = $detail->quantity;
@@ -182,7 +182,7 @@ class DeliveryController extends Controller
     {
         $rules = [
             'supplierId' => 'required',
-            'product.*' => 'required',
+            'product' => 'required',
             'qty.*' => 'required|integer|between:0,10000',
         ];
         $messages = [
@@ -192,7 +192,7 @@ class DeliveryController extends Controller
         ];
         $niceNames = [
             'supplierId' => 'Supplier',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);

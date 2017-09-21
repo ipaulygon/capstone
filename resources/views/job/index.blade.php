@@ -171,7 +171,7 @@
                                                             {!! Form::open(['method'=>'patch','action' => ['JobController@finalize',$job->jobId],'id'=>'fin'.$job->jobId]) !!}
                                                             {!! Form::close() !!}
                                                         @else
-                                                            <button onclick="sinatureModal('{{$job->jobId}}','job')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                            <button onclick="signatureModal('{{$job->jobId}}','job')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                                                 <i class="glyphicon glyphicon-file"></i>
                                                             </button>
                                                             @if($job->isComplete && $job->total==$job->paid && $job->release==null)

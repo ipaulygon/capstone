@@ -44,18 +44,19 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:supplier|max:75',
+            'name' => ['required','max:75','unique:supplier','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'spName.*' => 'required|max:100',
-            'spContact.*' => 'nullable|max:30',
-            'scNo.*' => 'required|max:30'
+            'spName.*' => ['required','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'spContact.*' => ['nullable','max:30','regex:/^[^_]+$/'],
+            'scNo.*' => ['required','max:30','regex:/^[^_]+$/']
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Supplier',
@@ -142,16 +143,18 @@ class SupplierController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:75',Rule::unique('supplier')->ignore($id)],
+            'name' => ['required','max:75',Rule::unique('supplier')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'spName.*' => 'required|max:100',
-            'scNo.*' => 'required|max:20',
+            'spName.*' => ['required','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'spContact.*' => ['nullable','max:30','regex:/^[^_]+$/'],
+            'scNo.*' => ['required','max:30','regex:/^[^_]+$/']
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Supplier',
@@ -159,7 +162,8 @@ class SupplierController extends Controller
             'brgy' => 'Brgy./Subd.',
             'city' => 'City/Municipality',
             'spName.*' => 'Contact Person',
-            'scNo.*' => 'Contact Number',
+            'spContact.*' => 'Contact Number',
+            'scNo.*' => 'Supplier Contact',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames);

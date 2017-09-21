@@ -53,20 +53,21 @@ class TechnicianController extends Controller
     {
         $rules = [
             'image' => 'image|mimes:jpeg,png,jpg,svg',
-            'firstName' => ['required','max:100',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName))],
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => ['required','max:45',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName)),'regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'street' => 'required|max:140',
             'brgy' => 'required|max:140',
             'city' => 'required|max:140',
-            'contact' => 'required',
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|unique:technician',
             'skill' => 'required'
         ];
         $messages = [
             'firstName.unique' => 'Name is already taken',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'image' => 'Technician Photo',
@@ -178,20 +179,21 @@ class TechnicianController extends Controller
     {
         $rules = [
             'image' => 'image|mimes:jpeg,png,jpg,svg',
-            'firstName' => ['required','max:100',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName))->ignore($id)],
-            'middleName' => 'max:100',
-            'lastName' => 'required|max:100',
+            'firstName' => ['required','max:45',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName))->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'street' => 'required|max:140',
             'brgy' => 'required|max:140',
             'city' => 'required|max:140',
-            'contact' => 'required',
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => ['nullable','email',Rule::unique('technician')->ignore($id)],
             'skill' => 'required'
         ];
         $messages = [
             'firstName.unique' => 'Name is already taken',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'image' => 'Technician Photo',

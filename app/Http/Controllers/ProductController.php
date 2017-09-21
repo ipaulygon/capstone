@@ -86,20 +86,20 @@ class ProductController extends Controller
         $part = ProductType::findOrFail($request->typeId)->first()->category;
         if($part=='category2'){
             $rules = [
-                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)],
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
                 'price' => 'required|between:0,500000',
-                'reorder' => 'required|integer|between:0,100',
+                'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
                 'varianceId' => 'required',
             ];
         }else{
             $rules = [
-                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)],
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
                 'price' => 'required|between:0,500000',
-                'reorder' => 'required|integer|between:0,100',
+                'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
                 'varianceId' => 'required',
@@ -110,6 +110,7 @@ class ProductController extends Controller
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Product',
@@ -137,6 +138,10 @@ class ProductController extends Controller
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
+                    'isWarranty' => $request->isWarranty,
+                    'year' => $request->year,
+                    'month' => $request->month,
+                    'day' => $request->day
                 ]);
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
@@ -221,20 +226,20 @@ class ProductController extends Controller
         $part = ProductType::findOrFail($request->typeId)->first()->category;
         if($part=='category2'){
             $rules = [
-                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->ignore($id)],
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
                 'price' => 'required|between:0,500000',
-                'reorder' => 'required|integer|between:0,100',
+                'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
                 'varianceId' => 'required',
             ];
         }else{
             $rules = [
-                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)->ignore($id)],
+                'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
                 'price' => 'required|between:0,500000',
-                'reorder' => 'required|integer|between:0,100',
+                'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
                 'varianceId' => 'required',
@@ -244,6 +249,7 @@ class ProductController extends Controller
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Product',
@@ -272,6 +278,10 @@ class ProductController extends Controller
                     'brandId' => $request->brandId,
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
+                    'isWarranty' => $request->isWarranty,
+                    'year' => $request->year,
+                    'month' => $request->month,
+                    'day' => $request->day
                 ]);
                 ProductVehicle::where('productId',$id)->update(['isActive'=>0]);
                 $vehicles = $request->vehicle;

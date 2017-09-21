@@ -24,6 +24,10 @@ class CreateProductTable extends Migration
             $table->unsignedInteger('brandId');
             $table->unsignedInteger('varianceId');
             $table->string('isOriginal',50)->nullable();
+            $table->boolean('isWarranty')->default(1);
+            $table->integer('year')->default(1);
+            $table->integer('month')->default(0);
+            $table->integer('day')->default(0);
             $table->boolean('isActive')->default(1);
             $table->foreign('typeId')
                   ->references('id')->on('product_type')

@@ -137,10 +137,10 @@ class PdfController extends Controller
         $estId = 'ESTIMATE'.str_pad($estimate->id, 5, '0', STR_PAD_LEFT); 
         $estimate = EstimateHeader::findOrFail($estimate->id);
         $total = 0;
-        $discounts = 0;
+        $discount = 0;
         $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','vat','date','picPath'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discount','vat','date','picPath'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
     }
 
@@ -150,10 +150,10 @@ class PdfController extends Controller
         $estimate = EstimateHeader::findOrFail($id);
         $estId = 'ESTIMATE'.str_pad($estimate->id, 5, '0', STR_PAD_LEFT); 
         $total = 0;
-        $discounts = 0;
+        $discount = 0;
         $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discounts','vat','date','picPath'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.estimate',compact('estId','estimate','total','discount','vat','date','picPath'))->setPaper([0,0,612,792]);
         return $pdf->stream('estimate.pdf');
     }
 
@@ -163,10 +163,10 @@ class PdfController extends Controller
         $date = date('Y-m-d H:i:s');
         $job = JobHeader::findOrFail($id);
         $total = 0;
-        $discounts = 0;
+        $discount = 0;
         $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discounts','vat','date','picPath'))->setPaper([0,0,612,792]);
+        $pdf = PDF::loadview('pdf.job',compact('jobId','job','total','discount','vat','date','picPath'))->setPaper([0,0,612,792]);
         return $pdf->stream('job.pdf');
     }
     
@@ -186,10 +186,10 @@ class PdfController extends Controller
         $date = date('Y-m-d H:i:s');
         $sales = SalesHeader::findOrFail($id);
         $total = 0;
-        $discounts = 0;
+        $discount = 0;
         $vat = 0;
         PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadview('pdf.sales',compact('salesId','sales','total','discounts','vat','date'))->setPaper([0,0,612,396]);
+        $pdf = PDF::loadview('pdf.sales',compact('salesId','sales','total','discount','vat','date'))->setPaper([0,0,612,396]);
         return $pdf->stream('sales.pdf');
     }
 

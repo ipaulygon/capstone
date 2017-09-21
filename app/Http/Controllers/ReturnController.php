@@ -57,7 +57,7 @@ class ReturnController extends Controller
     {
         $rules = [
             'supplierId' => 'required',
-            'product.*' => 'required',
+            'product' => 'required',
             'delivery.*' => 'required',
             'qty.*' => 'required|integer|between:0,10000',
             'remarks' => 'max:200'
@@ -69,7 +69,7 @@ class ReturnController extends Controller
         ];
         $niceNames = [
             'supplierId' => 'Supplier',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'delivery.*' => 'Delivery',
             'qty.*' => 'Quantity',
             'remarks' => 'Remarks'
@@ -98,7 +98,7 @@ class ReturnController extends Controller
                 $orders = $request->order;
                 sort($orders);
                 foreach($products as $key=>$product){
-                    if($qtys[$key]){
+                    if($qtys[$key]!=0){
                         ReturnDetail::create([
                             'returnId' => $return->id,
                             'productId' => $product,

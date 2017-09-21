@@ -22,7 +22,11 @@ class UtilitySeeder extends Seeder
             'max' => 100,
             'backlog' => 7,
             'isVat' => 1,
-            'vat' => 12
+            'vat' => 12,
+            'isWarranty' => 1,
+            'year' => 1,
+            'month' => 0,
+            'day' => 0
         ]);
     }
 }

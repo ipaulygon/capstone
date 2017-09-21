@@ -20,6 +20,10 @@ class ProductSeeder extends Seeder
             'brandId' => 3,
             'varianceId' => 2,
             'isOriginal' => 'type1',
+            'isWarranty' => 1,
+            'year' => 1,
+            'month' => 0,
+            'day' => 0,
             'isActive' => 1,
         ]);
         DB::table('product')->insert([
@@ -31,6 +35,10 @@ class ProductSeeder extends Seeder
             'brandId' => 1,
             'varianceId' => 1,
             'isOriginal' => null,
+            'isWarranty' => 1,
+            'year' => 1,
+            'month' => 0,
+            'day' => 0,
             'isActive' => 1,
         ]);
     }

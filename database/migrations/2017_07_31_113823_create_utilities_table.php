@@ -27,6 +27,10 @@ class CreateUtilitiesTable extends Migration
             $table->integer('backlog')->default(7);
             $table->boolean('isVat')->default(1);
             $table->integer('vat')->default(12);
+            $table->boolean('isWarranty')->default(1);
+            $table->integer('year')->default(1);
+            $table->integer('month')->default(0);
+            $table->integer('day')->default(0);
             $table->timestamps();
         });
     }

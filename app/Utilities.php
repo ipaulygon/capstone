@@ -19,6 +19,10 @@ class Utilities extends Model
         'max',
         'backlog',
         'isVat',
-        'vat'
+        'vat',
+        'isWarranty',
+        'year',
+        'month',
+        'day'
     ];
 }

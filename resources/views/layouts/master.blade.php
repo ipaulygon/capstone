@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/custom.css') }}">
+    <link rel="icon" href="{{ URL::asset($util->image) }}">
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -32,6 +33,10 @@
         var backlog = {{$util->backlog}}-1;
         var isVat = {{$util->isVat}};
         var vatRate = {{$util->vat}};
+        var isWarranty = {{$util->isWarranty}};
+        var wYear = {{$util->year}};
+        var wMonth = {{$util->month}};
+        var wDay = {{$util->day}};
     </script>
 </head>
 <body id="mainBody" class="fixed hold-transition skin-blue sidebar-mini">
@@ -42,7 +47,7 @@
                 <!-- mini logo for sidebar mini 50x50 pixels -->
                 <span class="logo-mini">
                     <b>
-                        <img src="{{ URL::asset($util->image)}}" width:"48px" height="48px" style="margin-top: -5px!important" class="img-circle" alt="User Image">
+                        <img src="{{ URL::asset($util->image) }}" width:"48px" height="48px" style="margin-top: -5px!important" class="img-circle" alt="User Image">
                     </b>
                 </span>
                 <!-- logo for regular state and mobile devices -->
@@ -190,6 +195,7 @@
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>View Estimates</span></a></li>
+                    <li id="tWarranty"><a href="{{url('/warranty')}}"><i class="fa fa-calculator"></i> <span>Warranty/Void Transactions</span></a></li>
                     @if($user->type==1)
                     <li class="header">QUERIES & REPORTS</li>
                     <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>

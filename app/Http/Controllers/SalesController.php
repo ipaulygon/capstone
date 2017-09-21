@@ -88,25 +88,26 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:45',
-            'middleName' => 'max:45',
-            'lastName' => 'required|max:45',
-            'contact' => 'required',
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'product.*' => 'sometimes|required',
+            'product' => 'required_without_all:package,promo',
             'productQty.*' => 'sometimes|required|numeric',
-            'package.*' => 'sometimes|required',
+            'package' => 'required_without_all:product,promo',
             'packageQty.*' => 'sometimes|required|numeric',
-            'promo.*' => 'sometimes|required',
+            'promo' => 'required_without_all:product,package',
             'promoQty.*' => 'sometimes|required|numeric',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -117,11 +118,11 @@ class SalesController extends Controller
             'street' => 'No. & St./Bldg.',
             'brgy' => 'Brgy./Subd.',
             'city' => 'City/Municipality',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'productQty.*' => 'Product Quantity',
-            'package.*' => 'Package',
+            'package' => 'Package',
             'packageQty.*' => 'Package Quantity',
-            'promo.*' => 'Promo Quantity',
+            'promo' => 'Promo Quantity',
             'promoQty.*' => 'Promo Quantity',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);

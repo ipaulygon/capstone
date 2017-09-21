@@ -56,9 +56,9 @@
                                     @if($sale->discount)
                                         <li>{{$sale->discount->discount->name}} Discount</li>
                                     @endif
-                                    {{$sale->created_at}}
                                 </td>
                                 <td class="text-right">{{number_format($sale->total,2)}}</td>
+                                <td>{{date('F j, Y - H:i:s',strtotime($sale->created_at))}}</td>
                                 <td class="text-right">
                                     <a href="{{url('/sales/pdf/'.$sale->id)}}" target="_blank" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
                                         <i class="glyphicon glyphicon-file"></i>

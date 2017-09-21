@@ -117,10 +117,10 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:45',
-            'middleName' => 'max:45',
-            'lastName' => 'required|max:45',
-            'contact' => 'required',
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
@@ -130,18 +130,19 @@ class JobController extends Controller
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'rackId.*' => 'required',
-            'product.*' => 'sometimes|required',
+            'product' => 'required_without_all:service,package,promo',
             'productQty.*' => 'sometimes|required|numeric',
-            'service.*' => 'sometimes|required',
-            'package.*' => 'sometimes|required',
+            'service' => 'required_without_all:product,package,promo',
+            'package' => 'required_without_all:service,product,promo',
             'packageQty.*' => 'sometimes|required|numeric',
-            'promo.*' => 'sometimes|required',
+            'promo' => 'required_without_all:service,package,product',
             'promoQty.*' => 'sometimes|required|numeric',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -157,12 +158,12 @@ class JobController extends Controller
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
             'rackId.*' => 'Rack',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'productQty.*' => 'Product Quantity',
-            'service.*' => 'Service',
-            'package.*' => 'Package',
+            'service' => 'Service',
+            'package' => 'Package',
             'packageQty.*' => 'Package Quantity',
-            'promo.*' => 'Promo Quantity',
+            'promo' => 'Promo Quantity',
             'promoQty.*' => 'Promo Quantity',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -365,10 +366,10 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => 'required|max:45',
-            'middleName' => 'max:45',
-            'lastName' => 'required|max:45',
-            'contact' => 'required',
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
@@ -378,18 +379,19 @@ class JobController extends Controller
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'rackId.*' => 'required',
-            'product.*' => 'sometimes|required',
+            'product' => 'required_without_all:service,package,promo',
             'productQty.*' => 'sometimes|required|numeric',
-            'service.*' => 'sometimes|required',
-            'package.*' => 'sometimes|required',
+            'service' => 'required_without_all:product,package,promo',
+            'package' => 'required_without_all:service,product,promo',
             'packageQty.*' => 'sometimes|required|numeric',
-            'promo.*' => 'sometimes|required',
+            'promo' => 'required_without_all:service,package,product',
             'promoQty.*' => 'sometimes|required|numeric',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -405,12 +407,12 @@ class JobController extends Controller
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
             'rackId.*' => 'Rack',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'productQty.*' => 'Product Quantity',
-            'service.*' => 'Service',
-            'package.*' => 'Package',
+            'service' => 'Service',
+            'package' => 'Package',
             'packageQty.*' => 'Package Quantity',
-            'promo.*' => 'Promo Quantity',
+            'promo' => 'Promo Quantity',
             'promoQty.*' => 'Promo Quantity',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);

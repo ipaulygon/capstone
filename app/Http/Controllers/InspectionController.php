@@ -44,14 +44,15 @@ class InspectionController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'type' => 'required|unique:inspection_type|max:50',
-            'item.*' => 'required|max:50',
+            'type' => ['required','max:50','unique:inspection_type','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'item.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'inspectionForm.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'type' => 'Type',
@@ -122,14 +123,15 @@ class InspectionController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'type' => ['required','max:50',Rule::unique('inspection_type')->ignore($id)],
-            'item.*' => 'required|max:50',
+            'type' => ['required','max:50',Rule::unique('inspection_type')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'item.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'inspectionForm.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'type' => 'Type',

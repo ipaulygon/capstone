@@ -280,13 +280,15 @@ $(document).on('click','#addNew',function(){
 });
 
 $(document).on('click','#backNew',function(){
-    $('#jobCarousel').carousel(0);
+    // $('#jobCarousel').carousel(0);
+    window.location.href = "/job";
 });
 
 
 $(document).on('click','#backProcess',function(){
-    $('#detailBox').addClass('hidden');
-    $('#jobCarousel').carousel(0);
+    window.location.href = "/job";
+    // $('#detailBox').addClass('hidden');
+    // $('#jobCarousel').carousel(0);
 });
 
 function view(id){

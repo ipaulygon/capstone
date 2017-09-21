@@ -89,6 +89,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('estimate','EstimateController',['only' => [
 		'index']]);
 	Route::resource('job','JobController');
+	Route::resource('warranty','WarrantyController');
 
 	//PDF
 	Route::get('inspect/pdf/{id}','PdfController@inspect');

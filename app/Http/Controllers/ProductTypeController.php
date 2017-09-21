@@ -47,14 +47,15 @@ class ProductTypeController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:product_type|max:50',
+            'name' => ['required','max:50',Rule::unique('product_type')->where('category',$request->category),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'category' => 'required',
-            'brand.*' => 'required|max:50',
+            'brand.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Product Type',
@@ -130,13 +131,14 @@ class ProductTypeController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('product_type')->ignore($id)],
+            'name' => ['required','max:50',Rule::unique('product_type')->where('category',$request->category)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'category' => 'required',
-            'brand.*' => 'required|max:50',
+            'brand.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Product Type',

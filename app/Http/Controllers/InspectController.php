@@ -75,10 +75,10 @@ class InspectController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => 'required|max:45',
-            'middleName' => 'max:45',
-            'lastName' => 'required|max:45',
-            'contact' => 'required',
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
@@ -95,7 +95,8 @@ class InspectController extends Controller
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -233,10 +234,10 @@ class InspectController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => 'required|max:45',
-            'middleName' => 'max:45',
-            'lastName' => 'required|max:45',
-            'contact' => 'required',
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
@@ -253,7 +254,8 @@ class InspectController extends Controller
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'firstName' => 'First Name',

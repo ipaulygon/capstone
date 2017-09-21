@@ -47,13 +47,14 @@ class RackController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:rack|max:20',
+            'name' => ['required','max:20','unique:rack','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'description' => 'max:50',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Rack',
@@ -115,12 +116,13 @@ class RackController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:20',Rule::unique('rack')->ignore(trim($request->id))],
+            'name' => ['required','max:20',Rule::unique('rack')->ignore(trim($request->id)),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'description' => 'max:50',
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Rack',

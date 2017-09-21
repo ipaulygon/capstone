@@ -65,8 +65,8 @@ class PurchaseController extends Controller
         $rules = [
             'supplierId' => 'required',
             'remarks' => 'max:200',
-            'product.*' => 'required',
-            'qty.*' => 'required|integer|between:0,100',
+            'product' => 'required',
+            'qty.*' => 'required|integer',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -76,7 +76,7 @@ class PurchaseController extends Controller
         $niceNames = [
             'supplierId' => 'Supplier',
             'remarks' => 'Remarks',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -186,8 +186,8 @@ class PurchaseController extends Controller
         $rules = [
             'supplierId' => 'required',
             'remarks' => 'max:200',
-            'product.*' => 'required',
-            'qty.*' => 'required|integer|between:0,100',
+            'product' => 'required',
+            'qty.*' => 'required|integer',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -197,7 +197,7 @@ class PurchaseController extends Controller
         $niceNames = [
             'supplierId' => 'Supplier',
             'remarks' => 'Remarks',
-            'product.*' => 'Product',
+            'product' => 'Product',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -233,7 +233,7 @@ class PurchaseController extends Controller
                         ['modelId' => $model[0],
                         'isManual' => $model[1],
                         'quantity' => $qtys[$key],
-                        str_replace(',','',$prices[$key]),
+                        'price' => str_replace(',','',$prices[$key]),
                         'isActive'=> 1]
                     );
                 }

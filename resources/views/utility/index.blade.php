@@ -166,7 +166,53 @@
                                 !!}
                             </div>
                         </div>
-                    </div> 
+                    </div>
+                    {!! Form::label('warranty', 'Warranty Details') !!}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{--  {!! Form::label('hasWarranty', 'Warranty') !!}<span>*</span><br>  --}}
+                                @php $warrantyChecked = ($utilities->isWarranty ? 'checked':'') @endphp
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="warranty" name="hasWarranty" value="1" {{$warrantyChecked}}> Warranty
+                                    <input type="hidden" id="isWarranty" name="isWarranty" value="1">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('year', 'Year') !!}<span>*</span>
+                                {!! Form::input('text','year',$utilities->year,[
+                                    'class' => 'form-control',
+                                    'id' => 'year',
+                                    'placeholder'=>'Year',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('month', 'Month') !!}<span>*</span>
+                                {!! Form::input('text','month',$utilities->month,[
+                                    'class' => 'form-control',
+                                    'id' => 'month',
+                                    'placeholder'=>'Month',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('day', 'Day') !!}<span>*</span>
+                                {!! Form::input('text','day',$utilities->day,[
+                                    'class' => 'form-control',
+                                    'id' => 'day',
+                                    'placeholder'=>'Day',
+                                    'required']) 
+                                !!}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -226,6 +272,30 @@
             min: 0,
             max: 100
         });
+        $("#year").inputmask({ 
+            alias: "integer",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: 0,
+            max: 2
+        });
+        $("#day").inputmask({ 
+            alias: "integer",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: 0,
+            max: 31
+        });
+        $("#month").inputmask({ 
+            alias: "integer",
+            prefix: '',
+            allowMinus: false,
+            autoGroup: true,
+            min: 0,
+            max: 12
+        });
         $('.vat').change(function(){
             if($(this).prop('checked')){
                 $('#vat').attr('readonly',false);
@@ -235,6 +305,25 @@
                 $('#vat').attr('readonly',true);
                 $('#vat').val(0);
                 $('#isVat').val(0);
+            }
+        });
+        $('.warranty').change(function(){
+            if($(this).prop('checked')){
+                $('#year').attr('readonly',false);
+                $('#month').attr('readonly',false);
+                $('#day').attr('readonly',false);
+                $('#year').val(wYear);
+                $('#month').val(wMonth);
+                $('#day').val(wDay);
+                $('#isWarranty').val(1);
+            }else{
+                $('#year').attr('readonly',true);
+                $('#month').attr('readonly',true);
+                $('#day').attr('readonly',true);
+                $('#year').val(0);
+                $('#month').val(0);
+                $('#day').val(0);
+                $('#isWarranty').val(0);
             }
         });
     </script>

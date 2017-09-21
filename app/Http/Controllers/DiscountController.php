@@ -81,15 +81,16 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:discount|max:50',
-            'rate' => 'required|between:0,100',
+            'name' => ['required','max:50','unique:discount','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'rate' => 'required|between:1,100',
             'isWhole' => 'required',
             'isVatExempt' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Discount',
@@ -211,15 +212,16 @@ class DiscountController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('discount')->ignore($id)],
-            'rate' => 'required|between:0,100',
+            'name' => ['required','max:50',Rule::unique('discount')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'rate' => 'required|between:1,100',
             'isWhole' => 'required',
             'isVatExempt' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Discount',
@@ -291,8 +293,8 @@ class DiscountController extends Controller
             $discount->update([
                 'isActive' => 0
             ]);
-            DiscountProduct::where('discountId',$id)->update(['isActive',0]);
-            DiscountService::where('discountId',$id)->update(['isActive',0]);
+            DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
+            DiscountService::where('discountId',$id)->update(['isActive'=>0]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();

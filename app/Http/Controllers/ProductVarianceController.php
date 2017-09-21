@@ -48,7 +48,7 @@ class ProductVarianceController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:product_variance|max:50',
+            'name' => ['required','max:50','unique:product_variance','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'dimension.*' => 'required|integer',
             'unit.*' => 'required',
             'type' => 'required'
@@ -56,7 +56,8 @@ class ProductVarianceController extends Controller
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Product Variance',
@@ -138,14 +139,15 @@ class ProductVarianceController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('product_variance')->ignore($id)],
+            'name' => ['required','max:50',Rule::unique('product_variance')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'dimension.*' => 'required|integer',
             'unit.*' => 'required',
             'type' => 'required'
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Product Variance',

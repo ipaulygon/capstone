@@ -17,13 +17,13 @@
 @stop
 
 @section('script')
-    <script src="{{ URL::asset('js/product.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
-    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ URL::asset('js/product.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
     <script>
         $(document).ajaxStart(function() { Pace.restart(); });
         var products = [

@@ -86,6 +86,10 @@ class UtilitiesController extends Controller
             'max' => 'required|between:0,200',
             'isVat' => 'required',
             'vat' => 'required|between:0,100',
+            'isWarranty' => 'required',
+            'year' => 'required|between:0,5',
+            'month' => 'required|between:0,12',
+            'day' => 'required|between:0,31'
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
@@ -102,6 +106,10 @@ class UtilitiesController extends Controller
             'max' => 'Max Pieces',
             'isVat' => 'VAT/NON-VAT',
             'vat' => 'VAT',
+            'isWarranty' => 'Warranty',
+            'year' => 'Warranty Year',
+            'month' => 'Warranty Month',
+            'day' => 'Warranty Day'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -133,7 +141,11 @@ class UtilitiesController extends Controller
                     'max' => str_replace(' pcs.','',$request->max),
                     'backlog' => $request->backlog,
                     'isVat' => $request->isVat,
-                    'vat' => str_replace(' %','',$request->vat)
+                    'vat' => str_replace(' %','',$request->vat),
+                    'isWarranty' => $request->isWarranty,
+                    'year' => $request->year,
+                    'month' => $request->month,
+                    'day' => $request->day
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){

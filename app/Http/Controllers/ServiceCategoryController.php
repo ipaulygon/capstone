@@ -43,13 +43,14 @@ class ServiceCategoryController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:service_category|max:50',
+            'name' => ['required','max:50','unique:service_category','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'description' => 'max:50',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Service Category',
@@ -111,12 +112,13 @@ class ServiceCategoryController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('service_category')->ignore($request->id)],
+            'name' => ['required','max:50',Rule::unique('service_category')->ignore($request->id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'description' => 'max:50',
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Service Category',

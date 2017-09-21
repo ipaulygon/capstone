@@ -17,6 +17,10 @@ class Product extends Model
     	'brandId',
         'varianceId',
         'isOriginal',
+        'isWarranty',
+        'year',
+        'month',
+        'day',
     	'isActive'  	
     ];
 

@@ -43,14 +43,15 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:vehicle_make|max:50',
-            'model.*' => 'required|max:50',
+            'name' => ['required','max:50','unique:vehicle_make','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'model.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'year.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Vehicle Make',
@@ -128,14 +129,15 @@ class VehicleController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('vehicle_make')->ignore($id)],
-            'model.*' => 'required|max:50',
+            'name' => ['required','max:50',Rule::unique('vehicle_make')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'model.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'year.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
-            'max' => 'The :attribute field must be no longer than :max characters.'
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'
         ];
         $niceNames = [
             'name' => 'Vehicle Make',

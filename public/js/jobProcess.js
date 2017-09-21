@@ -403,6 +403,11 @@ $(document).on('click','#savePayment', function(){
     }
     if(payment!="0.00" && passed && Number(payment)<=Number(balance)){
         balance = eval(balance+"-"+payment);
+        if(balance==0){
+            $('.addPayment').addClass('hidden');
+        }else{
+            $('.addPayment').removeClass('hidden');
+        }
         $('#balance').val(balance);
         $("#balance").inputmask({ 
             alias: "currency",

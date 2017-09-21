@@ -131,9 +131,28 @@ $(document).on("click", "#removeItem", function (){
 });
 
 $(document).on('click', '#save', function (){
+    var push = [];
+    var save = true;
     if(form!=null){
         var data = form.actions.getData('json');
         $(textarea).text(data);
     }
-    $('#submit').submit();
+    $.each($('#inspectionForm'),function(key, value){
+        if($(value).text()=='[]'){
+            push.push($(value).next().val());
+            save = false;
+        }
+    });
+    if(save){
+        $('#submit').submit();
+    }else{
+        $('#notif').append(
+            '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+            'Please fill up all Inspection Items: ' +
+            push +
+            '</div>'
+        );
+    }
 });

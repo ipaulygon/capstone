@@ -58,15 +58,16 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|unique:package|max:50',
+            'name' => ['required','max:50','unique:package','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'price' => 'required|between:0,1000000',
-            'qty.*' => 'sometimes|required|integer|between:0,100',
+            'qty.*' => 'sometimes|required|integer',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'numeric' => 'The :attribute field must be a valid number.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Package',
@@ -165,15 +166,16 @@ class PackageController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('package')->ignore($id)],
+            'name' => ['required','max:50',Rule::unique('package')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'price' => 'required|between:0,1000000',
-            'qty.*' => 'sometimes|required|integer|between:0,100',
+            'qty.*' => 'sometimes|required|integer',
         ];
         $messages = [
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'numeric' => 'The :attribute field must be a valid number.',
+            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
         ];
         $niceNames = [
             'name' => 'Package',
