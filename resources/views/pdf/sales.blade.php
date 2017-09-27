@@ -61,6 +61,9 @@
         }
     </style>
     <body>
+        <div style="float:left">
+            <img src="{{$util->image}}" width="50px" height="50px">
+        </div>
         <div class="center header">
             {{$util->name}}
         </div>
@@ -73,7 +76,7 @@
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            Sales Invoice
+            SALES INVOICE
         </div><br>
         <div class="col-md-12">
             Customer: {{$sales->customer->firstName}} {{$sales->customer->middleName}} {{$sales->customer->lastName}}<br>
@@ -266,7 +269,7 @@
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
             </div>
             <br><br>
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

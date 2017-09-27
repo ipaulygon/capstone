@@ -61,7 +61,11 @@
                         @endif
                         <div class="row">
                         <div class="col-md-6">
+                            @if($loop->index!=0)
+                            {!! Form::label('spName', 'Contact Person') !!}<span>*</span>
+                            @else
                             {!! Form::label('spName', 'Main Contact Person') !!}<span>*</span>
+                            @endif
                             {!! Form::input('text',null,$person->spName,[
                                 'class' => 'form-control',
                                 'name' => 'spName[]',

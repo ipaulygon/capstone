@@ -62,7 +62,7 @@ class ServiceController extends Controller
             'name.unique' => 'Service is already in records.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'name' => 'Service',
@@ -142,7 +142,7 @@ class ServiceController extends Controller
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'between' => 'The :attribute must be :between only.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'    
+            'regex' => 'The :attribute must not contain special characters.'    
         ];
         $niceNames = [
             'name' => 'Service',

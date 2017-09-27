@@ -292,6 +292,7 @@
                                     </div>
                                     <button type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
                                 </div>
+                                <button type="button" id="refundPayment" class="btn btn-warning btn-md hidden">Refund Payment</button>
                                 <div class="col-md-12">
                                     <div class="collapse" id="listPayments">
                                         <label>Total Price: </label>
@@ -552,7 +553,7 @@
                 @foreach($jobs as $job)
                     var events = {
                         id: {{$job->jobId}},
-                        title: '{{$job->plate}}',
+                        title: '{{"JOB".str_pad($job->jobId, 5, "0", STR_PAD_LEFT)}} | Plate: {{$job->plate}}',
                         start: '{{$job->start}}',
                         end: '{{$job->release}}',
                         @if($job->isComplete && $job->total==$job->paid && $job->release!=null)

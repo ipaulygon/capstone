@@ -122,7 +122,7 @@
                     $discountString = '';
                 }
             ?>
-            <script>retrieveService({{$service->serviceId}},{{$price}},"{{$discountString}}")</script>
+            <script>retrieveService({{$service->serviceId}},{{$price}},{{$service->isComplete}},"{{$discountString}}")</script>
         @endforeach
         @endif
         @if($job->package)

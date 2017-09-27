@@ -11,6 +11,38 @@
 
 @section('content')
     @if($user->type==1)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <div class="info-box bg-aqua">
+                    <span class="info-box-icon"><i class="fa fa-wrench"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number text-center" style="font-size:3em">{{count($jobs)}}</span>
+                        <span class="info-box-text text-center" style="font-size:1em">JOB ORDERS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box bg-green">
+                    <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number text-center" style="font-size:3em">{{count($sales)}}</span>
+                        <span class="info-box-text text-center" style="font-size:1em">SALES</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-box bg-red">
+                    <span class="info-box-icon"><i class="fa fa-trash"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-number text-center" style="font-size:3em">0</span>
+                        <span class="info-box-text text-center" style="font-size:1em">DISCREPANCIES</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     {{-- Jobs --}}
     <div class="col-md-7">
         <div class="box box-primary">

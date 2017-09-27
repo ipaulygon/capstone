@@ -16,10 +16,15 @@ class CreateEstimateHeaderTable extends Migration
         Schema::create('estimate_header', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->unsignedInteger('jobId');
             $table->unsignedInteger('customerId');
             $table->unsignedInteger('vehicleId');
             $table->unsignedInteger('rackId');
             $table->timestamps();
+            $table->foreign('jobId')
+                  ->references('id')->on('job_header')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
             $table->foreign('customerId')
                   ->references('id')->on('customer')
                   ->onUpdate('cascade')

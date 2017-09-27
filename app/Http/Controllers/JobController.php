@@ -10,6 +10,7 @@ use App\JobPromo;
 use App\JobDiscount;
 use App\JobTechnician;
 use App\JobPayment;
+use App\JobRefund;
 use App\Technician;
 use App\Vehicle;
 use App\Customer;
@@ -142,7 +143,7 @@ class JobController extends Controller
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'              
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -294,7 +295,7 @@ class JobController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $job = JobHeader::findOrFail($id);
         $customers = DB::table('customer')
@@ -353,7 +354,12 @@ class JobController extends Controller
             ->where('d.isWhole',1)
             ->select('d.*')
             ->get();
-        return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','inventory','products','services','packages','promos','discounts'));
+        if($request->session()->has('admin') || !$job->isFinalize){
+            return View('job.edit',compact('job','customers','autos','manuals','technicians','racks','inventory','products','services','packages','promos','discounts'));
+        }else{
+            $request->session()->flash('error', 'Unauthorized access.');
+            return Redirect('job');
+        }
     }
 
     /**
@@ -391,7 +397,7 @@ class JobController extends Controller
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'firstName' => 'First Name',
@@ -606,6 +612,27 @@ class JobController extends Controller
             $errMess = $e->getMessage();
         }
         return response()->json(['message'=>'Payment successfully updated','job'=>$job]);
+    }
+
+    public function refund(Request $request){
+        try{
+            DB::beginTransaction();
+            $job = JobHeader::with('refund')->findOrFail($request->id);
+            $refund = str_replace(',','',$request->refund);
+            $jr = JobRefund::create([
+                'jobId' => $job->id,
+                'refund' => $refund,
+            ]);
+            $now = $job->paid - $refund;
+            $job->update([
+                'paid' => $now
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+        }
+        return response()->json(['message'=>'Refund successfully done','job'=>$job,'refund'=>$jr]);
     }
 
     public function finalize(Request $request, $id){

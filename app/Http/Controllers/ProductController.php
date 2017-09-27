@@ -110,7 +110,7 @@ class ProductController extends Controller
             'unique' => ':attribute already exists.',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'name' => 'Product',
@@ -249,7 +249,7 @@ class ProductController extends Controller
         $messages = [
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'name' => 'Product',

@@ -107,7 +107,7 @@
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                     <td class="text-right">{{number_format($product->quantity)}}</td>
                 </tr>
-                @else
+                @endif
                 @endforeach
             </tbody>
         </table>
@@ -120,7 +120,7 @@
                 Returns: {{$attachments}}
             </div>
             <br><br>
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

@@ -310,7 +310,7 @@
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
             </div>
             <br><br>
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

@@ -26,6 +26,7 @@
                             <th>Invoice No.</th>
                             <th>Description</th>
                             <th class="text-right">Price (PhP)</th>
+                            <th>Date</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>

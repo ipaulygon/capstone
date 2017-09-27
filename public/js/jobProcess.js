@@ -60,15 +60,21 @@ function process(id){
             $("#balance").inputmask({ 
                 alias: "currency",
                 prefix: 'PhP ',
-                allowMinus: false,
+                allowMinus: true,
                 autoGroup: true,
                 min: balance,
                 max: balance
             });
-            if(balance==0){
+            if(balance<=0){
                 $('.addPayment').addClass('hidden');
+                if(balance<0){
+                    $('#refundPayment').removeClass('hidden');
+                }else{
+                    $('#refundPayment').addClass('hidden');
+                }
             }else{
                 $('.addPayment').removeClass('hidden');
+                $('#refundPayment').addClass('hidden');
             }
             $('#inputPayment').attr('data-qty',balance);
             $("#inputPayment").inputmask({ 
@@ -357,15 +363,21 @@ $(document).on('click','.update-payment', function(){
             $("#balance").inputmask({ 
                 alias: "currency",
                 prefix: 'PhP ',
-                allowMinus: false,
+                allowMinus: true,
                 autoGroup: true,
                 min: balance,
                 max: balance
             });
-            if(balance==0){
+            if(balance<=0){
                 $('.addPayment').addClass('hidden');
+                if(balance<0){
+                    $('#refundPayment').removeClass('hidden');
+                }else{
+                    $('#refundPayment').addClass('hidden');
+                }
             }else{
                 $('.addPayment').removeClass('hidden');
+                $('#refundPayment').addClass('hidden');
             }
             $('#inputPayment').attr('data-qty',balance);
             $("#inputPayment").inputmask({ 
@@ -405,8 +417,14 @@ $(document).on('click','#savePayment', function(){
         balance = eval(balance+"-"+payment);
         if(balance==0){
             $('.addPayment').addClass('hidden');
+            if(balance<0){
+                $('#refundPayment').removeClass('hidden');
+            }else{
+                $('#refundPayment').addClass('hidden');
+            }
         }else{
             $('.addPayment').removeClass('hidden');
+            $('#refundPayment').addClass('hidden');
         }
         $('#balance').val(balance);
         $("#balance").inputmask({ 
@@ -476,6 +494,75 @@ $(document).on('click','#savePayment', function(){
     setTimeout(function (){
         $('#alert').alert('close');
     },2000);
+});
+
+$(document).on('click','#refundPayment',function(){
+    balance = $('#balance').val().replace(',','');
+    refund = balance.replace('-PhP ','');
+    id = $('#processId').val();
+    balance = 0;
+    if(balance==0){
+        $('.addPayment').addClass('hidden');
+        if(balance<0){
+            $('#refundPayment').removeClass('hidden');
+        }else{
+            $('#refundPayment').addClass('hidden');
+        }
+    }else{
+        $('.addPayment').removeClass('hidden');
+        $('#refundPayment').addClass('hidden');
+    }
+    $('#balance').val(balance);
+    $("#balance").inputmask({ 
+        alias: "currency",
+        prefix: 'PhP ',
+        allowMinus: false,
+        autoGroup: true,
+        min: balance,
+        max: balance
+    });
+    $('#inputPayment').attr('data-qty',balance);
+    $("#inputPayment").inputmask({ 
+        alias: "currency",
+        prefix: '',
+        allowMinus: false,
+        autoGroup: true,
+        min: 0,
+        max: balance
+    });
+    $(this).popover('hide');
+    $('#inputPayment').val('0.00');
+    $.ajax({
+        type: "POST",
+        url: "job/refund",
+        data: {id: id,refund: refund},
+        success:function(data){
+            $('#notif').append(
+                '<div id="alert" class="alert alert-success alert-dismissible fade in">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                data.message +
+                '</div>'
+            );
+            row = payList.row.add([
+                '<input class="form-control prices no-border-input" value="'+refund+'" id="refund'+data.refund.id+'" readonly>',
+                method,
+                data.refund.created_at,
+                '',
+                ''
+            ]).draw().node();
+            $(row).find('td').eq(1).addClass('text-right');
+            $(row).find('td').eq(2).addClass('text-right');
+            $(row).find('td').eq(3).addClass('text-right');
+            $(".prices").inputmask({ 
+                alias: "currency",
+                prefix: '',
+                allowMinus: false,
+                autoGroup: true,
+            });
+        }
+    });
+    checkJob(id);
 });
 
 $(document).on('keyup', '#inputPayment' ,function (){
@@ -728,8 +815,9 @@ function checkJob(id){
                 }else{
                     colors = "#3c8dbc";
                 }
+                strId = String("00000" + value.id).slice(-5)
                 var events = {
-                    id: value.id,
+                    id: strId,
                     title: value.plate,
                     start: value.start,
                     end: value.release,

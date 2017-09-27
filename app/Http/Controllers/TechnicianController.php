@@ -67,7 +67,7 @@ class TechnicianController extends Controller
             'firstName.unique' => 'Name is already taken',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'image' => 'Technician Photo',
@@ -193,7 +193,7 @@ class TechnicianController extends Controller
             'firstName.unique' => 'Name is already taken',
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'image' => 'Technician Photo',

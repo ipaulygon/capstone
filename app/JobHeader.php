@@ -56,6 +56,10 @@ class JobHeader extends Model
         return $this->hasMany('App\JobPayment','jobId');
     }
 
+    public function refund(){
+        return $this->hasMany('App\JobRefund','jobId');
+    }
+
     public function rack(){
         return $this->belongsTo('App\Rack', 'rackId');
     }

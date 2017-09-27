@@ -11,8 +11,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    {{--  <link href="{{ asset('css/app.css') }}" rel="stylesheet">  --}}
+    <link rel="stylesheet" href="{{ URL::asset('assets/jquery/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/font-awesome.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/bootstrap/css/ionicons.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/iCheck/all.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/skins/_all-skins.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('css/custom.css') }}">
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
@@ -77,6 +84,19 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{--  <script src="{{ asset('js/app.js') }}"></script>  --}}
+    <script src="{{ URL::asset('assets/jquery/jquery.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/jquery/jquery-ui.min.js') }}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- SlimScroll -->
+    <script src="{{ URL::asset('assets/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/iCheck/icheck.min.js')}}"></script>
+    <!-- FastClick -->
+    <script src="{{ URL::asset('assets/plugins/fastclick/fastclick.js')}}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
 </body>
 </html>

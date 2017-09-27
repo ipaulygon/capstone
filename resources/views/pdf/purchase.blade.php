@@ -117,7 +117,7 @@
                         $total += $product->quantity*$product->price;
                     ?>
                 </tr>
-                @else
+                @endif
                 @endforeach
                 <tr>
                     <td></td>
@@ -136,7 +136,7 @@
             <br>
             Remarks: {{$purchase->remarks}}
             <br><br>
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

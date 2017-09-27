@@ -52,8 +52,8 @@ function rowFinder(row){
 $(document).on('keyup', '#qty', function (){
     qty = $(this).val();
     if(qty=='' || qty==null || qty==0){
-        qty = 1;
         $(this).val(1);
+        qty = $(this).val();
     }else if(qty>100){
         qty = 100;
         $(this).val(100);

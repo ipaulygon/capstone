@@ -70,6 +70,7 @@
         <div style="float:right">
             {{date('F j, Y', strtotime($estimate->created_at))}}<br>
             <label style="color:red">{{$estId}}</label>
+            <label>Reference Job: {{'JOB'.str_pad($estimate->jobId, 5, '0', STR_PAD_LEFT)}}</label>
         </div>
         <div style="clear:both"></div>
         <div class="center">
@@ -310,7 +311,7 @@
                 GRAND TOTAL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: PhP {{number_format($total-$discount-$vatExempt,2)}}<br> 
             </div>
             <br><br>
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

@@ -69,7 +69,7 @@ class PackageController extends Controller
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'numeric' => 'The :attribute field must be a valid number.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'name' => 'Package',
@@ -181,7 +181,7 @@ class PackageController extends Controller
             'required' => 'The :attribute field is required.',
             'max' => 'The :attribute field must be no longer than :max characters.',
             'numeric' => 'The :attribute field must be a valid number.',
-            'regex' => 'The :attribute must not contain special characters. (i.e. ~`!@#^*_={}|\;<>,.?).'                
+            'regex' => 'The :attribute must not contain special characters.'                
         ];
         $niceNames = [
             'name' => 'Package',

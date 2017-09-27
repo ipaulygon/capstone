@@ -8,6 +8,7 @@ class EstimateHeader extends Model
 {
     protected $table = 'estimate_header';
     protected $fillable = [
+        'jobId',
     	'customerId',
         'vehicleId',
         'rackId',

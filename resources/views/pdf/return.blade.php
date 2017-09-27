@@ -112,7 +112,7 @@
             </tbody>
         </table>
         <div class="footer">
-            <div class="footerd">Printed by: Admin {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
         </div>
     </body>
 </html>

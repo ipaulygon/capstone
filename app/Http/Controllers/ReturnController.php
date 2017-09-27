@@ -211,6 +211,7 @@ class ReturnController extends Controller
     public function header($id){
         $deliveries = DB::table('delivery_header as d')
             ->where('supplierId',$id)
+            ->where('isReceived',1)
             ->select('d.*')
             ->get();
         return response()->json(['deliveries'=>$deliveries]);

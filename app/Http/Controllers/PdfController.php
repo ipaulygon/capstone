@@ -71,6 +71,7 @@ class PdfController extends Controller
         try{
             DB::beginTransaction();
             $estimate = EstimateHeader::create([
+                'jobId' => $job->id,
                 'customerId' => $job->customer->id,
                 'vehicleId' => $job->vehicle->id,
                 'rackId' => $job->rackId,

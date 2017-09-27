@@ -18,7 +18,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
-	Route::resource('dashboard', 'DashboardController');
+	Route::resource('dashboard', 'DashboardController',['only' => [
+		'index']]);
 	Route::group(['middleware'=>'admin'], function(){
 		Route::resource('vehicle','VehicleController');
 		Route::resource('supplier','SupplierController');
@@ -117,6 +118,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('job/process/{id}','JobController@process');
 	Route::post('job/pay','JobController@pay');
 	Route::post('job/updatePay','JobController@updatePay');
+	Route::post('job/refund','JobController@refund');
 	Route::post('job/product','JobController@jobProduct');
 	Route::post('job/service','JobController@jobService');
 	Route::post('job/package','JobController@jobPackage');
