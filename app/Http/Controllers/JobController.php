@@ -118,7 +118,7 @@ class JobController extends Controller
     {
         $rules = [
             'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
@@ -367,7 +367,7 @@ class JobController extends Controller
     {
         $rules = [
             'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email',
@@ -469,46 +469,53 @@ class JobController extends Controller
                 JobTechnician::where('jobId',$id)->update(['isActive'=>0]);
                 if(!empty($products)){
                     foreach($products as $key=>$product){
-                        JobProduct::create([
+                        $product = JobProduct::updateOrCreate([
                             'jobId' => $job->id,
-                            'productId' => $product,
+                            'productId' => $product],[
                             'quantity' => $prodQty[$key],
                             'isActive' => 1
                         ]);
+                        $boolComplete = ($product->completed==$product->quantity ? 1 : 0);
+                        $product->update(['isComplete'=>$boolComplete]);
                     }
                 }
                 if(!empty($services)){
                     foreach($services as $key=>$service){
-                        JobService::create([
+                        JobService::updateOrCreate([
                             'jobId' => $job->id,
-                            'serviceId' => $service,
+                            'serviceId' => $service],[
                             'isActive' => 1
                         ]);
                     }
                 }
                 if(!empty($packages)){
                     foreach($packages as $key=>$package){
-                        JobPackage::create([
+                        $package = JobPackage::updateOrCreate([
                             'jobId' => $job->id,
-                            'packageId' => $package,
+                            'packageId' => $package],[
                             'quantity' => $packQty[$key],
                             'isActive' => 1
                         ]);
+                        $boolComplete = ($package->completed==$package->quantity ? 1 : 0);
+                        $package->update(['isComplete'=>$boolComplete]);
                     }
                 }
                 if(!empty($promos)){
                     foreach($promos as $key=>$promo){
-                        JobPromo::create([
+                        $promo = JobPromo::updateOrCreate([
                             'jobId' => $job->id,
-                            'promoId' => $promo,
+                            'promoId' => $promo],[
                             'quantity' => $promoQty[$key],
                             'isActive' => 1
                         ]);
+                        $boolComplete = ($promo->completed==$promo->quantity ? 1 : 0);
+                        $promo->update(['isComplete'=>$boolComplete]);
                     }
                 }
                 if(!empty($discounts)){
                     foreach($discounts as $key=>$discount){
-                        JobDiscount::update([
+                        $jobDiscount = JobDiscount::where('jobId',$job->id)->first();
+                        $jobDiscount->update([
                             'jobId' => $job->id,
                             'discountId' => $discount,
                             'isActive' => 1

@@ -12,6 +12,7 @@ class DeliveryHeader extends Model
         'id',
     	'supplierId',
         'dateMake',
+        'isReceived',
         'isActive'
     ];
 

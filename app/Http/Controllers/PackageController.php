@@ -60,6 +60,8 @@ class PackageController extends Controller
         $rules = [
             'name' => ['required','max:50','unique:package','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'price' => 'required|between:0,1000000',
+            'product' =>'required_without_all:service',
+            'service' => 'required_without_all:product',
             'qty.*' => 'sometimes|required|integer',
         ];
         $messages = [
@@ -72,6 +74,8 @@ class PackageController extends Controller
         $niceNames = [
             'name' => 'Package',
             'price' => 'Price',
+            'product' => 'Product',
+            'service' => 'Service',
             'qty.*' => 'Product Quantity',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -168,6 +172,8 @@ class PackageController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('package')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'price' => 'required|between:0,1000000',
+            'product' => 'required_without_all:service',
+            'service' => 'required_without_all:product',
             'qty.*' => 'sometimes|required|integer',
         ];
         $messages = [
@@ -180,6 +186,8 @@ class PackageController extends Controller
         $niceNames = [
             'name' => 'Package',
             'price' => 'Price',
+            'product' => 'Product',
+            'service' => 'Service',
             'qty.*' => 'Product Quantity',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);

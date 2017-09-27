@@ -54,7 +54,7 @@ class TechnicianController extends Controller
         $rules = [
             'image' => 'image|mimes:jpeg,png,jpg,svg',
             'firstName' => ['required','max:45',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName)),'regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'street' => 'required|max:140',
             'brgy' => 'required|max:140',
@@ -180,7 +180,7 @@ class TechnicianController extends Controller
         $rules = [
             'image' => 'image|mimes:jpeg,png,jpg,svg',
             'firstName' => ['required','max:45',Rule::unique('technician')->where('middleName',trim($request->middleName))->where('lastName',trim($request->lastName))->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'street' => 'required|max:140',
             'brgy' => 'required|max:140',

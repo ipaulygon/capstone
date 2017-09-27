@@ -41,8 +41,11 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::patch('purchase/finalize/{id}','PurchaseController@finalize');
 		Route::get('purchase/finalz/{id}','PurchaseController@finalz');
 		Route::resource('delivery','DeliveryController');
+		Route::get('delivery/get/{id}','DeliveryController@get');
+		Route::patch('delivery/receive/{id}','DeliveryController@receive');
 		Route::resource('return','ReturnController');
 		Route::resource('sales','SalesController');
+		Route::resource('warranty','WarrantyController');
 		Route::resource('query','QueryController');
 		Route::post('query/load','QueryController@load');
 		Route::resource('report','ReportController');
@@ -89,7 +92,6 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::resource('estimate','EstimateController',['only' => [
 		'index']]);
 	Route::resource('job','JobController');
-	Route::resource('warranty','WarrantyController');
 
 	//PDF
 	Route::get('inspect/pdf/{id}','PdfController@inspect');

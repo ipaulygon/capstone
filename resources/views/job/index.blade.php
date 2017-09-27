@@ -337,6 +337,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
+                                <button id="processUpdate" class="btn btn-primary btn-md pull-right" type="button">Update Job Order</a>
                             </div>
                         </div>
                     </div>
@@ -502,6 +503,7 @@
             @include('layouts.techList')
             @include('layouts.inventoryList')
             @include('layouts.signatureModal')
+            @include('layouts.updateAdmin')
         </div>
     </div>
 @stop
@@ -520,6 +522,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/signature/jSignature.min.js') }}"></script>
+    <script src="{{ URL::asset('js/record.js') }}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
     <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
     <script src="{{ URL::asset('js/techList.js') }}"></script>

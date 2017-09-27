@@ -31,6 +31,7 @@ function process(id){
         dataType: 'JSON',
         success:function(data){
             $('.processTechs').remove();
+            $('#processUpdate').attr('onclick','updateAdmin('+id+',"job")');
             $('#processStart').text(data.job.start);
             $('#processEnd').text(data.job.release);
             $('#processPlate').text(data.job.vehicle.plate);
@@ -48,7 +49,6 @@ function process(id){
         url: "/job/get/"+id,
         dataType: "JSON",
         success:function(data){
-            console.log(data);
             var count = 0;
             var completed = 0;
             procList.clear().draw();

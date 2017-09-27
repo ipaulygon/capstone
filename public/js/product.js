@@ -4,7 +4,7 @@ $("#year").inputmask({
     allowMinus: false,
     autoGroup: true,
     min: 0,
-    max: 2
+    max: wYear
 });
 $("#day").inputmask({ 
     alias: "integer",
@@ -12,7 +12,7 @@ $("#day").inputmask({
     allowMinus: false,
     autoGroup: true,
     min: 0,
-    max: 31
+    max: wDay
 });
 $("#month").inputmask({ 
     alias: "integer",
@@ -20,7 +20,7 @@ $("#month").inputmask({
     allowMinus: false,
     autoGroup: true,
     min: 0,
-    max: 12
+    max: wMonth
 });
 
 $('.warranty').change(function(){

@@ -63,6 +63,10 @@ class PromoController extends Controller
             'price' => 'required|between:0,1000000',
             'stock' => 'between:0,999',
             'date' => 'required',
+            'product' => 'required_without_all:service',
+            'service' => 'required_without_all:product',
+            'freeProduct' => 'required_without_all:product,service',
+            'freeService' => 'required_without_all:product,service',
             'qty.*' => 'sometimes|required|integer',
             'freeQty.*' => 'sometimes|required|integer',
         ];
@@ -75,6 +79,10 @@ class PromoController extends Controller
         $niceNames = [
             'name' => 'Promo',
             'price' => 'Price',
+            'product' => 'Product',
+            'service' => 'Service',
+            'freeProduct' => 'Free Product',
+            'freeService' => 'Free Service',
             'qty.*' => 'Product Quantity',
             'freeQty.*' => 'Free Product Quantity',
         ];
@@ -208,6 +216,10 @@ class PromoController extends Controller
             'price' => 'required|between:0,1000000',
             'stock' => 'between:0,999',
             'date' => 'required',
+            'product' => 'required_without_all:service',
+            'service' => 'required_without_all:product',
+            'freeProduct' => 'required_without_all:product,service',
+            'freeService' => 'required_without_all:product,service',
             'qty.*' => 'sometimes|required|integer',
             'freeQty.*' => 'sometimes|required|integer',
         ];
@@ -219,6 +231,10 @@ class PromoController extends Controller
         $niceNames = [
             'name' => 'Promo',
             'price' => 'Price',
+            'product' => 'Product',
+            'service' => 'Service',
+            'freeProduct' => 'Free Product',
+            'freeService' => 'Free Service',
             'qty.*' => 'Product Quantity',
             'freeQty.*' => 'Free Product Quantity',
         ];

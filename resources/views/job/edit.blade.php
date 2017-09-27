@@ -37,45 +37,45 @@
     <script>
         $(document).ready(function (){
             $('#tJob').addClass('active');
-            var customers = [
-                @foreach($customers as $customer)
-                    '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
-                @endforeach
-            ];    
-            var activeTechnicians = [
-                @foreach($job->technician as $technician)
-                    '{{$technician->technicianId}}',
-                @endforeach
-            ]; 
-            $("#technician").val(activeTechnicians);
-            $("#rack").val({{$job->rackId}});
-            $("#model").val({{$job->vehicle->modelId}}+','+{{$job->vehicle->isManual}});
-            $(".select2").select2();
-            $('#firstName').autocomplete({source: customers});
-            @if($job->customer->contact[2] == '2' && strlen($job->customer->contact) >= 17)
-                $('#contact').inputmask("(02) 999 9999 loc. 9999");
-            @elseif($job->customer->contact[2] == '2')
-                $('#contact').inputmask("(02) 999 9999");
-            @else
-                $('#contact').inputmask("+63 999 9999 999");
-            @endif
-            @if(strlen($job->vehicle->plate) == 7)
-                $('#plate').inputmask("AAA 999");
-            @elseif(strlen($job->vehicle->plate)== 8)
-                $('#plate').inputmask("AAA 9999");
-            @elseif(strlen($job->vehicle->plate) == 6)
-                @if($job->vehicle->plate[3] != ' ')
-                    $('#plate').inputmask("AA 9999");
-                @else
-                    $('#plate').inputmask("AAA 99");
-                @endif
-            @elseif(strlen($job->vehicle->plate) == 1)
-                $('#plate').inputmask("9");
-            @else
-                $('#plate').inputmask();
-                $('#plate').val("For Registration");
-            @endif
         });
+        var customers = [
+            @foreach($customers as $customer)
+                '{{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}',
+            @endforeach
+        ];    
+        var activeTechnicians = [
+            @foreach($job->technician as $technician)
+                '{{$technician->technicianId}}',
+            @endforeach
+        ]; 
+        $("#technician").val(activeTechnicians);
+        $("#rack").val({{$job->rackId}});
+        $("#model").val({{$job->vehicle->modelId}}+','+{{$job->vehicle->isManual}});
+        $(".select2").select2();
+        $('#firstName').autocomplete({source: customers});
+        @if($job->customer->contact[2] == '2' && strlen($job->customer->contact) >= 17)
+            $('#contact').inputmask("(02) 999 9999 loc. 9999");
+        @elseif($job->customer->contact[2] == '2')
+            $('#contact').inputmask("(02) 999 9999");
+        @else
+            $('#contact').inputmask("+63 999 9999 999");
+        @endif
+        @if(strlen($job->vehicle->plate) == 7)
+            $('#plate').inputmask("AAA 999");
+        @elseif(strlen($job->vehicle->plate)== 8)
+            $('#plate').inputmask("AAA 9999");
+        @elseif(strlen($job->vehicle->plate) == 6)
+            @if($job->vehicle->plate[3] != ' ')
+                $('#plate').inputmask("AA 9999");
+            @else
+                $('#plate').inputmask("AAA 99");
+            @endif
+        @elseif(strlen($job->vehicle->plate) == 1)
+            $('#plate').inputmask("9");
+        @else
+            $('#plate').inputmask();
+            $('#plate').val("For Registration");
+        @endif
     </script>
     @if($job->product || $job->service || $job->package || $job->promo || $job->discount)
         <script>$('#compute').val(0)</script>
@@ -99,7 +99,7 @@
                     $discountString = '';
                 }
             ?>
-            <script>retrieveProduct({{$product->productId}},{{$product->quantity}},{{$price}},"{{$discountString}}")</script>
+            <script>retrieveProduct({{$product->productId}},{{$product->quantity}},{{$price}},{{$product->completed}},"{{$discountString}}")</script>
         @endforeach
         @endif
         @if($job->service)
@@ -130,7 +130,7 @@
             <?php
                 $price = $package->package->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
             ?>
-            <script>retrievePackage({{$package->packageId}},{{$package->quantity}},{{$price}})</script>
+            <script>retrievePackage({{$package->packageId}},{{$package->quantity}},{{$price}},{{$package->completed}})</script>
         @endforeach
         @endif
         @if($job->promo)
@@ -138,7 +138,7 @@
             <?php
                 $price = $promo->promo->priceRecord->where('created_at','<=',$job->created_at)->first()->price;
             ?>
-            <script>retrievePromo({{$promo->promoId}},{{$promo->quantity}},{{$price}})</script>
+            <script>retrievePromo({{$promo->promoId}},{{$promo->quantity}},{{$price}},{{$promo->completed}})</script>
         @endforeach
         @endif
         @if($job->discount)

@@ -31,57 +31,57 @@
                             @endforeach
                         </select>
                     </div>
-                    @if($util->isWarranty)
-                    {!! Form::label('isWarranty', 'Warranty Details:') !!}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{--  {!! Form::label('hasWarranty', 'Warranty') !!}<span>*</span><br>  --}}
-                                @php 
-                                    if(!isset($product)){
-                                        $warrantyChecked = 'checked';
-                                    }else{
-                                        $warrantyChecked = ($product->isWarranty ? 'checked':'');
-                                    }
-                                @endphp
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" class="warranty" name="hasWarranty" value="1" {{$warrantyChecked}}> Warranty
-                                    <input type="hidden" id="isWarranty" name="isWarranty" value="1">
-                                </label>
+                    <div class="{{($util->isWarranty ? '' : 'hidden')}}">
+                        {!! Form::label('isWarranty', 'Warranty Details:') !!}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{--  {!! Form::label('hasWarranty', 'Warranty') !!}<span>*</span><br>  --}}
+                                    @php 
+                                        if(!isset($product)){
+                                            $warrantyChecked = 'checked';
+                                        }else{
+                                            $warrantyChecked = ($product->isWarranty ? 'checked':'');
+                                        }
+                                    @endphp
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="warranty" name="hasWarranty" value="1" {{$warrantyChecked}}> Warranty
+                                        <input type="hidden" id="isWarranty" name="isWarranty" value="1">
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {!! Form::label('year', 'Year') !!}<span>*</span>
-                                {!! Form::input('text','year',null,[
-                                    'class' => 'form-control',
-                                    'id' => 'year',
-                                    'placeholder'=>'Year']) 
-                                !!}
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('year', 'Year') !!}<span>*</span>
+                                    {!! Form::input('text','year',null,[
+                                        'class' => 'form-control',
+                                        'id' => 'year',
+                                        'placeholder'=>'Year']) 
+                                    !!}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {!! Form::label('month', 'Month') !!}<span>*</span>
-                                {!! Form::input('text','month',null,[
-                                    'class' => 'form-control',
-                                    'id' => 'month',
-                                    'placeholder'=>'Month']) 
-                                !!}
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('month', 'Month') !!}<span>*</span>
+                                    {!! Form::input('text','month',null,[
+                                        'class' => 'form-control',
+                                        'id' => 'month',
+                                        'placeholder'=>'Month']) 
+                                    !!}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {!! Form::label('day', 'Day') !!}<span>*</span>
-                                {!! Form::input('text','day',null,[
-                                    'class' => 'form-control',
-                                    'id' => 'day',
-                                    'placeholder'=>'Day']) 
-                                !!}
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('day', 'Day') !!}<span>*</span>
+                                    {!! Form::input('text','day',null,[
+                                        'class' => 'form-control',
+                                        'id' => 'day',
+                                        'placeholder'=>'Day']) 
+                                    !!}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    @endif
                 </div>
                 {{-- Main --}}
                 <div class="col-md-6">

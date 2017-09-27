@@ -189,13 +189,13 @@
                     @if($user->type==1)
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
-                    <li id="tReturn"><a href="{{url('/return')}}"><i class="fa fa-share"></i> <span>Return Items</span></a></li>
+                    <li id="tReturn"><a href="{{url('/return')}}"><i class="fa fa-reply"></i> <span>Return Items</span></a></li>
                     <li id="tSales"><a href="{{url('/sales')}}"><i class="fa fa-money"></i> <span>Point of Sales</span></a></li>
                     @endif
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>View Estimates</span></a></li>
-                    <li id="tWarranty"><a href="{{url('/warranty')}}"><i class="fa fa-calculator"></i> <span>Warranty/Void Transactions</span></a></li>
+                    <li id="tWarranty"><a href="{{url('/warranty')}}"><i class="fa fa-reply-all"></i> <span>Warranty/Void Transactions</span></a></li>
                     @if($user->type==1)
                     <li class="header">QUERIES & REPORTS</li>
                     <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>

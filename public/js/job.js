@@ -88,8 +88,8 @@ function recount(stack){
 $(document).on('keyup', '#qty', function (){
     qty = $(this).val();
     if(qty=='' || qty==null || qty<1){
-        qty = 1;
         $(this).val(1);
+        qty = $(this).val();
     }else if(qty>maxValue){
         qty = maxValue;
         $(this).val(maxValue);
@@ -159,6 +159,13 @@ $(document).on('change', '#products', function(){
             ]).draw().node();
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -205,6 +212,13 @@ function oldProduct(id,qty){
             $(row).find('td').eq(2).addClass('text-right');
             $(row).find('td').eq(3).addClass('text-right');
             recount(stack);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -212,7 +226,7 @@ function oldProduct(id,qty){
     $("#products").select2();
 }
 
-function retrieveProduct(id,qty,price,discountString){
+function retrieveProduct(id,qty,price,completed,discountString){
     $('#products option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
@@ -236,6 +250,14 @@ function retrieveProduct(id,qty,price,discountString){
             $(row).find('td').eq(3).addClass('text-right');
             recount(stack);
             masking();
+            minValue = (completed==0 ? 1 : completed);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: minValue,
+                max: maxValue,
+            });
         }
     });
     $('#products').val('');
@@ -375,6 +397,13 @@ $(document).on('change', '#packages', function(){
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
             });
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -420,12 +449,19 @@ function oldPackage(id,qty){
                 );
             });
             recount(stack);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
+            });
             masking();
         }
     });
 }
 
-function retrievePackage(id,qty,price){
+function retrievePackage(id,qty,price,completed){
     $('#packages option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
@@ -458,6 +494,14 @@ function retrievePackage(id,qty,price){
                 );
             });
             recount(stack);
+            minValue = (completed==0 ? 1 : completed);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: minValue,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -513,6 +557,13 @@ $(document).on('change', '#promos', function(){
                 $('#promoItems'+data.promo.id).append(
                     '<li>'+value.service.name+" - "+value.service.size+" ("+value.service.category.name+')</li>'
                 );
+            });
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
             });
             masking();
         }
@@ -577,6 +628,13 @@ function oldPromo(id,qty){
                 );
             });
             recount(stack);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: 1,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -584,7 +642,7 @@ function oldPromo(id,qty){
     $("#promos").select2();
 }
 
-function retrievePromo(id,qty,price){
+function retrievePromo(id,qty,price,completed){
     $('#promos option[value="'+id+'"]').attr('disabled',true);
     $.ajax({
         type: "GET",
@@ -635,6 +693,14 @@ function retrievePromo(id,qty,price){
                 );
             });
             recount(stack);
+            minValue = (completed==0 ? 1 : completed);
+            $(row).find('.qty').inputmask({ 
+                alias: "integer",
+                prefix: '',
+                allowMinus: false,
+                min: minValue,
+                max: maxValue,
+            });
             masking();
         }
     });
@@ -643,13 +709,6 @@ function retrievePromo(id,qty,price){
 }
 
 function masking(){
-    $('.qty').inputmask({ 
-        alias: "integer",
-        prefix: '',
-        allowMinus: false,
-        min: 1,
-        max: maxValue,
-    });
     $(".price").inputmask({ 
         alias: "currency",
         prefix: '',
@@ -664,6 +723,7 @@ function masking(){
         min: 0,
     });
 }
+
 
 // DISCOUNTS
 $(document).on('change', '#discounts', function(){

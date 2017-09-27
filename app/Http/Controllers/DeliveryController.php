@@ -316,4 +316,26 @@ class DeliveryController extends Controller
             ->get();
         return response()->json(['products'=>$products]);
     }
+
+    public function get($id){
+        $delivery = DeliveryHeader::with('detail')->findOrFail($id);
+        return response()->json(['delivery'=>$delivery]);
+    }
+
+    public function receive(Request $request, $id){
+        try{
+            DB::beginTransaction();
+            $delivery = DeliveryHeader::findOrFail($id);
+            $delivery->update([
+                'isReceived' => 1
+            ]);
+            DB::commit();
+        }catch(\Illuminate\Database\QueryException $e){
+            DB::rollBack();
+            $errMess = $e->getMessage();
+            return Redirect::back()->withErrors($errMess);
+        }
+        $request->session()->flash('success', 'Successfully received.');  
+        return Redirect('delivery');
+    }
 }
