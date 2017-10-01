@@ -92,7 +92,7 @@ class SalesController extends Controller
             'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
-            'email' => 'nullable|email',
+            'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',

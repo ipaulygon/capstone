@@ -325,7 +325,7 @@ function view(id){
             payView.clear().draw();
             $('.paymentView').remove();
             $('#viewPrice').val(data.job.total)
-            balance = data.job.total-data.paid;
+            balance = data.job.total-data.paid+data.refund;
             $('#viewBalance').val(balance);
             $("#viewBalance").inputmask({ 
                 alias: "currency",
@@ -505,6 +505,17 @@ function view(id){
                     '</a>'
                 ]).draw().node();
                 $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(2).addClass('text-right');
+                $(row).find('td').eq(3).addClass('text-right');
+            });
+            $.each(data.job.refund,function(key,value){
+                row = payView.row.add([
+                    '<input class="pricesView no-border-input" value="'+value.refund+'" id="refund'+value.id+'" readonly>',
+                    '',
+                    value.created_at,
+                    'Refund'
+                ]).draw().node();
+                $(row).find('td').eq(0).addClass('text-right');
                 $(row).find('td').eq(2).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
             });

@@ -66,6 +66,7 @@ class PurchaseController extends Controller
             'supplierId' => 'required',
             'remarks' => 'max:200',
             'product' => 'required',
+            'price.*' => 'required|between:0,500000',
             'qty.*' => 'required|integer',
         ];
         $messages = [
@@ -77,6 +78,7 @@ class PurchaseController extends Controller
             'supplierId' => 'Supplier',
             'remarks' => 'Remarks',
             'product' => 'Product',
+            'price.*' => 'Price',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
@@ -187,6 +189,7 @@ class PurchaseController extends Controller
             'supplierId' => 'required',
             'remarks' => 'max:200',
             'product' => 'required',
+            'price.*' => 'required|between:0,500000',
             'qty.*' => 'required|integer',
         ];
         $messages = [
@@ -198,6 +201,7 @@ class PurchaseController extends Controller
             'supplierId' => 'Supplier',
             'remarks' => 'Remarks',
             'product' => 'Product',
+            'price.*' => 'Price',
             'qty.*' => 'Quantity'
         ];
         $validator = Validator::make($request->all(),$rules,$messages);

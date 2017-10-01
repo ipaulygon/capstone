@@ -118,7 +118,7 @@ $(document).on('keyup', '#qty', function (){
     stack = $(this).nextAll('.stack').first().val();
     price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
-    final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+stack+"+"+price);
     $(this).nextAll('.stack').first().val(price);
     $('#compute').val(final);
 });
@@ -170,7 +170,7 @@ $(document).on('click','.pullFreeProduct', function (){
         }
     });
     // price
-    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.stack').val());
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+$(this).parents().find('.stack').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     fList.row(row).remove().draw();
@@ -219,7 +219,7 @@ $(document).on('click','.pullProduct', function (){
         }
     });
     // price
-    final = eval($('#compute').val().replace(',','')+"-"+$(this).parents().find('.stack').val());
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+$(this).parents().find('.stack').val());
     $('#compute').val(final);
     var row = rowFinder(this);
     pList.row(row).remove().draw();
@@ -237,7 +237,7 @@ $(document).on('click','.pushFreeService', function (){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullFreeService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -257,7 +257,7 @@ $(document).on('click','.pullFreeService', function (){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-primary btn-sm pull-right pushFreeService" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"-"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"-"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -277,7 +277,7 @@ $(document).on('click','.pushService', function (){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -297,7 +297,7 @@ $(document).on('click','.pullService', function (){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-primary btn-sm pull-right pushService" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-angle-double-right"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"-"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"-"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -330,7 +330,7 @@ function retrieveFreeProduct(id,qty){
                 max: maxValue
             });
             // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
+            final =  eval($('#compute').val().replace(/,/g,'')+"+"+stack);
             $('#compute').val(final);
         }
     });
@@ -363,7 +363,7 @@ function retrieveProduct(id,qty){
                 max: maxValue
             });
             // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
+            final =  eval($('#compute').val().replace(/,/g,'')+"+"+stack);
             $('#compute').val(final);
         }
     });
@@ -383,7 +383,7 @@ function retrieveFreeService(id){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullFreeService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });
@@ -403,7 +403,7 @@ function retrieveService(id){
                 '<button id="'+data.service.id+'" type="button" class="btn btn-danger btn-sm pull-right pullService" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-angle-double-left"></i></button>'
             ]).draw();
             // price
-            final = eval($('#compute').val().replace(',','')+"+"+data.service.price);
+            final = eval($('#compute').val().replace(/,/g,'')+"+"+data.service.price);
             $('#compute').val(final);
         }
     });

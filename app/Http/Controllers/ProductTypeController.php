@@ -49,7 +49,7 @@ class ProductTypeController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('product_type')->where('category',$request->category),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'category' => 'required',
-            'brand.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'brand.*' => ['required','distinct','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -133,7 +133,7 @@ class ProductTypeController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('product_type')->where('category',$request->category)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'category' => 'required',
-            'brand.*' => ['required','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'brand.*' => ['required','distinct','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
         ];
         $messages = [
             'required' => 'The :attribute field is required.',
@@ -238,9 +238,11 @@ class ProductTypeController extends Controller
         return Redirect('type');
     }
 
-    public function remove(Request $request, $id){
-        $checkProduct = DB::table('product')
-            ->where('brandId',$id)
+    public function remove(Request $request){
+        $checkProduct = DB::table('product_brand as pb')
+            ->join('product as p','p.brandId','pb.id')
+            ->where('pb.name',trim($request->brand))
+            ->where('p.isActive',1)
             ->get();
         if(count($checkProduct) > 0){
             return response()->json(['message'=>'It seems that the record is still being used in other items. Discarding failed.']);

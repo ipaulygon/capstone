@@ -42,6 +42,8 @@ function process(id){
             $.each(data.job.technician,function(key,value){
                 $('#processTechs').append('<li class="processTechs">'+value.technician.firstName+' '+value.technician.lastName+'</li>');
             });
+            $('#processRemarksValue').text(data.job.remarks);
+            $('#processRemarks').val(data.job.remarks);
         }
     })
     $.ajax({
@@ -55,7 +57,7 @@ function process(id){
             payList.clear().draw();
             $('.payment').remove();
             $('#totalPrice').val(data.job.total)
-            balance = data.job.total-data.paid;
+            balance = data.job.total-data.paid+data.refund;
             $('#balance').val(balance);
             $("#balance").inputmask({ 
                 alias: "currency",
@@ -294,6 +296,17 @@ function process(id){
                 $(row).find('td').eq(2).addClass('text-right');
                 $(row).find('td').eq(3).addClass('text-right');
             });
+            $.each(data.job.refund,function(key,value){
+                row = payList.row.add([
+                    '<input class="form-control prices no-border-input" value="'+value.refund+'" id="refund'+value.id+'" readonly>',
+                    '',
+                    value.created_at,
+                    'Refund'
+                ]).draw().node();
+                $(row).find('td').eq(1).addClass('text-right');
+                $(row).find('td').eq(2).addClass('text-right');
+                $(row).find('td').eq(3).addClass('text-right');
+            });
             $(".prices").inputmask({ 
                 alias: "currency",
                 prefix: '',
@@ -307,6 +320,19 @@ function process(id){
         }
     });
 }
+
+$(document).on('keyup','#processRemarks',function(){
+    jobId = $('#processId').val();
+    remarks = $(this).val();
+    $.ajax({
+       type: 'POST',
+       url: '/job/remarks',
+       data: {jobId:jobId,remarks:remarks},
+       success: function(data){
+            $('#processRemarksValue').text(data.remarks);
+       } 
+    });
+});
 
 $(document).on('click','.edit-payment', function(){
     id = $(this).attr('data-id');
@@ -399,9 +425,9 @@ $(document).on('click','.update-payment', function(){
 });
 
 $(document).on('click','#savePayment', function(){
-    balance = $('#balance').val().replace(',','');
+    balance = $('#balance').val().replace(/,/g,'');
     balance = balance.replace('PhP ','');
-    payment = $('#inputPayment').val().replace(',','');
+    payment = $('#inputPayment').val().replace(/,/g,'');
     method = $('#paymentMethod').val();
     credit = $('#inputCredit').val();
     id = $('#processId').val();
@@ -497,7 +523,7 @@ $(document).on('click','#savePayment', function(){
 });
 
 $(document).on('click','#refundPayment',function(){
-    balance = $('#balance').val().replace(',','');
+    balance = $('#balance').val().replace(/,/g,'');
     refund = balance.replace('-PhP ','');
     id = $('#processId').val();
     balance = 0;
@@ -549,7 +575,7 @@ $(document).on('click','#refundPayment',function(){
                 method,
                 data.refund.created_at,
                 '',
-                ''
+                'Refund'
             ]).draw().node();
             $(row).find('td').eq(1).addClass('text-right');
             $(row).find('td').eq(2).addClass('text-right');
@@ -566,7 +592,7 @@ $(document).on('click','#refundPayment',function(){
 });
 
 $(document).on('keyup', '#inputPayment' ,function (){
-    if(Number($(this).val().replace(',','')) > Number($(this).attr('data-qty'))){
+    if(Number($(this).val().replace(/,/g,'')) > Number($(this).attr('data-qty'))){
         $(this).tooltip({
             trigger: 'manual',
             title: function(){

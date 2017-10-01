@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Warranty/Void Transactions"}}
+    {{"Obtain Warranty"}}
 @endsection
 
 @section('style')
@@ -32,16 +32,14 @@
                                     <th>Invoice No.</th>
                                     <th>Description</th>
                                     <th class="text-right">Price (PhP)</th>
+                                    <th>Date</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($sales as $sale)
                                     <tr>
-                                        <?php 
-                                            $salesId = 'INV'.str_pad($sale->id, 5, '0', STR_PAD_LEFT); 
-                                        ?>
-                                        <td>{{$salesId}}</td>
+                                        <td>{{'INV'.str_pad($sale->id, 5, '0', STR_PAD_LEFT)}}</td>
                                         <td>
                                             @foreach($sale->product as $product)
                                                 <?php
@@ -66,18 +64,61 @@
                                         <td class="text-right">{{number_format($sale->total,2)}}</td>
                                         <td>{{date('F j, Y - H:i:s',strtotime($sale->created_at))}}</td>
                                         <td class="text-right">
-                                            
+                                            <button id="salesCast" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Cast Warranty"><i class="fa fa-level-down"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                    <!-- SALES MODAL -->
+                    <div id="salesModal" class="modal fade">
+                        <div class="modal-dialog">
+                            {!! Form::open(['url' => 'warranty']) !!}
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title">Obtain Warranty</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Products:</label>
+                                            <ul id="salesProduct"></ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Packages:</label>
+                                            <ul id="salesPackage"></ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Promos:</label>
+                                            <ul id="salesPromo"></ul>
+                                        </div>
+                                    </div>
+                                    <div class="dataTable_wrapper">
+                                        <table id="salesList" class="table table-striped table-bordered responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-right">Quantity</th>
+                                                    <th>Product</th>
+                                                    <th>Belongs to:(Package/Promo)</th>
+                                                    <th class="text-right">Quanity to apply warranty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
                     <div role="tabpanel" class="tab-pane fade" id="jobs">
-                        <table id="salesTable" class="table table-striped table-bordered responsive">
+                        <table id="jobsTable" class="table table-striped table-bordered responsive">
                             <thead>
                                 <tr>
-                                    <th>Invoice No.</th>
+                                    <th>Job Details</th>
                                     <th>Description</th>
                                     <th class="text-right">Action</th>
                                 </tr>
@@ -120,6 +161,7 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('js/warranty.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#salesTable').DataTable({

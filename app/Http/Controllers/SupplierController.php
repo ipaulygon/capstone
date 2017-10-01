@@ -48,7 +48,7 @@ class SupplierController extends Controller
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'spName.*' => ['required','disctinct','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'spName.*' => ['required','distinct','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'spContact.*' => ['nullable','distinct','max:30','regex:/^[^_]+$/'],
             'scNo.*' => ['required','distinct','max:30','regex:/^[^_]+$/']
         ];

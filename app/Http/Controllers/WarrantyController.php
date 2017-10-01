@@ -35,6 +35,7 @@ class WarrantyController extends Controller
             ->join('vehicle as v','v.id','j.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
+            ->where('j.release','!=',null)
             ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
             ->get();
         return View('warranty.index',compact('sales','jobs'));

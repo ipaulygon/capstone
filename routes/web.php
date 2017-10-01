@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 		// GET JSON
 		Route::get('vehicle/remove/{id}','VehicleController@remove');
-		Route::get('type/remove/{id}','ProductTypeController@remove');
+		Route::post('type/remove','ProductTypeController@remove');
 		Route::get('variance/category/{id}','ProductVarianceController@category');
 		Route::get('product/type/{id}','ProductController@type');
 		Route::get('inspection/remove/{id}','InspectionController@remove');
@@ -111,6 +111,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('item/promo/{id}','ItemController@promo');
 	Route::get('item/discount/{id}','ItemController@discount');
 	Route::post('item/user','ItemController@user');
+	Route::post('item/admin','ItemController@admin');
 	Route::get('job/check/{id}','JobController@check');
 	Route::get('job/get/{id}','JobController@get');
 	Route::patch('job/finalize/{id}','JobController@finalize');
@@ -124,4 +125,5 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('job/package','JobController@jobPackage');
 	Route::post('job/promo','JobController@jobPromo');
 	Route::post('job/final','JobController@jobFinal');
+	Route::post('job/remarks','JobController@remarks');
 });

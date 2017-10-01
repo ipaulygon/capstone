@@ -27,6 +27,7 @@
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
+        var userType = {{$user->type}};
         var type1 = "{{$util->type1}}";
         var type2 = "{{$util->type2}}";
         var maxValue = {{$util->max}};
@@ -195,7 +196,7 @@
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>
                     <li id="tEstimate"><a href="{{url('/estimate')}}"><i class="fa fa-calculator"></i> <span>View Estimates</span></a></li>
-                    <li id="tWarranty"><a href="{{url('/warranty')}}"><i class="fa fa-reply-all"></i> <span>Warranty/Void Transactions</span></a></li>
+                    <li id="tWarranty"><a href="{{url('/warranty')}}"><i class="fa fa-reply-all"></i> <span>Obtain Warranty</span></a></li>
                     @if($user->type==1)
                     <li class="header">QUERIES & REPORTS</li>
                     <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>

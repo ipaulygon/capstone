@@ -30,7 +30,6 @@
                                     <i class="glyphicon glyphicon-remove"></i>
                                 </button>
                             @endif
-                            <input type="hidden" class="hidden" value="{{$tb->brandId}}">
                             {!! Form::label('brand', 'Brand') !!}<span>*</span>
                             {!! Form::input('text','brand',$tb->brand->name,[
                                 'class' => 'form-control autocomplete',

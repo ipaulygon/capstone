@@ -23,6 +23,7 @@ class JobHeaderSeeder extends Seeder
             'start' => Carbon::now(),
             'end' => null,
             'release' => null,
+            'remarks' => null,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);

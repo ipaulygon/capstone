@@ -122,7 +122,7 @@ class JobController extends Controller
             'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
-            'email' => 'nullable|email',
+            'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
@@ -131,6 +131,7 @@ class JobController extends Controller
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'rackId.*' => 'required',
+            'remarks' => 'nullable|max:500',
             'product' => 'required_without_all:service,package,promo',
             'productQty.*' => 'sometimes|required|numeric',
             'service' => 'required_without_all:product,package,promo',
@@ -159,6 +160,7 @@ class JobController extends Controller
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
             'rackId.*' => 'Rack',
+            'remarks' => 'Remarks',
             'product' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service' => 'Service',
@@ -206,7 +208,8 @@ class JobController extends Controller
                     'rackId' => $request->rackId,
                     'total' => str_replace(',','',$request->computed),
                     'paid' => 0,
-                    'start' => $request->start." ".$time
+                    'start' => $request->start." ".$time,
+                    'remarks' => trim($request->remarks),
                 ]);
                 $products = $request->product;
                 $prodQty = $request->productQty;
@@ -376,7 +379,7 @@ class JobController extends Controller
             'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
-            'email' => 'nullable|email',
+            'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
@@ -385,6 +388,7 @@ class JobController extends Controller
             'mileage' => 'nullable|between:0,1000000',
             'technician.*' => 'required',
             'rackId.*' => 'required',
+            'remarks' => 'nullable|max:500',
             'product' => 'required_without_all:service,package,promo',
             'productQty.*' => 'sometimes|required|numeric',
             'service' => 'required_without_all:product,package,promo',
@@ -413,6 +417,7 @@ class JobController extends Controller
             'mileage' => 'Mileage',
             'technician.*' => 'Technician Assigned',
             'rackId.*' => 'Rack',
+            'remarks' => 'Remarks',
             'product' => 'Product',
             'productQty.*' => 'Product Quantity',
             'service' => 'Service',
@@ -459,6 +464,7 @@ class JobController extends Controller
                     'vehicleId' => $vehicle->id,
                     'rackId' => $request->rackId,
                     'total' => str_replace(',','',$request->computed),
+                    'remarks' => trim($request->remarks),
                 ]);
                 $products = $request->product;
                 $prodQty = $request->productQty;
@@ -559,9 +565,10 @@ class JobController extends Controller
     }
 
     public function get($id){
-        $job = JobHeader::with('product','service','package','promo','discount','payment')->findOrFail($id);
+        $job = JobHeader::with('product','service','package','promo','discount','payment','refund')->findOrFail($id);
         $paid = $job->payment->sum('paid');
-        return response()->json(['job'=>$job,'paid'=>$paid]);
+        $refund = $job->refund->sum('refund');
+        return response()->json(['job'=>$job,'paid'=>$paid,'refund'=>$refund]);
     }
 
     public function process($id){
@@ -881,5 +888,13 @@ class JobController extends Controller
             $errMess = $e->getMessage();
         }
         return response()->json(['message'=>'Job updated','jobs'=>$jobs,'count'=>$count,'completed'=>$completed]);
+    }
+
+    public function remarks(Request $request){  
+        $job = JobHeader::findOrFail($request->jobId);
+        $job->update([
+            'remarks' => trim($request->remarks)
+        ]);
+        return response()->json(['remarks'=>$request->remarks]);
     }
 }

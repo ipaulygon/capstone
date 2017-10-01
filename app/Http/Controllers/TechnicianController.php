@@ -60,7 +60,7 @@ class TechnicianController extends Controller
             'brgy' => 'required|max:140',
             'city' => 'required|max:140',
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
-            'email' => 'nullable|email|unique:technician',
+            'email' => 'nullable|email|unique:technician|max:100',
             'skill' => 'required'
         ];
         $messages = [
@@ -186,7 +186,7 @@ class TechnicianController extends Controller
             'brgy' => 'required|max:140',
             'city' => 'required|max:140',
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
-            'email' => ['nullable','email',Rule::unique('technician')->ignore($id)],
+            'email' => ['nullable','email',Rule::unique('technician')->ignore($id),'max:100'],
             'skill' => 'required'
         ];
         $messages = [

@@ -11,6 +11,15 @@
             @include('layouts.itemList')
         </div>
         <div class="box-footer">
+            <div class="form-group">
+                {!! Form::label('remarks', 'Remarks:') !!}
+                {!! Form::textarea('remarks',null,[
+                    'class' => 'form-control',
+                    'placeholder'=>'Remarks',
+                    'maxlength'=>'500',
+                    'rows' => '2']) 
+                !!}
+            </div>
             {!! Form::submit('Save', ['class'=>'btn btn-primary']) !!}
             <div class="form-inline pull-right">
                 {!! Form::label('computed', 'Total Price',[

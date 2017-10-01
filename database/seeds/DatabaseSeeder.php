@@ -61,5 +61,7 @@ class DatabaseSeeder extends Seeder
         $this->call(JobPackageSeeder::class);
         $this->call(JobDiscountSeeder::class);
         $this->call(JobTechnicianSeeder::class);
+        $this->call(SalesHeaderSeeder::class);
+        $this->call(SalesProductSeeder::class);
     }
 }

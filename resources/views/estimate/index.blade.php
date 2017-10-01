@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {{"Estimate Repair"}}
+    {{"View Estimates"}}
 @stop
 
 @section('style')

@@ -22,5 +22,17 @@ class CustomerSeeder extends Seeder
             'email' => null,
             'card' => null
         ]);
+        
+        DB::table('customer')->insert([
+            'firstName' => 'Paul',
+            'middleName' => '',
+            'lastName' => 'Cruz',
+            'street' => '',
+            'brgy' => '',
+            'city' => 'San Juan City',
+            'contact' => '+63 998 4123 460',
+            'email' => null,
+            'card' => null
+        ]);
     }
 }

@@ -26,6 +26,7 @@ class CreateJobHeaderTable extends Migration
             $table->timestamp('start');
             $table->timestamp('end')->nullable();
             $table->timestamp('release')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
             $table->foreign('customerId')
                   ->references('id')->on('customer')

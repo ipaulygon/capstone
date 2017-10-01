@@ -17,7 +17,8 @@ class JobHeader extends Model
         'paid',
         'start',
         'end',
-        'release'
+        'release',
+        'remarks'
     ];
 
     public function product(){

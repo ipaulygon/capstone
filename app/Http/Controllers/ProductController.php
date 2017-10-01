@@ -88,7 +88,7 @@ class ProductController extends Controller
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
-                'price' => 'required|between:0,500000',
+                'price' => 'required',
                 'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
@@ -98,7 +98,7 @@ class ProductController extends Controller
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
-                'price' => 'required|between:0,500000',
+                'price' => 'required',
                 'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
@@ -228,7 +228,7 @@ class ProductController extends Controller
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
-                'price' => 'required|between:0,500000',
+                'price' => 'required',
                 'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',
@@ -238,7 +238,7 @@ class ProductController extends Controller
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->where('isOriginal',$request->isOriginal)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
                 'description' => 'max:50',
-                'price' => 'required|between:0,500000',
+                'price' => 'required',
                 'reorder' => 'required|integer',
                 'typeId' => 'required',
                 'brandId' => 'required',

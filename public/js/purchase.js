@@ -54,9 +54,9 @@ $(document).on('keyup', '#qty', function (){
     if(qty=='' || qty==null || qty==0){
         $(this).val(1);
         qty = $(this).val();
-    }else if(qty>100){
-        qty = 100;
-        $(this).val(100);
+    }else if(qty>maxValue){
+        qty = maxValue;
+        $(this).val(maxValue);
         $(this).popover({
             trigger: 'manual',
             content: function(){
@@ -75,21 +75,24 @@ $(document).on('keyup', '#qty', function (){
             pop.popover('hide');
         },2000);
     }
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    price = $(this).attr('data-price');
+    stack = $(this).parents('tr').find('#stack').val().replace(/,/g,'');
+    price = $(this).attr('data-price').replace(/,/g,'');
     price = eval(price+"*"+qty);
-    final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
 });
 
 $(document).on('keyup', '.price', function(){
-    inputQty = rowFinder(this).find('#qty').attr('data-price',$(this).val().replace(',',''));
+    if(Number($(this).val().replace(/,/g,''))>=1000000){
+        $(this).val(1000000);
+    }
+    inputQty = rowFinder(this).find('#qty').attr('data-price',$(this).val());
     if(inputQty.val()!='' || inputQty.val()!=null){
-        stack = $(inputQty).parents('tr').find('#stack').val().replace(',','');
-        price = $(inputQty).attr('data-price');
+        stack = $(inputQty).parents('tr').find('#stack').val().replace(/,/g,'');
+        price = $(inputQty).attr('data-price').replace(/,/g,'');
         price = eval(price+"*"+qty);
-        final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
+        final = eval($('#compute').val().replace(/,/g,'')+"-"+stack+"+"+price);
         $(this).parents('tr').find('#stack').val(price);
         $('#compute').val(final);
     }
@@ -141,6 +144,7 @@ $(document).on('change', '#products', function(){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
+                max: 1000000
             });
             $('.stack').inputmask({ 
                 alias: "currency",
@@ -156,8 +160,8 @@ $(document).on('change', '#products', function(){
 
 $(document).on('click','.pullProduct', function(){
     $('#products option[value="'+this.id+'"]').attr('disabled',false);
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
+    stack = $(this).parents('tr').find('#stack').val().replace(/,/g,'');
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+stack);
     $('#compute').val(final);
     var row = rowFinder(this);
     $('#products').val('');
@@ -204,7 +208,7 @@ function oldProduct(id,qty,model,price){
                 $('#'+data.product.id).select2();
             }
             // price
-            final =  eval($('#compute').val().replace(',','')+"+"+stack);
+            final =  eval($('#compute').val().replace(/,/g,'')+"+"+stack);
             $('#compute').val(final);
             $('.qty').inputmask({ 
                 alias: "integer",
@@ -219,6 +223,7 @@ function oldProduct(id,qty,model,price){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
+                max: 1000000
             });
             $('.stack').inputmask({ 
                 alias: "currency",
@@ -271,7 +276,7 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
                 $('#'+data.product.id).select2();
             }
             // price
-            final = eval($('#compute').val().replace(',','')+"+"+stack);
+            final = eval($('#compute').val().replace(/,/g,'')+"+"+stack);
             $('#compute').val(final);
             $(row).find('.qty').inputmask({ 
                 alias: "integer",
@@ -286,6 +291,7 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
                 allowMinus: false,
                 autoGroup: true,
                 min: 0,
+                max: 1000000
             });
             $('.stack').inputmask({ 
                 alias: "currency",

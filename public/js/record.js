@@ -34,8 +34,19 @@ function deactivateAdmin(id){
 function updateAdmin(id,type){
     update = id;
     updateLink = type;
-    $('#keyUpdate').val('');
-    $('#updateAdmin').modal('show');
+    if(userType==1){
+        $.ajax({
+            type: 'POST',
+            url: '/item/admin',
+            data: {key: 'admin'},
+            success: function(data){
+                window.location.replace('/'+updateLink+'/'+update+'/edit');
+            }
+        });
+    }else{
+        $('#keyUpdate').val('');
+        $('#updateAdmin').modal('show');
+    }
 }
 
 $('#adminUpdate').on('click',function(){

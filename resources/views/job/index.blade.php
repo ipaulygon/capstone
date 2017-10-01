@@ -67,7 +67,7 @@
                                     <button id="detailEstimate" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
                                         <i class="glyphicon glyphicon-list-alt"></i>
                                     </button>
-                                    <button id="detailPDF" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                    <button id="detailPDF" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Generate Invoice">
                                         <i class="glyphicon glyphicon-file"></i>
                                     </button>
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
@@ -171,7 +171,7 @@
                                                             {!! Form::open(['method'=>'patch','action' => ['JobController@finalize',$job->jobId],'id'=>'fin'.$job->jobId]) !!}
                                                             {!! Form::close() !!}
                                                         @else
-                                                            <button onclick="signatureModal('{{$job->jobId}}','job')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                            <button onclick="signatureModal('{{$job->jobId}}','job')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Invoice">
                                                                 <i class="glyphicon glyphicon-file"></i>
                                                             </button>
                                                             @if($job->isComplete && $job->total==$job->paid && $job->release==null)
@@ -245,6 +245,7 @@
                             <label>Customer:</label> <span class="pro" id="processCustomer"></span><br>
                             <label>Technician(s):</label>
                             <ul id="processTechs"></ul>
+                            <label>Remarks:</label><p class="pro" id="processRemarksValue"></p>
                         </div>
                     </div>
                 </div>
@@ -338,7 +339,17 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                                <button id="processUpdate" class="btn btn-primary btn-md pull-right" type="button">Update Job Order</a>
+                                <div class="form-group">
+                                    {!! Form::label('remarks', 'Remarks:') !!}<span style="font-weight: 580;color: red;">This text is autosave</span>
+                                    {!! Form::textarea('remarks',null,[
+                                        'id' => 'processRemarks',
+                                        'class' => 'form-control',
+                                        'placeholder'=>'Remarks',
+                                        'maxlength'=>'500',
+                                        'rows' => '2']) 
+                                    !!}
+                                </div>
+                                <button id="processUpdate" class="btn btn-primary btn-md pull-right" type="button">Modify Job Order</a>
                             </div>
                         </div>
                     </div>

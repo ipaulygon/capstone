@@ -25,25 +25,25 @@ function rowFinder(row){
 
 function discountReplenish(){
     if($('#discountStack').length!=0){
-        discounted = eval($('#discountStack').val().replace(',','')+"*"+'-1');
-        final = eval($('#compute').val().replace(',','')+"+"+discounted);
+        discounted = eval($('#discountStack').val().replace(/,/g,'')+"*"+'-1');
+        final = eval($('#compute').val().replace(/,/g,'')+"+"+discounted);
         $('#compute').val(final);
     }
 }
 
 function discountRecount(){
     if($('#discountStack').length!=0){
-        final =  eval($('#compute').val().replace(',','')+"*"+($('#discountPrice').val().replace(' %','')/100));
+        final =  eval($('#compute').val().replace(/,/g,'')+"*"+($('#discountPrice').val().replace(' %','')/100));
         discountStack = 0-final;
         $('#discountStack').val(discountStack);
-        final = eval($('#compute').val().replace(',','')+"-"+final);
+        final = eval($('#compute').val().replace(/,/g,'')+"-"+final);
         $('#compute').val(final);
     }
 }
 
 function vatReplenish(){
     if(isVat){
-        final = eval($('#vatSales').val().replace(',','')+"+"+$('#vatStack').val().replace(',',''));
+        final = eval($('#vatSales').val().replace(/,/g,'')+"+"+$('#vatStack').val().replace(/,/g,''));
         $('#compute').val(final);
     }
 }
@@ -51,12 +51,12 @@ function vatReplenish(){
 function vatRecount(){
     if(isVat){
         vat = 100 / (100+vatRate);
-        final = eval($('#compute').val().replace(',','')+"*"+vat);
+        final = eval($('#compute').val().replace(/,/g,'')+"*"+vat);
         $('#vatSales').val(final);
-        $('#vatStack').val(eval($('#compute').val().replace(',','')+"-"+final));
+        $('#vatStack').val(eval($('#compute').val().replace(/,/g,'')+"-"+final));
         if(Number($('#discountExempt').val())==1){
-            $('#vatExempt').val(-Number($('#vatStack').val().replace(',','')));
-            $('#compute').val($('#vatSales').val().replace(',',''));
+            $('#vatExempt').val(-Number($('#vatStack').val().replace(/,/g,'')));
+            $('#compute').val($('#vatSales').val().replace(/,/g,''));
         }else{
             $('#vatExempt').val(0);
         }
@@ -65,7 +65,7 @@ function vatRecount(){
 
 function pullItem(item){
     component = $(item).parents('tr').find('#qty');
-    qty = component.val().replace(',','');
+    qty = component.val().replace(/,/g,'');
     qty = (qty=='' || qty==null ? 0 : qty);
     type = component.attr('data-type');
     id = component.attr('data-id');
@@ -75,18 +75,18 @@ function pullItem(item){
         dataType: 'JSON',
         success:function(data){
             if(type=='product'){
-                final = eval($('#inventory'+id).val().replace(',','')+"+"+qty);
+                final = eval($('#inventory'+id).val().replace(/,/g,'')+"+"+qty);
                 $('#inventory'+id).val(final);
             }else if(type=='package'){
                 $.each(data.package.product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     stack = eval(qty+"*"+value.quantity);
                     iQty = eval(iQty+"+"+stack);
                     $('#inventory'+value.productId).val(iQty);
                 });
             }else if(type='promo'){
                 $.each(data.promo.all_product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     total = eval(value.quantity+"+"+value.freeQuantity);
                     stack = eval(qty+"*"+total);
                     iQty = eval(iQty+"+"+stack);
@@ -97,8 +97,8 @@ function pullItem(item){
     });
     discountReplenish();
     vatReplenish();
-    stack = $(item).parents('tr').find('#stack').val().replace(',','');
-    final = eval($('#compute').val().replace(',','')+"-"+stack);
+    stack = $(item).parents('tr').find('#stack').val().replace(/,/g,'');
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+stack);
     $('#compute').val(final);
     vatRecount();
     discountRecount();
@@ -109,7 +109,7 @@ function pullItem(item){
 function recount(stack){
     discountReplenish();
     vatReplenish();
-    final =  eval($('#compute').val().replace(',','')+"+"+stack);
+    final =  eval($('#compute').val().replace(/,/g,'')+"+"+stack);
     $('#compute').val(final);
     vatRecount();
     discountRecount();
@@ -129,7 +129,7 @@ function minMax(component,minQty,maxQty){
 
 // QUANTITY
 $(document).on('keyup', '#qty', function (){
-    qty = $(this).val().replace(',','');
+    qty = $(this).val().replace(/,/g,'');
     min = $(this).attr('data-min');
     max = $(this).attr('data-max');
     if(qty=='' || qty==null){
@@ -154,12 +154,12 @@ $(document).on('keyup', '#qty', function (){
             pop.popover('hide');
         },2000);
     }
-    stack = $(this).parents('tr').find('#stack').val().replace(',','');
+    stack = $(this).parents('tr').find('#stack').val().replace(/,/g,'');
     price = $(this).attr('data-price');
     price = eval(price+"*"+qty);
     discountReplenish();
     vatReplenish();
-    final = eval($('#compute').val().replace(',','')+"-"+stack+"+"+price);
+    final = eval($('#compute').val().replace(/,/g,'')+"-"+stack+"+"+price);
     $(this).parents('tr').find('#stack').val(price);
     $('#compute').val(final);
     vatRecount();
@@ -169,7 +169,7 @@ $(document).on('keyup', '#qty', function (){
 
 $(document).on('focusin','#qty',function(){
     component = $(this);
-    qty = $(this).val().replace(',','');
+    qty = $(this).val().replace(/,/g,'');
     qty = (qty=='' || qty==null ? 0 : qty);
     type = $(this).attr('data-type');
     id = $(this).attr('data-id');
@@ -179,7 +179,7 @@ $(document).on('focusin','#qty',function(){
         dataType: 'JSON',
         success:function(data){
             if(type=='product'){
-                iQty = $('#inventory'+id).val().replace(',','');
+                iQty = $('#inventory'+id).val().replace(/,/g,'');
                 iQty = eval(qty+"+"+iQty);
                 $('#inventory'+id).val(iQty);
                 minQty = (1<=iQty ? 1 : iQty);
@@ -189,7 +189,7 @@ $(document).on('focusin','#qty',function(){
                 minQty = 0;
                 maxQty = maxValue;
                 $.each(data.package.product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     stack = eval(qty+"*"+value.quantity);
                     iQty = eval(iQty+"+"+stack);
                     $('#inventory'+value.productId).val(iQty);
@@ -202,7 +202,7 @@ $(document).on('focusin','#qty',function(){
                 minQty = 0;
                 maxQty = maxValue;
                 $.each(data.promo.all_product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     total = eval(value.quantity+"+"+value.freeQuantity);
                     stack = eval(qty+"*"+total);
                     iQty = eval(iQty+"+"+stack);
@@ -220,7 +220,7 @@ $(document).on('focusin','#qty',function(){
 $(document).on('change','#qty',function(){
     $(this).popover('hide');
     component = $(this);
-    qty = $(this).val().replace(',','');
+    qty = $(this).val().replace(/,/g,'');
     qty = (qty=='' || qty==null ? 0 : qty);
     type = $(this).attr('data-type');
     id = $(this).attr('data-id');
@@ -230,18 +230,18 @@ $(document).on('change','#qty',function(){
         dataType: 'JSON',
         success:function(data){
             if(type=='product'){
-                final = eval($('#inventory'+id).val().replace(',','')+"-"+qty);
+                final = eval($('#inventory'+id).val().replace(/,/g,'')+"-"+qty);
                 $('#inventory'+id).val(final);
             }else if(type=='package'){
                 $.each(data.package.product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     stack = eval(qty+"*"+value.quantity);
                     iQty = eval(iQty+"-"+stack);
                     $('#inventory'+value.productId).val(iQty);
                 });
             }else if(type=='promo'){
                 $.each(data.promo.all_product,function(key,value){
-                    iQty = $('#inventory'+value.productId).val().replace(',','');
+                    iQty = $('#inventory'+value.productId).val().replace(/,/g,'');
                     total = eval(value.quantity+"+"+value.freeQuantity);
                     stack = eval(qty+"*"+total);
                     iQty = eval(iQty+"-"+stack);
@@ -697,9 +697,9 @@ $(document).on('change', '#discounts', function(){
         dataType: "JSON",
         success:function(data){
             vatExempt(data.discount.isVatExempt);
-            final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
+            final =  eval($('#compute').val().replace(/,/g,'')+"*"+(data.discount.rate/100));
             discountStack = 0-final;
-            final = eval($('#compute').val().replace(',','')+"-"+final);
+            final = eval($('#compute').val().replace(/,/g,'')+"-"+final);
             $('#compute').val(final);
             $('#tFoot').append(
                 '<tr id="discountRow">' +
@@ -733,8 +733,8 @@ $(document).on('click','.pullDiscount', function(){
     $('#discounts').prop('disabled',false);
     $('#discounts').val('');
     $("#discounts").select2();
-    discounted = eval($('#discountStack').val().replace(',','')+"*"+'-1');
-    final = eval($('#compute').val().replace(',','')+"+"+discounted);
+    discounted = eval($('#discountStack').val().replace(/,/g,'')+"*"+'-1');
+    final = eval($('#compute').val().replace(/,/g,'')+"+"+discounted);
     $('#compute').val(final);
     $('#discountRow').remove();
     vatReplenish();
@@ -751,9 +751,9 @@ function oldDiscount(id){
         dataType: "JSON",
         success:function(data){
             vatExempt(data.discount.isVatExempt);
-            final =  eval($('#compute').val().replace(',','')+"*"+(data.discount.rate/100));
+            final =  eval($('#compute').val().replace(/,/g,'')+"*"+(data.discount.rate/100));
             discountStack = 0-final;
-            final = eval($('#compute').val().replace(',','')+"-"+final);
+            final = eval($('#compute').val().replace(/,/g,'')+"-"+final);
             $('#compute').val(final);
             $('#tFoot').append(
                 '<tr id="discountRow">' +
@@ -793,9 +793,9 @@ function retrieveDiscount(id,rate){
         dataType: "JSON",
         success:function(data){
             vatExempt(data.discount.isVatExempt);
-            final =  eval($('#compute').val().replace(',','')+"*"+(rate/100));
+            final =  eval($('#compute').val().replace(/,/g,'')+"*"+(rate/100));
             discountStack = 0-final;
-            final = eval($('#compute').val().replace(',','')+"-"+final);
+            final = eval($('#compute').val().replace(/,/g,'')+"-"+final);
             $('#compute').val(final);
             $('#tFoot').append(
                 '<tr id="discountRow">' +
@@ -828,8 +828,8 @@ function retrieveDiscount(id,rate){
 function vatExempt(isVatExempt){
     if(isVat){
         if(isVatExempt==1){
-            $('#vatExempt').val(-Number($('#vatStack').val().replace(',','')));
-            $('#compute').val($('#vatSales').val().replace(',',''));
+            $('#vatExempt').val(-Number($('#vatStack').val().replace(/,/g,'')));
+            $('#compute').val($('#vatSales').val().replace(/,/g,''));
         }
     }
 }

@@ -114,4 +114,9 @@ class ItemController extends Controller
         }
         return response()->json(['message'=>$message]);
     }
+
+    public function admin(Request $request){
+        $request->session()->flash('admin',true);
+        return response()->json(['message'=>true]);
+    }
 }
