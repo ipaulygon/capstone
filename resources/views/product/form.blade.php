@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('year', 'Year') !!}<span>*</span>
+                                    {!! Form::label('year', 'Year') !!}
                                     {!! Form::input('text','year',null,[
                                         'class' => 'form-control',
                                         'id' => 'year',
@@ -62,7 +62,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('month', 'Month') !!}<span>*</span>
+                                    {!! Form::label('month', 'Month') !!}
                                     {!! Form::input('text','month',null,[
                                         'class' => 'form-control',
                                         'id' => 'month',
@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('day', 'Day') !!}<span>*</span>
+                                    {!! Form::label('day', 'Day') !!}
                                     {!! Form::input('text','day',null,[
                                         'class' => 'form-control',
                                         'id' => 'day',

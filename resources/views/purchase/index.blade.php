@@ -190,7 +190,6 @@
         });
         function finalizeModal(id){
 			finalize = id;
-			$('#finalizeModal').modal('show');
             $.ajax({
                 type: "GET",
                 url: "/purchase/finalz/"+id,
@@ -202,6 +201,7 @@
                     });
                 }
             });
+            $('#finalizeModal').modal('show');
 		}
 		$('#finalize').on('click', function (){
 			$('#fin'+finalize).submit();

@@ -7,6 +7,7 @@
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/plugins/pace/pace.min.css') }}">
 @endsection
 
 @section('content')
@@ -14,7 +15,7 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title"></h3>
-                <ul class="nav nav-tabs">
+                <ul class="nav nav-tabs" id="mainTab">
                     <li class="active">
                         <a href="#sales" data-toggle="tab">Sales</a>
                     </li>
@@ -64,7 +65,7 @@
                                         <td class="text-right">{{number_format($sale->total,2)}}</td>
                                         <td>{{date('F j, Y - H:i:s',strtotime($sale->created_at))}}</td>
                                         <td class="text-right">
-                                            <button id="salesCast" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Cast Warranty"><i class="fa fa-level-down"></i></button>
+                                            <button id="salesObtain" data-id="{{$sale->id}}" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Obtain Warranty"><i class="fa fa-level-down"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -73,29 +74,55 @@
                     </div>
                     <!-- SALES MODAL -->
                     <div id="salesModal" class="modal fade">
-                        <div class="modal-dialog">
-                            {!! Form::open(['url' => 'warranty']) !!}
+                        <div class="modal-dialog modal-lg">
+                            {!! Form::open(['url' => 'warranty','id' => 'salesForm']) !!}
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span></button>
-                                    <h4 class="modal-title">Obtain Warranty</h4>
+                                    <h4 class="modal-title">Obtain Warranty <i id="infoInventory" class="fa fa-question-circle"></i></h4>
                                 </div>
                                 <div class="modal-body">
+                                    <input type="hidden" id="salesId" name="salesId"> 
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6 col-md-offset-3 dataTable_wrapper">
                                             <label>Products:</label>
-                                            <ul id="salesProduct"></ul>
+                                            <table id="salesProduct" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6 dataTable_wrapper">
                                             <label>Packages:</label>
-                                            <ul id="salesPackage"></ul>
+                                            <table id="salesPackage" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Package</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6 dataTable_wrapper">
                                             <label>Promos:</label>
-                                            <ul id="salesPromo"></ul>
+                                            <table id="salesPromo" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Promo</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
                                         </div>
                                     </div>
+                                    <h4>Warranty Items</h4>
                                     <div class="dataTable_wrapper">
                                         <table id="salesList" class="table table-striped table-bordered responsive">
                                             <thead>
@@ -103,12 +130,16 @@
                                                     <th class="text-right">Quantity</th>
                                                     <th>Product</th>
                                                     <th>Belongs to:(Package/Promo)</th>
-                                                    <th class="text-right">Quanity to apply warranty</th>
+                                                    <th class="text-right">Quantity to apply warranty</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
                                         </table>
                                     </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    {!! Form::submit('Submit', ['class'=>'btn btn-primary','id'=>'salesSubmit']) !!}
                                 </div>
                             </div>
                             {!! Form::close() !!}
@@ -153,6 +184,7 @@
                     </div>
                 </div>
             </div>
+            @include('layouts.inventoryList')
         </div>
     </div>
 @endsection
@@ -161,7 +193,13 @@
     <script src="{{ URL::asset('assets/datatables/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ URL::asset('assets/datatables/datatables-responsive/js/dataTables.responsive.js') }}"></script>
-    <script type="text/javascript" src="{{ URL::asset('js/warranty.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
+    <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
+    <script src="{{ URL::asset('js/swarranty.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#salesTable').DataTable({
@@ -171,6 +209,7 @@
                 responsive: true,
             });
             $('#tWarranty').addClass('active');
+            $('#mainTab a[href=#{{$tab}}]').tab('show');
         });
     </script>
 @endsection

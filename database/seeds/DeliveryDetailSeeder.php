@@ -20,9 +20,7 @@ class DeliveryDetailSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('inventory')->where('productId',1)->update([
-            'quantity' => 10
-        ]);
+        DB::table('inventory')->where('productId',1)->increment('quantity',10);
         DB::table('delivery_detail')->insert([
             'deliveryId' => 'DELIVERY00001',
             'productId' => 2,
@@ -31,8 +29,6 @@ class DeliveryDetailSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('inventory')->where('productId',2)->update([
-            'quantity' => 10
-        ]);
+        DB::table('inventory')->where('productId',2)->increment('quantity',10);
     }
 }

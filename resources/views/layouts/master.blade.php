@@ -223,9 +223,9 @@
             </section>
             <!-- /.content -->
         </div>
-        {{-- <footer class="main-footer">
+        <!-- <footer class="main-footer">
             <strong>Copyright © 2017 <a href="http://facebook.com">Rapide</a>.</strong> All rights reserved.
-        </footer> --}}
+        </footer> -->
     </div>
     <!-- Scripts -->
     <!-- jQuery 2.2.0 -->
@@ -242,9 +242,9 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
-    {{--  <script>
+    <!-- <script>
         $('#mainBody').addClass('sidebar-collapse');
-    </script>    --}}
+    </script> -->
     <script>
         $(function () {
             //iCheck for checkbox and radio inputs

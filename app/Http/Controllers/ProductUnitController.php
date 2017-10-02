@@ -161,17 +161,33 @@ class ProductUnitController extends Controller
     {
         try{
             DB::beginTransaction();
-            $unit = ProductUnit::findOrFail($id);
-            $unit->update([
-                'isActive' => 0
-            ]);
+            $used = false;
+            $variances = DB::table('product_variance')
+                ->where('isActive',1)
+                ->get();
+            foreach ($variances as $var) {
+                $units = explode(',',$var->units);
+                foreach ($units as $unit) {
+                    if($unit==$id){
+                        $used = true;
+                    }
+                }
+            }
+            if(!$used){
+                $unit = ProductUnit::findOrFail($id);
+                $unit->update([
+                    'isActive' => 0
+                ]);
+                $request->session()->flash('success', 'Successfully deactivated.');  
+            }else{
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+            }
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
             $errMess = $e->getMessage();
             return Redirect::back()->withErrors($errMess);
         }
-        $request->session()->flash('success', 'Successfully deactivated.');  
         return Redirect('unit');
     }
 

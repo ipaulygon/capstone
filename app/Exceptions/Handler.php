@@ -55,12 +55,6 @@ class Handler extends ExceptionHandler
         if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
             return response()->view('layouts.404',compact('util'));
         }
-        if ($exception instanceof \Illuminate\Audth\Access\AuthorizationException) {
-            return response()->view('auth.login');
-        }
-        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-            return response()->view('auth.login');
-        }
         return parent::render($request, $exception);
     }
 

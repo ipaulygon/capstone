@@ -64,6 +64,11 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('delivery/detail/{id}','DeliveryController@detail');
 		Route::get('return/header/{id}','ReturnController@header');
 		Route::get('return/detail/{id}','ReturnController@detail');
+		Route::get('warranty/sales/{id}','WarrantyController@sales');
+		Route::get('warranty/sales/product/{id}','WarrantyController@salesProduct');
+		Route::get('warranty/sales/package/{id}','WarrantyController@salesPackage');
+		Route::get('warranty/sales/promo/{id}','WarrantyController@salesPromo');
+		Route::post('warranty/sales/create','WarrantyController@salesCreate');
 
 		//PDF
 		Route::get('purchase/pdf/{id}','PdfController@purchase');
