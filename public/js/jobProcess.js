@@ -703,11 +703,12 @@ $(document).on('click','.procProduct',function(){
                 );
                 status = (data.completed ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
                 $('#prodStatus'+detailId).html(status);
+                iList.ajax.reload();
             }else{
                 $('#notif').append(
                     '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
                     data.message +
                     '</div>'
                 );
@@ -767,11 +768,12 @@ $(document).on('click','.procPackage',function(){
                 );
                 status = (data.completed==1 ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
                 $('#packStatus'+detailId).html(status);
+                iList.ajax.reload();
             }else{
                 $('#notif').append(
                     '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
                     data.message +
                     '</div>'
                 );
@@ -804,11 +806,12 @@ $(document).on('click','.procPromo',function(){
                 );
                 status = (data.completed==1 ? '<i class="glyphicon glyphicon-ok text-success"></i> Completed' : '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed');
                 $('#promoStatus'+detailId).html(status);
+                iList.ajax.reload();
             }else{
                 $('#notif').append(
                     '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-                    '<h4><i class="icon fa fa-check"></i> Success!</h4>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
                     data.message +
                     '</div>'
                 );

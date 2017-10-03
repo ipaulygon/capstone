@@ -21,6 +21,7 @@ class CreateJobHeaderTable extends Migration
             $table->unsignedInteger('rackId');
             $table->boolean('isFinalize')->default(0);
             $table->boolean('isComplete')->default(0);
+            $table->boolean('isVoid')->default(0);
             $table->double('total',15,2);
             $table->double('paid',15,2);
             $table->timestamp('start');

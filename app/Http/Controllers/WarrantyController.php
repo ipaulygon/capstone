@@ -6,6 +6,13 @@ use App\WarrantySalesHeader;
 use App\WarrantySalesProduct;
 use App\WarrantySalesPackage;
 use App\WarrantySalesPromo;
+use App\WarrantyJobHeader;
+use App\WarrantyJobProduct;
+use App\WarrantyJobService;
+use App\WarrantyJobPackageProduct;
+use App\WarrantyJobPackageService;
+use App\WarrantyJobPromoProduct;
+use App\WarrantyJobPromoService;
 use App\SalesHeader;
 use App\SalesProduct;
 use App\SalesPackage;
@@ -121,6 +128,16 @@ class WarrantyController extends Controller
         return View('layouts.404');
     }
 
+    public function tabSales(Request $request){
+        $tab = $request->session()->put('warranty_tab','sales');
+        return response()->json('success');
+    }
+    
+    public function tabJobs(Request $request){
+        $tab = $request->session()->put('warranty_tab','jobs');
+        return response()->json('success');
+    }
+
     public function sales($id){
         $sales = SalesHeader::with('product')
             ->with('package')
@@ -145,116 +162,113 @@ class WarrantyController extends Controller
     }
 
     public function salesCreate(Request $request){
-        if($request->session()->get('warranty_tab')=='sales'){
-            $rules = [
-                'product' => 'required_without_all:packageProduct,promoProduct',
-                'productQty.*' => 'sometimes|required|numeric',
-                'packageProduct' => 'required_without_all:product,promoProduct',
-                'packageProductQty.*' => 'sometimes|required|numeric',
-                'promoProduct' => 'required_without_all:product,packageProduct',
-                'promoProductQty.*' => 'sometimes|required|numeric',
-            ];
-            $messages = [
-                'unique' => ':attribute already exists.',
-                'required' => 'The :attribute field is required.',
-                'max' => 'The :attribute field must be no longer than :max characters.',
-                'regex' => 'The :attribute must not contain special characters.'              
-            ];
-            $niceNames = [
-                'product' => 'Product',
-                'productQty.*' => 'Product Quantity',
-                'packageProduct' => 'Package',
-                'packageProductQty.*' => 'Package(Product) Quantity',
-                'promoProduct' => 'Promo',
-                'promoProductQty.*' => 'Promo(Product) Quantity',
-            ];
-            $validator = Validator::make($request->all(),$rules,$messages);
-            $validator->setAttributeNames($niceNames); 
-            if ($validator->fails()) {
-                return Redirect::back()->withErrors($validator)->withInput();
-            }
-            else{
-                try{
-                    DB::beginTransaction();
-                    $warranty = WarrantySalesHeader::create([
-                        'salesId' => $request->salesId,
-                    ]);
-                    $products = $request->product;
-                    $salesProducts = $request->salesProduct;
-                    $prodQty = $request->productQty;
-                    $packages = $request->packageProduct;
-                    $salesPackages = $request->salesPackage;
-                    $packQty = $request->packageProductQty;
-                    $promos = $request->promoProduct;
-                    $salesPromos = $request->salesPromo;
-                    $promoQty = $request->promoProductQty;
-                    if(!empty($products)){
-                        foreach($products as $key=>$product){
-                            if($prodQty[$key]!=0){
-                                $inventory = Inventory::where('productId',$product)->first();
-                                $inventory->decrement('quantity',$prodQty[$key]);
-                                if($inventory->quantity < 0){
-                                    $product = Product::findOrFail($product);
-                                    return response()->json(['message'=>0,'product'=>$product->name]);
-                                }else{
-                                    WarrantySalesProduct::create([
-                                        'warrantyId' => $warranty->id,
-                                        'salesProductId' => $salesProducts[$key],
-                                        'productId' => $product,
-                                        'quantity' => $prodQty[$key]
-                                    ]);
-                                }
+        $rules = [
+            'product' => 'required_without_all:packageProduct,promoProduct',
+            'productQty.*' => 'sometimes|required|numeric',
+            'packageProduct' => 'required_without_all:product,promoProduct',
+            'packageProductQty.*' => 'sometimes|required|numeric',
+            'promoProduct' => 'required_without_all:product,packageProduct',
+            'promoProductQty.*' => 'sometimes|required|numeric',
+        ];
+        $messages = [
+            'unique' => ':attribute already exists.',
+            'required' => 'The :attribute field is required.',
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters.'              
+        ];
+        $niceNames = [
+            'product' => 'Product',
+            'productQty.*' => 'Product Quantity',
+            'packageProduct' => 'Package',
+            'packageProductQty.*' => 'Package(Product) Quantity',
+            'promoProduct' => 'Promo',
+            'promoProductQty.*' => 'Promo(Product) Quantity',
+        ];
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames); 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        else{
+            try{
+                DB::beginTransaction();
+                $warranty = WarrantySalesHeader::create([
+                    'salesId' => $request->salesId,
+                ]);
+                $products = $request->product;
+                $salesProducts = $request->salesProduct;
+                $prodQty = $request->productQty;
+                $packages = $request->packageProduct;
+                $salesPackages = $request->salesPackage;
+                $packQty = $request->packageProductQty;
+                $promos = $request->promoProduct;
+                $salesPromos = $request->salesPromo;
+                $promoQty = $request->promoProductQty;
+                if(!empty($products)){
+                    foreach($products as $key=>$product){
+                        if($prodQty[$key]!=0){
+                            $inventory = Inventory::where('productId',$product)->first();
+                            $inventory->decrement('quantity',$prodQty[$key]);
+                            if($inventory->quantity < 0){
+                                $product = Product::with(['type','brand','variance'])->findOrFail($product);
+                                return response()->json(['message'=>0,'product'=>$product]);
+                            }else{
+                                WarrantySalesProduct::create([
+                                    'warrantyId' => $warranty->id,
+                                    'salesProductId' => $salesProducts[$key],
+                                    'productId' => $product,
+                                    'quantity' => $prodQty[$key]
+                                ]);
                             }
                         }
                     }
-                    if(!empty($packages)){
-                        foreach($packages as $key=>$product){
-                            if($packQty[$key]!=0){
-                                $inventory = Inventory::where('productId',$product)->first();
-                                $inventory->decrement('quantity',$packQty[$key]);
-                                if($inventory->quantity < 0){
-                                    $product = Product::findOrFail($product);
-                                    return response()->json(['message'=>0,'product'=>$product->name]);
-                                }else{
-                                    WarrantySalesPackage::create([
-                                        'warrantyId' => $warranty->id,
-                                        'salesPackageId' => $salesPackages[$key],
-                                        'productId' => $product,
-                                        'quantity' => $packQty[$key]
-                                    ]);
-                                }
-                            }
-                        }
-                    }
-                    if(!empty($promos)){
-                        foreach($promos as $key=>$product){
-                            if($promoQty[$key]!=0){
-                                $inventory = Inventory::where('productId',$product)->first();
-                                $inventory->decrement('quantity',$promoQty[$key]);
-                                if($inventory->quantity < 0){
-                                    $product = Product::findOrFail($product);
-                                    return response()->json(['message'=>0,'product'=>$product->name]);
-                                }else{
-                                    WarrantySalesPromo::create([
-                                        'warrantyId' => $warranty->id,
-                                        'salesPromoId' => $salesPromos[$key],
-                                        'productId' => $product,
-                                        'quantity' => $promoQty[$key]
-                                    ]);
-                                }
-                            }
-                        }
-                    }
-                    DB::commit();
-                    return response()->json(['message'=>'Warranty successfully added']);
-                }catch(\Illuminate\Database\QueryException $e){
-                    DB::rollBack();
-                    $errMess = $e->getMessage();
-                    return Redirect::back()->withErrors($errMess);
                 }
+                if(!empty($packages)){
+                    foreach($packages as $key=>$product){
+                        if($packQty[$key]!=0){
+                            $inventory = Inventory::where('productId',$product)->first();
+                            $inventory->decrement('quantity',$packQty[$key]);
+                            if($inventory->quantity < 0){
+                                $product = Product::with(['type','brand','variance'])->findOrFail($product);
+                                return response()->json(['message'=>0,'product'=>$product]);
+                            }else{
+                                WarrantySalesPackage::create([
+                                    'warrantyId' => $warranty->id,
+                                    'salesPackageId' => $salesPackages[$key],
+                                    'productId' => $product,
+                                    'quantity' => $packQty[$key]
+                                ]);
+                            }
+                        }
+                    }
+                }
+                if(!empty($promos)){
+                    foreach($promos as $key=>$product){
+                        if($promoQty[$key]!=0){
+                            $inventory = Inventory::where('productId',$product)->first();
+                            $inventory->decrement('quantity',$promoQty[$key]);
+                            if($inventory->quantity < 0){
+                                $product = Product::with(['type','brand','variance'])->findOrFail($product);
+                                return response()->json(['message'=>0,'product'=>$product]);
+                            }else{
+                                WarrantySalesPromo::create([
+                                    'warrantyId' => $warranty->id,
+                                    'salesPromoId' => $salesPromos[$key],
+                                    'productId' => $product,
+                                    'quantity' => $promoQty[$key]
+                                ]);
+                            }
+                        }
+                    }
+                }
+                DB::commit();
+                $request->session()->flash('success', 'Successfully added.'); 
+                return Redirect('warranty');
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollBack();
+                $errMess = $e->getMessage();
+                return Redirect::back()->withErrors($errMess);
             }
-        }else{
-
         }
     }
 }

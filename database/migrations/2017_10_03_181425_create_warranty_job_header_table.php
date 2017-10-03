@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesPackageTable extends Migration
+class CreateWarrantyJobHeaderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,18 @@ class CreateSalesPackageTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_package', function (Blueprint $table) {
+        Schema::create('warranty_job_header', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('salesId');
-            $table->unsignedInteger('packageId');
-            $table->integer('quantity');
-            $table->boolean('isActive')->default(1);
-            $table->foreign('salesId')
-                  ->references('id')->on('sales_header')
+            $table->unsignedInteger('jobId');
+            $table->unsignedInteger('warrantyJobId');
+            $table->timestamps();
+            $table->foreign('jobId')
+                  ->references('id')->on('job_header')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('packageId')
-                  ->references('id')->on('package')
+            $table->foreign('warrantyJobId')
+                  ->references('id')->on('job_header')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -38,6 +37,6 @@ class CreateSalesPackageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_package');
+        Schema::dropIfExists('warranty_job_header');
     }
 }

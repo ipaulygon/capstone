@@ -20,7 +20,6 @@ class CreateSalesPromoTable extends Migration
             $table->unsignedInteger('promoId');
             $table->integer('quantity');
             $table->boolean('isActive')->default(1);
-            $table->boolean('isVoid')->default(0);
             $table->foreign('salesId')
                   ->references('id')->on('sales_header')
                   ->onUpdate('cascade')

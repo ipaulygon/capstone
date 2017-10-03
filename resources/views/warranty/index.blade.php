@@ -17,10 +17,10 @@
                 <h3 class="box-title"></h3>
                 <ul class="nav nav-tabs" id="mainTab">
                     <li class="active">
-                        <a href="#sales" data-toggle="tab">Sales</a>
+                        <a href="#sales" id="mainTabSales" data-toggle="tab">Sales</a>
                     </li>
                     <li>
-                        <a href="#jobs" data-toggle="tab">Jobs</a>
+                        <a href="#jobs" id="mainTabJobs" data-toggle="tab">Jobs</a>
                     </li>
                 </ul>
             </div>
@@ -85,6 +85,7 @@
                                 <div class="modal-body">
                                     <input type="hidden" id="salesId" name="salesId"> 
                                     <div class="row">
+                                        <div class="col-md-12" id="salesError"></div>
                                         <div class="col-md-6 col-md-offset-3 dataTable_wrapper">
                                             <label>Products:</label>
                                             <table id="salesProduct" class="table table-striped table-bordered responsive">
@@ -176,11 +177,99 @@
                                             <li>Senior Citizen/PWD ID: {{$job->card}}</li>
                                             @endif
                                         </td>
-                                        <td class="text-right"></td>
+                                        <td class="text-right">
+                                        <button id="jobsObtain" data-id="{{$sale->id}}" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Obtain Warranty"><i class="fa fa-level-down"></i></button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                    <!-- JOBS MODAL -->
+                    <div id="jobModal" class="modal fade">
+                        <div class="modal-dialog modal-lg">
+                            {!! Form::open(['url' => 'warranty','id' => 'jobForm']) !!}
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title">Obtain Warranty <i id="infoInventory" class="fa fa-question-circle"></i></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="jobId" name="jobId"> 
+                                    <div class="row">
+                                        <div class="col-md-12" id="jobsError"></div>
+                                        <div class="col-md-6 dataTable_wrapper">
+                                            <label>Products:</label>
+                                            <table id="jobProduct" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6 dataTable_wrapper">
+                                            <label>Services:</label>
+                                            <table id="jobService" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Service</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6 dataTable_wrapper">
+                                            <label>Packages:</label>
+                                            <table id="jobPackage" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Package</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6 dataTable_wrapper">
+                                            <label>Promos:</label>
+                                            <table id="jobPromo" class="table table-striped table-bordered responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Promo</th>
+                                                        <th class="text-right">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <h4>Warranty Items</h4>
+                                    <div class="dataTable_wrapper">
+                                        <table id="jobList" class="table table-striped table-bordered responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-right">Quantity</th>
+                                                    <th>Item</th>
+                                                    <th>Belongs to:(Package/Promo)</th>
+                                                    <th class="text-right">Quantity to apply warranty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                    {!! Form::submit('Submit', ['class'=>'btn btn-primary','id'=>'jobsSubmit']) !!}
+                                </div>
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -200,6 +289,7 @@
     <script src="{{ URL::asset('assets/plugins/pace/pace.min.js') }}"></script>
     <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
     <script src="{{ URL::asset('js/swarranty.js') }}"></script>
+    <script src="{{ URL::asset('js/jwarranty.js') }}"></script>
     <script>
         $(document).ready(function (){
             $('#salesTable').DataTable({
@@ -211,5 +301,25 @@
             $('#tWarranty').addClass('active');
             $('#mainTab a[href=#{{$tab}}]').tab('show');
         });
+        $(document).on('click','#mainTabSales',function(){
+            $.ajax({
+                type: 'GET',
+                url: 'warranty/tab/sales',
+                dataType: 'JSON',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        })
+        $(document).on('click','#mainTabJobs',function(){
+            $.ajax({
+                type: 'GET',
+                url: 'warranty/tab/jobs',
+                dataType: 'JSON',
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        })
     </script>
 @endsection

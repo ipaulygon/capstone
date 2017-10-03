@@ -301,7 +301,19 @@ $(document).on('click','#salesSubmit',function(e){
         data: $('#salesForm').serialize(),
         success:function(data){
             if(data.message==0){
-                console.log(data.name);
+                if(data.product.isOriginal!=null){
+                    part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    part = '';
+                }
+                productString = data.product.brand.name+' - '+data.product.name+part+' ('+data.product.variance.name+')';
+                $('#salesError').append(
+                    '<div id="alert" class="alert alert-danger alert-dismissible fade in">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                    '<h4><i class="icon fa fa-ban"></i> Something went wrong!</h4>' +
+                    'Check your inventory status on '+productString+
+                    '</div>'
+                )
             }
         }
     });

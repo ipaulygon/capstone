@@ -16,7 +16,6 @@ class SalesProductSeeder extends Seeder
             'productId' => 2,
             'quantity' => 5,
             'isActive' => 1,
-            'isVoid' => 0
         ]);
         DB::table('inventory')->where('productId',2)->decrement('quantity',5);
     }

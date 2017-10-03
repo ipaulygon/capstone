@@ -6,7 +6,7 @@ var iList = $('#inventoryList').DataTable({
     "retrieve": true,
 });
 
-$('#infoInventory').click(function(){
+$(document).on('click','#infoInventory',function(){
     $('#inventoryModal').modal('show');
 });
 

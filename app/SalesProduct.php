@@ -13,7 +13,6 @@ class SalesProduct extends Model
     	'productId',
         'quantity',
     	'isActive',
-        'isVoid'
     ];
 
     public function product(){

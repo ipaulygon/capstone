@@ -64,6 +64,8 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('delivery/detail/{id}','DeliveryController@detail');
 		Route::get('return/header/{id}','ReturnController@header');
 		Route::get('return/detail/{id}','ReturnController@detail');
+		Route::get('warranty/tab/sales','WarrantyController@tabSales');
+		Route::get('warranty/tab/jobs','WarrantyController@tabJobs');
 		Route::get('warranty/sales/{id}','WarrantyController@sales');
 		Route::get('warranty/sales/product/{id}','WarrantyController@salesProduct');
 		Route::get('warranty/sales/package/{id}','WarrantyController@salesPackage');
@@ -108,6 +110,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('job/receipt/pdf/{id}','PdfController@jobReceipt');
 
 	//GetJSON
+	Route::get('item/inventory','ItemController@inventory');
 	Route::get('item/customer/{name}','ItemController@customer');
 	Route::get('item/vehicle/{name}','ItemController@vehicle');
 	Route::get('item/product/{id}','ItemController@product');

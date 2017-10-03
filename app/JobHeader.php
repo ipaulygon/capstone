@@ -18,7 +18,8 @@ class JobHeader extends Model
         'start',
         'end',
         'release',
-        'remarks'
+        'remarks',
+        'isVoid'
     ];
 
     public function product(){

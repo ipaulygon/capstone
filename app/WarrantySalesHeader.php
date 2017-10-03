@@ -12,15 +12,15 @@ class WarrantySalesHeader extends Model
     ];
 
     public function product(){
-        return $this->hasMany('App\SalesProduct','salesId')->where('isActive',1);
+        return $this->hasMany('App\WarrantySalesProduct','salesId');
     }
 
     public function package(){
-        return $this->hasMany('App\SalesPackage','salesId')->where('isActive',1);
+        return $this->hasMany('App\WarrantySalesPackage','salesId');
     }
 
     public function promo(){
-        return $this->hasMany('App\SalesPromo','salesId')->where('isActive',1);
+        return $this->hasMany('App\WarrantySalesPromo','salesId');
     }
 
     public function sales(){

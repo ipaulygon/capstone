@@ -320,7 +320,7 @@
                                 </div>
                             </div>
                             <br>
-                            <label>Progress:</label>
+                            <label>Progress: <i id="infoInventory" class="fa fa-question-circle"></i></label>
                             <div class="progress">
                                 <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;width: 0%;">
                                     0%
@@ -536,7 +536,7 @@
     <script src="{{ URL::asset('assets/signature/jSignature.min.js') }}"></script>
     <script src="{{ URL::asset('js/record.js') }}"></script>
     <script src="{{ URL::asset('js/customer.js') }}"></script>
-    <script src="{{ URL::asset('js/inventoryList.js') }}"></script>
+    <script src="{{ URL::asset('js/inventoryJobList.js') }}"></script>
     <script src="{{ URL::asset('js/techList.js') }}"></script>
     <script src="{{ URL::asset('js/job.js') }}"></script>
     <script src="{{ URL::asset('js/jobFinal.js') }}"></script>

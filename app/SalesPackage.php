@@ -13,7 +13,6 @@ class SalesPackage extends Model
     	'packageId',
         'quantity',
     	'isActive',
-        'isVoid',
     ];
 
     public function package(){

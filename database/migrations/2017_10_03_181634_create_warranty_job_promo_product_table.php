@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesProductTable extends Migration
+class CreateWarrantyJobPromoProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,20 @@ class CreateSalesProductTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_product', function (Blueprint $table) {
+        Schema::create('warranty_job_promo_product', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('salesId');
+            $table->unsignedInteger('warrantyId');
+            $table->unsignedInteger('jobPromoId');
             $table->unsignedInteger('productId');
             $table->integer('quantity');
-            $table->boolean('isActive')->default(1);
-            $table->foreign('salesId')
-                  ->references('id')->on('sales_header')
+            $table->timestamps();
+            $table->foreign('warrantyId')
+                  ->references('id')->on('warranty_job_header')
+                  ->onUpdate('cascade')
+                  ->onDelete('restrict');
+            $table->foreign('jobPromoId')
+                  ->references('id')->on('job_promo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
             $table->foreign('productId')
@@ -38,6 +43,6 @@ class CreateSalesProductTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_product');
+        Schema::dropIfExists('warranty_job_promo_product');
     }
 }

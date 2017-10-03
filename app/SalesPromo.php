@@ -13,7 +13,6 @@ class SalesPromo extends Model
     	'promoId',
         'quantity',
     	'isActive',
-        'isVoid'	
     ];
 
     public function promo(){
