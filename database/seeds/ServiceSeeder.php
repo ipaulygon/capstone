@@ -16,6 +16,9 @@ class ServiceSeeder extends Seeder
             'price' => 300.25,
             'size' => 'Sedan',
             'categoryId' => 1,
+            'year' => 1,
+            'month' => 0,
+            'day' => 0,
             'isActive' => 1
         ]);
     }

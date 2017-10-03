@@ -130,6 +130,11 @@ function clickEvent(id){
             $.each(data.job.technician,function(key,value){
                 $('#detailTechs').append('<li class="detailTechs">'+value.technician.firstName+' '+value.technician.lastName+'</li>');
             });
+            if(data.job.isVoid){
+                $('#detailEstimate').addClass('hidden');
+            }else{
+                $('#detailEstimate').removeClass('hidden');
+            }
             if(data.job.isFinalize){
                 $('#detailPDF').removeClass('hidden');
                 $('#detailProcess').removeClass('hidden');

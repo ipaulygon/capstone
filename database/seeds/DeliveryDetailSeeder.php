@@ -24,11 +24,11 @@ class DeliveryDetailSeeder extends Seeder
         DB::table('delivery_detail')->insert([
             'deliveryId' => 'DELIVERY00001',
             'productId' => 2,
-            'quantity' => 10,
+            'quantity' => 20,
             'isActive' => 1,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        DB::table('inventory')->where('productId',2)->increment('quantity',10);
+        DB::table('inventory')->where('productId',2)->increment('quantity',20);
     }
 }

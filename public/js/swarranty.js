@@ -62,7 +62,7 @@ $(document).on('click','#salesObtain',function(){
             $.each(data.sales.package,function(key,value){
                 salesPackageList(value);
             });
-            //package
+            //promo
             $.each(data.sales.promo,function(key,value){
                 salesPromoList(value);
             });
@@ -117,7 +117,7 @@ function salesProduct(id) {
         success: function(value){
             $.ajax({
                 type: "GET",
-                url: "/item/product/"+value.productId,
+                url: "/item/product/warranty/"+value.productId,
                 dataType: "JSON",
                 success: function(data) {
                     if(data.product.isOriginal!=null){
@@ -218,7 +218,6 @@ function salesPackage(id){
             });
         }
     });
-    
 }
 
 function salesPromoList(value){
@@ -314,6 +313,8 @@ $(document).on('click','#salesSubmit',function(e){
                     'Check your inventory status on '+productString+
                     '</div>'
                 )
+            }else{
+                location.reload();
             }
         }
     });

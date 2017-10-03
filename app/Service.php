@@ -12,7 +12,10 @@ class Service extends Model
     	'name',
         'price',
         'size',
-    	'categoryId',
+        'categoryId',
+        'year',
+        'month',
+        'day',
     	'isActive'  	
     ];
 

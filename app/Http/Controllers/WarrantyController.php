@@ -17,7 +17,11 @@ use App\SalesHeader;
 use App\SalesProduct;
 use App\SalesPackage;
 use App\SalesPromo;
-use App\SalesDiscount;
+use App\JobHeader;
+use App\JobProduct;
+use App\JobService;
+use App\JobPackage;
+use App\JobPromo;
 use App\Customer;
 use App\Inventory;
 use App\Product;
@@ -89,9 +93,15 @@ class WarrantyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        return View('layouts.404');
+        if($request->session()->get('warranty_tab')=='sales'){
+            $warranties = WarrantySalesHeader::where('salesId',$id)->get();
+            return View('warranty.sales',compact('warranties'));
+        }else{
+            $warranties = WarrantyJobHeader::where('jobId',$id)->get();
+            return View('warranty.job',compact('warranties'));
+        }
     }
 
     /**
@@ -262,7 +272,230 @@ class WarrantyController extends Controller
                     }
                 }
                 DB::commit();
-                $request->session()->flash('success', 'Successfully added.'); 
+                $request->session()->flash('warranty', 'Sales warranty successfully added.'); 
+                return Redirect('warranty');
+            }catch(\Illuminate\Database\QueryException $e){
+                DB::rollBack();
+                $errMess = $e->getMessage();
+                return Redirect::back()->withErrors($errMess);
+            }
+        }
+    }
+
+    public function job($id){
+        $job = JobHeader::with('product')
+            ->with('service')
+            ->with('package')
+            ->with('promo')
+            ->findOrFail($id);
+        return response()->json(['job'=>$job]);
+    }
+    
+    public function jobProduct($id){
+        $job = JobProduct::findOrFail($id);
+        return response()->json($job);
+    }
+    
+    public function jobService($id){
+        $job = JobService::findOrFail($id);
+        return response()->json($job);
+    }
+    
+    public function jobPackage($id){
+        $job = JobPackage::findOrFail($id);
+        return response()->json($job);
+    }
+    
+    public function jobPromo($id){
+        $job = JobPromo::findOrFail($id);
+        return response()->json($job);
+    }
+
+    public function jobCreate(Request $request){
+        $rules = [
+            'product' => 'required_without_all:service,packageProduct,packageService,promoProduct,promoService',
+            'productQty.*' => 'sometimes|required|numeric',
+            'service' => 'required_without_all:product,packageProduct,packageService,promoProduct,promoService',
+            'packageProduct' => 'required_without_all:product,service,packageService,promoProduct,promoService',
+            'packageProductQty.*' => 'sometimes|required|numeric',
+            'packageService' => 'required_without_all:product,service,packageProduct,promoProduct,promoService',
+            'promoProduct' => 'required_without_all:product,service,packageProduct,packageService,promoService',
+            'promoProductQty.*' => 'sometimes|required|numeric',
+            'promoService' => 'product,service,packageProduct,packageService,promoProduct'
+        ];
+        $messages = [
+            'unique' => ':attribute already exists.',
+            'required' => 'The :attribute field is required.',
+            'max' => 'The :attribute field must be no longer than :max characters.',
+            'regex' => 'The :attribute must not contain special characters.'              
+        ];
+        $niceNames = [
+            'product' => 'Product',
+            'productQty.*' => 'Product Quantity',
+            'service' => 'Service',
+            'packageProduct' => 'Package',
+            'packageProductQty.*' => 'Package(Product) Quantity',
+            'packageService' => 'Package(Service)',
+            'promoProduct' => 'Promo',
+            'promoProductQty.*' => 'Promo(Product) Quantity',
+            'promoService' => 'Promo(Service)'
+        ];
+        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator->setAttributeNames($niceNames); 
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+        else{
+            try{
+                DB::beginTransaction();
+                $job = JobHeader::findOrFail($request->jobId);
+                $job = JobHeader::create([
+                    'customerId' => $job->customer->id,
+                    'vehicleId' => $job->vehicle->id,
+                    'rackId' => $job->rackId,
+                    'isFinalize' => 1,
+                    'total' => 0,
+                    'paid' => 0,
+                    'start' => date('Y-m-d H:i:s'),
+                    'remarks' => 'On warranty',
+                    'isVoid' => 1
+                ]);
+                $warranty = WarrantyJobHeader::create([
+                    'jobId' => $request->jobId,
+                    'warrantyJobId' => $job->id
+                ]);
+                //products
+                $products = $request->product;
+                $jobProducts = $request->jobProduct;
+                $prodQty = $request->productQty;
+                //services
+                $services = $request->service;
+                $jobServices = $request->jobService;
+                //pp
+                $packageProducts = $request->packageProduct;
+                $jobProductPackages = $request->jobProductPackage;
+                $packQty = $request->packageProductQty;
+                //ps
+                $packageServices = $request->packageService;
+                $jobServicePackages = $request->jobServicePackage;
+                //pp
+                $promoProducts = $request->promoProduct;
+                $jobProductPromos = $request->jobProductPromo;
+                $promoQty = $request->promoProductQty;
+                //ps
+                $promoServices = $request->promoService;
+                $jobServicePromos = $request->jobServicePromo;
+                if(!empty($products)){
+                    foreach($products as $key=>$product){
+                        if($prodQty[$key]!=0){
+                            WarrantyJobProduct::create([
+                                'warrantyId' => $warranty->id,
+                                'jobProductId' => $jobProducts[$key],
+                                'productId' => $product,
+                                'quantity' => $prodQty[$key]
+                            ]);
+                            JobProduct::create([
+                                'jobId' => $job->id,
+                                'productId' => $product,
+                                'quantity' => $prodQty[$key],
+                                'isActive' => 1,
+                                'isVoid' => 1
+                            ]);
+                        }
+                    }
+                }
+                if(!empty($services)){
+                    foreach($services as $key=>$service){
+                        WarrantyJobService::create([
+                            'warrantyId' => $warranty->id,
+                            'jobServiceId' => $jobServices[$key],
+                            'serviceId' => $service,
+                        ]);
+                        JobService::create([
+                            'jobId' => $job->id,
+                            'serviceId' => $service,
+                            'isActive' => 1,
+                            'isVoid' => 1
+                        ]);
+                    }
+                }
+                if(!empty($packageProducts)){
+                    foreach($packageProducts as $key=>$product){
+                        WarrantyJobPackageProduct::create([
+                            'warrantyId' => $warranty->id,
+                            'jobPackageId' => $jobProductPackages[$key],
+                            'productId' => $product,
+                            'quantity' => $packQty[$key]
+                        ]);
+                        $checkJob = JobProduct::where('productId',$product)->where('jobId',$job->id)->first();
+                        if(count($checkJob)>0){
+                            $checkJob->increment('quantity',$packQty[$key]);
+                        }else{
+                            JobProduct::create([
+                                'jobId' => $job->id,
+                                'productId' => $product,
+                                'quantity' => $packQty[$key],
+                                'isActive' => 1,
+                                'isVoid' => 1
+                            ]);
+                        }
+                    }
+                }
+                if(!empty($packageServices)){
+                    foreach($packageServices as $key=>$service){
+                        WarrantyJobPackageService::create([
+                            'warrantyId' => $warranty->id,
+                            'jobPackageId' => $jobServicePackages[$key],
+                            'serviceId' => $service,
+                        ]);
+                        JobService::create([
+                            'jobId' => $job->id,
+                            'serviceId' => $service,
+                            'isActive' => 1,
+                            'isVoid' => 1
+                        ]);
+                    }
+                }
+                if(!empty($promoProducts)){
+                    foreach($promoProducts as $key=>$product){
+                        WarrantyJobPromoProduct::create([
+                            'warrantyId' => $warranty->id,
+                            'jobPromoId' => $jobProductPromos[$key],
+                            'productId' => $product,
+                            'quantity' => $promoQty[$key]
+                        ]);
+                        $checkJob = JobProduct::where('productId',$product)->where('jobId',$job->id)->first();
+                        if(count($checkJob)>0){
+                            $checkJob->increment('quantity',$promoQty[$key]);
+                        }else{
+                            JobProduct::create([
+                                'jobId' => $job->id,
+                                'productId' => $product,
+                                'quantity' => $promoQty[$key],
+                                'isActive' => 1,
+                                'isVoid' => 1
+                            ]);
+                        }
+                    }
+                }
+                if(!empty($promoServices)){
+                    foreach($promoServices as $key=>$service){
+                        WarrantyJobPromoService::create([
+                            'warrantyId' => $warranty->id,
+                            'jobPromoId' => $jobServicePromos[$key],
+                            'serviceId' => $service,
+                        ]);
+                        JobService::create([
+                            'jobId' => $job->id,
+                            'serviceId' => $service,
+                            'isActive' => 1,
+                            'isVoid' => 1
+                        ]);
+                    }
+                }
+                DB::commit();
+                $id = 'JOB'.str_pad($job->id, 5, '0', STR_PAD_LEFT);
+                $request->session()->flash('warranty', 'Job warranty successfully added. New job order generated: '.$id); 
                 return Redirect('warranty');
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

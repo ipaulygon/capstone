@@ -48,6 +48,25 @@ class ItemController extends Controller
         return response()->json(['product'=>$product]);
     }
 
+    public function productw($id){
+        $product = Product::with('type')
+            ->with('brand')
+            ->with('variance')
+            ->with('inventory')
+            ->with('discount.header.rateRecord')
+            ->with('discountRecord.header.rateRecord')
+            ->with('priceRecord')
+            ->with('vehicle.model.make')
+            ->findOrFail($id);
+        $dateNow = date('Y-m-d H:i:s');
+        $endDate = date('Y-m-d H:i:s',strtotime('+'.$product->year.' years '.$product->month.' months '.$product->day.' days'));
+        if($endDate>=$dateNow){
+            return response()->json(['product'=>$product]);
+        }else{
+            return null;
+        }
+    }
+
     public function service($id){
         $service = Service::with('category')
             ->with('discount.header.rateRecord')
@@ -55,6 +74,21 @@ class ItemController extends Controller
             ->with('priceRecord')
             ->findOrFail($id);
         return response()->json(['service'=>$service]);
+    }
+    
+    public function servicew($id){
+        $service = Service::with('category')
+            ->with('discount.header.rateRecord')
+            ->with('discountRecord.header.rateRecord')
+            ->with('priceRecord')
+            ->findOrFail($id);
+        $dateNow = date('Y-m-d H:i:s');
+        $endDate = date('Y-m-d H:i:s',strtotime('+'.$service->year.' years '.$service->month.' months '.$service->day.' days'));
+        if($endDate>=$dateNow){
+            return response()->json(['service'=>$service]);
+        }else{
+            return null;
+        }
     }
 
     public function package($id){

@@ -15,9 +15,19 @@ class JobPackageSeeder extends Seeder
             'jobId' => 1,
             'packageId' => 1,
             'quantity' => 5,
-            'completed' => 0,
+            'completed' => 5,
             'isActive' => 1,
-            'isComplete' => 0,
+            'isComplete' => 1,
+            'isVoid' => 0,
+        ]);
+        
+        DB::table('job_package')->insert([
+            'jobId' => 2,
+            'packageId' => 2,
+            'quantity' => 1,
+            'completed' => 1,
+            'isActive' => 1,
+            'isComplete' => 1,
             'isVoid' => 0,
         ]);
     }

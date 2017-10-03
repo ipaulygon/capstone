@@ -23,13 +23,12 @@ class PurchaseDetailSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-
         DB::table('purchase_detail')->insert([
             'purchaseId' => 'ORDER00001',
             'productId' => 2,
             'modelId' => null,
             'isManual' => null,
-            'quantity' => 10,
+            'quantity' => 20,
             'delivered' => 10,
             'price' => 100.00,
             'created_at' => Carbon::now(),

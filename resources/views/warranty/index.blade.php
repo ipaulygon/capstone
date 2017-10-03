@@ -66,6 +66,7 @@
                                         <td>{{date('F j, Y - H:i:s',strtotime($sale->created_at))}}</td>
                                         <td class="text-right">
                                             <button id="salesObtain" data-id="{{$sale->id}}" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Obtain Warranty"><i class="fa fa-level-down"></i></button>
+                                            <a href="{{url('/warranty/'.$sale->id)}}" target="_blank" type="button" class="btn btn-sm bg-purple" data-toggle="tooltip" data-placement="top" title="View Record"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -84,8 +85,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <input type="hidden" id="salesId" name="salesId"> 
+                                    <div class="col-md-12" id="salesError"></div>
                                     <div class="row">
-                                        <div class="col-md-12" id="salesError"></div>
                                         <div class="col-md-6 col-md-offset-3 dataTable_wrapper">
                                             <label>Products:</label>
                                             <table id="salesProduct" class="table table-striped table-bordered responsive">
@@ -140,7 +141,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                    {!! Form::submit('Submit', ['class'=>'btn btn-primary','id'=>'salesSubmit']) !!}
+                                    <button type="button" class="btn btn-primary" id="salesSubmit">Submit</button>
                                 </div>
                             </div>
                             {!! Form::close() !!}
@@ -178,7 +179,8 @@
                                             @endif
                                         </td>
                                         <td class="text-right">
-                                        <button id="jobsObtain" data-id="{{$sale->id}}" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Obtain Warranty"><i class="fa fa-level-down"></i></button>
+                                            <button id="jobsObtain" data-id="{{$job->jobId}}" type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Obtain Warranty"><i class="fa fa-level-down"></i></button>
+                                            <a href="{{url('/warranty/'.$job->jobId)}}" target="_blank" type="button" class="btn btn-sm bg-purple" data-toggle="tooltip" data-placement="top" title="View Record"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -197,8 +199,8 @@
                                 </div>
                                 <div class="modal-body">
                                     <input type="hidden" id="jobId" name="jobId"> 
+                                    <div class="col-md-12" id="jobsError"></div>
                                     <div class="row">
-                                        <div class="col-md-12" id="jobsError"></div>
                                         <div class="col-md-6 dataTable_wrapper">
                                             <label>Products:</label>
                                             <table id="jobProduct" class="table table-striped table-bordered responsive">
@@ -223,6 +225,8 @@
                                                 <tbody></tbody>
                                             </table>
                                         </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-6 dataTable_wrapper">
                                             <label>Packages:</label>
                                             <table id="jobPackage" class="table table-striped table-bordered responsive">
@@ -265,7 +269,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                    {!! Form::submit('Submit', ['class'=>'btn btn-primary','id'=>'jobsSubmit']) !!}
+                                    <button type="button" class="btn btn-primary" id="jobSubmit">Submit</button>
                                 </div>
                             </div>
                             {!! Form::close() !!}

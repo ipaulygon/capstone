@@ -17,5 +17,12 @@ class PackageProductSeeder extends Seeder
             'quantity' => 2,
             'isActive' => 1,
         ]);
+        
+        DB::table('package_product')->insert([
+            'packageId' => 2,
+            'productId' => 2,
+            'quantity' => 1,
+            'isActive' => 1,
+        ]);
     }
 }

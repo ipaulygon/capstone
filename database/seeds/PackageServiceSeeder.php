@@ -11,6 +11,10 @@ class PackageServiceSeeder extends Seeder
      */
     public function run()
     {
-        
+        DB::table('package_service')->insert([
+            'packageId' => 2,
+            'serviceId' => 1,
+            'isActive' => 1,
+        ]);
     }
 }

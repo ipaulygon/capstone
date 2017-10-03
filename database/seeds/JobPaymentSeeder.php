@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon as Carbon;
 
-class JobTechnicianSeeder extends Seeder
+class JobPaymentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,18 +12,20 @@ class JobTechnicianSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('job_technician')->insert([
+        DB::table('job_payment')->insert([
             'jobId' => 1,
-            'technicianId' => 1,
-            'isActive' => 1,
+            'paid' => 5551.06,
+            'creditCard' => bcrypt(''),
+            'isCredit' => 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
         
-        DB::table('job_technician')->insert([
-            'jobId' => 1,
-            'technicianId' => 2,
-            'isActive' => 1,
+        DB::table('job_payment')->insert([
+            'jobId' => 2,
+            'paid' => 1970.48,
+            'creditCard' => bcrypt(''),
+            'isCredit' => 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);

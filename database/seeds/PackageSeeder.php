@@ -16,5 +16,11 @@ class PackageSeeder extends Seeder
             'price' => 500.00,
             'isActive' => 1,
         ]);
+
+        DB::table('package')->insert([
+            'name' => 'Change Oil Package',
+            'price' => 700.00,
+            'isActive' => 1,
+        ]);
     }
 }

@@ -73,7 +73,7 @@
                                     <a id="detailUpdate" href="" type="button" class="btn btn-primary btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Update record">
                                         <i class="glyphicon glyphicon-edit"></i>
                                     </a>
-                                    <button id="detailView" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
+                                    <button id="detailView" type="button" class="btn bg-purple btn-sm" data-toggle="tooltip" data-placement="top" title="View record">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </button>
                                     <button id="detailProcess" type="button" class="btn btn-success btn-sm hidden" data-toggle="tooltip" data-placement="top" title="Process record">
@@ -153,10 +153,10 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-right">
-                                                        <button onclick="view('{{$job->jobId}}')" type="button" class="btn btn-primary btn-sm" style="background-color:#6f5499!important" data-toggle="tooltip" data-placement="top" title="View record">
+                                                        <button onclick="view('{{$job->jobId}}')" type="button" class="btn bg-purple btn-sm" data-toggle="tooltip" data-placement="top" title="View record">
                                                             <i class="glyphicon glyphicon-eye-open"></i>
                                                         </button>
-                                                        @if($job->release==null)
+                                                        @if($job->release==null || !$job->isVoid)
                                                         <button onclick="signatureModal('{{$job->jobId}}','estimate')" type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Generate Estimate">
                                                             <i class="glyphicon glyphicon-list-alt"></i>
                                                         </button>
@@ -569,11 +569,11 @@
                         end: '{{$job->release}}',
                         @if($job->isComplete && $job->total==$job->paid && $job->release!=null)
                             color: '#6f5499'
-                        @elseif($job->isComplete && $job->total==$job->paid)
+                        @elseif($job->isComplete && $job->isFinalize && $job->total==$job->paid)
                             color: '#00a65a'
-                        @elseif($job->isComplete && $job->total!=$job->paid)
+                        @elseif($job->isComplete && $job->isFinalize && $job->total!=$job->paid)
                             color: '#00a65a'
-                        @elseif(!$job->isComplete && $job->total==$job->paid)
+                        @elseif(!$job->isComplete && $job->isFinalize  && $job->total==$job->paid)
                             color: '#00c0ef'
                         @elseif(!$job->isComplete && $job->isFinalize && $job->total!=$job->paid)
                             color: '#f39c12'

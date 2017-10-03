@@ -46,7 +46,8 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::patch('delivery/receive/{id}','DeliveryController@receive');
 		Route::resource('return','ReturnController');
 		Route::resource('sales','SalesController');
-		Route::resource('warranty','WarrantyController');
+		Route::resource('warranty','WarrantyController',['only' => [
+			'index','show']]);
 		Route::resource('query','QueryController');
 		Route::post('query/load','QueryController@load');
 		Route::resource('report','ReportController');
@@ -71,6 +72,12 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('warranty/sales/package/{id}','WarrantyController@salesPackage');
 		Route::get('warranty/sales/promo/{id}','WarrantyController@salesPromo');
 		Route::post('warranty/sales/create','WarrantyController@salesCreate');
+		Route::get('warranty/job/{id}','WarrantyController@job');
+		Route::get('warranty/job/product/{id}','WarrantyController@jobProduct');
+		Route::get('warranty/job/service/{id}','WarrantyController@jobService');
+		Route::get('warranty/job/package/{id}','WarrantyController@jobPackage');
+		Route::get('warranty/job/promo/{id}','WarrantyController@jobPromo');
+		Route::post('warranty/job/create','WarrantyController@jobCreate');
 
 		//PDF
 		Route::get('purchase/pdf/{id}','PdfController@purchase');
@@ -114,7 +121,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('item/customer/{name}','ItemController@customer');
 	Route::get('item/vehicle/{name}','ItemController@vehicle');
 	Route::get('item/product/{id}','ItemController@product');
+	Route::get('item/product/warranty/{id}','ItemController@productw');
 	Route::get('item/service/{id}','ItemController@service');
+	Route::get('item/service/warranty/{id}','ItemController@servicew');
 	Route::get('item/package/{id}','ItemController@package');
 	Route::get('item/promo/{id}','ItemController@promo');
 	Route::get('item/discount/{id}','ItemController@discount');

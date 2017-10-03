@@ -21,6 +21,7 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.numeric.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ URL::asset('js/service.js') }}"></script>
     <script>
         @if(old('categoryId'))
             $("#sc").val({{old('categoryId')}});

@@ -29,6 +29,7 @@
                                 <option value="3">Most jobs done by technician</option>
                                 <option value="4">Most repaired vehicle</option>
                                 <option value="5">Customers with pending payments</option>
+                                <option value="6">Current Inventory List</option>
                             </select>
                         </div>
                     </div>
@@ -191,6 +192,34 @@
                         </table>
                     </div>
                 </div>
+                <div class="panel panel-primary hidden pan6">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="list6" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-right">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($inventory as $product)
+                                <?php
+                                    if($product->isOriginal!=null){
+                                        $type = ($product->isOriginal=="type1" ? $util->type1 : $util->type2);
+                                    }else{
+                                        $type = "";
+                                    }
+                                ?>
+                                <tr>
+                                    <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
+                                    <td class="text-right">{{$product->quantity}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -218,6 +247,9 @@
                 responsive: true
             });
             $('#list5').DataTable({
+                responsive: true
+            });
+            $('#list6').DataTable({
                 responsive: true
             });
         });

@@ -48,7 +48,16 @@ class QueryController extends Controller
                 Select * from job_header JOIN customer on job_header.customerId = customer.id 
                 WHERE job_header.total <> job_header.paid"));
 
-        return View('query.index',compact('product','services','technician','vehicle','customer'));
+        $inventory = DB::table('inventory as i')
+            ->join('product as p','p.id','i.productId')
+            ->join('product_type as pt','pt.id','p.typeId')
+            ->join('product_brand as pb','pb.id','p.brandId')
+            ->join('product_variance as pv','pv.id','p.varianceId')
+            ->where('p.isActive',1)
+            ->select('i.*','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+            ->get();
+
+        return View('query.index',compact('product','services','technician','vehicle','customer','inventory'));
     }
 
     /**
@@ -58,7 +67,7 @@ class QueryController extends Controller
      */
     public function create()
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -69,7 +78,7 @@ class QueryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -80,7 +89,7 @@ class QueryController extends Controller
      */
     public function show($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -91,7 +100,7 @@ class QueryController extends Controller
      */
     public function edit($id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -103,7 +112,7 @@ class QueryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return View('layouts.404');
     }
 
     /**
@@ -114,7 +123,7 @@ class QueryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return View('layouts.404');
     }
 
     public function load(Request $request){

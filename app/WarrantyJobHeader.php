@@ -13,19 +13,27 @@ class WarrantyJobHeader extends Model
     ];
 
     public function product(){
-        return $this->hasMany('App\WarrantyJobProduct','jobId');
+        return $this->hasMany('App\WarrantyJobProduct','warrantyId');
     }
     
     public function service(){
-        return $this->hasMany('App\WarrantyJobService','jobId');
+        return $this->hasMany('App\WarrantyJobService','warrantyId');
     }
 
-    public function package(){
-        return $this->hasMany('App\WarrantyJobPackage','jobId');
+    public function packageProduct(){
+        return $this->hasMany('App\WarrantyJobPackageProduct','warrantyId');
+    }
+    
+    public function packageService(){
+        return $this->hasMany('App\WarrantyJobPackageService','warrantyId');
     }
 
-    public function promo(){
-        return $this->hasMany('App\WarrantyJobPromo','jobId');
+    public function promoProduct(){
+        return $this->hasMany('App\WarrantyJobPromoProduct','warrantyId');
+    }
+    
+    public function promoService(){
+        return $this->hasMany('App\WarrantyJobPromoService','warrantyId');
     }
 
     public function job(){

@@ -31,6 +31,11 @@ function process(id){
         dataType: 'JSON',
         success:function(data){
             $('.processTechs').remove();
+            if(data.job.isVoid){
+                $('#processUpdate').addClass('hidden');
+            }else{
+                $('#processUpdate').removeClass('hidden');
+            }
             $('#processUpdate').attr('onclick','updateAdmin('+id+',"job")');
             $('#processStart').text(data.job.start);
             $('#processEnd').text(data.job.release);
