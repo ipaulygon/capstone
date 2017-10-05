@@ -63,7 +63,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($jobs as $job)
+                        @foreach($pendingJobs as $job)
                         <tr>
                             <td>{{'JOB'.str_pad($job->id, 5, '0', STR_PAD_LEFT)}}</td>
                             <td>
@@ -145,7 +145,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($jobs as $job)
+                        @foreach($pendingJobs as $job)
                         <tr>
                             @foreach($job->technician as $tech)
                                 @if($tech->technicianId==$techUser->id)

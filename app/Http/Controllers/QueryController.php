@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
-class QueryController extends Controller
+clASs QueryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,50 +14,140 @@ class QueryController extends Controller
      */
     public function index()
     {
-        $product = DB::select(DB::raw("
-                SELECT COUNT(*) as count, product.name as product, product_brand.name as brand, product_variance.name as variance, product_type.name as type, product.description as description, product.isOriginal as isOriginal FROM product 
-                JOIN product_brand on product.brandId = product_brand.id 
-                join product_type on product_type.id = product.typeId
-                JOIN product_variance on product.varianceId = product_variance.id
-                JOIN job_product ON product.id = job_product.productId 
-                JOIN job_header ON job_header.id = job_product.productId
-                WHERE job_header.isFinalize = '1' AND job_header.total = job_header.paid 
-                GROUP BY product.name,product_brand.name,product_variance.name,product_type.name,product.description,product.isOriginal ORDER BY count DESC LIMIT 3 ")
-        );
+        $products = DB::select(DB::raw('
+        SELECT product, type, brand, variance, original, description, SUM(productCount) AS total FROM (
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN sales_product AS sp ON sp.id = p.id
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity*pp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN package_product AS pp ON pp.id = p.id
+            JOIN package ON package.id = pp.packageId
+            JOIN sales_package AS sp ON sp.packageId = package.id
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity*pp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN promo_product AS pp ON pp.id = p.id
+            JOIN promo ON promo.id = pp.promoId
+            JOIN sales_promo AS sp ON sp.promoId = promo.id
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN job_product AS jp ON jp.id = p.id
+            JOIN job_header AS jh ON jh.id = jp.jobId
+            WHERE p.isActive=1 AND jh.isComplete=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity*pp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN package_product AS pp ON pp.id = p.id
+            JOIN package ON package.id = pp.packageId
+            JOIN job_package AS jp ON jp.packageId = package.id
+            JOIN job_header AS jh ON jh.id = jp.jobId
+            WHERE p.isActive=1 AND jh.isComplete=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity*pp.quantity) AS productCount FROM product AS p
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            JOIN promo_product AS pp ON pp.id = p.id
+            JOIN promo ON promo.id = pp.promoId
+            JOIN job_promo AS jp ON jp.promoId = promo.id
+            JOIN job_header AS jh ON jh.id = jp.jobId
+            WHERE p.isActive=1 AND jh.isComplete=1
+            GROUP BY type,brand,variance,product,original,description
+        ) AS result
+        GROUP BY type,brand,variance,product,original,description
+        ORDER BY total
+        LIMIT 5
+        '));
+        $services = DB::select(DB::raw('
+        SELECT category, service, size, SUM(serviceCount) AS total FROM(
+            SELECT s.name AS service, sc.name AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
+            JOIN service_category AS sc ON sc.id = s.categoryId
+            JOIN job_service AS js ON js.serviceId = s.id
+            JOIN job_header AS jh ON jh.id = js.jobId
+            WHERE s.isActive=1 AND jh.isComplete=1
+            GROUP BY category,service,size
+            UNION
+            SELECT s.name AS service, sc.name AS category, s.size AS size, SUM(jp.quantity) AS serviceCount FROM service AS s
+            JOIN service_category AS sc ON sc.id = s.categoryId
+            JOIN package_service AS ps ON ps.serviceId = s.id
+            JOIN package ON package.id = ps.packageId
+            JOIN job_package AS jp ON jp.packageId = package.id
+            JOIN job_header AS jh ON jh.id = jp.jobId
+            WHERE s.isActive=1 AND jh.isComplete=1
+            GROUP BY category,service,size
+            UNION
+            SELECT s.name AS service, sc.name AS category, s.size AS size, SUM(jp.quantity) AS serviceCount FROM service AS s
+            JOIN service_category AS sc ON sc.id = s.categoryId
+            JOIN promo_service AS ps ON ps.serviceId = s.id
+            JOIN promo ON promo.id = ps.promoId
+            JOIN job_promo AS jp ON jp.promoId = promo.id
+            JOIN job_header AS jh ON jh.id = jp.jobId
+            WHERE s.isActive=1 AND jh.isComplete=1
+            GROUP BY category,service,size
+        )AS result
+        GROUP BY category,service,size
+        ORDER BY total
+        LIMIT 5
+        '));
 
-        $services = DB::select(DB::raw("
-                SELECT COUNT(*) as count, service.name as service, service_category.name as category, service.size as size FROM `service` JOIN job_service ON  service.id = job_service.serviceId JOIN job_header ON job_header.id = job_service.serviceId join service_category on service.categoryId = service_category.id
-                WHERE job_header.isFinalize = 1 AND job_header.total = job_header.paid
-                 GROUP BY service.name,service_category.name,service.size ORDER BY count DESC LIMIT 3")
-        );
+        $technicians = DB::select(DB::raw('
+        SELECT tech.*, COUNT(*) AS total FROM technician AS tech
+        JOIN job_technician AS jt ON jt.technicianId = tech.id
+        JOIN job_header AS jh ON jh.id = jt.jobId
+        WHERE jh.isComplete=1
+        GROUP BY tech.id
+        ORDER BY total
+        LIMIT 5
+        '));
 
-        $technician = DB::select(DB::raw("
-                SELECT COUNT(*) as count, technician.firstName, technician.middleName, technician.lastName, technician.image, technician.birthdate, technician.contact, technician.street, technician.brgy, technician.city, technician.email, technician_skill.categoryId as skill FROM technician JOIN job_technician ON technician.id = job_technician.technicianId JOIN job_header ON job_header.id = job_technician.technicianId join technician_skill on technician_skill.technicianId = technician.id WHERE job_header.isFinalize = '1' GROUP BY technician.firstName, technician.middleName, technician.lastName, technician.image, technician.birthdate, technician.contact, technician.street, technician.brgy, technician.city, technician.email, technician_skill.categoryId ORDER BY count DESC LIMIT 3")
-        );
+        $vehicles = DB::select(DB::raw('
+        SELECT v.*, vd.name AS model, vk.name AS make, vd.year AS year, COUNT(*) AS total FROM vehicle AS v
+        JOIN vehicle_model AS vd ON vd.id = v.modelId
+        JOIN vehicle_make AS vk ON vk.id = vd.makeId
+        JOIN job_header AS jh ON jh.vehicleId = v.id
+        WHERE jh.isComplete=1
+        GROUP BY v.id
+        ORDER BY total
+        LIMIT 5
+        '));
 
-        $vehicle = DB::select(DB::raw("
-                SELECT COUNT(*) as count, vehicle.plate, vehicle.mileage, vehicle_model.name as model, vehicle_model.year, vehicle_make.name as make, vehicle.isManual as transmission FROM vehicle JOIN vehicle_model ON 
-                vehicle_model.id = vehicle.modelId JOIN vehicle_make ON vehicle_make.id = 
-                vehicle_model.makeId JOIN job_header ON job_header.vehicleId = vehicle.id WHERE 
-                job_header.isFinalize = 1 AND job_header.total = job_header.paid GROUP BY vehicle.plate, 
-                vehicle.mileage, vehicle_model.name, vehicle_model.year, 
-                vehicle_make.name,vehicle.isManual ORDER BY count desc LIMIT 3")
-        );
+        $customers = DB::select(DB::raw('
+        SELECT c.*, jh.total as total, jh.paid as paid FROM customer as c
+        JOIN job_header AS jh ON jh.customerId = c.id
+        WHERE jh.total!=jh.paid
+        '));
 
-        $customer = DB::select(DB::raw("
-                Select * from job_header JOIN customer on job_header.customerId = customer.id 
-                WHERE job_header.total <> job_header.paid"));
-
-        $inventory = DB::table('inventory as i')
-            ->join('product as p','p.id','i.productId')
-            ->join('product_type as pt','pt.id','p.typeId')
-            ->join('product_brand as pb','pb.id','p.brandId')
-            ->join('product_variance as pv','pv.id','p.varianceId')
+        $inventory = DB::table('inventory AS i')
+            ->join('product AS p','p.id','i.productId')
+            ->join('product_type AS pt','pt.id','p.typeId')
+            ->join('product_brand AS pb','pb.id','p.brandId')
+            ->join('product_variance AS pv','pv.id','p.varianceId')
             ->where('p.isActive',1)
-            ->select('i.*','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
+            ->select('i.*','p.name AS product','p.isOriginal AS isOriginal','pt.name AS type','pb.name AS brand','pv.name AS variance')
             ->get();
 
-        return View('query.index',compact('product','services','technician','vehicle','customer','inventory'));
+        return View('query.index',compact('products','services','technicians','vehicles','customers','inventory'));
     }
 
     /**
@@ -124,56 +214,5 @@ class QueryController extends Controller
     public function destroy($id)
     {
         return View('layouts.404');
-    }
-
-    public function load(Request $request){
-        $id = $request->id;
-        if($id==1){
-            $query = DB::select(DB::raw("
-				SELECT COUNT(*) as count, product.name as product, product_brand.name as brand, product_variance.name as variance FROM product 
-				JOIN product_brand on product.brandId = product_brand.id 
-				JOIN product_variance on product.varianceId = product_variance.id
-				JOIN job_product ON product.id = job_product.productId 
-				JOIN job_header ON job_header.id = job_product.productId
-				WHERE job_header.isFinalize = '1' AND job_header.total = job_header.paid 
-				GROUP BY product.name,product_brand.name,product_variance.name")
-            );
-            return response()->json(['query'=>$query]);
-        }
-        else if($id==2){
-             $query = DB::select(DB::raw("
-				SELECT COUNT(*) as count, service.name as service FROM `service` JOIN job_service ON 
-				service.id = job_service.serviceId JOIN job_header ON job_header.id = job_service.serviceId 
-				WHERE job_header.isFinalize = 1 AND job_header.total = job_header.paid
-				 GROUP BY service.name LIMIT 1 ")
-             );
-            return response()->json(['query'=>$query]);
-        }
-        else if($id==3){
-             $query = DB::select(DB::raw("
-				SELECT COUNT(*) as count, technician.firstName, technician.middleName, technician.lastName 
-				FROM technician JOIN job_technician ON technician.id = job_technician.technicianId 
-				JOIN job_header ON job_header.id = job_technician.technicianId WHERE job_header.isFinalize 
-				= '1' GROUP BY technician.firstName, technician.middleName, technician.lastName LIMIT 1")
-             );
-            return response()->json(['query'=>$query]);
-        }
-        else if($id==4){
-             $query = DB::select(DB::raw("
-				SELECT COUNT(*) as count, vehicle.plate, vehicle.mileage, vehicle_model.name, vehicle_model.year, vehicle_make.name FROM vehicle JOIN vehicle_model ON 
-				vehicle_model.id = vehicle.modelId JOIN vehicle_make ON vehicle_make.id = 
-				vehicle_model.makeId JOIN job_header ON job_header.vehicleId = vehicle.id WHERE 
-				job_header.isFinalize = 1 AND job_header.total = job_header.paid GROUP BY vehicle.plate, 
-				vehicle.mileage, vehicle_model.name, vehicle_model.year, 
-				vehicle_make.name")
-             );
-            return response()->json(['query'=>$query]);
-        }
-        else if($id==5){
-             $query = DB::select(DB::raw("
-				Select * from job_header JOIN customer on job_header.customerId = customer.id 
-				WHERE job_header.total <> job_header.paid"));
-            return response()->json(['query'=>$query]);
-        }
     }
 }

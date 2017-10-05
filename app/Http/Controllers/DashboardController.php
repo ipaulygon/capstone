@@ -33,15 +33,16 @@ class DashboardController extends Controller
                 ->whereColumn('i.quantity','<=','p.reorder')
                 ->select('i.*','p.reorder as reorder','p.name as product','p.isOriginal as isOriginal','pt.name as type','pb.name as brand','pv.name as variance')
                 ->get();
+            $pendingJobs = JobHeader::where('isComplete',0)->get();
             $jobs = JobHeader::get();
             $sales = SalesHeader::get();
-            return View('dashboard',compact('stocks','jobs','sales'));
+            return View('dashboard',compact('stocks','jobs','sales','pendingJobs'));
         }else{
             $id = str_replace('TECH-','',$user->name);
             $id = (int)$id;
             $techUser = Technician::find($id);
-            $jobs = JobHeader::get();
-            return View('dashboard',compact('jobs'));
+            $pendingJobs = JobHeader::where('isComplete',0)->get();
+            return View('dashboard',compact('pendingJobs'));
         }
     }
 

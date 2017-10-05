@@ -69,8 +69,8 @@
         </div>
         <div style="float:right">
             {{date('F j, Y', strtotime($estimate->created_at))}}<br>
-            <label style="color:red">{{$estId}}</label>
-            <label>Reference Job: {{'JOB'.str_pad($estimate->jobId, 5, '0', STR_PAD_LEFT)}}</label>
+            <label style="color:red">{{$estId}}</label><br>
+            <label>Reference: {{'JOB'.str_pad($estimate->jobId, 5, '0', STR_PAD_LEFT)}}</label>
         </div>
         <div style="clear:both"></div>
         <div class="center">

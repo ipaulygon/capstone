@@ -48,8 +48,8 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::resource('sales','SalesController');
 		Route::resource('warranty','WarrantyController',['only' => [
 			'index','show']]);
-		Route::resource('query','QueryController');
-		Route::post('query/load','QueryController@load');
+		Route::resource('query','QueryController',['only' => [
+			'index']]);
 		Route::resource('report','ReportController');
 		Route::post('report/where','ReportController@where');
 		Route::resource('utility','UtilitiesController');
@@ -84,6 +84,8 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('delivery/pdf/{id}','PdfController@delivery');
 		Route::get('return/pdf/{id}','PdfController@return');
 		Route::get('sales/pdf/{id}','PdfController@sales');
+		Route::get('warranty/sales/pdf/{id}','PdfController@warrantySales');
+		Route::get('warranty/job/pdf/{id}','PdfController@warrantyJob');
 
 		// Reactivate
 		Route::patch('vehicle/reactivate/{id}','VehicleController@reactivate');

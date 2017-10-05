@@ -24,6 +24,8 @@ use App\EstimateTechnician;
 use App\JobHeader;
 use App\JobPayment;
 use App\SalesHeader;
+use App\WarrantySalesHeader;
+use App\WarrantyJobHeader;
 class PdfController extends Controller
 {
     public function purchase($id){
@@ -201,5 +203,21 @@ class PdfController extends Controller
         $picPath = "pics/".date('YmdHis').'signature.png';
         $signature = file_put_contents($picPath, $pics);
         $request->session()->put('signature',$picPath);
+    }
+
+    public function warrantySales($id){
+        $warranty = WarrantySalesHeader::findOrFail($id);
+        $warrantyId = 'WS'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.warrantySales',compact('warrantyId','warranty'))->setPaper([0,0,612,396]);
+        return $pdf->stream('warrantysales.pdf');
+    }
+    
+    public function warrantyJob($id){
+        $warranty = WarrantyJobHeader::findOrFail($id);
+        $warrantyId = 'WJ'.str_pad($id, 5, '0', STR_PAD_LEFT); 
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadview('pdf.warrantyJob',compact('warrantyId','warranty'))->setPaper([0,0,612,396]);
+        return $pdf->stream('warrantyjob.pdf');
     }
 }

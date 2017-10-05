@@ -24,7 +24,7 @@
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             <select id="queryId" name="queryId" class="form-control">
                                 <option value=""></option>
-                                <option value="1">Most availed parts/supplies</option>
+                                <option value="1">Most availed products</option>
                                 <option value="2">Most availed services</option>
                                 <option value="3">Most jobs done by technician</option>
                                 <option value="4">Most repaired vehicle</option>
@@ -46,21 +46,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($product as $prod)
+                                @foreach($products as $product)
                                 <tr>
-                                    <td>{{$prod->brand}} - {{$prod->product}}</td>
+                                    <td>{{$product->brand}} - {{$product->product}}</td>
                                     <td>
-                                        <li>Type: {{$prod->type}}</li>
-                                        <li>Size: {{$prod->variance}}</li>
-                                        @if($prod->isOriginal!=null)
-                                            <?php $type = ($prod->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
+                                        <li>Type: {{$product->type}}</li>
+                                        <li>Size: {{$product->variance}}</li>
+                                        @if($product->original!=null)
+                                            <?php $type = ($product->original=="type1" ? $util->type1 : $util->type2); ?>
                                             <li>Part Information: {{$type}}</li>
                                         @endif
-                                        @if($prod->description!=null || $prod->description!="")
-                                            <li>{{$prod->description}}</li>
+                                        @if($product->description!=null || $product->description!="")
+                                            <li>{{$product->description}}</li>
                                         @endif
                                     </td>
-                                    <td class="text-right">{{$prod->count}}</td>
+                                    <td class="text-right">{{$product->total}}</td>
                                 </tr>
                                 @endforeach 
                             </tbody>
@@ -79,14 +79,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($services as $ser)
+                                @foreach($services as $service)
                                 <tr>
-                                    <td>{{$ser->service}}</td>
+                                    <td>{{$service->service}}</td>
                                     <td>
-                                        <li>Category: {{$ser->category}}</li>
-                                        <li>Size: {{$ser->size}}</li>
+                                        <li>Category: {{$service->category}}</li>
+                                        <li>Size: {{$service->size}}</li>
                                     </td>
-                                    <td class="text-right">{{$ser->count}}</td>
+                                    <td class="text-right">{{$service->total}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -106,7 +106,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($technician as $tech)
+                                @foreach($technicians as $tech)
                                 <tr>
                                     <td><img class="img-responsive" src="{{URL::asset($tech->image)}}" alt="" style="max-width:150px; background-size: contain"></td>
                                     <td>{{$tech->firstName}} {{$tech->middleName}} {{$tech->lastName}}</td>
@@ -127,7 +127,7 @@
                                                 <li>{{$skills->category->name}}</li>
                                             @endforeach
                                         </ul> --}}
-                                    <td class="text-right">{{$tech->count}}</td>
+                                    <td class="text-right">{{$tech->total}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -145,17 +145,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($vehicle as $ve)
+                                @foreach($vehicles as $vehicle)
                                 <tr>
                                     <td>
-                                        <li>Plate: {{$ve->plate}}</li>
-                                        <?php $transmission = ($ve->transmission ? 'MT' : 'AT')?>
-                                        <li>Model: {{$ve->make}} - {{$ve->year}} {{$ve->model}} - {{$transmission}}</li>
-                                        @if($ve->mileage!=null)
-                                        <li>Mileage: {{$ve->mileage}}</li>
+                                        <li>Plate: {{$vehicle->plate}}</li>
+                                        <?php $transmission = ($vehicle->isManual ? 'MT' : 'AT')?>
+                                        <li>Model: {{$vehicle->make}} - {{$vehicle->year}} {{$vehicle->model}} - {{$transmission}}</li>
+                                        @if($vehicle->mileage!=null)
+                                        <li>Mileage: {{$vehicle->mileage}}</li>
                                         @endif
                                     </td>
-                                    <td class="text-right">{{$ve->count}}</td>
+                                    <td class="text-right">{{$vehicle->total}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -174,18 +174,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($customer as $cust)
+                            @foreach($customers as $customer)
                                 <tr>
                                     <td>
-                                        <li>Name: {{$cust->firstName}} {{$cust->middleName}} {{$cust->lastName}}</li>
-                                        <li>Address: {{$cust->street}} {{$cust->brgy}} {{$cust->city}}</li>
-                                        <li>Contact No.: {{$cust->contact}}</li>
-                                        @if($cust->email!=null)
-                                        <li>Email: {{$cust->email}}</li>
+                                        <li>Name: {{$customer->firstName}} {{$customer->middleName}} {{$customer->lastName}}</li>
+                                        <li>Address: {{$customer->street}} {{$customer->brgy}} {{$customer->city}}</li>
+                                        <li>Contact No.: {{$customer->contact}}</li>
+                                        @if($customer->email!=null)
+                                        <li>Email: {{$customer->email}}</li>
                                         @endif
                                     </td>
-                                    <td class="text-right">{{number_format($cust->total,2)}}</td>
-                                    <td class="text-right">{{number_format($cust->paid,2)}}</td>
+                                    <td class="text-right">{{number_format($customer->total,2)}}</td>
+                                    <td class="text-right">{{number_format($customer->paid,2)}}</td>
                                 </tr>
                             @endforeach
                             </tbody>

@@ -11,7 +11,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-10 col-md-offset-1">
             @if(count($warranties)==0)
                 <center><h3>NO WARRANTY FOUND</h3></center>
             @else
@@ -24,8 +24,7 @@
                             <table id="salesTable" class="table table-striped table-bordered responsive">
                                 <thead>
                                     <tr>
-                                        <th>Id</th>
-                                        <th>Date</th>
+                                        <th>ID - Date</th>
                                         <th>Item</th>
                                         <th>From(Package/Promo)</th>
                                         <th class="text-right">Quantity</th>
@@ -34,8 +33,12 @@
                                 <tbody>
                                 @foreach($warranties as $w)
                                     <tr>
-                                        <td>{{'WS'.str_pad($w->id, 5, '0', STR_PAD_LEFT)}}</td>
-                                        <td>{{date('F j, Y H:i:s',strtotime($w->created_at))}}</td>
+                                        <td>
+                                            {{'WS'.str_pad($w->id, 5, '0', STR_PAD_LEFT)}} - {{date('F j, Y H:i:s',strtotime($w->created_at))}}
+                                            <a href="{{url('/warranty/sales/pdf/'.$w->id)}}" target="_blank" class="btn btn-sm btn-primary"  data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                                                <i class="glyphicon glyphicon-file"></i>
+                                            </a>
+                                        </td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -49,7 +52,6 @@
                                             }
                                         ?>
                                         <tr>
-                                            <td></td>
                                             <td></td>
                                             <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                                             <td></td>
@@ -66,7 +68,6 @@
                                         ?>
                                         <tr>
                                             <td></td>
-                                            <td></td>
                                             <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                                             <td>{{$product->sales->package->name}}</td>
                                             <td class="text-right">{{number_format($product->quantity)}}</td>
@@ -81,7 +82,6 @@
                                             }
                                         ?>
                                         <tr>
-                                            <td></td>
                                             <td></td>
                                             <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                                             <td>{{$product->sales->promo->name}}</td>
