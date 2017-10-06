@@ -18,23 +18,23 @@
                 <h3 class="box-title"> Reports as of now {{$ldate}} </h3>
             </div>
             <div class="box-body dataTable_wrapper">
-                <form action="">
-                    <div class="form-group">
-                        {!! Form::label('Report', 'Report Search') !!}
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                            <select id="reportId" name="reportId" class="form-control">
-                                <option value=""></option>
-                                {{--  <option value="1">Inventory Report</option>  --}}
-                                <option value="2">Services Report</option>
-                                <option value="3">Sales Report</option>
-                                <option value="4">Products Report</option>
-                                <option value="5">Discrepancy Report</option>
-                            </select>
+                {!! Form::open(['url' => 'report','id' => 'reportForm']) !!}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {!! Form::label('Report', 'Report Search') !!}
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <select id="reportId" name="reportId" class="form-control">
+                                    <option value=""></option>
+                                    <option value="1">Sales Report</option>
+                                    <option value="2">Inventory Report</option>
+                                    <option value="3">Service Report</option>
+                                    <option value="5">Discrepancy Report</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </form>
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             {!! Form::label('date', 'Date Range') !!}<span>*</span>
@@ -52,147 +52,124 @@
                         </div>
                     </div>
                 </div>
+                {!! Form::close() !!}
+                <div class="panel panel-primary pan1">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="salesTable" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Customer</th>
+                                    <th>Vehicle</th>
+                                    <th class="text-right">Cash(PhP)</th>
+                                    <th class="text-right">Credit Card(PhP)</th>
+                                    <th class="text-right">Total(PhP)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php 
+                                    $totalCash = 0; $totalCredit = 0; $totalAll = 0; $totalBalance = 0;
+                                @endphp
+                                @foreach($jobs as $job)
+                                <tr>
+                                    <td>{{$loop->index+1}}</td>
+                                    <td>{{$job->customer}}</td>
+                                    <td>
+                                        {{$job->plate}}<br>
+                                        {{$job->make}} {{$job->model}} - {{$job->year}} ({{($job->isManual ? 'AT' : 'MT')}})
+                                    </td>
+                                    <td class="text-right">{{number_format($job->cash,2)}}</td>
+                                    <td class="text-right">{{number_format($job->credit,2)}}</td>
+                                    <td class="text-right">{{number_format($job->cash+$job->credit,2)}}</td>
+                                    <td>{{($job->paid==$job->total ? 'Paid' : 'Bal: '.number_format($job->total-$job->paid,2))}}</td>
+                                    @php
+                                        $totalCash += $job->cash;
+                                        $totalCredit += $job->credit;
+                                        $totalAll += $job->cash+$job->credit;
+                                        $totalBalance += $job->total-$job->paid;
+                                    @endphp
+                                </tr>
+                                @endforeach
+                                @foreach($sales as $sale)
+                                <tr>
+                                    <td>{{$loop->index+1+count($jobs)}}</td>
+                                    <td>{{$sale->customer}}</td>
+                                    <td></td>
+                                    <td class="text-right">{{number_format($sale->total,2)}}</td>
+                                    <td></td>
+                                    <td class="text-right">{{number_format($sale->total,2)}}</td>
+                                    <td></td>
+                                    @php
+                                        $totalCash += $sale->total;
+                                        $totalAll += $sale->total;
+                                    @endphp
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Total:</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right">{{number_format($totalCash,2)}}</th>
+                                    <th class="text-right">{{number_format($totalCredit,2)}}</th>
+                                    <th class="text-right">{{number_format($totalAll,2)}}</th>
+                                    <th class="text-right">Balance: {{number_format($totalBalance,2)}}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary pan2">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="inventoryTable" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product</th>
+                                    <th class="text-right">Delivered</th>
+                                    <th class="text-right">Returned</th>
+                                    <th class="text-right">Sales</th>
+                                    <th class="text-right">Total Inventory</th>
+                                    <th class="text-right">Re-order point</th>
+                                    <th>Condition</th>
+                                    <th class="text-right">Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($inventory as $product)
+                                <tr>
+                                    <td>{{$loop->index+1}}</td>
+                                    @php
+                                        if($product->original!=null){
+                                            $type = ($product->original=="type1" ? $util->type1 : $util->type2);
+                                        }else{
+                                            $type = "";
+                                        }
+                                    @endphp
+                                    <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
+                                    <td class="text-right">{{number_format($product->delivered)}}</td>
+                                    <td class="text-right">{{number_format($product->returned)}}</td>
+                                    <td class="text-right">{{number_format($product->total)}}</td>
+                                    <td class="text-right">{{number_format($product->delivered-$product->total)}}</td>
+                                    <td class="text-right">{{number_format($product->reorder)}}</td>
+                                    <td>{{($product->delivered-$product->total <= $product->reorder ? 'For reorder' : 'Stable')}}</td>
+                                    <td class="text-right">{{$loop->index+1}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                            
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             <div>
         </div>
-
-        <ul class="nav nav-pills" role="tablist">
-            <li class="active" role="presentation"><a href="#Table" id ="tab1" aria-controls="table" role="tab" data-toggle="pill">Table</a></li>
-            <li role="presentation"><a href="#Graph" aria-controls="table" id ="tab2" role="tab" data-toggle="pill">Graph</a></li>
-        </ul>
-        <div role="tabpanel" class="tab-pane fade in active" id="Table">
-            <table id="list1" class="table table-striped table-bordered responsive hidden">
-                <thead>
-                    <tr>
-                        <th>Date Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($inventory as $in)
-                    <tr>
-                        <td>{{$in->datecreated}}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <table id="list2" class="table table-striped table-bordered responsive hidden">
-                <thead>
-                    <tr>
-                        <th>Count</th>
-                        <th>Service</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($services as $service)
-                    <tr>
-                        <td>{{count($service)}}</td>
-                        <td>{{$service->name}}</td>
-                        <td>
-                            <li>Category: {{$service->category}}</li>
-                            <li>Size: {{$service->size}}</li>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <table id="list3" class="table table-striped table-bordered responsive hidden">
-                <thead>
-                    <tr>
-                        <th>Invoice No.</th>
-                        <th>Customer</th>
-                        <th class="text-right">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($pos as $sales)
-                        <tr>
-                        <?php 
-                            $salesId = 'INV'.str_pad($sales->invoId, 5, '0', STR_PAD_LEFT); 
-                        ?>
-                        <td>{{$salesId}}</td>
-                        <td>
-                            <li>Name: {{$sales->firstName}} {{$sales->middleName}} {{$sales->lastName}}</li>
-                            <li>Address: {{$sales->street}} {{$sales->brgy}} {{$sales->city}}</li>
-                            <li>Contact No.: {{$sales->contact}}</li>
-                            @if($sales->email!=null)
-                            <li>{{$sales->email}}</li>
-                            @endif
-                        </td>
-                        <td class="text-right">{{number_format($sales->total,2)}}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <table id="list4" class="table table-striped table-bordered responsive hidden">
-                <thead>
-                    <tr>
-                        <th>Job Id</th>
-                        <th>Product</th>
-                        <th>Description</th>
-                        <th class="text-right">Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($products as $prod)
-                    <tr>
-                        <td id="detailIds"></td>
-                        <td>{{$prod->brand}} - {{$prod->product}}</td>
-                        <td>
-                            <li>Type: {{$prod->type}}</li>
-                            <li>Size: {{$prod->variance}}</li>
-                            @if($prod->isOriginal!=null)
-                                <?php $type = ($prod->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
-                                <li>Part Information: {{$type}}</li>
-                            @endif
-                            @if($prod->description!=null || $prod->description!="")
-                                <li>{{$prod->description}}</li>
-                            @endif
-                        </td>
-                        <td class="text-right">{{number_format($prod->pprices,2)}}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <table id="list5" class="table table-striped table-bordered responsive hidden">
-                <thead>
-                    <tr>
-                        <th>Return Id</th>
-                        <th>Supplier</th>
-                        <th>Description</th>
-                        <th class="text-right">Quantity Returned</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($return as $r)
-                    <tr>
-                        <td>{{$r->id}}</td>
-                        <td>{{$r->supplier}}</td>
-                        <td>
-                            <li>Product: {{$r->brand}} - {{$r->product}}</li>
-                            <li>Type: {{$r->type}}</li>
-                            <li>Size: {{$r->variance}}</li>
-                            @if($r->isOriginal!=null)
-                                <?php $type = ($r->isOriginal=="type1" ? $util->type1 : $util->type2); ?>
-                                <li>Part Information: {{$type}}</li>
-                            @endif
-                            @if($r->description!=null || $r->description!="")
-                                <li>{{$r->description}}</li>
-                            @endif
-                        </td>
-                        <td class="text-right">{{$r->qtyre}}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
-        <div role="tabpanel" class="tab-pane fade" id="Graph">
-            <canvas id="myChart1" class="chart hidden" width="400" height="100"></canvas>
-            <canvas id="myChart2" class="chart hidden" width="400" height="100"></canvas>
-            <canvas id="myChart3" class="chart hidden" width="400" height="100"></canvas>
-            <canvas id="myChart4" class="chart hidden" width="400" height="100"></canvas>
-            <canvas id="myChart5" class="chart hidden" width="400" height="100"></canvas>
-        </div>
+        
     </div>
 @stop
 
@@ -208,279 +185,6 @@
     <script>
         $(document).ready(function(){
             $('#report').addClass('active');
-
-            @foreach($services as $id)
-                var jobId = String("00000" + {{$id->jobId}}).slice(-5);
-                $('#detailId').text('JOB'+jobId);
-            @endforeach
-
-            @foreach($products as $prod)
-                var jobId2 = String("00000" + {{$prod->jobId}}).slice(-5);
-                $('#detailIds').text('JOB'+jobId2);
-            @endforeach
         });
-        var ctx = document.getElementById("myChart1").getContext('2d');
-        var myChart1 = new Chart(ctx, {
-            type: 'bar',
-            data: {
-            labels: [
-                  @foreach($data as $rows) 
-                        '{{$rows->brand}} - {{$rows->name}}', 
-                  @endforeach
-                        ],
-                datasets: [{
-                    label: 'Inventory Report',
-                   
-                    data: [
-                      @foreach($data as $rows) 
-                        '{{$rows->quantity}}', 
-                      @endforeach
-                          ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        var ctx2 = document.getElementById("myChart2").getContext('2d');
-        var myChart2 = new Chart(ctx2, {
-            type: 'bar',
-            data: {
-                labels: [
-                      @foreach($services as $ser) 
-                            '{{$ser->name}} - {{$ser->category}}', 
-                      @endforeach
-                ],
-                datasets: [{
-                    label: 'Services Report',
-                    data: [
-                         @foreach($services as $ser) 
-                            '{{$ser->price}}', 
-                         @endforeach
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        var ctx3 = document.getElementById("myChart3").getContext('2d');
-        var myChart3 = new Chart(ctx3, {
-            type: 'bar',
-            data: {
-                labels: [
-                     @foreach($pos as $s) 
-                            '{{$s->lastName}}, {{$s->firstName}} {{$s->middleName}}', 
-                     @endforeach
-                ],
-                datasets: [{
-                    label: 'Sales Report',
-                    data: [
-                        @foreach($pos as $s) 
-                            '{{$s->total}}', 
-                        @endforeach
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        var ctx4 = document.getElementById("myChart4").getContext('2d');
-        var myChart4 = new Chart(ctx4, {
-            type: 'bar',
-            data: {
-                labels: [
-                    @foreach($products as $pro)
-                        '{{$pro->brand}} - {{$pro->product}}'
-                    @endforeach
-                      
-                ],
-                datasets: [{
-                    label: 'Products Report',
-                    data: [
-                    @foreach($products as $pro)
-                      '{{$pro->price}}',
-                    @endforeach
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        var ctx5 = document.getElementById("myChart5").getContext('2d');
-        var myChart5 = new Chart(ctx5, {
-            type: 'bar',
-            data: {
-                labels: [
-                     @foreach($return as $re)
-                        '{{$re->brand}} - {{$re->product}}',
-                      @endforeach
-                ],
-                datasets: [{
-                    label: 'Discrepancy Report',
-                    data: [
-                    @foreach($return as $rr)
-                      '{{$rr->qtyre}}',
-                    @endforeach  
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        $('#reportId').on('change', function() {          
-            $('.chart').addClass('hidden');
-            $('.table').addClass('hidden');
-            $('#myChart'+$(this).val()).removeClass('hidden');
-            $('#list'+$(this).val()).removeClass('hidden');
-        });
-        $('#date').on('change', function() {
-                id = $('#reportId').val();
-                date = $('#date').val();
-                $.ajax({
-                type: 'POST',
-                url: '/report/where',
-                data: {date:date,id:id},
-                success: function(data){
-                    console.log(data);
-                },
-            });
-        });
-        $('#date').inputmask('99/99/9999-99/99/9999');
-                var start = moment();
-        var end = moment();
-        function cb(start, end) {
-            $('#date input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        }
-        $('#date').daterangepicker({
-            ranges: {
-                'Today': [moment(), moment()],
-                'Last for 7 Days': [moment(), moment().add(6, 'days')],
-                'Last for 30 Days': [moment(), moment().add(29, 'days')],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-            }
-        }, cb);
-        cb(start, end);
-
-
     </script>
 @stop

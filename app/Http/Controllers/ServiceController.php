@@ -53,7 +53,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('service')->where('size',$request->size),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'name' => ['required','max:75',Rule::unique('service')->where('size',$request->size),'regex:/^[^~`!@#*_={}|\;<>.?]+$/'],
             'categoryId' => 'required',
             'size' => 'required',
             'price' => 'required|between:0,500000'
@@ -133,7 +133,7 @@ class ServiceController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:50',Rule::unique('service')->where('size',$request->size)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'name' => ['required','max:75',Rule::unique('service')->where('size',$request->size)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>.?]+$/'],
             'categoryId' => 'required',
             'size' => 'required',
             'price' => 'required|between:0,500000'

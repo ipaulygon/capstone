@@ -271,7 +271,7 @@
                                             'readonly'])
                                         !!}</strong>
                                     </div>
-                                    <a style="color:black;font-weight:600" role="button" data-toggle="collapse" href="#listPayments" aria-expanded="false" aria-controls="listPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                    <a style="color:black;font-weight:600" role="button" id="listPaymentButton" data-toggle="collapse" href="#listPayments" aria-expanded="false" aria-controls="listPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
                                 </div>
                                 <div class="col-md-6 addPayment">
                                     <div class="form-group form-inline">

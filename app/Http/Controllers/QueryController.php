@@ -15,99 +15,70 @@ clASs QueryController extends Controller
     public function index()
     {
         $products = DB::select(DB::raw('
-        SELECT product, type, brand, variance, original, description, SUM(productCount) AS total FROM (
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN sales_product AS sp ON sp.id = p.id
+        SELECT product, t.name AS type, b.name AS brand, v.name AS variance, original, description, SUM(productCount) AS total FROM (
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity) THEN 0 ELSE sp.quantity END) AS productCount FROM product AS p
+            LEFT JOIN sales_product AS sp ON sp.productId = p.id
             WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity*pp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN package_product AS pp ON pp.id = p.id
-            JOIN package ON package.id = pp.packageId
-            JOIN sales_package AS sp ON sp.packageId = package.id
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity*pp.quantity) THEN 0 ELSE sp.quantity*pp.quantity END) AS productCount FROM product AS p
+            JOIN package_product AS pp ON pp.productId = p.id
+            LEFT JOIN sales_package AS sp ON sp.packageId = pp.packageId
             WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(sp.quantity*pp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN promo_product AS pp ON pp.id = p.id
-            JOIN promo ON promo.id = pp.promoId
-            JOIN sales_promo AS sp ON sp.promoId = promo.id
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity*pp.quantity) THEN 0 ELSE sp.quantity*pp.quantity END) AS productCount FROM product AS p
+            JOIN promo_product AS pp ON pp.productId = p.id
+            LEFT JOIN sales_promo AS sp ON sp.promoId = pp.promoId
             WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN job_product AS jp ON jp.id = p.id
-            JOIN job_header AS jh ON jh.id = jp.jobId
-            WHERE p.isActive=1 AND jh.isComplete=1
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS productCount FROM product AS p
+            LEFT JOIN job_product AS jp ON jp.productId = p.id
+            WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity*pp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN package_product AS pp ON pp.id = p.id
-            JOIN package ON package.id = pp.packageId
-            JOIN job_package AS jp ON jp.packageId = package.id
-            JOIN job_header AS jh ON jh.id = jp.jobId
-            WHERE p.isActive=1 AND jh.isComplete=1
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
+            JOIN package_product AS pp ON pp.productId = p.id
+            LEFT JOIN job_package AS jp ON jp.packageId = pp.packageId
+            WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
-            SELECT p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(jp.quantity*pp.quantity) AS productCount FROM product AS p
-            JOIN product_type AS pt ON pt.id = p.typeId
-            JOIN product_brand AS pb ON pb.id = p.brandId
-            JOIN product_variance AS pv ON pv.id = p.varianceId
-            JOIN promo_product AS pp ON pp.id = p.id
-            JOIN promo ON promo.id = pp.promoId
-            JOIN job_promo AS jp ON jp.promoId = promo.id
-            JOIN job_header AS jh ON jh.id = jp.jobId
-            WHERE p.isActive=1 AND jh.isComplete=1
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
+            JOIN promo_product AS pp ON pp.productId = p.id
+            LEFT JOIN job_promo AS jp ON jp.promoId = pp.promoId
+            WHERE p.isActive=1
             GROUP BY type,brand,variance,product,original,description
         ) AS result
+        JOIN product_type AS t ON t.id = result.type
+        JOIN product_brand AS b ON b.id = result.brand
+        JOIN product_variance AS v ON v.id = result.variance
         GROUP BY type,brand,variance,product,original,description
-        ORDER BY total
+        ORDER BY total DESC
         LIMIT 5
         '));
         $services = DB::select(DB::raw('
-        SELECT category, service, size, SUM(serviceCount) AS total FROM(
-            SELECT s.name AS service, sc.name AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
-            JOIN service_category AS sc ON sc.id = s.categoryId
+        SELECT c.name AS category, service, size, SUM(serviceCount) AS total FROM(
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
             JOIN job_service AS js ON js.serviceId = s.id
-            JOIN job_header AS jh ON jh.id = js.jobId
-            WHERE s.isActive=1 AND jh.isComplete=1
+            WHERE s.isActive=1 AND js.isComplete=1
             GROUP BY category,service,size
             UNION
-            SELECT s.name AS service, sc.name AS category, s.size AS size, SUM(jp.quantity) AS serviceCount FROM service AS s
-            JOIN service_category AS sc ON sc.id = s.categoryId
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
             JOIN package_service AS ps ON ps.serviceId = s.id
-            JOIN package ON package.id = ps.packageId
-            JOIN job_package AS jp ON jp.packageId = package.id
-            JOIN job_header AS jh ON jh.id = jp.jobId
-            WHERE s.isActive=1 AND jh.isComplete=1
+            JOIN job_package AS jp ON jp.packageId = ps.packageId
+            WHERE s.isActive=1
             GROUP BY category,service,size
             UNION
-            SELECT s.name AS service, sc.name AS category, s.size AS size, SUM(jp.quantity) AS serviceCount FROM service AS s
-            JOIN service_category AS sc ON sc.id = s.categoryId
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
             JOIN promo_service AS ps ON ps.serviceId = s.id
-            JOIN promo ON promo.id = ps.promoId
-            JOIN job_promo AS jp ON jp.promoId = promo.id
-            JOIN job_header AS jh ON jh.id = jp.jobId
-            WHERE s.isActive=1 AND jh.isComplete=1
+            JOIN job_promo AS jp ON jp.promoId = ps.promoId
+            WHERE s.isActive=1
             GROUP BY category,service,size
         )AS result
+        JOIN service_category AS c ON c.id = result.category
         GROUP BY category,service,size
-        ORDER BY total
+        ORDER BY total DESC
         LIMIT 5
         '));
 
@@ -117,7 +88,7 @@ clASs QueryController extends Controller
         JOIN job_header AS jh ON jh.id = jt.jobId
         WHERE jh.isComplete=1
         GROUP BY tech.id
-        ORDER BY total
+        ORDER BY total DESC
         LIMIT 5
         '));
 
@@ -128,7 +99,7 @@ clASs QueryController extends Controller
         JOIN job_header AS jh ON jh.vehicleId = v.id
         WHERE jh.isComplete=1
         GROUP BY v.id
-        ORDER BY total
+        ORDER BY total DESC
         LIMIT 5
         '));
 

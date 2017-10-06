@@ -25,6 +25,12 @@ var lessPayment = null;
 function process(id){
     $('#jobCarousel').carousel(2);
     $('#processId').val(id);
+    if(userType==2){
+        $('.addPayment').addClass('hidden');
+        $('#refundPayment').addClass('hidden');
+        $('#listPayments').addClass('hidden');
+        $('#listPaymentButton').addClass('hidden');
+    }
     $.ajax({
         type: 'GET',
         url: '/job/check/'+id,
@@ -72,14 +78,14 @@ function process(id){
                 min: balance,
                 max: balance
             });
-            if(balance<=0){
+            if(balance<=0 && userType==1){
                 $('.addPayment').addClass('hidden');
-                if(balance<0){
+                if(balance<0 && userType==1){
                     $('#refundPayment').removeClass('hidden');
                 }else{
                     $('#refundPayment').addClass('hidden');
                 }
-            }else{
+            }else if(balance>0 && userType==1){
                 $('.addPayment').removeClass('hidden');
                 $('#refundPayment').addClass('hidden');
             }
@@ -399,14 +405,14 @@ $(document).on('click','.update-payment', function(){
                 min: balance,
                 max: balance
             });
-            if(balance<=0){
+            if(balance<=0 && userType==1){
                 $('.addPayment').addClass('hidden');
-                if(balance<0){
+                if(balance<0 && userType==1){
                     $('#refundPayment').removeClass('hidden');
                 }else{
                     $('#refundPayment').addClass('hidden');
                 }
-            }else{
+            }else if(balance>0 && userType==1){
                 $('.addPayment').removeClass('hidden');
                 $('#refundPayment').addClass('hidden');
             }
@@ -426,7 +432,9 @@ $(document).on('click','.update-payment', function(){
     setTimeout(function (){
         $('#alert').alert('close');
     },2000);
-    $('.addPayment').removeClass('hidden');
+    if(userType==1){
+        $('.addPayment').removeClass('hidden');
+    }
 });
 
 $(document).on('click','#savePayment', function(){
@@ -446,14 +454,14 @@ $(document).on('click','#savePayment', function(){
     }
     if(payment!="0.00" && passed && Number(payment)<=Number(balance)){
         balance = eval(balance+"-"+payment);
-        if(balance==0){
+        if(balance==0 && userType==1){
             $('.addPayment').addClass('hidden');
-            if(balance<0){
+            if(balance<0 && userType==1){
                 $('#refundPayment').removeClass('hidden');
             }else{
                 $('#refundPayment').addClass('hidden');
             }
-        }else{
+        }else if(balance>0 && userType==1){
             $('.addPayment').removeClass('hidden');
             $('#refundPayment').addClass('hidden');
         }
@@ -532,14 +540,14 @@ $(document).on('click','#refundPayment',function(){
     refund = balance.replace('-PhP ','');
     id = $('#processId').val();
     balance = 0;
-    if(balance==0){
+    if(balance==0 && userType==1){
         $('.addPayment').addClass('hidden');
-        if(balance<0){
+        if(balance<0 && userType==1){
             $('#refundPayment').removeClass('hidden');
         }else{
             $('#refundPayment').addClass('hidden');
         }
-    }else{
+    }else if(balance>0 && userType==1){
         $('.addPayment').removeClass('hidden');
         $('#refundPayment').addClass('hidden');
     }

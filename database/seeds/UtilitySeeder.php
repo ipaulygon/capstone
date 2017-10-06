@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon as Carbon;
 
 class UtilitySeeder extends Seeder
 {
@@ -26,7 +27,9 @@ class UtilitySeeder extends Seeder
             'isWarranty' => 1,
             'year' => 1,
             'month' => 0,
-            'day' => 0
+            'day' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
     }
 }

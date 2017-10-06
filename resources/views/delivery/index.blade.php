@@ -64,10 +64,10 @@
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span></button>
-                                <h4 class="modal-title">Receive</h4>
+                                <h4 class="modal-title">Checking</h4>
                             </div>
                             <div class="modal-body">
-                                <div style="text-align:center">Are you sure you want to receive this record?</div>
+                                <div style="text-align:center">Are you sure you checked this record? Clicking the check button will not let you to update this record again.</div>
                                 <br>
                                 <div class="dataTable_wrapper">
                                     <table id="receiveList" class="table table-striped table-bordered responsive">
@@ -83,7 +83,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <button id="receive" type="button" class="btn btn-success">Receive</button>
+                                <button id="receive" type="button" class="btn btn-success">Chek</button>
                             </div>
                         </div>
                     </div>

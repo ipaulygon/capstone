@@ -20,7 +20,7 @@ class JobPackageSeeder extends Seeder
             'isComplete' => 1,
             'isVoid' => 0,
         ]);
-        
+        DB::table('inventory')->where('productId',2)->decrement('quantity',10);  
         DB::table('job_package')->insert([
             'jobId' => 2,
             'packageId' => 2,
@@ -30,5 +30,6 @@ class JobPackageSeeder extends Seeder
             'isComplete' => 1,
             'isVoid' => 0,
         ]);
+        DB::table('inventory')->where('productId',2)->decrement('quantity',1);
     }
 }

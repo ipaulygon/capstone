@@ -50,8 +50,8 @@ Route::group(['middleware' => 'auth'], function(){
 			'index','show']]);
 		Route::resource('query','QueryController',['only' => [
 			'index']]);
-		Route::resource('report','ReportController');
-		Route::post('report/where','ReportController@where');
+		Route::resource('report','ReportController',['only' => [
+			'index']]);
 		Route::resource('utility','UtilitiesController');
 
 		// GET JSON

@@ -29,7 +29,7 @@
                                 <option value="3">Most jobs done by technician</option>
                                 <option value="4">Most repaired vehicle</option>
                                 <option value="5">Customers with pending payments</option>
-                                <option value="6">Current Inventory List</option>
+                                <option value="6">Current inventory list</option>
                             </select>
                         </div>
                     </div>
@@ -235,22 +235,26 @@
         $(document).ready(function (){
             $('#query').addClass('active');
             $('#list1').DataTable({
-                responsive: true
+                responsive: true,
+                ordering: false
             });
             $('#list2').DataTable({
-                responsive: true
+                responsive: true,
+                ordering: false
             });
             $('#list3').DataTable({
-                responsive: true
+                responsive: true,
+                ordering: false
             });
             $('#list4').DataTable({
-                responsive: true
+                responsive: true,
+                ordering: false
             });
             $('#list5').DataTable({
-                responsive: true
+                responsive: true,
             });
             $('#list6').DataTable({
-                responsive: true
+                responsive: true,
             });
         });
         $('#queryId').on('change', function() {          
