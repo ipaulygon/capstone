@@ -74,7 +74,7 @@ class ServiceSeeder extends Seeder
         DB::table('service')->insert([
             'name' => 'Replace Compressor',
             'price' => 525.25,
-            'size' => 'Sedan',
+            'size' => 'Large',
             'categoryId' => 3,
             'year' => 1,
             'month' => 0,
