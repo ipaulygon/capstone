@@ -271,7 +271,6 @@
                                             'readonly'])
                                         !!}</strong>
                                     </div>
-                                    <a style="color:black;font-weight:600" role="button" id="listPaymentButton" data-toggle="collapse" href="#listPayments" aria-expanded="false" aria-controls="listPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
                                 </div>
                                 <div class="col-md-6 addPayment">
                                     <div class="form-group form-inline">
@@ -283,17 +282,73 @@
                                             'placeholder'=>'Payment']) 
                                         !!}
                                     </div>
-                                    <div id="creditCard" class="form-group hidden">
-                                        {!! Form::label('inputCredit', 'Credit Card: ') !!}
-                                        {!! Form::input('text','inputCredit',null,[
-                                            'id'=>'inputCredit',
-                                            'class' => 'form-control',
-                                            'placeholder'=>'Credit']) 
-                                        !!}
-                                    </div>
+                                    <fieldset id="creditCard" class="hidden">
+                                        <div class="row">
+                                            <div class="col-md-8 col-md-offset-2 text-center">
+                                                <img src="{{ URL::asset('pics/visa.png') }}" alt="" width="50px" height="50px">
+                                                <img src="{{ URL::asset('pics/mastercard.png') }}" alt="" width="50px" height="50px">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    {!! Form::label('cardName', 'Name on card: ') !!}
+                                                    {!! Form::input('text','cardName',null,[
+                                                        'id'=>'cardName',
+                                                        'class' => 'form-control',
+                                                        'placeholder'=>'Name']) 
+                                                    !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="form-group">
+                                                    {!! Form::label('cardNo', 'Card number: ') !!}
+                                                    {!! Form::input('text','cardNo',null,[
+                                                        'id'=>'cardNo',
+                                                        'class' => 'form-control',
+                                                        'placeholder'=>'4242 4242 4242 4242']) 
+                                                    !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <img id="visaPic" class="hidden" src="{{ URL::asset('pics/visa.png') }}" alt="" width="50px" height="50px">
+                                                <img id="mcPic" class="hidden" src="{{ URL::asset('pics/mastercard.png') }}" alt="" width="50px" height="50px">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {!! Form::label('cardExp', 'Expiry Date: ') !!}
+                                                    {!! Form::input('text','cardExp',null,[
+                                                        'id'=>'cardExp',
+                                                        'class' => 'form-control',
+                                                        'placeholder'=>'12/20']) 
+                                                    !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {!! Form::label('cardSec', 'Security Code: ') !!}
+                                                    {!! Form::input('password','cardSec',null,[
+                                                        'id'=>'cardSec',
+                                                        'class' => 'form-control']) 
+                                                    !!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    {!! Form::label('cardZip', 'ZIP/Postal Code: ') !!}
+                                                    {!! Form::input('text','cardZip',null,[
+                                                        'id'=>'cardZip',
+                                                        'class' => 'form-control',
+                                                        'placeholder'=>'Credit']) 
+                                                    !!}
+                                                </div>     
+                                            </div>
+                                        </div>
+                                    </fieldset>
                                     <button type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>
                                 </div>
                                 <button type="button" id="refundPayment" class="btn btn-warning btn-md hidden">Refund Payment</button>
+                                <div class="col-md-12">
+                                    <a style="color:black;font-weight:600" role="button" id="listPaymentButton" data-toggle="collapse" href="#listPayments" aria-expanded="false" aria-controls="listPayments">View Payment Details <i class="fa fa-caret-down"></i></a>
+                                </div>
                                 <div class="col-md-12">
                                     <div class="collapse" id="listPayments">
                                         <label>Total Price: </label>

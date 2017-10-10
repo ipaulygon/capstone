@@ -13,6 +13,10 @@
 
 @section('content')
     {!! Form::open(['url' => 'sales']) !!}
+    <div class="col-md-12">
+        <a href="{{ URL::to('/sales') }}" class="btn btn-success btn-md">
+        <i class="glyphicon glyphicon-eye-open"></i> View Transactions</a>
+    </div><br><br>
     @include('layouts.required')
     @include('sales.formCreate')
     {!! Form::close() !!}

@@ -20,7 +20,45 @@ $("#totalPrice").inputmask({
     autoGroup: true,
     min: 0,
 });
-$('#inputCredit').inputmask('999 9999 9999 9999');
+$('#cardNo').inputmask('9999 9999 9999 9999');
+$('#cardExp').inputmask('99/99');
+$('#cardSec').inputmask('999',{
+    showMaskOnHover: false,
+    showMaskOnFocus: false,
+});
+$('#cardZip').inputmask('9999');
+$(document).on('keyup','#cardNo',function(){
+    pop = $(this);
+    if($(this).val().charAt(0)=='4' || $(this).val().charAt(0)=='5'){
+        pop.popover('hide');
+        if($(this).val().charAt(0)=='4'){
+            $('#visaPic').removeClass('hidden');
+            $('#mcPic').addClass('hidden');
+        }else{
+            $('#visaPic').addClass('hidden');
+            $('#mcPic').removeClass('hidden');
+        }
+    }else{
+        $('#visaPic').addClass('hidden');
+        $('#mcPic').addClass('hidden');
+        $(this).popover({
+            trigger: 'manual',
+            content: function(){
+                var content = "Oops! Only Visa and Master Card our available. Try starting with 4 or 5";
+                return content;
+            },
+            placement: function(){
+                var placement = 'top';
+                return placement;
+            },
+            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+        });
+        $(this).popover('show');
+        setTimeout(function(){
+            pop.popover('hide');
+        },2000);
+    }
+});
 var lessPayment = null;
 function process(id){
     $('#jobCarousel').carousel(2);
@@ -442,13 +480,15 @@ $(document).on('click','#savePayment', function(){
     balance = balance.replace('PhP ','');
     payment = $('#inputPayment').val().replace(/,/g,'');
     method = $('#paymentMethod').val();
-    credit = $('#inputCredit').val();
+    cardName = $('#cardName').val();
+    cardNumber = $('#cardNo').val();
+    cardExp = $('#cardExp').val();
+    cardSec = $('#cardSec').val();
+    cardZip = $('#cardZip').val()
     id = $('#processId').val();
     passed = false;
     if(method==1){
-        if(credit!=''){
-            passed = true;
-        }
+        passed = ((cardName!=null ||cardName!='') && (cardNumber!=null || cardNumber!='') && (cardNumber[0]=='4' || cardNumber[0]=='5') && (cardExp!=null || cardExp!='') && (cardSec!=null || cardSec!='') && (cardZip!=null || cardZip!='') ? true : false);
     }else{
         passed = true;
     }
@@ -488,7 +528,7 @@ $(document).on('click','#savePayment', function(){
         $.ajax({
             type: "POST",
             url: "job/pay",
-            data: {id: id,payment: payment,credit: credit,method: method},
+            data: {id: id,payment: payment,method: method,cardName: cardName,cardNumber: cardNumber,cardExp: cardExp,cardSec: cardSec,cardZip: cardZip},
             success:function(data){
                 $('#notif').append(
                     '<div id="alert" class="alert alert-success alert-dismissible fade in">' +

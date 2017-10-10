@@ -207,7 +207,7 @@
                     <thead>
                         <tr>
                             <th>Free Items</th>
-                            <th>Description</th>
+                            <th>Quantity</th>
                             <th class="text-right">Action</th>
                         </tr>
                     </thead>

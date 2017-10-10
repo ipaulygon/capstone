@@ -88,6 +88,7 @@ class JobController extends Controller
         $promos = DB::table('promo as p')
             ->where('dateStart','>=',$date)
             ->where('dateEnd','<=',$date)
+            ->where('stock','!=',0)
             ->where('p.isActive',1)
             ->select('p.*')
             ->get();
@@ -349,6 +350,7 @@ class JobController extends Controller
         $promos = DB::table('promo as p')
             ->where('dateStart','>=',$job->created_at)
             ->where('dateEnd','<=',$job->created_at)
+            ->where('stock','!=',0)
             ->where('p.isActive',1)
             ->select('p.*')
             ->get();
@@ -584,7 +586,11 @@ class JobController extends Controller
             $jp = JobPayment::create([
                 'jobId' => $job->id,
                 'paid' => $payment,
-                'creditCard' => bcrypt($request->credit),
+                'creditName' => trim($request->creditName),
+                'creditNumber' => trim($request->creditNumber),
+                'creditExpiry' => trim($request->creditExpiry),
+                'creditCode' => bcrypt(trim($request->creditCode)),
+                'creditZip' => trim($request->creditZip),
                 'isCredit' => $method
             ]);
             $now = $job->paid + $payment;
@@ -807,6 +813,7 @@ class JobController extends Controller
                 $inventory->decrement('quantity',$product->freeQuantity*$promo->completed);
             }
             if($check==1){
+                $promo->promo->decrement('stock',$request->detailQty);
                 foreach($promo->promo->product as $product){
                     $inventory = Inventory::where('productId',$product->productId)->first();
                     $inventory->increment('quantity',$product->quantity*$promo->completed);

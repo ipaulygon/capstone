@@ -81,7 +81,6 @@ clASs QueryController extends Controller
         ORDER BY total DESC
         LIMIT 5
         '));
-
         $technicians = DB::select(DB::raw('
         SELECT tech.*, COUNT(*) AS total FROM technician AS tech
         JOIN job_technician AS jt ON jt.technicianId = tech.id
@@ -91,7 +90,6 @@ clASs QueryController extends Controller
         ORDER BY total DESC
         LIMIT 5
         '));
-
         $vehicles = DB::select(DB::raw('
         SELECT v.*, vd.name AS model, vk.name AS make, vd.year AS year, COUNT(*) AS total FROM vehicle AS v
         JOIN vehicle_model AS vd ON vd.id = v.modelId
@@ -102,7 +100,6 @@ clASs QueryController extends Controller
         ORDER BY total DESC
         LIMIT 5
         '));
-
         $customers = DB::select(DB::raw('
         SELECT c.*, jh.total as total, jh.paid as paid FROM customer as c
         JOIN job_header AS jh ON jh.customerId = c.id

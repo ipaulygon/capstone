@@ -229,7 +229,6 @@
     <script>
         $(document).ready(function(){
             $('#utility').addClass('active');
-            console.log(isVat);
             if(!isVat){
                 $('#vat').attr('readonly',true);
                 $('#vat').val(0);
@@ -253,7 +252,7 @@
             allowMinus: false,
             autoGroup: true,
             min: 1,
-            max: 200
+            max: 1000
         });
         $("#backlog").inputmask({ 
             alias: "integer",
@@ -269,7 +268,7 @@
             suffix: ' %',
             allowMinus: false,
             autoGroup: true,
-            min: 0,
+            min: 1,
             max: 100
         });
         $("#year").inputmask({ 

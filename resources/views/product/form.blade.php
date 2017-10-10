@@ -32,6 +32,7 @@
                         </select>
                     </div>
                     <div class="{{($util->isWarranty ? '' : 'hidden')}}">
+                        <fieldset>
                         {!! Form::label('isWarranty', 'Warranty Details:') !!}
                         <div class="row">
                             <div class="col-md-12">
@@ -81,6 +82,7 @@
                                 </div>
                             </div>
                         </div>
+                        </fieldset>
                     </div>
                 </div>
                 {{-- Main --}}

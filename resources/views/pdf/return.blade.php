@@ -57,6 +57,9 @@
         .footerd{
             font-size: 0.8em;
         }
+        .page-break {
+            page-break-after: always;
+        }
     </style>
     <body>
         <div style="float:left">
@@ -109,6 +112,53 @@
                 </tr>
                 @endif
                 @endforeach
+            </tbody>
+        </table>
+        <div class="footer">
+            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
+        </div>
+        <div class="page-break"></div>
+        <div style="float:left">
+            <img src="{{$util->image}}" width="50px" height="50px">
+        </div>
+        <div class="center header">
+            {{$util->name}}
+        </div>
+        <label style="float:right;color:red">{{$delivery->id}}</label>
+        <div style="clear:both"></div>
+        <div class="center">
+            <label>AUTO SERVICE CENTER</label>
+        </div>
+        <div class="col-md-12 border center">
+            REFERENCE DELIVERIES
+        </div><br>
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th>Delivery Id</th>
+                    <th>Product</th>
+                    <th width="20%" class="text-right">Quantity Delivered</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($return->delivery as $delivery)
+                @foreach($delivery->delivery->detail as $product)
+                @if($product->quantity!=0)
+                <tr>
+                    <td>{{$delivery->deliveryId}}</td>
+                    <?php
+                        if($product->product->isOriginal!=null){
+                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
+                        }else{
+                            $type = "";
+                        }
+                    ?>
+                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
+                    <td class="text-right">{{number_format($product->quantity)}}</td>
+                </tr>
+                @endif
+                @endforeach
+            @endforeach
             </tbody>
         </table>
         <div class="footer">

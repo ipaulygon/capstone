@@ -248,14 +248,15 @@
                 @endforeach
             </tbody>
             <tfoot id="tFoot">
-            <?php 
-                $getVat = 100 / (100+$util->vat);
-                $vatSales = $total*$getVat;
-                $vat = $vatSales*($util->vat/100);
-                if(count($estimate->discount) > 0){
-                    $vatExempt = ($estimate->discount->discount->isVatExempt ? $vat : 0);
-                }else{
-                    $vatExempt = 0;
+            <?php
+                $vatExempt = 0;
+                if($util->isVat){
+                    $getVat = 100 / (100+$util->vat);
+                    $vatSales = $total*$getVat;
+                    $vat = $vatSales*($util->vat/100);
+                    if(count($estimate->discount)>0){
+                        $vatExempt = ($estimate->discount->discount->isVatExempt ? $vat : 0);
+                    }
                 }
             ?>
             @if($util->isVat)
@@ -286,17 +287,17 @@
                     $discount = ($util->isVat && $estimate->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
                 ?>
                 <tr>
-                    <td></td>
-                    <td>{{$estimate->discount->discount->name}} - DISCOUNT</td>
-                    <td class="text-right">{{$discountRate}} %</td>
-                    <td class="text-right">-{{number_format($discount,2)}}</td>
+                    <th></th>
+                    <th>{{$estimate->discount->discount->name}} - DISCOUNT</th>
+                    <th class="text-right">{{$discountRate}} %</th>
+                    <th class="text-right">-{{number_format($discount,2)}}</th>
                 </tr>
             @endif
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total-$discount-$vatExempt,2)}}</td>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th class="text-right">PhP {{number_format($total-$discount-$vatExempt,2)}}</th>
                 </tr>
             <tfoot>
         </table>

@@ -68,6 +68,7 @@ class SalesController extends Controller
             ->where(DB::raw('(SELECT COUNT(*) FROM promo_service WHERE promo_service.promoId=p.id)'),0)
             ->where('dateStart','>=',$date)
             ->where('dateEnd','<=',$date)
+            ->where('stock','!=',0)
             ->where('p.isActive',1)
             ->select('p.*')
             ->get();
@@ -197,6 +198,7 @@ class SalesController extends Controller
                                 'quantity' => $promoQty[$key],
                             ]);
                             $promo = Promo::findOrFail($promo);
+                            $promo->decrement('stock',$promoQty[$key]);
                             foreach($promo->allProduct as $product){
                                 $inventory = Inventory::where('productId',$product->productId)->first();
                                 $inventory->decrement('quantity',($product->quantity+$product->freeQuantity)*$promoQty[$key]);

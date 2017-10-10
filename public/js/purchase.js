@@ -54,27 +54,28 @@ $(document).on('keyup', '#qty', function (){
     if(qty=='' || qty==null || qty==0){
         $(this).val(1);
         qty = $(this).val();
-    }else if(qty>maxValue){
-        qty = maxValue;
-        $(this).val(maxValue);
-        $(this).popover({
-            trigger: 'manual',
-            content: function(){
-                var content = "Oops! Your input exceeds the max number of items. The max value will be set.";
-                return content;
-            },
-            placement: function(){
-                var placement = 'top';
-                return placement;
-            },
-            template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-        });
-        $(this).popover('show');
-        pop = $(this);
-        setTimeout(function(){
-            pop.popover('hide');
-        },2000);
     }
+    // }else if(qty>maxValue){
+    //     qty = maxValue;
+    //     $(this).val(maxValue);
+    //     $(this).popover({
+    //         trigger: 'manual',
+    //         content: function(){
+    //             var content = "Oops! Your input exceeds the max number of items. The max value will be set.";
+    //             return content;
+    //         },
+    //         placement: function(){
+    //             var placement = 'top';
+    //             return placement;
+    //         },
+    //         template: '<div class="popover alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+    //     });
+    //     $(this).popover('show');
+    //     pop = $(this);
+    //     setTimeout(function(){
+    //         pop.popover('hide');
+    //     },2000);
+    // }
     stack = $(this).parents('tr').find('#stack').val().replace(/,/g,'');
     price = $(this).attr('data-price').replace(/,/g,'');
     price = eval(price+"*"+qty);
@@ -136,7 +137,6 @@ $(document).on('change', '#products', function(){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -215,7 +215,6 @@ function oldProduct(id,qty,model,price){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",
@@ -283,7 +282,6 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
                 prefix: '',
                 allowMinus: false,
                 min: delivered,
-                max: maxValue,
             });
             $(".price").inputmask({ 
                 alias: "currency",

@@ -21,8 +21,8 @@ class TechnicianController extends Controller
      */
     public function index()
     {
-        $technicians = Technician::where('isActive',1)->get();
-        $deactivate = Technician::where('isActive',0)->get();
+        $technicians = Technician::where('isActive',1)->orderBy('lastName')->get();
+        $deactivate = Technician::where('isActive',0)->orderBy('lastName')->get();
         return View('technician.index',compact('technicians','deactivate'));
     }
 
@@ -38,8 +38,8 @@ class TechnicianController extends Controller
         $categories = DB::table('service_category')
             ->where('isActive',1)
             ->select('service_category.*')
-            ->get()
-            ->sortBy('name');
+            ->orderBy('name')
+            ->get();
         return View('technician.create',compact('image','date','categories'));
     }
 
@@ -163,8 +163,8 @@ class TechnicianController extends Controller
         $categories = DB::table('service_category')
             ->where('isActive',1)
             ->select('service_category.*')
-            ->get()
-            ->sortBy('name');
+            ->orderBy('name')
+            ->get();
         return View('technician.edit',compact('technician','date','image','categories'));
     }
 

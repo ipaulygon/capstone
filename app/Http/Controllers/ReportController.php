@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\JobHeader;
+use App\Utilities;
 use DB;
 
 class ReportController extends Controller
@@ -15,6 +15,10 @@ class ReportController extends Controller
      */
     public function index()
     {
+        $util = Utilities::findOrFail(1);
+        $dateStart = date('m/d/Y', strtotime($util->created_at));
+        $dateEnd = date('m/d/Y');
+        $dateString = $dateStart.'-'.$dateEnd;
         $jobs = DB::select(DB::raw('
         SELECT CONCAT_WS(" ",c.firstName,c.middleName,c.lastName) AS customer, v.plate AS plate, vd.name AS model, vd.year AS year, vk.name AS make, v.isManual AS isManual, jh.*, SUM(CASE WHEN jp.isCredit=0 THEN jp.paid END) AS cash, SUM(CASE WHEN jp.isCredit=1 THEN jp.paid END) AS credit FROM job_header as jh
         JOIN customer AS c ON c.id = jh.customerId
@@ -85,7 +89,30 @@ class ReportController extends Controller
             ORDER BY total DESC
         ) AS y ON x.product = y.product
         '));
-        return View('report.index',compact('jobs','sales','inventory'));
+        $services = DB::select(DB::raw('
+        SELECT c.name AS category, service, size, SUM(serviceCount) AS total FROM(
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
+            JOIN job_service AS js ON js.serviceId = s.id
+            WHERE s.isActive=1 AND js.isComplete=1
+            GROUP BY category,service,size
+            UNION
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
+            JOIN package_service AS ps ON ps.serviceId = s.id
+            JOIN job_package AS jp ON jp.packageId = ps.packageId
+            WHERE s.isActive=1
+            GROUP BY category,service,size
+            UNION
+            SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
+            JOIN promo_service AS ps ON ps.serviceId = s.id
+            JOIN job_promo AS jp ON jp.promoId = ps.promoId
+            WHERE s.isActive=1
+            GROUP BY category,service,size
+        )AS result
+        JOIN service_category AS c ON c.id = result.category
+        GROUP BY category,service,size
+        ORDER BY total DESC
+        '));
+        return View('report.index',compact('dateStart','dateEnd','dateString','jobs','sales','inventory','services'));
     }
 
     /**

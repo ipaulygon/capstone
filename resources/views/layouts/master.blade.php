@@ -40,7 +40,7 @@
         var wDay = {{$util->day}};
     </script>
 </head>
-<body id="mainBody" class="fixed hold-transition skin-blue sidebar-mini">
+<body id="mainBody" class="fixed hold-transition skin-purple sidebar-mini">
     <div class="wrapper">
         <header class="main-header">
             <!-- Logo -->
@@ -191,7 +191,7 @@
                     <li id="tPurchase"><a href="{{url('/purchase')}}"><i class="fa fa-clipboard"></i> <span>Purchase Order</span></a></li>
                     <li id="tDelivery"><a href="{{url('/delivery')}}"><i class="fa fa-truck"></i> <span>Receive Delivery</span></a></li>
                     <li id="tReturn"><a href="{{url('/return')}}"><i class="fa fa-reply"></i> <span>Return Items</span></a></li>
-                    <li id="tSales"><a href="{{url('/sales')}}"><i class="fa fa-money"></i> <span>Point of Sales</span></a></li>
+                    <li id="tSales"><a href="{{url('/sales/create')}}"><i class="fa fa-money"></i> <span>Point of Sales</span></a></li>
                     @endif
                     <li id="tInspect"><a href="{{url('/inspect')}}"><i class="fa fa-search"></i> <span>Inspect Vehicle</span></a></li>
                     <li id="tJob"><a href="{{url('/job')}}"><i class="fa fa-tasks"></i> <span>Job Order</span></a></li>

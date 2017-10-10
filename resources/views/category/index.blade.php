@@ -92,24 +92,28 @@
                                 <h4 class="modal-title">New Record</h4>
                             </div>
                             <div class="modal-body">
-                                @include('layouts.required')
-                                <div class="form-group">
-                                    {!! Form::label('name', 'Service Category') !!}<span>*</span>
-                                    {!! Form::input('text','name',null,[
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Name',
-                                        'maxlength'=>'50',
-                                        'required']) 
-                                    !!}
-                                </div>
-                                <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}
-                                    {!! Form::textarea('description',null,[
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Description',
-                                        'maxlength'=>'50',
-                                        'rows'=>'3']) 
-                                    !!}
+                                <div class="row">
+                                    @include('layouts.required')
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            {!! Form::label('name', 'Service Category') !!}<span>*</span>
+                                            {!! Form::input('text','name',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Name',
+                                                'maxlength'=>'50',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}
+                                            {!! Form::textarea('description',null,[
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'3']) 
+                                            !!}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -131,27 +135,31 @@
                                 <h4 class="modal-title">Update Record</h4>
                             </div>
                             <div class="modal-body">
-                                @include('layouts.required')
-                                <input id="categoryId" name="id" type="hidden">
-                                <div class="form-group">
-                                    {!! Form::label('name', 'Service Category') !!}<span>*</span>
-                                    {!! Form::input('text','name',null,[
-                                        'id'=>'categoryName',
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Name',
-                                        'maxlength'=>'50',
-                                        'required']) 
-                                    !!}
-                                </div>
-                                <div class="form-group">
-                                    {!! Form::label('description', 'Description') !!}
-                                    {!! Form::textarea('description',null,[
-                                        'id'=>'categoryDesc',
-                                        'class' => 'form-control',
-                                        'placeholder'=>'Description',
-                                        'maxlength'=>'50',
-                                        'rows'=>'3']) 
-                                    !!}
+                                <div class="row">
+                                    @include('layouts.required')
+                                    <div class="col-md-12">
+                                        <input id="categoryId" name="id" type="hidden">
+                                        <div class="form-group">
+                                            {!! Form::label('name', 'Service Category') !!}<span>*</span>
+                                            {!! Form::input('text','name',null,[
+                                                'id'=>'categoryName',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Name',
+                                                'maxlength'=>'50',
+                                                'required']) 
+                                            !!}
+                                        </div>
+                                        <div class="form-group">
+                                            {!! Form::label('description', 'Description') !!}
+                                            {!! Form::textarea('description',null,[
+                                                'id'=>'categoryDesc',
+                                                'class' => 'form-control',
+                                                'placeholder'=>'Description',
+                                                'maxlength'=>'50',
+                                                'rows'=>'3']) 
+                                            !!}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">

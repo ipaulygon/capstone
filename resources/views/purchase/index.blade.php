@@ -69,10 +69,10 @@
                                                 <button onclick="updateAdmin('{{$purchase->id}}','purchase')" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Update record">
                                                     <i class="glyphicon glyphicon-edit"></i>
                                                 </button>
-                                                @endif
                                                 <button onclick="deactivateAdmin('{{$purchase->id}}')" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Discard record">
                                                     <i class="glyphicon glyphicon-trash"></i>
                                                 </button>
+                                                @endif
                                                 {!! Form::open(['method'=>'delete','action' => ['PurchaseController@destroy',$purchase->id],'id'=>'del'.$purchase->id]) !!}
                                                 {!! Form::close() !!}
                                             @else

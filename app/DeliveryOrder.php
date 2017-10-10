@@ -11,4 +11,12 @@ class DeliveryOrder extends Model
         'deliveryId',
     	'purchaseId',
     ];
+
+    public function delivery(){
+    	return $this->belongsTo('App\DeliverHeader', 'deliveryId');
+    }
+
+    public function purchase(){
+    	return $this->belongsTo('App\PurchaseHeader', 'purchaseId');
+    }
 }

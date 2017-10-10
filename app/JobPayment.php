@@ -10,7 +10,11 @@ class JobPayment extends Model
     protected $fillable = [
     	'jobId',
         'paid',
-        'creditCard',
+        'creditName',
+        'creditNumber',
+        'creditExpiry',
+        'creditCode',
+        'creditZip',
         'isCredit'
     ];
 

@@ -211,6 +211,7 @@ $(document).on('focusin','#qty',function(){
                     maxQty = (maxQty>=div ? div : maxQty);
                 });
                 minQty = (maxQty>=1 ? 1 : 0);
+                maxQty = (data.promo.stock<maxQty ? data.promo.stock : maxQty);
                 minMax(component,minQty,maxQty);
             }
         }

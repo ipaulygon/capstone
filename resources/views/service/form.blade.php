@@ -45,55 +45,57 @@
                 </div>
             </div>
             <div class="{{($util->isWarranty ? '' : 'hidden')}}">
-                {!! Form::label('isWarranty', 'Warranty Details:') !!}
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            {{--  {!! Form::label('hasWarranty', 'Warranty') !!}<span>*</span><br>  --}}
-                            @php 
-                                if(!isset($product)){
-                                    $warrantyChecked = 'checked';
-                                }else{
-                                    $warrantyChecked = ($product->isWarranty ? 'checked':'');
-                                }
-                            @endphp
-                            <label class="checkbox-inline">
-                                <input type="checkbox" class="warranty" name="hasWarranty" value="1" {{$warrantyChecked}}> Warranty
-                                <input type="hidden" id="isWarranty" name="isWarranty" value="1">
-                            </label>
+                <fieldset>
+                    {!! Form::label('isWarranty', 'Warranty Details:') !!}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{--  {!! Form::label('hasWarranty', 'Warranty') !!}<span>*</span><br>  --}}
+                                @php 
+                                    if(!isset($product)){
+                                        $warrantyChecked = 'checked';
+                                    }else{
+                                        $warrantyChecked = ($product->isWarranty ? 'checked':'');
+                                    }
+                                @endphp
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="warranty" name="hasWarranty" value="1" {{$warrantyChecked}}> Warranty
+                                    <input type="hidden" id="isWarranty" name="isWarranty" value="1">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('year', 'Year') !!}
+                                {!! Form::input('text','year',null,[
+                                    'class' => 'form-control',
+                                    'id' => 'year',
+                                    'placeholder'=>'Year']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('month', 'Month') !!}
+                                {!! Form::input('text','month',null,[
+                                    'class' => 'form-control',
+                                    'id' => 'month',
+                                    'placeholder'=>'Month']) 
+                                !!}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('day', 'Day') !!}
+                                {!! Form::input('text','day',null,[
+                                    'class' => 'form-control',
+                                    'id' => 'day',
+                                    'placeholder'=>'Day']) 
+                                !!}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            {!! Form::label('year', 'Year') !!}
-                            {!! Form::input('text','year',null,[
-                                'class' => 'form-control',
-                                'id' => 'year',
-                                'placeholder'=>'Year']) 
-                            !!}
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            {!! Form::label('month', 'Month') !!}
-                            {!! Form::input('text','month',null,[
-                                'class' => 'form-control',
-                                'id' => 'month',
-                                'placeholder'=>'Month']) 
-                            !!}
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            {!! Form::label('day', 'Day') !!}
-                            {!! Form::input('text','day',null,[
-                                'class' => 'form-control',
-                                'id' => 'day',
-                                'placeholder'=>'Day']) 
-                            !!}
-                        </div>
-                    </div>
-                </div>
+                </fieldset>
             </div>
         </div>
         <div class="box-footer">

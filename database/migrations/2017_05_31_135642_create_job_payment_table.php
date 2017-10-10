@@ -18,7 +18,11 @@ class CreateJobPaymentTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('jobId');
             $table->double('paid',15,2);
-            $table->string('creditCard')->nullable();
+            $table->string('creditName',150)->nullable();
+            $table->string('creditNumber',20)->nullable();
+            $table->string('creditExpiry',5)->nullable();
+            $table->string('creditCode')->nullable();
+            $table->string('creditZip',4)->nullable();
             $table->boolean('isCredit');
             $table->timestamps();
             $table->foreign('jobId')

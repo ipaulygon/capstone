@@ -566,7 +566,7 @@ $(document).on('change', '#promos', function(){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: maxValue,
+                max: data.promo.stock,
             });
             masking();
         }
@@ -636,7 +636,7 @@ function oldPromo(id,qty){
                 prefix: '',
                 allowMinus: false,
                 min: 1,
-                max: maxValue,
+                max: data.promo.stock,
             });
             masking();
         }
@@ -703,7 +703,7 @@ function retrievePromo(id,qty,price,completed){
                 prefix: '',
                 allowMinus: false,
                 min: minValue,
-                max: maxValue,
+                max: data.promo.stock,
             });
             masking();
         }

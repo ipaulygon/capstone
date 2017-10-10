@@ -57,6 +57,9 @@
         .footerd{
             font-size: 0.8em;
         }
+        .page-break {
+            page-break-after: always;
+        }
     </style>
     <body>
         <div style="float:left">
@@ -119,14 +122,16 @@
                 </tr>
                 @endif
                 @endforeach
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total,2)}}</td>
-                </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th class="text-right">PhP {{number_format($total,2)}}</th>
+                </tr>
+            </tfoot>
         </table>
         <div class="footer">
             <div class="col-md-6">

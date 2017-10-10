@@ -30,7 +30,6 @@
                                     <option value="1">Sales Report</option>
                                     <option value="2">Inventory Report</option>
                                     <option value="3">Service Report</option>
-                                    <option value="5">Discrepancy Report</option>
                                 </select>
                             </div>
                         </div>
@@ -42,7 +41,7 @@
                                 <div class="input-group-addon" >
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                {!! Form::input('text','date',null,[
+                                {!! Form::input('text','date',$dateString,[
                                     'class' => 'form-control',
                                     'id'=>'date',
                                     'placeholder'=>'Date',
@@ -161,9 +160,31 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                            
-                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary pan3">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="serviceTable" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Service</th>
+                                    <th class="text-right">Rendered</th>
+                                    <th class="text-right">Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($services as $service)
+                                <tr>
+                                    <td>{{$loop->index+1}}</td>
+                                    <td>{{$service->service}} - {{$service->size}} ({{$service->category}})</td>
+                                    <td class="text-right">{{number_format($service->total)}}</td>
+                                    <td class="text-right">{{$loop->index+1}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -182,9 +203,29 @@
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/inputmask.phone.extensions.js')}}"></script>
     <script src="{{ URL::asset('assets/plugins/input-mask/jquery.inputmask.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#report').addClass('active');
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#date input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+            $('#date').daterangepicker({
+                minDate: {{$dateStart}},
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Last for 7 Days': [moment(), moment().add(6, 'days')],
+                    'Last for 30 Days': [moment(), moment().add(29, 'days')],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                }
+            }, cb);
+            cb(start, end);
+            $('#date').inputmask('99/99/9999-99/99/9999');
         });
     </script>
 @stop

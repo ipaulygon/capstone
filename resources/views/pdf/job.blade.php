@@ -248,11 +248,11 @@
             </tbody>
             <tfoot id="tFoot">
             <?php 
+                $vatExempt = 0;
                 if($util->isVat){
                     $getVat = 100 / (100+$util->vat);
                     $vatSales = $total*$getVat;
                     $vat = $vatSales*($util->vat/100);
-                    $vatExempt = 0;
                     if(count($job->discount)>0){
                         $vatExempt = ($job->discount->discount->isVatExempt ? $vat : 0);
                     }
@@ -286,17 +286,17 @@
                     $discount = ($util->isVat && $job->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
                 ?>
                 <tr>
-                    <td></td>
-                    <td>{{$job->discount->discount->name}} - DISCOUNT</td>
-                    <td class="text-right">{{$discountRate}} %</td>
-                    <td class="text-right">-{{number_format($discount,2)}}</td>
+                    <th></th>
+                    <th>{{$job->discount->discount->name}} - DISCOUNT</th>
+                    <th class="text-right">{{$discountRate}} %</th>
+                    <th class="text-right">-{{number_format($discount,2)}}</th>
                 </tr>
             @endif
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Total</td>
-                    <td class="text-right">PhP {{number_format($total-$discount-$vatExempt,2)}}</td>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th class="text-right">PhP {{number_format($total-$discount-$vatExempt,2)}}</th>
                 </tr>
             <tfoot>
         </table>

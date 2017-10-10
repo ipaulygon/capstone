@@ -11,4 +11,12 @@ class ReturnDelivery extends Model
         'returnId',
     	'deliveryId',
     ];
+
+    public function return(){
+    	return $this->belongsTo('App\ReturnHeader', 'returnId');
+    }
+
+    public function delivery(){
+    	return $this->belongsTo('App\DeliveryHeader', 'deliveryId');
+    }
 }
