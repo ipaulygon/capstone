@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class SalesPromo extends Model
 {
     protected $table = 'sales_promo';
-    public $timestamps = false;
     protected $fillable = [
     	'salesId',
     	'promoId',

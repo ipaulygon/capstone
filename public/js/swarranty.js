@@ -293,13 +293,13 @@ function salesPromo(id){
 }
 
 $(document).on('click','#salesSubmit',function(e){
-    e.preventDefault();
     $.ajax({
         type: 'POST',
         url: '/warranty/sales/create',
         data: $('#salesForm').serialize(),
         success:function(data){
             if(data.message==0){
+                e.preventDefault();
                 if(data.product.isOriginal!=null){
                     part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
                 }else{
@@ -314,7 +314,7 @@ $(document).on('click','#salesSubmit',function(e){
                     '</div>'
                 )
             }else{
-                location.reload();
+                window.location.reload();
             }
         }
     });

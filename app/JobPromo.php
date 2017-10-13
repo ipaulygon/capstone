@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class JobPromo extends Model
 {
     protected $table = 'job_promo';
-    public $timestamps = false;
     protected $fillable = [
     	'jobId',
     	'promoId',

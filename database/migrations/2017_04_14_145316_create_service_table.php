@@ -20,9 +20,9 @@ class CreateServiceTable extends Migration
             $table->double('price', 15,2);
             $table->string('size', 20);
             $table->unsignedInteger('categoryId');
-            $table->integer('year')->nullable();
-            $table->integer('month')->nullable();
-            $table->integer('day')->nullable();
+            $table->integer('year')->default(0);
+            $table->integer('month')->default(0);
+            $table->integer('day')->default(0);
             $table->boolean('isActive')->default(1);
             $table->unique(['name', 'size']);
             $table->foreign('categoryId')

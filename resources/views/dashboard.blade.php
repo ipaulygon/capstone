@@ -7,6 +7,11 @@
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/datatables/datatables-responsive/css/dataTables.responsive.css') }}">
+    <style>
+        .info-box{
+            cursor: pointer;
+        }
+    </style>
 @stop
 
 @section('content')
@@ -14,7 +19,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-4">
-                <div class="info-box bg-aqua">
+                <div class="info-box bg-aqua" data-link="job">
                     <span class="info-box-icon"><i class="fa fa-wrench"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-number text-center" style="font-size:3em">{{count($jobs)}}</span>
@@ -23,7 +28,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="info-box bg-green">
+                <div class="info-box bg-green" data-link="sales/create">
                     <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-number text-center" style="font-size:3em">{{count($sales)}}</span>
@@ -32,7 +37,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="info-box bg-red">
+                <div class="info-box bg-red" data-link="damage">
                     <span class="info-box-icon"><i class="fa fa-trash"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-number text-center" style="font-size:3em">0</span>
@@ -243,6 +248,10 @@
                 responsive: true,
             });
             $('#dashboard').addClass('active');
+        });
+        $(document).on('click','.info-box',function(){
+            link = $(this).attr('data-link');
+            window.location.replace('/'+link);
         });
     </script>
 @stop

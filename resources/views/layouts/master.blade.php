@@ -38,6 +38,7 @@
         var wYear = {{$util->year}};
         var wMonth = {{$util->month}};
         var wDay = {{$util->day}};
+        var businessDate = "{{$util->created_at}}";
     </script>
 </head>
 <body id="mainBody" class="fixed hold-transition skin-purple sidebar-mini">
@@ -202,7 +203,8 @@
                     <li id="query"><a href="{{url('/query')}}"><i class="fa fa-bookmark-o"></i> <span>Queries</span></a></li>
                     <li id="report"><a href="{{url('/report')}}"><i class="fa fa-book"></i> <span>Reports</span></a></li>
                     <li class="header">UTILITIES</li>
-                    <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Utilities</span></a></li>
+                    <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Manage Settings</span></a></li>
+                    <li id="damage"><a href="{{url('/damage')}}"><i class="fa fa-trash"></i> <span>Dispose Products</span></a></li>
                     @endif
                 </ul>
             </section>

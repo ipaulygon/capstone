@@ -19,6 +19,7 @@ class CreateJobDiscountTable extends Migration
             $table->unsignedInteger('jobId');
             $table->unsignedInteger('discountId');
             $table->boolean('isActive')->default(1);
+            $table->timestamps();
             $table->foreign('jobId')
                   ->references('id')->on('job_header')
                   ->onUpdate('cascade')

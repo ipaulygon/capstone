@@ -274,7 +274,7 @@ class WarrantyController extends Controller
                 }
                 DB::commit();
                 $request->session()->flash('warranty', 'Sales warranty successfully added.'); 
-                return Redirect('warranty');
+                return 'success';
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();
@@ -497,7 +497,7 @@ class WarrantyController extends Controller
                 DB::commit();
                 $id = 'JOB'.str_pad($job->id, 5, '0', STR_PAD_LEFT);
                 $request->session()->flash('warranty', 'Job warranty successfully added. New job order generated: '.$id); 
-                return Redirect('warranty');
+                return 'success';
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();

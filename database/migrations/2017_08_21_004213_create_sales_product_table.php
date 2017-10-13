@@ -20,6 +20,7 @@ class CreateSalesProductTable extends Migration
             $table->unsignedInteger('productId');
             $table->integer('quantity');
             $table->boolean('isActive')->default(1);
+            $table->timestamps();
             $table->foreign('salesId')
                   ->references('id')->on('sales_header')
                   ->onUpdate('cascade')

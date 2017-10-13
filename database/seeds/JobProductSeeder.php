@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon as Carbon;
 
 class JobProductSeeder extends Seeder
 {
@@ -19,6 +20,8 @@ class JobProductSeeder extends Seeder
             'isActive' => 1,
             'isComplete' => 1,
             'isVoid' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
         DB::table('inventory')->where('productId',1)->decrement('quantity',5);        
         DB::table('job_product')->insert([
@@ -29,6 +32,8 @@ class JobProductSeeder extends Seeder
             'isActive' => 1,
             'isComplete' => 1,
             'isVoid' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
         DB::table('inventory')->where('productId',1)->decrement('quantity',1);  
     }

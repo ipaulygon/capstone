@@ -28,8 +28,8 @@ class UtilitySeeder extends Seeder
             'year' => 1,
             'month' => 0,
             'day' => 0,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'created_at' => Carbon::yesterday(),
+            'updated_at' => Carbon::yesterday()
         ]);
     }
 }

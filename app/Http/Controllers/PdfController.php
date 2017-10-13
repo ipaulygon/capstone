@@ -8,7 +8,7 @@ use Session;
 use DB;
 use Illuminate\Validation\Rule;
 use PDF;
-use PDFF;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDFSnappy;
 //MODELS
 use App\PurchaseHeader;
 use App\DeliveryHeader;
@@ -60,9 +60,11 @@ class PdfController extends Controller
     public function inspect($id){
         $date = date('Y-m-d H:i:s');
         $inspect = InspectionHeader::findOrFail($id);
-        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        // $pdf = PDFSnappy::loadView('pdf.inspect',compact('inspect','date'));
+        // return $pdf->inline('github.pdf');
+        // PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
         // $pdf = PDF::loadview('pdf.inspect',compact('inspect','date'))->setPaper([0,0,612,792]);
-        // return $pdf->stream('inspect.pdf');
+        // return $pdf->download('inspect.pdf');
         return View('pdf.inspect',compact('inspect','date'));
     }
 

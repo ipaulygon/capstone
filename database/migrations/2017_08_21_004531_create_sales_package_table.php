@@ -20,6 +20,7 @@ class CreateSalesPackageTable extends Migration
             $table->unsignedInteger('packageId');
             $table->integer('quantity');
             $table->boolean('isActive')->default(1);
+            $table->timestamps();
             $table->foreign('salesId')
                   ->references('id')->on('sales_header')
                   ->onUpdate('cascade')

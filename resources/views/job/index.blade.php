@@ -331,16 +331,6 @@
                                                     !!}
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    {!! Form::label('cardZip', 'ZIP/Postal Code: ') !!}
-                                                    {!! Form::input('text','cardZip',null,[
-                                                        'id'=>'cardZip',
-                                                        'class' => 'form-control',
-                                                        'placeholder'=>'Credit']) 
-                                                    !!}
-                                                </div>     
-                                            </div>
                                         </div>
                                     </fieldset>
                                     <button type="button" id="savePayment" class="btn btn-info btn-md">Add Payment</button>

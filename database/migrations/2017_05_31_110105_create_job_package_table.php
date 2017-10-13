@@ -23,6 +23,7 @@ class CreateJobPackageTable extends Migration
             $table->boolean('isActive')->default(1);
             $table->boolean('isComplete')->default(0);
             $table->boolean('isVoid')->default(0);
+            $table->timestamps();
             $table->foreign('jobId')
                   ->references('id')->on('job_header')
                   ->onUpdate('cascade')

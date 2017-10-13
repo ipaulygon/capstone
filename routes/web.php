@@ -52,7 +52,10 @@ Route::group(['middleware' => 'auth'], function(){
 			'index']]);
 		Route::resource('report','ReportController',['only' => [
 			'index']]);
-		Route::resource('utility','UtilitiesController');
+		Route::resource('utility','UtilitiesController',['only' => [
+			'index','update']]);
+		Route::resource('damage','DamageController',['only' => [
+			'index','store']]);
 
 		// GET JSON
 		Route::get('vehicle/remove/{id}','VehicleController@remove');
@@ -78,6 +81,7 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::get('warranty/job/package/{id}','WarrantyController@jobPackage');
 		Route::get('warranty/job/promo/{id}','WarrantyController@jobPromo');
 		Route::post('warranty/job/create','WarrantyController@jobCreate');
+		Route::post('report/filter','ReportController@filter');
 
 		//PDF
 		Route::get('purchase/pdf/{id}','PdfController@purchase');

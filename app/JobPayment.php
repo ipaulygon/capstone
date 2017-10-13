@@ -14,7 +14,6 @@ class JobPayment extends Model
         'creditNumber',
         'creditExpiry',
         'creditCode',
-        'creditZip',
         'isCredit'
     ];
 

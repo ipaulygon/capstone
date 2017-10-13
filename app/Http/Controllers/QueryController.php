@@ -35,19 +35,19 @@ clASs QueryController extends Controller
             UNION
             SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS productCount FROM product AS p
             LEFT JOIN job_product AS jp ON jp.productId = p.id
-            WHERE p.isActive=1
+            WHERE p.isActive=1 AND jp.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
             SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
             JOIN package_product AS pp ON pp.productId = p.id
             LEFT JOIN job_package AS jp ON jp.packageId = pp.packageId
-            WHERE p.isActive=1
+            WHERE p.isActive=1 AND jp.isActive=1
             GROUP BY type,brand,variance,product,original,description
             UNION
             SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
             JOIN promo_product AS pp ON pp.productId = p.id
             LEFT JOIN job_promo AS jp ON jp.promoId = pp.promoId
-            WHERE p.isActive=1
+            WHERE p.isActive=1 AND jp.isActive=1
             GROUP BY type,brand,variance,product,original,description
         ) AS result
         JOIN product_type AS t ON t.id = result.type
@@ -61,19 +61,19 @@ clASs QueryController extends Controller
         SELECT c.name AS category, service, size, SUM(serviceCount) AS total FROM(
             SELECT s.name AS service, s.categoryId AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
             JOIN job_service AS js ON js.serviceId = s.id
-            WHERE s.isActive=1 AND js.isComplete=1
+            WHERE s.isActive=1 AND js.isComplete=1 AND js.isActive=1
             GROUP BY category,service,size
             UNION
             SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
             JOIN package_service AS ps ON ps.serviceId = s.id
             JOIN job_package AS jp ON jp.packageId = ps.packageId
-            WHERE s.isActive=1
+            WHERE s.isActive=1 AND jp.isActive=1
             GROUP BY category,service,size
             UNION
             SELECT s.name AS service, s.categoryId AS category, s.size AS size, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS serviceCount FROM service AS s
             JOIN promo_service AS ps ON ps.serviceId = s.id
             JOIN job_promo AS jp ON jp.promoId = ps.promoId
-            WHERE s.isActive=1
+            WHERE s.isActive=1 AND jp.isActive=1
             GROUP BY category,service,size
         )AS result
         JOIN service_category AS c ON c.id = result.category
@@ -105,7 +105,6 @@ clASs QueryController extends Controller
         JOIN job_header AS jh ON jh.customerId = c.id
         WHERE jh.total!=jh.paid
         '));
-
         $inventory = DB::table('inventory AS i')
             ->join('product AS p','p.id','i.productId')
             ->join('product_type AS pt','pt.id','p.typeId')
@@ -114,7 +113,6 @@ clASs QueryController extends Controller
             ->where('p.isActive',1)
             ->select('i.*','p.name AS product','p.isOriginal AS isOriginal','pt.name AS type','pb.name AS brand','pv.name AS variance')
             ->get();
-
         return View('query.index',compact('products','services','technicians','vehicles','customers','inventory'));
     }
 

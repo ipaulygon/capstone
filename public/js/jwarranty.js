@@ -393,7 +393,7 @@ $(document).on('click','#jobSubmit',function(e){
         url: '/warranty/job/create',
         data: $('#jobForm').serialize(),
         success:function(data){
-            console.log('success');
+            window.location.reload();
         }
     });
 });

@@ -23,7 +23,7 @@ class CreateCustomerTable extends Migration
             $table->text('brgy')->nullable();
             $table->text('city');
             $table->string('contact', 30);
-            $table->string('email', 45)->nullable();
+            $table->string('email')->nullable();
             $table->string('card', 45)->nullable();
             $table->unique(['firstName', 'middleName','lastName']);
         });

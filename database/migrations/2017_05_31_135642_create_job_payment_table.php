@@ -22,7 +22,6 @@ class CreateJobPaymentTable extends Migration
             $table->string('creditNumber',20)->nullable();
             $table->string('creditExpiry',5)->nullable();
             $table->string('creditCode')->nullable();
-            $table->string('creditZip',4)->nullable();
             $table->boolean('isCredit');
             $table->timestamps();
             $table->foreign('jobId')

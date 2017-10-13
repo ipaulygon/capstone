@@ -31,6 +31,7 @@ function cb(start, end) {
 }
 
 $('#date').daterangepicker({
+    opens: 'left',
     minDate: start,
     startDate: start,
     endDate: end,

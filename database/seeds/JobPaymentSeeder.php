@@ -19,7 +19,6 @@ class JobPaymentSeeder extends Seeder
             'creditNumber' => '',
             'creditExpiry' => '',
             'creditCode' => '',
-            'creditZip' => '',
             'isCredit' => 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
@@ -32,7 +31,6 @@ class JobPaymentSeeder extends Seeder
             'creditNumber' => '',
             'creditExpiry' => '',
             'creditCode' => '',
-            'creditZip' => '',
             'isCredit' => 0,
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()

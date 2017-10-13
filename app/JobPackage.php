@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class JobPackage extends Model
 {
     protected $table = 'job_package';
-    public $timestamps = false;
     protected $fillable = [
     	'jobId',
     	'packageId',

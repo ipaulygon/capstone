@@ -22,7 +22,7 @@
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-builder.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ URL::asset('assets/formbuilder/form-render.min.css') }}">
 </head>
-<body>
+<body id="hello">
     <center>
         <h2>{{$util->name}}</h2>
         <h4>BASIC INSPECTION FORM</h4>
@@ -66,6 +66,10 @@
     <script src="{{ URL::asset('assets/formbuilder/form-builder.min.js') }}"></script>
     <script src="{{ URL::asset('assets/formbuilder/form-render.min.js') }}"></script>
     <script src="{{ URL::asset('js/inspect.js') }}"></script>
+    <script src="{{ URL::asset('assets/jspdf/jspdf.js') }}"></script>
+    <script src="{{ URL::asset('assets/jspdf/from_html.js') }}"></script>
+    <script src="{{ URL::asset('assets/jspdf/split_text_to_size.js') }}"></script>
+    <script src="{{ URL::asset('assets/jspdf/standard_fonts_metrics.js') }}"></script>
     @foreach($inspect->detail as $detail)
         <script>
             form = JSON.stringify({!! $detail->remarks !!});

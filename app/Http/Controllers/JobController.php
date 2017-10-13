@@ -590,7 +590,6 @@ class JobController extends Controller
                 'creditNumber' => trim($request->creditNumber),
                 'creditExpiry' => trim($request->creditExpiry),
                 'creditCode' => bcrypt(trim($request->creditCode)),
-                'creditZip' => trim($request->creditZip),
                 'isCredit' => $method
             ]);
             $now = $job->paid + $payment;

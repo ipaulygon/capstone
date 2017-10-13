@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesPromoTable extends Migration
+class CreateDamageProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,15 @@ class CreateSalesPromoTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_promo', function (Blueprint $table) {
+        Schema::create('damage_product', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->unsignedInteger('salesId');
-            $table->unsignedInteger('promoId');
+            $table->unsignedInteger('productId');
             $table->integer('quantity');
-            $table->boolean('isActive')->default(1);
+            $table->text('remarks')->nullable();
             $table->timestamps();
-            $table->foreign('salesId')
-                  ->references('id')->on('sales_header')
-                  ->onUpdate('cascade')
-                  ->onDelete('restrict');
-            $table->foreign('promoId')
-                  ->references('id')->on('promo')
+            $table->foreign('productId')
+                  ->references('id')->on('product')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
         });
@@ -39,6 +34,6 @@ class CreateSalesPromoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_promo');
+        Schema::dropIfExists('damage_product');
     }
 }

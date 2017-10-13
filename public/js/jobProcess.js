@@ -26,7 +26,6 @@ $('#cardSec').inputmask('999',{
     showMaskOnHover: false,
     showMaskOnFocus: false,
 });
-$('#cardZip').inputmask('9999');
 $(document).on('keyup','#cardNo',function(){
     pop = $(this);
     if($(this).val().charAt(0)=='4' || $(this).val().charAt(0)=='5'){
@@ -484,11 +483,10 @@ $(document).on('click','#savePayment', function(){
     cardNumber = $('#cardNo').val();
     cardExp = $('#cardExp').val();
     cardSec = $('#cardSec').val();
-    cardZip = $('#cardZip').val()
     id = $('#processId').val();
     passed = false;
     if(method==1){
-        passed = ((cardName!=null ||cardName!='') && (cardNumber!=null || cardNumber!='') && (cardNumber[0]=='4' || cardNumber[0]=='5') && (cardExp!=null || cardExp!='') && (cardSec!=null || cardSec!='') && (cardZip!=null || cardZip!='') ? true : false);
+        passed = ((cardName!=null ||cardName!='') && (cardNumber!=null || cardNumber!='') && (cardNumber[0]=='4' || cardNumber[0]=='5') && (cardExp!=null || cardExp!='') && (cardSec!=null || cardSec!='') ? true : false);
     }else{
         passed = true;
     }
@@ -528,7 +526,7 @@ $(document).on('click','#savePayment', function(){
         $.ajax({
             type: "POST",
             url: "job/pay",
-            data: {id: id,payment: payment,method: method,cardName: cardName,cardNumber: cardNumber,cardExp: cardExp,cardSec: cardSec,cardZip: cardZip},
+            data: {id: id,payment: payment,method: method,cardName: cardName,cardNumber: cardNumber,cardExp: cardExp,cardSec: cardSec},
             success:function(data){
                 $('#notif').append(
                     '<div id="alert" class="alert alert-success alert-dismissible fade in">' +

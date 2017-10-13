@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon as Carbon;
 
 class JobServiceSeeder extends Seeder
 {
@@ -17,6 +18,8 @@ class JobServiceSeeder extends Seeder
             'isActive' => 1,
             'isComplete' => 1,
             'isVoid' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
         
         DB::table('job_service')->insert([
@@ -25,6 +28,8 @@ class JobServiceSeeder extends Seeder
             'isActive' => 1,
             'isComplete' => 1,
             'isVoid' => 0,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
     }
 }
