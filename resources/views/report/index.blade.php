@@ -14,10 +14,10 @@
     <div class="col-md-12">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title"> Reports as of now {{$dateEnd}} </h3>
+                <h4 class="box-title"> Reports as of now <b id="dateLabel">{{$dateEnd}}</b> </h4>
             </div>
             <div class="box-body dataTable_wrapper">
-                {!! Form::open(['url' => 'report','id' => 'reportForm']) !!}
+                {!! Form::open(['url' => 'report','id' => 'reportForm','target' => '_blank']) !!}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             {!! Form::label('date', 'Date Range') !!}<span>*</span>
                             <div class="input-group">
@@ -48,6 +48,10 @@
                                 !!}
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-2">
+                        {!! Form::label('action', 'Action') !!}
+                        <button type="submit" class="btn btn-primary btn-md" id="generatePdf"><i class="glyphicon glyphicon-file"></i> Generate PDF</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -76,7 +80,7 @@
                                     <td>{{$job->customer}}</td>
                                     <td>
                                         {{$job->plate}}<br>
-                                        {{$job->make}} {{$job->model}} - {{$job->year}} ({{($job->isManual ? 'AT' : 'MT')}})
+                                        {{$job->make}} {{$job->model}} - ({{($job->isManual ? 'AT' : 'MT')}})
                                     </td>
                                     <td class="text-right">{{number_format($job->cash,2)}}</td>
                                     <td class="text-right">{{number_format($job->credit,2)}}</td>

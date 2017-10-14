@@ -30,7 +30,7 @@ class InspectController extends Controller
             ->join('vehicle as v','v.id','i.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('i.*','i.id as inspectId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
+            ->select('i.*','i.id as inspectId','c.*','v.*','vd.name as model','v.isManual as transmission','vk.name as make')
             ->get();
         return View('inspect.index',compact('inspects'));
     }

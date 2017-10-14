@@ -243,7 +243,7 @@
             @if($sales->discount)
                 <?php
                     $discountRate = $sales->discount->discount->rateRecord->where('created_at','<=',$sales->created_at)->first()->rate;
-                    $discount = ($util->isVat && $sales->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
+                    $discount = ($util->isVat && $sales->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*($discountRate/100));
                 ?>
                 <tr>
                     <th></th>

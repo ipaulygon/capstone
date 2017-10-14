@@ -91,7 +91,6 @@
             Plate: {{$warranty->job->vehicle->plate}}<br>
             Make: {{$warranty->job->vehicle->model->make->name}}<br>
             Model: {{$warranty->job->vehicle->model->name}}<br>
-            Year: {{$warranty->job->vehicle->model->year}}<br>
             Transmission: {{$transmission}}<br>
             Mileage: {{$warranty->job->vehicle->mileage}}<br>
         </div>

@@ -52,7 +52,7 @@ class WarrantyController extends Controller
             ->join('vehicle_make as vk','vk.id','vd.makeId')
             ->where('j.release','!=',null)
             ->where('j.isVoid','!=',1)
-            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
+            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','v.isManual as transmission','vk.name as make')
             ->get();
         $inventory = DB::table('inventory as i')
             ->join('product as p','p.id','i.productId')

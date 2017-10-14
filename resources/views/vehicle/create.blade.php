@@ -32,22 +32,13 @@
                                 </button><br>
                             @endif
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     {!! Form::label('model', 'Model') !!}<span>*</span>
                                     {!! Form::input('text',null,$model,[
                                         'class' => 'form-control',
                                         'name' => 'model[]',
                                         'placeholder' => 'Model',
                                         'maxlength' => '50',
-                                        'required'])
-                                    !!}
-                                </div>
-                                <div class="col-md-2">
-                                    {!! Form::label('year', 'Year') !!}<span>*</span>
-                                    {!! Form::input('text',null,old('year.'.$key),[
-                                        'class' => 'form-control year',
-                                        'name' => 'year[]',
-                                        'placeholder' => 'Year',
                                         'required'])
                                     !!}
                                 </div>
@@ -87,22 +78,13 @@
                 @else
                     <div id="model" class="form-group">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 {!! Form::label('model', 'Model') !!}<span>*</span>
                                 {!! Form::input('text',null,null,[
                                     'class' => 'form-control model',
                                     'name' => 'model[]',
                                     'placeholder' => 'Name',
                                     'maxlength' => '50',
-                                    'required'])
-                                !!}
-                            </div>
-                            <div class="col-md-2">
-                                {!! Form::label('year', 'Year') !!}<span>*</span>
-                                {!! Form::input('text',null,null,[
-                                    'class' => 'form-control year',
-                                    'name' => 'year[]',
-                                    'placeholder' => 'Year',
                                     'required'])
                                 !!}
                             </div>
@@ -150,13 +132,6 @@
         $(document).ready(function (){
             $('#maintenance').addClass('active');
             $('#mVehicle').addClass('active');
-            $('.year').inputmask({ 
-                alias: "integer",
-                prefix: '',
-                allowMinus: false,
-                min: 1900,
-                max: (new Date()).getFullYear(),
-            });
         });
     </script>
 @stop

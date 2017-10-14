@@ -254,7 +254,7 @@ class PromoController extends Controller
                 ->where('jp.promoId',$id)
                 ->get();
             if(count($checkEstimate) > 0 || count($checkJob) > 0){
-                $request->session()->flash('error', 'It seems that the record is still being used in other items. Deactivation failed.');
+                $request->session()->flash('error', 'It seems that the record is still being used in other items. Update failed.');
                 return Redirect('promo');
             }else{
                 try{

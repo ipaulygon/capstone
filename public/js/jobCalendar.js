@@ -123,7 +123,7 @@ function clickEvent(id){
             $('#detailEnd').text(data.job.end);
             $('#detailPlate').text(data.job.vehicle.plate);
             transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
-            $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
+            $('#detailModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.name+" - "+transmission);
             $('#detailMileage').text(data.job.vehicle.mileage);
             $('#detailCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
             $('.detailTechs').remove();
@@ -235,7 +235,7 @@ function hoverEvent(id,element){
             $('#popStart').text(data.job.start);
             $('#popEnd').text(data.job.end);
             $('#popPlate').text(data.job.vehicle.plate);
-            $('#popModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" ("+data.job.vehicle.model.transmission+")");
+            $('#popModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.name+" ("+data.job.vehicle.model.transmission+")");
             $('#popMileage').text(data.job.vehicle.mileage);
             $('#popCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
         }
@@ -311,7 +311,7 @@ function view(id){
             $('#viewEnd').text(data.job.release);
             $('#viewPlate').text(data.job.vehicle.plate);
             transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
-            $('#viewModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
+            $('#viewModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.name+" - "+transmission);
             $('#viewMileage').text(data.job.vehicle.mileage);
             $('#viewCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
             $.each(data.job.technician,function(key,value){

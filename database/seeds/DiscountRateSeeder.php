@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon as Carbon;
 
 class DiscountRateSeeder extends Seeder
 {
@@ -14,14 +15,14 @@ class DiscountRateSeeder extends Seeder
         DB::table('discount_rate')->insert([
             'discountId' => 1,
             'rate' => 10,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
         DB::table('discount_rate')->insert([
             'discountId' => 2,
             'rate' => 20,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
     }
 }

@@ -35,7 +35,7 @@
                                 <td>
                                     <li>Plate: {{$inspect->plate}}</li>
                                     <?php $transmission = ($inspect->transmission ? 'MT' : 'AT')?>
-                                    <li>Model: {{$inspect->make}} - {{$inspect->year}} {{$inspect->model}} - {{$transmission}}</li>
+                                    <li>Model: {{$inspect->make}} - {{$inspect->model}} - {{$transmission}}</li>
                                     @if($inspect->mileage!=null)
                                     <li>Mileage: {{$inspect->mileage}}</li>
                                     @endif

@@ -83,6 +83,9 @@ class ServiceController extends Controller
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
                     'price' => trim(str_replace(',','',$request->price)),
+                    'year' => (trim($request->year)=='' ? 0 : trim($request->year)),
+                    'month' => (trim($request->month)=='' ? 0 : trim($request->month)),
+                    'day' => (trim($request->day)=='' ? 0 : trim($request->day))
                 ]);
                 ServicePrice::create([
                     'serviceId' => $service->id,
@@ -164,6 +167,9 @@ class ServiceController extends Controller
                     'categoryId' => $request->categoryId,
                     'size' => $request->size,
                     'price' => trim(str_replace(',','',$request->price)),
+                    'year' => (trim($request->year)=='' ? 0 : trim($request->year)),
+                    'month' => (trim($request->month)=='' ? 0 : trim($request->month)),
+                    'day' => (trim($request->day)=='' ? 0 : trim($request->day))
                 ]);
                 ServicePrice::create([
                     'serviceId' => $service->id,

@@ -33,7 +33,7 @@
                                 <td>
                                     <li>Plate: {{$estimate->plate}}</li>
                                     <?php $transmission = ($estimate->transmission ? 'MT' : 'AT')?>
-                                    <li>Model: {{$estimate->make}} - {{$estimate->year}} {{$estimate->model}} - {{$transmission}}</li>
+                                    <li>Model: {{$estimate->make}} - {{$estimate->model}} - {{$transmission}}</li>
                                     @if($estimate->mileage!=null)
                                     <li>Mileage: {{$estimate->mileage}}</li>
                                     @endif

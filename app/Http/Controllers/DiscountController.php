@@ -238,37 +238,42 @@ class DiscountController extends Controller
             try{
                 DB::beginTransaction();
                 $discount = Discount::findOrFail($id);
-                $discount->update([
-                    'name' => trim($request->name),
-                    'rate' => trim(str_replace(' %','',$request->rate)),
-                    'isWhole' => $request->isWhole,
-                    'isVatExempt' => $request->isVatExempt,
-                ]);
-                DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
-                DiscountService::where('discountId',$id)->update(['isActive'=>0]);
-                $products = $request->product;
-                $services = $request->service;
-                if(!empty($products)){
-                    foreach ($products as $product) {
-                        DiscountProduct::create([
-                            'discountId' => $discount->id,
-                            'productId' => $product,
-                        ]);
+                if($discount->isWhole!=$request->isWhole || $discount->isVatExempt!=$request->isVatExempt){
+                    $request->session()->flash('error', 'Discount attributes cannot be altered (Type & VAT) once used in transactions. Update failed.');
+                    return Redirect('discount');
+                }else{
+                    $discount->update([
+                        'name' => trim($request->name),
+                        'rate' => trim(str_replace(' %','',$request->rate)),
+                        'isWhole' => $request->isWhole,
+                        'isVatExempt' => $request->isVatExempt,
+                    ]);
+                    DiscountProduct::where('discountId',$id)->update(['isActive'=>0]);
+                    DiscountService::where('discountId',$id)->update(['isActive'=>0]);
+                    $products = $request->product;
+                    $services = $request->service;
+                    if(!empty($products)){
+                        foreach ($products as $product) {
+                            DiscountProduct::create([
+                                'discountId' => $discount->id,
+                                'productId' => $product,
+                            ]);
+                        }
                     }
-                }
-                if(!empty($services)){
-                    foreach ($services as $service) {
-                        DiscountService::create([
-                            'discountId' => $discount->id,
-                            'serviceId' => $service,
-                        ]);
+                    if(!empty($services)){
+                        foreach ($services as $service) {
+                            DiscountService::create([
+                                'discountId' => $discount->id,
+                                'serviceId' => $service,
+                            ]);
+                        }
                     }
+                    DiscountRate::create([
+                        'discountId' => $discount->id,
+                        'rate' => trim(str_replace(' %','',$request->rate))
+                    ]);
+                    DB::commit();
                 }
-                DiscountRate::create([
-                    'discountId' => $discount->id,
-                    'rate' => trim(str_replace(' %','',$request->rate))
-                ]);
-                DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
                 $errMess = $e->getMessage();

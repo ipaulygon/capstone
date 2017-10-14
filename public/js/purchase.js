@@ -128,7 +128,7 @@ $(document).on('change', '#products', function(){
             }else{
                 $.each(data.product.vehicle,function(key, value){
                     tr = (value.isManual ? 'MT' : 'AT');
-                    $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
+                    $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.name+' ('+tr+')'+'</option>');
                 });
                 $('#'+data.product.id).select2();
             }
@@ -200,9 +200,9 @@ function oldProduct(id,qty,model,price){
                 $.each(data.product.vehicle,function(key, value){
                     tr = (value.isManual ? 'MT' : 'AT');
                     if((value.model.id+','+value.isManual)==model){
-                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.name+' ('+tr+')'+'</option>');
                     }else{
-                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.name+' ('+tr+')'+'</option>');
                     }
                 });
                 $('#'+data.product.id).select2();
@@ -267,9 +267,9 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
                 $.each(data.product.vehicle,function(key, value){
                     tr = (value.isManual ? 'MT' : 'AT');
                     if((value.model.id+','+value.isManual)==(model+','+manual)){
-                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'" selected>'+value.model.make.name+' - '+value.model.name+' ('+tr+')'+'</option>');
                     }else{
-                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.year+' '+value.model.name+' ('+tr+')'+'</option>');
+                        $('#'+data.product.id).append('<option value="'+value.model.id+','+value.isManual+'">'+value.model.make.name+' - '+value.model.name+' ('+tr+')'+'</option>');
                     }
                 });
                 $('#'+data.product.id).select2();

@@ -51,11 +51,13 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::resource('query','QueryController',['only' => [
 			'index']]);
 		Route::resource('report','ReportController',['only' => [
-			'index']]);
+			'index','store']]);
 		Route::resource('utility','UtilitiesController',['only' => [
 			'index','update']]);
 		Route::resource('damage','DamageController',['only' => [
 			'index','store']]);
+		Route::resource('backup','BackupController',['only' => [
+			'index']]);
 
 		// GET JSON
 		Route::get('vehicle/remove/{id}','VehicleController@remove');

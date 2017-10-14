@@ -120,6 +120,7 @@
     <script src="{{ URL::asset('js/damage.js') }}"></script>
     <script>
         $(document).ready(function (){
+            $('#damage').addClass('active');
             $('#list').DataTable({
                 responsive: true,
             });

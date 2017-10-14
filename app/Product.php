@@ -41,7 +41,7 @@ class Product extends Model
     }
 
     public function discount(){
-        return $this->hasOne('App\DiscountProduct', 'productId')->where('isActive',1);
+        return $this->hasOne('App\DiscountProduct', 'productId');
     }
     
     public function discountRecord(){

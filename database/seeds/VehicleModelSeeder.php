@@ -12,25 +12,29 @@ class VehicleModelSeeder extends Seeder
     public function run()
     {
         DB::table('vehicle_model')->insert([
-            'name' => 'Corolla',
+            'name' => 'Corolla 1998',
             'makeId' => 1,
-            'year' => '1998',
             'hasAuto' => 1,
             'hasManual' => 1,
             'isActive' => 1,
         ]);
         DB::table('vehicle_model')->insert([
-            'name' => 'Wigo',
+            'name' => 'Wigo 2010',
             'makeId' => 1,
-            'year' => '2010',
             'hasAuto' => 1,
             'hasManual' => 0,
             'isActive' => 1,
         ]);
         DB::table('vehicle_model')->insert([
-            'name' => 'Vios',
+            'name' => 'Vios 2012',
             'makeId' => 1,
-            'year' => '2012',
+            'hasAuto' => 1,
+            'hasManual' => 1,
+            'isActive' => 1,
+        ]);
+        DB::table('vehicle_model')->insert([
+            'name' => 'Vios 2010',
+            'makeId' => 1,
             'hasAuto' => 1,
             'hasManual' => 1,
             'isActive' => 1,

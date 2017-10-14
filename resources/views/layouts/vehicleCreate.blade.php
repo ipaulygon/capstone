@@ -41,10 +41,10 @@
         {!! Form::label('modelId', 'Vehicle Model') !!}<span>*</span>
         <select id="model" name="modelId" class="select2 form-control" style="width:100%" required>
             @foreach($autos as $model)
-                <option value="{{$model->id}},0">{{$model->make}} - {{$model->year}} {{$model->name}} - AT</option>
+                <option value="{{$model->id}},0">{{$model->make}} - {{$model->name}} - AT</option>
             @endforeach
             @foreach($manuals as $model)
-                <option value="{{$model->id}},1">{{$model->make}} - {{$model->year}} {{$model->name}} - MT</option>
+                <option value="{{$model->id}},1">{{$model->make}} - {{$model->name}} - MT</option>
             @endforeach
         </select>
     </div>

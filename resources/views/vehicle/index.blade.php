@@ -45,7 +45,7 @@
                                                         $transmission = "MT";
                                                     }
                                                 ?>
-                                                <li>{{$model->year}} {{$model->name}} - {{$transmission}}</li>
+                                                <li>{{$model->name}} - {{$transmission}}</li>
                                             @endforeach
                                         </td>
                                         <td class="text-right">
@@ -78,7 +78,7 @@
                                         <td>{{$make->name}}</td>
                                         <td>
                                             @foreach($make->model as $model)
-                                                <li>{{$model->year}} {{$model->name}} - {{$model->transmission}}</li>
+                                                <li>{{$model->name}} - {{$model->transmission}}</li>
                                             @endforeach
                                         </td>
                                         <td class="text-right">

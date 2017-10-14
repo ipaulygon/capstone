@@ -45,7 +45,6 @@ class VehicleController extends Controller
         $rules = [
             'name' => ['required','max:50','unique:vehicle_make','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'model.*' => ['required','distinct','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
-            'year.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -56,7 +55,6 @@ class VehicleController extends Controller
         $niceNames = [
             'name' => 'Vehicle Make',
             'model.*' => 'Vehicle Model',
-            'year.*' => 'Vehicle Year',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -71,14 +69,12 @@ class VehicleController extends Controller
                     'isActive' => 1
                 ]);
                 $models = $request->model;
-                $years = $request->year;
                 $autos = $request->hasAuto;
                 $manuals = $request->hasManual;
                 foreach ($models as $key=>$model) {
                     VehicleModel::updateOrCreate(
                         ['makeId' => $make->id,
                         'name' => $model,
-                        'year' => $years[$key],
                         'hasAuto' => $autos[$key],
                         'hasManual' => $manuals[$key],
                         ],
@@ -131,7 +127,6 @@ class VehicleController extends Controller
         $rules = [
             'name' => ['required','max:50',Rule::unique('vehicle_make')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
             'model.*' => ['required','distinct','max:50','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
-            'year.*' => 'required'
         ];
         $messages = [
             'unique' => ':attribute already exists.',
@@ -142,7 +137,6 @@ class VehicleController extends Controller
         $niceNames = [
             'name' => 'Vehicle Make',
             'model.*' => 'Vehicle Model',
-            'year.*' => 'Vehicle Year',
         ];
         $validator = Validator::make($request->all(),$rules,$messages);
         $validator->setAttributeNames($niceNames); 
@@ -159,14 +153,12 @@ class VehicleController extends Controller
                 $make = VehicleMake::all()->last();
                 VehicleModel::where('makeId',$id)->update(['isActive'=>0]);
                 $models = $request->model;
-                $years = $request->year;
                 $autos = $request->hasAuto;
                 $manuals = $request->hasManual;
                 foreach ($models as $key=>$model) {
                     VehicleModel::updateOrCreate(
                         ['makeId' => $make->id,
                         'name' => $model,
-                        'year' => $years[$key],
                         'hasAuto' => $autos[$key],
                         'hasManual' => $manuals[$key],
                         ],

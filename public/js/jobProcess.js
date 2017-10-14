@@ -84,7 +84,7 @@ function process(id){
             $('#processEnd').text(data.job.release);
             $('#processPlate').text(data.job.vehicle.plate);
             transmission = (data.job.vehicle.isManual ? 'MT' : 'AT');
-            $('#processModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.year+" "+data.job.vehicle.model.name+" - "+transmission);
+            $('#processModel').text(data.job.vehicle.model.make.name+" - "+data.job.vehicle.model.name+" - "+transmission);
             $('#processMileage').text(data.job.vehicle.mileage);
             $('#processCustomer').text(data.job.customer.firstName+" "+data.job.customer.middleName+" "+data.job.customer.lastName);
             $.each(data.job.technician,function(key,value){

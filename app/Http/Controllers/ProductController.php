@@ -83,7 +83,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $part = ProductType::findOrFail($request->typeId)->first()->category;
+        $part = ProductType::findOrFail($request->typeId)->category;
         if($part=='category2'){
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
@@ -139,9 +139,9 @@ class ProductController extends Controller
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
                     'isWarranty' => $request->isWarranty,
-                    'year' => $request->year,
-                    'month' => $request->month,
-                    'day' => $request->day
+                    'year' => (trim($request->year)=='' ? 0 : trim($request->year)),
+                    'month' => (trim($request->month)=='' ? 0 : trim($request->month)),
+                    'day' => (trim($request->day)=='' ? 0 : trim($request->day))
                 ]);
                 $vehicles = $request->vehicle;
                 if(!empty($vehicles)){
@@ -223,7 +223,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $part = ProductType::findOrFail($request->typeId)->first()->category;
+        $part = ProductType::findOrFail($request->typeId)->category;
         if($part=='category2'){
             $rules = [
                 'name' => ['required','max:50',Rule::unique('product')->where('typeId',$request->typeId)->where('brandId',$request->brandId)->where('varianceId',$request->varianceId)->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
@@ -279,9 +279,9 @@ class ProductController extends Controller
                     'varianceId' => $request->varianceId,
                     'isOriginal' => $request->isOriginal,
                     'isWarranty' => $request->isWarranty,
-                    'year' => $request->year,
-                    'month' => $request->month,
-                    'day' => $request->day
+                    'year' => (trim($request->year)=='' ? 0 : trim($request->year)),
+                    'month' => (trim($request->month)=='' ? 0 : trim($request->month)),
+                    'day' => (trim($request->day)=='' ? 0 : trim($request->day))
                 ]);
                 ProductVehicle::where('productId',$id)->update(['isActive'=>0]);
                 $vehicles = $request->vehicle;

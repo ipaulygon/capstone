@@ -90,7 +90,6 @@
             Plate: {{$estimate->vehicle->plate}}<br>
             Make: {{$estimate->vehicle->model->make->name}}<br>
             Model: {{$estimate->vehicle->model->name}}<br>
-            Year: {{$estimate->vehicle->model->year}}<br>
             Transmission: {{$transmission}}<br>
             Mileage: {{$estimate->vehicle->mileage}}<br>
         </div>
@@ -284,7 +283,7 @@
             @if($estimate->discount)
                 <?php
                     $discountRate = $estimate->discount->discount->rateRecord->where('created_at','<=',$estimate->created_at)->first()->rate;
-                    $discount = ($util->isVat && $estimate->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
+                    $discount = ($util->isVat && $estimate->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*($discountRate/100));
                 ?>
                 <tr>
                     <th></th>

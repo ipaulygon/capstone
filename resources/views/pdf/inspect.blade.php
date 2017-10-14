@@ -49,7 +49,6 @@
                                 Plate: {{$inspect->vehicle->plate}}<br>
                                 Make: {{$inspect->vehicle->model->make->name}}<br>
                                 Model: {{$inspect->vehicle->model->name}}<br>
-                                Year: {{$inspect->vehicle->model->year}}<br>
                                 Transmission: {{$transmission}}<br>
                                 Mileage: {{$inspect->vehicle->mileage}}<br>
                             </div>

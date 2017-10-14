@@ -4,13 +4,6 @@ $(document).on("click", "#addModel", function (){
         '<i class="glyphicon glyphicon-remove"></i>' +
         '</button><br>').appendTo('#models');
     $(value).find('input.form-control').val('');
-    $('.year').inputmask({ 
-        alias: "integer",
-        prefix: '',
-        allowMinus: false,
-        min: 1900,
-        max: (new Date()).getFullYear(),
-    });
 });
 
 $(document).on("click", "#removeModel", function (){

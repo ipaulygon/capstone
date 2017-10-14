@@ -37,7 +37,7 @@ class JobController extends Controller
             ->join('vehicle as v','v.id','j.vehicleId')
             ->join('vehicle_model as vd','vd.id','v.modelId')
             ->join('vehicle_make as vk','vk.id','vd.makeId')
-            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
+            ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','v.isManual as transmission','vk.name as make')
             ->get();
         $date = date('Y-m-d');
         $customers = DB::table('customer')
@@ -886,7 +886,7 @@ class JobController extends Controller
                 ->join('vehicle as v','v.id','j.vehicleId')
                 ->join('vehicle_model as vd','vd.id','v.modelId')
                 ->join('vehicle_make as vk','vk.id','vd.makeId')
-                ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','vd.year as year','v.isManual as transmission','vk.name as make')
+                ->select('j.*','j.id as jobId','c.*','v.*','vd.name as model','v.isManual as transmission','vk.name as make')
                 ->get();
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){

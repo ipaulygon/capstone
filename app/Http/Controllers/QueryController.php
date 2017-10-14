@@ -91,7 +91,7 @@ clASs QueryController extends Controller
         LIMIT 5
         '));
         $vehicles = DB::select(DB::raw('
-        SELECT v.*, vd.name AS model, vk.name AS make, vd.year AS year, COUNT(*) AS total FROM vehicle AS v
+        SELECT v.*, vd.name AS model, vk.name AS make, COUNT(*) AS total FROM vehicle AS v
         JOIN vehicle_model AS vd ON vd.id = v.modelId
         JOIN vehicle_make AS vk ON vk.id = vd.makeId
         JOIN job_header AS jh ON jh.vehicleId = v.id

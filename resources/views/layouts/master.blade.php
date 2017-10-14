@@ -205,6 +205,7 @@
                     <li class="header">UTILITIES</li>
                     <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Manage Settings</span></a></li>
                     <li id="damage"><a href="{{url('/damage')}}"><i class="fa fa-trash"></i> <span>Dispose Products</span></a></li>
+                    <li id="backup"><a href="{{url('/backup')}}"><i class="fa fa-refresh"></i> <span>Backup & Recovery</span></a></li>
                     @endif
                 </ul>
             </section>

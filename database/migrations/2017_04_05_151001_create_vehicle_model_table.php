@@ -18,7 +18,6 @@ class CreateVehicleModelTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('makeId');
             $table->string('name', 50);
-            $table->string('year', 4);
             $table->boolean('hasAuto');
             $table->boolean('hasManual');
             $table->boolean('isActive')->default(1);

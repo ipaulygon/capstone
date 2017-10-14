@@ -74,7 +74,7 @@
                             <td>
                                 Customer: {{$job->customer->firstName}} {{$job->customer->lastName}}<br>
                                 Vehicle: {{$job->vehicle->plate}}
-                                <li>{{$job->vehicle->model->make->name}} - {{$job->vehicle->model->name}} {{$job->vehicle->model->year}} ({{($job->vehicle->isManual ? 'MT' : 'AT')}})</li>
+                                <li>{{$job->vehicle->model->make->name}} - {{$job->vehicle->model->name}} ({{($job->vehicle->isManual ? 'MT' : 'AT')}})</li>
                             </td>
                             <td>
                                 @foreach($job->technician as $technician)
@@ -158,7 +158,7 @@
                                     <td>
                                         Customer: {{$job->customer->firstName}} {{$job->customer->lastName}}<br>
                                         Vehicle: {{$job->vehicle->plate}}
-                                        <li>{{$job->vehicle->model->make->name}} - {{$job->vehicle->model->name}} {{$job->vehicle->model->year}} ({{($job->vehicle->isManual ? 'MT' : 'AT')}})</li>
+                                        <li>{{$job->vehicle->model->make->name}} - {{$job->vehicle->model->name}} ({{($job->vehicle->isManual ? 'MT' : 'AT')}})</li>
                                     </td>
                                     <td>
                                         @foreach($job->product as $product)

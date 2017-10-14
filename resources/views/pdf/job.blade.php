@@ -89,7 +89,6 @@
             Plate: {{$job->vehicle->plate}}<br>
             Make: {{$job->vehicle->model->make->name}}<br>
             Model: {{$job->vehicle->model->name}}<br>
-            Year: {{$job->vehicle->model->year}}<br>
             Transmission: {{$transmission}}<br>
             Mileage: {{$job->vehicle->mileage}}<br>
         </div>
@@ -283,7 +282,7 @@
             @if($job->discount)
                 <?php
                     $discountRate = $job->discount->discount->rateRecord->where('created_at','<=',$job->created_at)->first()->rate;
-                    $discount = ($util->isVat && $job->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*$discount);
+                    $discount = ($util->isVat && $job->discount->discount->isVatExempt ? $vatSales*($discountRate/100) : $total*($discountRate/100));
                 ?>
                 <tr>
                     <th></th>

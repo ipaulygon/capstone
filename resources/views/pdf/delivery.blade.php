@@ -170,7 +170,7 @@
                     <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
                     <td>
                         @if($product->modelId!=null)
-                        {{$product->vehicle->make->name}} - {{$product->vehicle->year}} {{$product->vehicle->name}} ({{$transmission}})
+                        {{$product->vehicle->make->name}} - {{$product->vehicle->name}} ({{$transmission}})
                         @endif
                     </td>
                     <td class="text-right">{{number_format($product->price,2)}}</td>

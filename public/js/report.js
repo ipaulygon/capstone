@@ -34,6 +34,7 @@ $(document).on('change','#reportId',function(){
     }
 });
 $(document).on('change','#datepicker',function(){
+    $('#dateLabel').text($(this).val());
     reportId = $('#reportId').val();
     if(reportId=="1"){
         jList.ajax.reload();
@@ -62,7 +63,7 @@ var jList = $('#jobsTable').DataTable({
         { "data": "plate",
             render:  function(data,type,row,meta){
                 var transmission = (row.isManual ? 'MT' : 'AT');
-                return row.plate+" "+row.make+" "+row.model+" - "+row.year+" ("+transmission+')';
+                return row.plate+" | "+row.make+" "+row.model+" - ("+transmission+')';
             } 
         },
         { "data": "cash",

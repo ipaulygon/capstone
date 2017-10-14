@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{$util->name}} | Purchase Order</title>
+        <title>{{$util->name}} | Job Order Report</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/style.css" rel="stylesheet">
@@ -68,80 +68,72 @@
         <div class="center header">
             {{$util->name}}
         </div>
-        <label style="float:right;color:red">{{$purchase->id}}</label>
         <div style="clear:both"></div>
         <div class="center">
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            PURCHASE ORDER
+            JOB ORDER REPORT
         </div><br>
-        <div style="float:left" class="col-md-6">
-            Supplier: {{$purchase->supplier->name}}<br>
-            Address: {{$purchase->supplier->street}} {{$purchase->supplier->brgy}} {{$purchase->supplier->city}}
+        <div style="float:left"  class="col-md-6">
+            Total of {{count($jobs)}} records
         </div>
         <div style="float:right"  class="col-md-6">
-            Date: {{date('F j, Y', strtotime($purchase->dateMake))}}
+            Date as of: {{$date}}
         </div>
         <div style="clear:both"></div>
         <br>
         <table width="100%">
             <thead>
                 <tr>
-                    <th width="5%" class="text-right">Qty</th>
-                    <th>Product</th>
+                    <th width="5%">#</th>
+                    <th>Customer</th>
                     <th>Vehicle</th>
-                    <th class="text-right">Unit Price</th>
-                    <th class="text-right">Total Cost</th>
+                    <th class="text-right">Cash(PhP)</th>
+                    <th class="text-right">Credit Card(PhP)</th>
+                    <th class="text-right">Total(PhP)</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($purchase->detail as $product)
-                @if($product->quantity!=0)
+                @php 
+                    $totalCash = 0; $totalCredit = 0; $totalAll = 0; $totalBalance = 0;
+                @endphp
+                @foreach($jobs as $job)
                 <tr>
-                    <td class="text-right">{{number_format($product->quantity)}}</td>
-                    <?php
-                        if($product->product->isOriginal!=null){
-                            $type = ($product->product->isOriginal=="type1" ? $util->type1 : $util->type2);
-                        }else{
-                            $type = "";
-                        }
-                        $transmission = ($product->isManual ? 'MT' : 'AT');
-                    ?>
-                    <td>{{$product->product->brand->name}} - {{$product->product->name}} {{$type}} ({{$product->product->variance->name}})</td>
+                    <td>{{$job->id}}</td>
+                    <td>{{$job->customer}}</td>
                     <td>
-                        @if($product->modelId!=null)
-                        {{$product->vehicle->make->name}} - {{$product->vehicle->name}} ({{$transmission}})
-                        @endif
+                        {{$job->plate}} | {{$job->make}} {{$job->model}} - ({{($job->isManual ? 'AT' : 'MT')}})
                     </td>
-                    <td class="text-right">{{number_format($product->price,2)}}</td>
-                    <td class="text-right">{{number_format($product->quantity*$product->price,2)}}</td>
-                    <?php
-                        $total += $product->quantity*$product->price;
-                    ?>
+                    <td class="text-right">{{number_format($job->cash,2)}}</td>
+                    <td class="text-right">{{number_format($job->credit,2)}}</td>
+                    <td class="text-right">{{number_format($job->paid,2)}}</td>
+                    <td>{{($job->paid==$job->total ? 'Paid' : 'Bal: '.number_format($job->balance,2))}}</td>
                 </tr>
-                @endif
+                @php
+                    $totalCash += $job->cash;
+                    $totalCredit += $job->credit;
+                    $totalAll += $job->paid;
+                    $totalBalance += $job->balance;
+                @endphp
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
+                    <th>Total:</th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th>Total</th>
-                    <th class="text-right">PhP {{number_format($total,2)}}</th>
+                    <th class="text-right">{{number_format($totalCash,2)}}</th>
+                    <th class="text-right">{{number_format($totalCredit,2)}}</th>
+                    <th class="text-right">{{number_format($totalAll,2)}}</th>
+                    <th class="text-right">Balance: {{number_format($totalBalance,2)}}</th>
                 </tr>
             </tfoot>
         </table>
         <div class="footer">
-            <div class="col-md-6">
-                Please deliver to: {{$util->address}}<br>
-                Approved by &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ______________________<br> 
-            </div>
-            <br>
-            Remarks: {{$purchase->remarks}}
             <br><br>
-            <div class="footerd">Printed by: {{$userName}} {{$date}}</div>
+            <div class="footerd">Printed by: {{$userName}} {{date('Y-m-d H:i:s')}}</div>
         </div>
     </body>
 </html>

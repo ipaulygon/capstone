@@ -11,7 +11,6 @@ class VehicleModel extends Model
     protected $fillable = [
         'makeId',
     	'name',
-        'year',
         'hasAuto',
         'hasManual',
         'isActive'

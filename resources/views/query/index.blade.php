@@ -150,7 +150,7 @@
                                     <td>
                                         <li>Plate: {{$vehicle->plate}}</li>
                                         <?php $transmission = ($vehicle->isManual ? 'MT' : 'AT')?>
-                                        <li>Model: {{$vehicle->make}} - {{$vehicle->year}} {{$vehicle->model}} - {{$transmission}}</li>
+                                        <li>Model: {{$vehicle->make}} - {{$vehicle->model}} - {{$transmission}}</li>
                                         @if($vehicle->mileage!=null)
                                         <li>Mileage: {{$vehicle->mileage}}</li>
                                         @endif
