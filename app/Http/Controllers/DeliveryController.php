@@ -12,6 +12,8 @@ use Validator;
 use Redirect;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 class DeliveryController extends Controller
 {
@@ -128,6 +130,11 @@ class DeliveryController extends Controller
                         PurchaseHeader::where('id',''.$order)->update(['isDelivered'=>1]);
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Receive Delivery",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -259,6 +266,11 @@ class DeliveryController extends Controller
                         PurchaseHeader::where('id',''.$order)->update(['isDelivered'=>1]);
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Update Delivery",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -328,6 +340,11 @@ class DeliveryController extends Controller
             $delivery = DeliveryHeader::findOrFail($id);
             $delivery->update([
                 'isReceived' => 1
+            ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Check Delivery",
+                'json' => json_encode($request->all())
             ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){

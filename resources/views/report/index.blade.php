@@ -25,9 +25,11 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                                 <select id="reportId" name="reportId" class="form-control">
-                                    <option value="1">Job Order Report</option>
-                                    <option value="2">Sales Report</option>
+                                    <option value="5">Discrepancy Report</option>
                                     <option value="3">Inventory Report</option>
+                                    <option value="1">Job Order Report</option>
+                                    <option value="6">Price Analysis Report</option>
+                                    <option value="2">Sales Report</option>
                                     <option value="4">Service Report</option>
                                 </select>
                             </div>
@@ -55,7 +57,7 @@
                     </div>
                 </div>
                 {!! Form::close() !!}
-                <div class="panel panel-primary pan1">
+                <div class="panel panel-primary pan1 hidden">
                     <div class="panel-heading"><h3 class="panel-title">Job Order Report</h3></div>
                     <div class="panel-body">
                         <table id="jobsTable" class="table table-striped table-bordered responsive">
@@ -209,6 +211,68 @@
                                     <td>{{$service->service}} - {{$service->size}} ({{$service->category}})</td>
                                     <td class="text-right">{{number_format($service->total)}}</td>
                                     <td class="text-right">{{$loop->index+1}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary pan5">
+                    <div class="panel-heading"><h3 class="panel-title">Discrepancy Report</h3></div>
+                    <div class="panel-body">
+                        <table id="discrepancyTable" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product</th>
+                                    <th class="text-right">No. of items disposed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($discrepancy as $product)
+                                <tr>
+                                    <td>{{$product->id}}</td>
+                                    @php
+                                        if($product->original!=null){
+                                            $type = ($product->original=="type1" ? $util->type1 : $util->type2);
+                                        }else{
+                                            $type = "";
+                                        }
+                                    @endphp
+                                    <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
+                                    <td class="text-right">{{number_format($product->total)}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary pan6 hidden">
+                    <div class="panel-heading"><h3 class="panel-title">Price Analysis Report</h3></div>
+                    <div class="panel-body">
+                        <table id="priceTable" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-right">Price</th>
+                                    <th>Supplier</th>
+                                    <th>Date Ordered</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($analysis as $product)
+                                <tr>
+                                    @php
+                                        if($product->original!=null){
+                                            $type = ($product->original=="type1" ? $util->type1 : $util->type2);
+                                        }else{
+                                            $type = "";
+                                        }
+                                    @endphp
+                                    <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
+                                    <td class="text-right">{{number_format($product->price,2)}}</td>
+                                    <td>{{$product->supplier}}</td>
+                                    <td>{{$product->ordered}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

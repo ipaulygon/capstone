@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use Illuminate\Http\Request;
-use Artisan;
-use Carbon\Carbon as Carbon;
 
-class BackupController extends Controller
+class AuditController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +13,11 @@ class BackupController extends Controller
      */
     public function index()
     {
-        return View('backup.index');
+        $audits = DB::table('audit as a')
+            ->join('users as u','u.id','a.userId')
+            ->select('u.name as user','a.*')
+            ->get();
+        return View('audit.index',compact('audits'));
     }
 
     /**
@@ -82,10 +84,5 @@ class BackupController extends Controller
     public function destroy($id)
     {
         return View('layouts.404');
-    }
-
-    public function dump(){
-        Artisan::call('backup:run');
-        return View('dashboard');
     }
 }

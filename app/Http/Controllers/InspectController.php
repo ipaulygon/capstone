@@ -15,6 +15,8 @@ use Redirect;
 use Response;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 class InspectController extends Controller
 {
@@ -170,6 +172,11 @@ class InspectController extends Controller
                         'technicianId' => $technician,
                     ]);
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Inspection",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -340,6 +347,11 @@ class InspectController extends Controller
                         ['isActive' => 1]
                     );
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Update Inspection",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

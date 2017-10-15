@@ -24,12 +24,14 @@
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             <select id="queryId" name="queryId" class="form-control">
                                 <option value=""></option>
-                                <option value="1">Most availed products</option>
+                                <option value="6">Current inventory list</option>
+                                <option value="5">Customers with pending payments</option>
+                                <option value="7">Most availed products(Job Orders)</option>
+                                <option value="8">Most availed products(Sales)</option>
+                                <option value="1">Most availed products(Job Orders and Sales)</option>
                                 <option value="2">Most availed services</option>
                                 <option value="3">Most jobs done by technician</option>
                                 <option value="4">Most repaired vehicle</option>
-                                <option value="5">Customers with pending payments</option>
-                                <option value="6">Current inventory list</option>
                             </select>
                         </div>
                     </div>
@@ -47,6 +49,72 @@
                             </thead>
                             <tbody>
                                 @foreach($products as $product)
+                                <tr>
+                                    <td>{{$product->brand}} - {{$product->product}}</td>
+                                    <td>
+                                        <li>Type: {{$product->type}}</li>
+                                        <li>Size: {{$product->variance}}</li>
+                                        @if($product->original!=null)
+                                            <?php $type = ($product->original=="type1" ? $util->type1 : $util->type2); ?>
+                                            <li>Part Information: {{$type}}</li>
+                                        @endif
+                                        @if($product->description!=null || $product->description!="")
+                                            <li>{{$product->description}}</li>
+                                        @endif
+                                    </td>
+                                    <td class="text-right">{{$product->total}}</td>
+                                </tr>
+                                @endforeach 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary hidden pan7">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="list7" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th class="text-right">No. of times availed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($jobProducts as $product)
+                                <tr>
+                                    <td>{{$product->brand}} - {{$product->product}}</td>
+                                    <td>
+                                        <li>Type: {{$product->type}}</li>
+                                        <li>Size: {{$product->variance}}</li>
+                                        @if($product->original!=null)
+                                            <?php $type = ($product->original=="type1" ? $util->type1 : $util->type2); ?>
+                                            <li>Part Information: {{$type}}</li>
+                                        @endif
+                                        @if($product->description!=null || $product->description!="")
+                                            <li>{{$product->description}}</li>
+                                        @endif
+                                    </td>
+                                    <td class="text-right">{{$product->total}}</td>
+                                </tr>
+                                @endforeach 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="panel panel-primary hidden pan8">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <table id="list8" class="table table-striped table-bordered responsive">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th class="text-right">No. of times availed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($salesProducts as $product)
                                 <tr>
                                     <td>{{$product->brand}} - {{$product->product}}</td>
                                     <td>
@@ -236,24 +304,26 @@
             $('#query').addClass('active');
             $('#list1').DataTable({
                 responsive: true,
-                ordering: false
             });
             $('#list2').DataTable({
                 responsive: true,
-                ordering: false
             });
             $('#list3').DataTable({
                 responsive: true,
-                ordering: false
             });
             $('#list4').DataTable({
                 responsive: true,
-                ordering: false
             });
             $('#list5').DataTable({
                 responsive: true,
             });
             $('#list6').DataTable({
+                responsive: true,
+            });
+            $('#list7').DataTable({
+                responsive: true,
+            });
+            $('#list8').DataTable({
                 responsive: true,
             });
         });

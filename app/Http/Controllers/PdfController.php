@@ -26,6 +26,8 @@ use App\JobPayment;
 use App\SalesHeader;
 use App\WarrantySalesHeader;
 use App\WarrantyJobHeader;
+use App\Audit;
+use Auth;
 class PdfController extends Controller
 {
     public function purchase($id){
@@ -133,6 +135,11 @@ class PdfController extends Controller
                     'technicianId' => $technician->technicianId,
                 ]);
             }
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Create Estimate",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();

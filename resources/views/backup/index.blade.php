@@ -25,10 +25,10 @@
                     {!! Form::label('type', 'Backup Type') !!}<span>*</span>
                     <div class="row">
                         <div class="col-md-6">
-                            <input id="type" type="radio" class="square-blue" name="config" value="manual" required> Manual
+                            <input id="conf" type="radio" class="square-blue" name="config" value="manual" required> Manual
                         </div>
                         <div class="col-md-6">
-                            <input id="type" type="radio" class="square-blue" name="config" value="auto" required> Automatic
+                            <input id="conf" type="radio" class="square-blue" name="config" value="auto" required checked> Automatic
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <div class="box-body">
                 <div class="form-group">
                     {!! Form::label('dump', 'Save database') !!}<br>
-                    <button type="button" class="btn btn-md btn-primary">Save</button>
+                    <a href="{{url('/backup/dump')}}" target="_blank" type="button" class="btn btn-md btn-primary">Dump</a>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
@@ -76,12 +76,7 @@
     <script>
         $(document).ready(function (){
             $('#backup').addClass('active');
-            $('#list').DataTable({
-                responsive: true,
-            });
-            $('#dlist').DataTable({
-                responsive: true,
-            });
+            $("#conf[value=auto]").prop('checked',true);
             $(".select2").select2();
         });
     </script>

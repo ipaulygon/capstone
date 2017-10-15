@@ -17,6 +17,8 @@ use Redirect;
 use Response;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon as Carbon;
 
@@ -214,6 +216,11 @@ class SalesController extends Controller
                         ]);
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Sales",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

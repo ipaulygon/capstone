@@ -17,7 +17,7 @@ class CreateWarrantySalesPromoTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('warrantyId');
-            $table->unsignedInteger('salesPackageId');
+            $table->unsignedInteger('salesPromoId');
             $table->unsignedInteger('productId');
             $table->integer('quantity');
             $table->timestamps();
@@ -25,7 +25,7 @@ class CreateWarrantySalesPromoTable extends Migration
                   ->references('id')->on('warranty_sales_header')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');
-            $table->foreign('salesPackageId')
+            $table->foreign('salesPromoId')
                   ->references('id')->on('sales_promo')
                   ->onUpdate('cascade')
                   ->onDelete('restrict');

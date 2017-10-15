@@ -113,7 +113,26 @@ class ReportController extends Controller
         GROUP BY category,service,size
         ORDER BY total DESC
         '));
-        return View('report.index',compact('dateStart','dateEnd','dateString','jobs','sales','inventory','services'));
+        $discrepancy = DB::select(DB::raw('
+        SELECT p.id AS id, p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(dp.quantity) THEN 0 ELSE dp.quantity END) AS total FROM product AS p
+        JOIN damage_product AS dp ON dp.productId = p.id
+        JOIN product_type AS pt ON pt.id = p.typeId
+        JOIN product_brand AS pb ON pb.id = p.brandId
+        JOIN product_variance AS pv ON pv.id = p.varianceId
+        WHERE p.isActive = 1
+        GROUP BY id,type,brand,variance,product,original,description
+        '));
+        $analysis = DB::select(DB::raw('
+        SELECT p.id AS id,p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, pd.price AS price, s.name AS supplier, pd.created_at AS ordered FROM product AS p
+        LEFT JOIN purchase_detail AS pd ON pd.productId = p.id
+        JOIN purchase_header AS ph ON ph.id = pd.purchaseId
+        JOIN supplier AS s ON s.id = ph.supplierId
+        JOIN product_type AS pt ON pt.id = p.typeId
+        JOIN product_brand AS pb ON pb.id = p.brandId
+        JOIN product_variance AS pv ON pv.id = p.varianceId
+        GROUP BY id,supplier,type,brand,variance,product,original,description,price,ordered
+        '));
+        return View('report.index',compact('dateStart','dateEnd','dateString','jobs','sales','inventory','services','discrepancy','analysis'));
     }
 
     /**
@@ -325,6 +344,34 @@ class ReportController extends Controller
             PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
             $pdf = PDF::loadview('pdf.serviceReport',compact('date','services'))->setPaper([0,0,612,792]);
             return $pdf->stream('servicereport.pdf');
+        }
+        if($request->reportId=="5"){
+            $discrepancy = DB::select(DB::raw('
+            SELECT p.id AS id, p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(dp.quantity) THEN 0 ELSE dp.quantity END) AS total FROM product AS p
+            JOIN damage_product AS dp ON dp.productId = p.id AND dp.created_at BETWEEN "'.$finalStartDate.'" AND "'.$finalEndDate.'"
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            GROUP BY id,type,brand,variance,product,original,description
+            '));
+            PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+            $pdf = PDF::loadview('pdf.discrepancyReport',compact('date','discrepancy'))->setPaper([0,0,612,792]);
+            return $pdf->stream('discrepancyreport.pdf');
+        }
+        if($request->reportId=="6"){
+            $analysis = DB::select(DB::raw('
+            SELECT p.id AS id,p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, pd.price AS price, s.name AS supplier, pd.created_at AS ordered FROM product AS p
+            LEFT JOIN purchase_detail AS pd ON pd.productId = p.id AND pd.created_at BETWEEN "'.$finalStartDate.'" AND "'.$finalEndDate.'"
+            JOIN purchase_header AS ph ON ph.id = pd.purchaseId
+            JOIN supplier AS s ON s.id = ph.supplierId
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            GROUP BY id,supplier,type,brand,variance,product,original,description,price,ordered
+            '));
+            PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+            $pdf = PDF::loadview('pdf.priceReport',compact('date','analysis'))->setPaper([0,0,612,792]);
+            return $pdf->stream('pricereport.pdf');
         }
     }
 
@@ -562,6 +609,30 @@ class ReportController extends Controller
             ) AS y ON x.s_sId = y.sId
             '));
             return response()->json(['data'=>$services]);
+        }
+        if($request->reportId=="5"){
+            $discrepancy = DB::select(DB::raw('
+            SELECT p.id AS id, p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(dp.quantity) THEN 0 ELSE dp.quantity END) AS total FROM product AS p
+            JOIN damage_product AS dp ON dp.productId = p.id AND dp.created_at BETWEEN "'.$finalStartDate.'" AND "'.$finalEndDate.'"
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            GROUP BY id,type,brand,variance,product,original,description
+            '));
+            return response()->json(['data'=>$discrepancy]);
+        }
+        if($request->reportId=="6"){
+            $analysis = DB::select(DB::raw('
+            SELECT p.id AS id,p.name AS product, pt.name AS type, pb.name AS brand, pv.name AS variance, p.isOriginal AS original, p.description AS description, pd.price AS price, s.name AS supplier, pd.created_at AS ordered FROM product AS p
+            LEFT JOIN purchase_detail AS pd ON pd.productId = p.id AND pd.created_at BETWEEN "'.$finalStartDate.'" AND "'.$finalEndDate.'"
+            JOIN purchase_header AS ph ON ph.id = pd.purchaseId
+            JOIN supplier AS s ON s.id = ph.supplierId
+            JOIN product_type AS pt ON pt.id = p.typeId
+            JOIN product_brand AS pb ON pb.id = p.brandId
+            JOIN product_variance AS pv ON pv.id = p.varianceId
+            GROUP BY id,supplier,type,brand,variance,product,original,description,price,ordered
+            '));
+            return response()->json(['data'=>$analysis]);
         }
      }
 }

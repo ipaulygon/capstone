@@ -31,6 +31,10 @@ $(document).on('change','#reportId',function(){
         iList.ajax.reload();
     }else if(reportId=="4"){
         serviceList.ajax.reload();
+    }else if(reportId=="5"){
+        dList.ajax.reload();
+    }else if(reportId=="6"){
+        pList.ajax.reload();
     }
 });
 $(document).on('change','#datepicker',function(){
@@ -44,6 +48,10 @@ $(document).on('change','#datepicker',function(){
         iList.ajax.reload();
     }else if(reportId=="4"){
         serviceList.ajax.reload();
+    }else if(reportId=="5"){
+        dList.ajax.reload();
+    }else if(reportId=="6"){
+        pList.ajax.reload();
     }
 });
 
@@ -261,5 +269,65 @@ var serviceList = $('#serviceTable').DataTable({
             render: $.fn.dataTable.render.number( ',', '.', 0, '' ),
             className: "text-right",
         },
+    ],
+});
+
+var dList = $('#discrepancyTable').DataTable({
+    'responsive': true,
+    "ajax" : {
+        "url": '/report/filter',
+        "type": 'POST',
+        "data": function ( d ) {
+                return {reportId: "5",date: $('#datepicker').val()};
+            }
+    },
+    "columns": [
+        { "data": "id"},
+        { "data": "product",
+            render: function(data,type,row,meta){
+                if(row.original!=null){
+                    var part = (row.original == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    var part = '';
+                }
+                return row.brand+" - "+row.product+part+" ("+row.variance+")";
+            }
+        },
+        { "data": "total",
+            className: "text-right",
+            render: function(data,type,row,meta){
+                var numFormat = $.fn.dataTable.render.number( ',', '.', 0, '' ).display;
+                return (row.total==null ? numFormat(0) : numFormat(row.total));
+            },
+        },
+    ],
+});
+
+var pList = $('#priceTable').DataTable({
+    'responsive': true,
+    "ajax" : {
+        "url": '/report/filter',
+        "type": 'POST',
+        "data": function ( d ) {
+                return {reportId: "6",date: $('#datepicker').val()};
+            }
+    },
+    "columns": [
+        { "data": "product",
+            render: function(data,type,row,meta){
+                if(row.original!=null){
+                    var part = (row.original == 'type1' ? ' - '+type1 : type2)
+                }else{
+                    var part = '';
+                }
+                return row.brand+" - "+row.product+part+" ("+row.variance+")";
+            }
+        },
+        { "data": "price",
+            className: "text-right",
+            render: $.fn.dataTable.render.number( ',', '.', 2, '' ),
+        },
+        { "data": "supplier"},
+        { "data": "ordered"},
     ],
 });

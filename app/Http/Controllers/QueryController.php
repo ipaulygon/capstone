@@ -57,6 +57,58 @@ clASs QueryController extends Controller
         ORDER BY total DESC
         LIMIT 5
         '));
+        $jobProducts = DB::select(DB::raw('
+        SELECT product, t.name AS type, b.name AS brand, v.name AS variance, original, description, SUM(productCount) AS total FROM (
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed) THEN 0 ELSE jp.completed END) AS productCount FROM product AS p
+            LEFT JOIN job_product AS jp ON jp.productId = p.id
+            WHERE p.isActive=1 AND jp.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
+            JOIN package_product AS pp ON pp.productId = p.id
+            LEFT JOIN job_package AS jp ON jp.packageId = pp.packageId
+            WHERE p.isActive=1 AND jp.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(jp.completed*pp.quantity) THEN 0 ELSE jp.completed*pp.quantity END) AS productCount FROM product AS p
+            JOIN promo_product AS pp ON pp.productId = p.id
+            LEFT JOIN job_promo AS jp ON jp.promoId = pp.promoId
+            WHERE p.isActive=1 AND jp.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+        ) AS result
+        JOIN product_type AS t ON t.id = result.type
+        JOIN product_brand AS b ON b.id = result.brand
+        JOIN product_variance AS v ON v.id = result.variance
+        GROUP BY type,brand,variance,product,original,description
+        ORDER BY total DESC
+        LIMIT 5
+        '));
+        $salesProducts = DB::select(DB::raw('
+        SELECT product, t.name AS type, b.name AS brand, v.name AS variance, original, description, SUM(productCount) AS total FROM (
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity) THEN 0 ELSE sp.quantity END) AS productCount FROM product AS p
+            LEFT JOIN sales_product AS sp ON sp.productId = p.id
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity*pp.quantity) THEN 0 ELSE sp.quantity*pp.quantity END) AS productCount FROM product AS p
+            JOIN package_product AS pp ON pp.productId = p.id
+            LEFT JOIN sales_package AS sp ON sp.packageId = pp.packageId
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+            UNION
+            SELECT p.name AS product, p.typeId AS type, p.brandId AS brand, p.varianceId AS variance, p.isOriginal AS original, p.description AS description, SUM(CASE WHEN ISNULL(sp.quantity*pp.quantity) THEN 0 ELSE sp.quantity*pp.quantity END) AS productCount FROM product AS p
+            JOIN promo_product AS pp ON pp.productId = p.id
+            LEFT JOIN sales_promo AS sp ON sp.promoId = pp.promoId
+            WHERE p.isActive=1
+            GROUP BY type,brand,variance,product,original,description
+        ) AS result
+        JOIN product_type AS t ON t.id = result.type
+        JOIN product_brand AS b ON b.id = result.brand
+        JOIN product_variance AS v ON v.id = result.variance
+        GROUP BY type,brand,variance,product,original,description
+        ORDER BY total DESC
+        LIMIT 5
+        '));
         $services = DB::select(DB::raw('
         SELECT c.name AS category, service, size, SUM(serviceCount) AS total FROM(
             SELECT s.name AS service, s.categoryId AS category, s.size AS size, COUNT(*) AS serviceCount FROM service AS s
@@ -113,7 +165,7 @@ clASs QueryController extends Controller
             ->where('p.isActive',1)
             ->select('i.*','p.name AS product','p.isOriginal AS isOriginal','pt.name AS type','pb.name AS brand','pv.name AS variance')
             ->get();
-        return View('query.index',compact('products','services','technicians','vehicles','customers','inventory'));
+        return View('query.index',compact('products','jobProducts','salesProducts','services','technicians','vehicles','customers','inventory'));
     }
 
     /**

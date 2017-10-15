@@ -58,6 +58,9 @@ Route::group(['middleware' => 'auth'], function(){
 			'index','store']]);
 		Route::resource('backup','BackupController',['only' => [
 			'index']]);
+		Route::resource('audit','AuditController',['only' => [
+			'index']]);
+		Route::get('backup/dump','BackupController@dump');
 
 		// GET JSON
 		Route::get('vehicle/remove/{id}','VehicleController@remove');

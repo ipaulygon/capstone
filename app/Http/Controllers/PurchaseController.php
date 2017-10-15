@@ -9,6 +9,8 @@ use Validator;
 use Redirect;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 class PurchaseController extends Controller
 {
@@ -125,6 +127,11 @@ class PurchaseController extends Controller
                         ]);
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Purchase Order",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -241,6 +248,11 @@ class PurchaseController extends Controller
                         'isActive'=> 1]
                     );
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Update Purchase Order",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -274,6 +286,11 @@ class PurchaseController extends Controller
                     'isActive' => 0
                 ]);
                 PurchaseDetail::where('purchaseId',''.$id)->update(['isActive'=>0]);
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Deactivate Purchase Order",
+                    'json' => json_encode($request->all())
+                ]);
                 $request->session()->flash('success', 'Successfully deactivated.');  
             }
             DB::commit();
@@ -293,6 +310,11 @@ class PurchaseController extends Controller
             $purchase->update([
                 'isActive' => 1
             ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Reactivate Purchase Order",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
@@ -309,6 +331,11 @@ class PurchaseController extends Controller
             $purchase = PurchaseHeader::findOrFail($id);
             $purchase->update([
                 'isFinalize' => 1
+            ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Finalize Purchase Order",
+                'json' => json_encode($request->all())
             ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){

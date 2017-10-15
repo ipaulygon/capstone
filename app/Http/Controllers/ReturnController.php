@@ -15,6 +15,8 @@ use Validator;
 use Redirect;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 class ReturnController extends Controller
 {
@@ -152,6 +154,11 @@ class ReturnController extends Controller
                         'deliveryId' => $order
                     ]);
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Return Items",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

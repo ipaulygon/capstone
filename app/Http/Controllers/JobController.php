@@ -20,6 +20,8 @@ use Redirect;
 use Response;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon as Carbon;
 
@@ -271,6 +273,11 @@ class JobController extends Controller
                         'technicianId' => $technician,
                     ]);
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Job Order",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -544,6 +551,11 @@ class JobController extends Controller
                         'isActive' => 1
                     ]);
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Update Job Order",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();
@@ -596,6 +608,11 @@ class JobController extends Controller
             $job->update([
                 'paid' => $now
             ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Job Order Payment",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
@@ -618,6 +635,11 @@ class JobController extends Controller
             $job->update([
                 'paid' => $now
             ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Update Job Order Payment",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
@@ -639,6 +661,11 @@ class JobController extends Controller
             $job->update([
                 'paid' => $now
             ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Refund Job Order Payment",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
@@ -653,6 +680,11 @@ class JobController extends Controller
             $job = JobHeader::findOrFail($id);
             $job->update([
                 'isFinalize' => 1
+            ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Finalize Job Order",
+                'json' => json_encode($request->all())
             ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
@@ -670,6 +702,11 @@ class JobController extends Controller
             $job = JobHeader::findOrFail($id);
             $job->update([
                 'release' => Carbon::now()
+            ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Release Job Order Vehicle",
+                'json' => json_encode($request->all())
             ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
@@ -705,6 +742,11 @@ class JobController extends Controller
                 $inventory->decrement('quantity',$product->completed);
                 $check = 0;
             }
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Job Order Product Update",
+                'json' => json_encode($request->all())
+            ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
             DB::rollBack();
@@ -724,6 +766,11 @@ class JobController extends Controller
             $completed = $request->detailDone;
             $service->update([
                 'isComplete' => $completed
+            ]);
+            Audit::create([
+                'userId' => Auth::id(),
+                'name' => "Job Order Service Update",
+                'json' => json_encode($request->all())
             ]);
             DB::commit();
         }catch(\Illuminate\Database\QueryException $e){
@@ -763,6 +810,11 @@ class JobController extends Controller
                 $package->update([
                     'completed' => $request->detailQty,
                     'isComplete' => $completed
+                ]);
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Job Order Package Update",
+                    'json' => json_encode($request->all())
                 ]);
             }
             DB::commit();
@@ -827,6 +879,11 @@ class JobController extends Controller
                 $promo->update([
                     'completed' => $request->detailQty,
                     'isComplete' => $completed
+                ]);
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Job Order Promo Update",
+                    'json' => json_encode($request->all())
                 ]);
             }
             DB::commit();

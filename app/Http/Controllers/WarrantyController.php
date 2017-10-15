@@ -32,6 +32,8 @@ use Redirect;
 use Response;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon as Carbon;
 
@@ -272,6 +274,11 @@ class WarrantyController extends Controller
                         }
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Sales Warranty",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
                 $request->session()->flash('warranty', 'Sales warranty successfully added.'); 
                 return 'success';
@@ -494,6 +501,11 @@ class WarrantyController extends Controller
                         ]);
                     }
                 }
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Create Job Warranty",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
                 $id = 'JOB'.str_pad($job->id, 5, '0', STR_PAD_LEFT);
                 $request->session()->flash('warranty', 'Job warranty successfully added. New job order generated: '.$id); 

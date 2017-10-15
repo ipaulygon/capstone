@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{$util->name}} | Service Report</title>
+        <title>{{$util->name}} | Discrepancy Report</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="css/style.css" rel="stylesheet">
@@ -73,10 +73,10 @@
             <label>AUTO SERVICE CENTER</label>
         </div>
         <div class="col-md-12 border center">
-            SERVICe REPORT
+            DISCREPANCY REPORT
         </div><br>
         <div style="float:left"  class="col-md-6">
-            Total of {{count($services)}} records
+            Total of {{count($discrepancy)}} records
         </div>
         <div style="float:right"  class="col-md-6">
             Date as of: {{$date}}
@@ -87,18 +87,23 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Service</th>
-                    <th class="text-right">Rendered</th>
-                    <th class="text-right">Rank</th>
+                    <th>Product</th>
+                    <th class="text-right">No. of items disposed</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($services as $service)
+                @foreach($discrepancy as $product)
                 <tr>
-                    <td>{{$service->s_sId}}</td>
-                    <td>{{$service->s_service}} - {{$service->s_size}} ({{$service->s_category}})</td>
-                    <td class="text-right">{{number_format($service->total)}}</td>
-                    <td class="text-right">{{$service->rank}}</td>
+                    <td>{{$product->id}}</td>
+                    @php
+                        if($product->original!=null){
+                            $type = ($product->original=="type1" ? $util->type1 : $util->type2);
+                        }else{
+                            $type = "";
+                        }
+                    @endphp
+                    <td>{{$product->brand}} - {{$product->product}} {{$type}} ({{$product->variance}})</td>
+                    <td class="text-right">{{number_format($product->total)}}</td>
                 </tr>
                 @endforeach
             </tbody>

@@ -64,32 +64,7 @@
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <!-- Notifications: style can be found in dropdown.less -->
-                        {{--  <li class="dropdown notifications-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-bell-o"></i>
-                                <span class="label label-success">10</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
-                                <li>
-                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;">
-                                        <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
-                                                <li>
-                                                    <a href="#">
-                                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                                    </a>
-                                                </li>
-                                            <div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;">
-                                            </div>
-                                            <div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
-                                            </div>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="footer"><a href="#">View all</a></li>
-                            </ul>
-                        </li>  --}}
+                        <li><a href="#" id="clock" class="text-white">...</a></li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -206,6 +181,7 @@
                     <li id="utility"><a href="{{url('/utility')}}"><i class="fa fa-gears"></i> <span>Manage Settings</span></a></li>
                     <li id="damage"><a href="{{url('/damage')}}"><i class="fa fa-trash"></i> <span>Dispose Products</span></a></li>
                     <li id="backup"><a href="{{url('/backup')}}"><i class="fa fa-refresh"></i> <span>Backup & Recovery</span></a></li>
+                    <li id="audit"><a href="{{url('/audit')}}"><i class="fa fa-eye"></i> <span>View Audit</span></a></li>
                     @endif
                 </ul>
             </section>
@@ -245,6 +221,7 @@
     <script src="{{ URL::asset('assets/dist/js/app.min.js')}}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ URL::asset('assets/dist/js/demo.js')}}"></script>
+    <script src="{{ URL::asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
     <!-- <script>
         $('#mainBody').addClass('sidebar-collapse');
     </script> -->
@@ -279,6 +256,10 @@
         setTimeout(function(){
             $('#successAlert').alert('close');
         },4000)
+        function update() {
+            $('#clock').html(moment().format('dddd - MMMM D, YYYY h:mm:ss A'));
+        }
+        setInterval(update, 1000);
     </script>
     @yield('script')
 </body>

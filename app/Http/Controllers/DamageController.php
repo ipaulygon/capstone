@@ -10,6 +10,8 @@ use Redirect;
 use Response;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 
 class DamageController extends Controller
@@ -80,6 +82,11 @@ class DamageController extends Controller
                 ]);
                 $inventory = Inventory::where('productId',$request->productId)->first();
                 $inventory->decrement('quantity',$request->quantity);
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Disposed Items",
+                    'json' => json_encode($request->all())
+                ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
                 DB::rollBack();

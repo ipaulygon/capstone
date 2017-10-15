@@ -50,4 +50,7 @@ fieldset {
     border: 2px groove !important;
 }
 
+table{
+    width: 100%;
+}
 

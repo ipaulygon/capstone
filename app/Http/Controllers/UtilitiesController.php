@@ -8,6 +8,8 @@ use Validator;
 use Redirect;
 use Session;
 use DB;
+use App\Audit;
+use Auth;
 use Illuminate\Validation\Rule;
 
 class UtilitiesController extends Controller
@@ -146,6 +148,11 @@ class UtilitiesController extends Controller
                     'year' => $request->year,
                     'month' => $request->month,
                     'day' => $request->day
+                ]);
+                Audit::create([
+                    'userId' => Auth::id(),
+                    'name' => "Change Settings",
+                    'json' => json_encode($request->all())
                 ]);
                 DB::commit();
             }catch(\Illuminate\Database\QueryException $e){
