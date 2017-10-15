@@ -271,8 +271,8 @@ function jobPackage(id){
                             part = '';
                         }
                         row = jList.row.add([
-                            value1.quantity,
-                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+')',
+                            value.quantity,
+                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+') x '+value1.quantity,
                             data.package.name,
                             '<input type="hidden" name="packageProduct[]" value="'+value1.product.id+'"><input type="hidden" name="jobProductPackage[]" value="'+value.id+'"><input type="text" class="form-control qty text-right" id="qty" name="packageProductQty[]" value="0" required>'
                         ]).draw().node();
@@ -354,8 +354,8 @@ function jobPromo(id){
                             part = '';
                         }
                         row = jList.row.add([
-                            value1.quantity,
-                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+')',
+                            value.quantity,
+                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+') x '+value1.quantity,
                             data.promo.name,
                             '<input type="hidden" name="promoProduct[]" value="'+value1.product.id+'"><input type="hidden" name="jobProductPromo[]" value="'+value.id+'"><input type="text" class="form-control qty text-right" id="qty" name="promoProductQty[]" value="0" required>'
                         ]).draw().node();

@@ -198,8 +198,8 @@ function salesPackage(id){
                             part = '';
                         }
                         row = sList.row.add([
-                            value1.quantity,
-                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+')',
+                            value.quantity,
+                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+') x '+value1.quantity,
                             data.package.name,
                             '<input type="hidden" name="packageProduct[]" value="'+value1.product.id+'"><input type="hidden" name="salesPackage[]" value="'+value.id+'"><input type="text" class="form-control qty text-right" id="qty" name="packageProductQty[]" value="0" required>'
                         ]).draw().node();
