@@ -69,7 +69,7 @@ class SalesController extends Controller
         $promos = DB::table('promo as p')
             ->where(DB::raw('(SELECT COUNT(*) FROM promo_service WHERE promo_service.promoId=p.id)'),0)
             ->where('dateStart','>=',$date)
-            ->where('dateEnd','<=',$date)
+            ->where('dateEnd','>=',$date)
             ->where('stock','!=',0)
             ->where('p.isActive',1)
             ->select('p.*')
@@ -91,9 +91,9 @@ class SalesController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',

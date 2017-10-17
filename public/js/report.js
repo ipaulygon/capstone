@@ -199,7 +199,7 @@ var iList = $('#inventoryTable').DataTable({
         { "data": "product",
             render: function(data,type,row,meta){
                 if(row.original!=null){
-                    var part = (row.original == 'type1' ? ' - '+type1 : type2)
+                    var part = (row.original == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     var part = '';
                 }
@@ -286,7 +286,7 @@ var dList = $('#discrepancyTable').DataTable({
         { "data": "product",
             render: function(data,type,row,meta){
                 if(row.original!=null){
-                    var part = (row.original == 'type1' ? ' - '+type1 : type2)
+                    var part = (row.original == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     var part = '';
                 }
@@ -316,7 +316,7 @@ var pList = $('#priceTable').DataTable({
         { "data": "product",
             render: function(data,type,row,meta){
                 if(row.original!=null){
-                    var part = (row.original == 'type1' ? ' - '+type1 : type2)
+                    var part = (row.original == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     var part = '';
                 }

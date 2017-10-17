@@ -26,5 +26,20 @@ class ProductTypeSeeder extends Seeder
             'category' => 'category1',
             'isActive' => 1,
         ]);
+        DB::table('product_type')->insert([
+            'name' => 'Batteries/Electrical',
+            'category' => 'category1',
+            'isActive' => 1,
+        ]);
+        DB::table('product_type')->insert([
+            'name' => 'Tires',
+            'category' => 'category1',
+            'isActive' => 1,
+        ]);
+        DB::table('product_type')->insert([
+            'name' => 'Brakes',
+            'category' => 'category1',
+            'isActive' => 1,
+        ]);
     }
 }

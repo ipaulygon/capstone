@@ -44,11 +44,11 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => ['required','max:75','unique:supplier','regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'name' => ['required','max:75','unique:supplier','regex:/^[^~`!@#*_={}|\;<>,?]+$/'],
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'spName.*' => ['required','distinct','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'spName.*' => ['required','distinct','max:100','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'spContact.*' => ['nullable','distinct','max:30','regex:/^[^_]+$/'],
             'scNo.*' => ['required','distinct','max:30','regex:/^[^_]+$/']
         ];
@@ -143,11 +143,11 @@ class SupplierController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name' => ['required','max:75',Rule::unique('supplier')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,.?]+$/'],
+            'name' => ['required','max:75',Rule::unique('supplier')->ignore($id),'regex:/^[^~`!@#*_={}|\;<>,?]+$/'],
             'street' => 'nullable|max:140',
             'brgy' => 'nullable|max:140',
             'city' => 'required|max:140',
-            'spName.*' => ['required','distinct','max:100','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'spName.*' => ['required','distinct','max:100','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'spContact.*' => ['nullable','distinct','max:30','regex:/^[^_]+$/'],
             'scNo.*' => ['required','distinct','max:30','regex:/^[^_]+$/']
         ];

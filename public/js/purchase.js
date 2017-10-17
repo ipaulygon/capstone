@@ -107,7 +107,7 @@ $(document).on('change', '#products', function(){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -177,7 +177,7 @@ function oldProduct(id,qty,model,price){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -244,7 +244,7 @@ function retrieveProduct(price,id,qty,delivered,model,manual){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -310,7 +310,7 @@ function detailProduct(id,qty){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }

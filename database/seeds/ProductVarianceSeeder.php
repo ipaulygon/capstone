@@ -23,5 +23,11 @@ class ProductVarianceSeeder extends Seeder
             'units' => '1,6',
             'isActive' => 1
         ]);
+        DB::table('product_variance')->insert([
+            'name' => '4500 watts',
+            'size' => '4500',
+            'units' => '8',
+            'isActive' => 1
+        ]);
     }
 }

@@ -35,5 +35,13 @@ class TypeBrandSeeder extends Seeder
             'typeId' => 3,
             'brandId' => 4,
         ]);
+        DB::table('type_brand')->insert([
+            'typeId' => 4,
+            'brandId' => 5,
+        ]);
+        DB::table('type_brand')->insert([
+            'typeId' => 5,
+            'brandId' => 6,
+        ]);
     }
 }

@@ -22,7 +22,7 @@ function receiveModal(id){
                     dataType: "JSON",
                     success:function(data){
                         if(data.product.isOriginal!=null){
-                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }

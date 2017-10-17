@@ -93,7 +93,7 @@ function jobProductList(value) {
         dataType: "JSON",
         success: function(data) {
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -136,7 +136,7 @@ function jobProduct(id) {
                 dataType: "JSON",
                 success: function(data) {
                     if(data.product.isOriginal!=null){
-                        part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                     }else{
                         part = '';
                     }
@@ -266,7 +266,7 @@ function jobPackage(id){
                 success:function(data){
                     $.each(data.package.product,function(key1,value1){
                         if(value1.product.isOriginal!=null){
-                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -349,7 +349,31 @@ function jobPromo(id){
                 success:function(data){
                     $.each(data.promo.product,function(key1,value1){
                         if(value1.product.isOriginal!=null){
-                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
+                        }else{
+                            part = '';
+                        }
+                        row = jList.row.add([
+                            value.quantity,
+                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+') x '+value1.quantity,
+                            data.promo.name,
+                            '<input type="hidden" name="promoProduct[]" value="'+value1.product.id+'"><input type="hidden" name="jobProductPromo[]" value="'+value.id+'"><input type="text" class="form-control qty text-right" id="qty" name="promoProductQty[]" value="0" required>'
+                        ]).draw().node();
+                        $(row).find('.qty').inputmask({ 
+                            alias: "integer",
+                            prefix: '',
+                            allowMinus: false,
+                            min: 0,
+                            max: value.quantity*value1.quantity,
+                        });
+                        $(row).find('td').eq(0).addClass('text-right');
+                        $(row).find('td').eq(0).addClass('jpromo'+value.id);
+                        $(row).find('td').eq(3).addClass('text-right');
+                    });
+                    console.log(data);
+                    $.each(data.promo.free_product,function(key1,value1){
+                        if(value1.product.isOriginal!=null){
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -371,6 +395,17 @@ function jobPromo(id){
                         $(row).find('td').eq(3).addClass('text-right');
                     });
                     $.each(data.promo.service,function(key1,value1){
+                        row = jList.row.add([
+                            '',
+                            value1.service.name+' - '+value1.service.size+' ('+value1.service.category.name+')',
+                            data.promo.name,
+                            '<input type="hidden" name="promoService[]" value="'+value1.service.id+'"><input type="hidden" name="jobServicePromo[]" value="'+value.id+'">'
+                        ]).draw().node();
+                        $(row).find('td').eq(0).addClass('text-right');
+                        $(row).find('td').eq(0).addClass('jpromo'+value.id);
+                        $(row).find('td').eq(3).addClass('text-right');
+                    });
+                    $.each(data.promo.free_service,function(key1,value1){
                         row = jList.row.add([
                             '',
                             value1.service.name+' - '+value1.service.size+' ('+value1.service.category.name+')',

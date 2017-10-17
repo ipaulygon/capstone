@@ -329,7 +329,7 @@ class WarrantyController extends Controller
             'packageService' => 'required_without_all:product,service,packageProduct,promoProduct,promoService',
             'promoProduct' => 'required_without_all:product,service,packageProduct,packageService,promoService',
             'promoProductQty.*' => 'sometimes|required|numeric',
-            'promoService' => 'product,service,packageProduct,packageService,promoProduct'
+            'promoService' => 'required_without_all:product,service,packageProduct,packageService,promoProduct'
         ];
         $messages = [
             'unique' => ':attribute already exists.',

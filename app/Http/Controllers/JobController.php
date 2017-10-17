@@ -57,7 +57,7 @@ class JobController extends Controller
             ->where('hasManual',1)
             ->where('vd.isActive',1)
             ->get();
-        $technicians = Technician::where('isActive',1)->get();
+        $technicians = Technician::where('isActive',1)->orderBy('firstName')->get();
         $racks = DB::table('rack as r')
             ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL)'),0)
             ->where('r.isActive',1)
@@ -89,7 +89,7 @@ class JobController extends Controller
             ->get();
         $promos = DB::table('promo as p')
             ->where('dateStart','>=',$date)
-            ->where('dateEnd','<=',$date)
+            ->where('dateEnd','>=',$date)
             ->where('stock','!=',0)
             ->where('p.isActive',1)
             ->select('p.*')
@@ -121,9 +121,9 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',
@@ -324,7 +324,7 @@ class JobController extends Controller
             ->where('hasManual',1)
             ->where('vd.isActive',1)
             ->get();
-        $technicians = Technician::where('isActive',1)->get();
+        $technicians = Technician::where('isActive',1)->orderBy('firstName')->get();
         $racks = DB::table('rack as r')
             ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL AND r.id!='.$job->rackId.')'),0)
             ->where('r.isActive',1)
@@ -384,9 +384,9 @@ class JobController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',

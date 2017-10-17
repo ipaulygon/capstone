@@ -78,7 +78,7 @@ function salesProductList(value) {
         dataType: "JSON",
         success: function(data) {
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -121,7 +121,7 @@ function salesProduct(id) {
                 dataType: "JSON",
                 success: function(data) {
                     if(data.product.isOriginal!=null){
-                        part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                     }else{
                         part = '';
                     }
@@ -193,7 +193,7 @@ function salesPackage(id){
                 success:function(data){
                     $.each(data.package.product,function(key1,value1){
                         if(value1.product.isOriginal!=null){
-                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -265,7 +265,30 @@ function salesPromo(id){
                 success:function(data){
                     $.each(data.promo.product,function(key1,value1){
                         if(value1.product.isOriginal!=null){
-                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
+                        }else{
+                            part = '';
+                        }
+                        row = sList.row.add([
+                            value1.quantity,
+                            value1.product.brand.name+' - '+value1.product.name+part+' ('+value1.product.variance.name+')',
+                            data.promo.name,
+                            '<input type="hidden" name="promoProduct[]" value="'+value1.product.id+'"><input type="hidden" name="salesPromo[]" value="'+value.id+'"><input type="text" class="form-control qty text-right" id="qty" name="promoProductQty[]" value="0" required>'
+                        ]).draw().node();
+                        $(row).find('.qty').inputmask({ 
+                            alias: "integer",
+                            prefix: '',
+                            allowMinus: false,
+                            min: 0,
+                            max: value.quantity*value1.quantity,
+                        });
+                        $(row).find('td').eq(0).addClass('text-right');
+                        $(row).find('td').eq(0).addClass('spromo'+value.id);
+                        $(row).find('td').eq(3).addClass('text-right');
+                    });
+                    $.each(data.promo.free_product,function(key1,value1){
+                        if(value1.product.isOriginal!=null){
+                            part = (value1.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -301,7 +324,7 @@ $(document).on('click','#salesSubmit',function(e){
             if(data.message==0){
                 e.preventDefault();
                 if(data.product.isOriginal!=null){
-                    part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }

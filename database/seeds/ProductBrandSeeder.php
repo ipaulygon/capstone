@@ -27,5 +27,13 @@ class ProductBrandSeeder extends Seeder
             'name' => 'Gates',
             'isActive' => 1,
         ]);
+        DB::table('product_brand')->insert([
+            'name' => 'Motolite',
+            'isActive' => 1,
+        ]);
+        DB::table('product_brand')->insert([
+            'name' => 'Dunlop',
+            'isActive' => 1,
+        ]);
     }
 }

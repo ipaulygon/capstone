@@ -150,7 +150,7 @@ function process(id){
                             status = '<i class="glyphicon glyphicon-remove text-danger"></i> Not Completed';
                         }
                         if(data.product.isOriginal!=null){
-                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -243,7 +243,7 @@ function process(id){
                         });
                         $.each(data.package.product,function(key,value){
                             if(value.product.isOriginal!=null){
-                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                             }else{
                                 part = '';
                             }   
@@ -293,7 +293,7 @@ function process(id){
                         });
                         $.each(data.promo.product,function(key,value){
                             if(value.product.isOriginal!=null){
-                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                             }else{
                                 part = '';
                             }   
@@ -311,7 +311,7 @@ function process(id){
                         );
                         $.each(data.promo.free_product,function(key,value){
                             if(value.product.isOriginal!=null){
-                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                                part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                             }else{
                                 part = '';
                             }   

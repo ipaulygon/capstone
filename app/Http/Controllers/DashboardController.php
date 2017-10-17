@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 
 use App\JobHeader;
 use App\SalesHeader;
+use App\DamageProduct;
 use App\User;
 use App\Technician;
 use Auth;
@@ -36,7 +37,8 @@ class DashboardController extends Controller
             $pendingJobs = JobHeader::where('isComplete',0)->get();
             $jobs = JobHeader::get();
             $sales = SalesHeader::get();
-            return View('dashboard',compact('stocks','jobs','sales','pendingJobs'));
+            $damage = DamageProduct::get();
+            return View('dashboard',compact('stocks','jobs','sales','damage','pendingJobs'));
         }else{
             $id = str_replace('TECH-','',$user->name);
             $id = (int)$id;

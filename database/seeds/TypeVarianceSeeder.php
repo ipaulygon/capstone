@@ -23,5 +23,9 @@ class TypeVarianceSeeder extends Seeder
             'typeId' => 3,
             'varianceId' => 2,
         ]);
+        DB::table('type_variance')->insert([
+            'typeId' => 4,
+            'varianceId' => 3,
+        ]);
     }
 }

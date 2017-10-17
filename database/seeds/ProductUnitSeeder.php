@@ -53,5 +53,11 @@ class ProductUnitSeeder extends Seeder
             'category' => 2,
             'isActive' => 1
         ]);
+        DB::table('product_unit')->insert([
+            'name' => 'watts',
+            'description' => 'Watts',
+            'category' => 3,
+            'isActive' => 1
+        ]);
     }
 }

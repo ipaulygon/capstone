@@ -60,7 +60,7 @@ class InspectController extends Controller
             ->where('hasManual',1)
             ->where('vd.isActive',1)
             ->get();
-        $technicians = Technician::where('isActive',1)->get();
+        $technicians = Technician::where('isActive',1)->orderBy('firstName')->get();
         $racks = DB::table('rack')
             ->where('isActive',1)
             ->select('rack.*')
@@ -77,9 +77,9 @@ class InspectController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',
@@ -223,7 +223,7 @@ class InspectController extends Controller
             ->where('hasManual',1)
             ->where('vd.isActive',1)
             ->get();
-        $technicians = Technician::where('isActive',1)->get();
+        $technicians = Technician::where('isActive',1)->orderBy('firstName')->get();
         $racks = DB::table('rack')
             ->where('isActive',1)
             ->select('rack.*')
@@ -241,9 +241,9 @@ class InspectController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
-            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,.?()$%&^]+$/'],
+            'firstName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'middleName' => ['nullable','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
+            'lastName' => ['required','max:45','regex:/^[^~`!@#*_={}|\;<>,?()$%&^]+$/'],
             'contact' => ['required','max:30','regex:/^[^_]+$/'],
             'email' => 'nullable|email|max:100',
             'street' => 'nullable|max:140',

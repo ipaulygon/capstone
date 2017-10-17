@@ -161,7 +161,7 @@ $(document).on('change','#delivery',function(){
                     );
                 }else{
                     if(value.isOriginal!=null){
-                        part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        part = (value.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                     }else{
                         part = '';
                     }

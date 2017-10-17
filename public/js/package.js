@@ -92,7 +92,7 @@ $(document).on('click','.pushProduct', function (){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -182,7 +182,7 @@ function retrieveProduct(id,qty){
         success:function(data){
             var stack = eval(qty+"*"+data.product.price);
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }

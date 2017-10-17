@@ -208,7 +208,7 @@ $(document).on('change','#purchase',function(){
                         });
                     }else{
                         if(value.isOriginal!=null){
-                            part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
+                            part = (value.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                         }else{
                             part = '';
                         }
@@ -267,7 +267,7 @@ function retrievePurchase(id){
                     });
                 }else{
                     if(value.isOriginal!=null){
-                        part = (value.isOriginal == 'type1' ? ' - '+type1 : type2)
+                        part = (value.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                     }else{
                         part = '';
                     }

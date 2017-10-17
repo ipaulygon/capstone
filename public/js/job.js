@@ -146,7 +146,7 @@ $(document).on('change', '#products', function(){
                 discountString = '';
             }
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -197,7 +197,7 @@ function oldProduct(id,qty){
                 discountString = '';
             }
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -234,7 +234,7 @@ function retrieveProduct(id,qty,price,completed,discountString){
         dataType: "JSON",
         success:function(data){
             if(data.product.isOriginal!=null){
-                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                part = (data.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
             }else{
                 part = '';
             }
@@ -386,7 +386,7 @@ $(document).on('change', '#packages', function(){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -437,7 +437,7 @@ function oldPackage(id,qty){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -483,7 +483,7 @@ function retrievePackage(id,qty,price,completed){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.package.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -530,7 +530,7 @@ $(document).on('change', '#promos', function(){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -548,7 +548,7 @@ $(document).on('change', '#promos', function(){
             );
             $.each(data.promo.free_product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -599,7 +599,7 @@ function oldPromo(id,qty){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -617,7 +617,7 @@ function oldPromo(id,qty){
             );
             $.each(data.promo.free_product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -665,7 +665,7 @@ function retrievePromo(id,qty,price,completed){
             $(row).find('td').eq(3).addClass('text-right');
             $.each(data.promo.product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
@@ -683,7 +683,7 @@ function retrievePromo(id,qty,price,completed){
             );
             $.each(data.promo.free_product,function(key,value){
                 if(value.product.isOriginal!=null){
-                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : type2)
+                    part = (value.product.isOriginal == 'type1' ? ' - '+type1 : ' - '+type2)
                 }else{
                     part = '';
                 }  
