@@ -208,6 +208,7 @@
             </tbody>
             <tfoot id="tFoot">
             <?php 
+                $discount = 0 ;
                 $vatExempt = 0;
                 if($util->isVat){
                     $getVat = 100 / (100+$util->vat);

@@ -42,7 +42,7 @@ class DashboardController extends Controller
             $id = (int)$id;
             $techUser = Technician::find($id);
             $pendingJobs = JobHeader::where('isComplete',0)->get();
-            return View('dashboard',compact('pendingJobs'));
+            return View('dashboard',compact('pendingJobs','techUser'));
         }
     }
 

@@ -151,9 +151,9 @@
                     </thead>
                     <tbody>
                         @foreach($pendingJobs as $job)
-                        <tr>
                             @foreach($job->technician as $tech)
                                 @if($tech->technicianId==$techUser->id)
+                                <tr>
                                     <td>{{'JOB'.str_pad($job->id, 5, '0', STR_PAD_LEFT)}}</td>
                                     <td>
                                         Customer: {{$job->customer->firstName}} {{$job->customer->lastName}}<br>
@@ -223,9 +223,9 @@
                                             @endif
                                         @endforeach
                                     </td>
+                                </tr>
                                 @endif
                             @endforeach
-                        </tr>
                         @endforeach
                     </tbody>
                 </table>

@@ -326,7 +326,7 @@ class JobController extends Controller
             ->get();
         $technicians = Technician::where('isActive',1)->get();
         $racks = DB::table('rack as r')
-            ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL AND r.id!='.$id.')'),0)
+            ->where(DB::raw('(SELECT COUNT(*) FROM job_header as jh WHERE jh.rackId=r.id AND jh.release IS NULL AND r.id!='.$job->rackId.')'),0)
             ->where('r.isActive',1)
             ->select('r.*')
             ->get();

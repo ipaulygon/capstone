@@ -156,7 +156,7 @@
                 </div>
             </div>
             <div class="form-group">
-                {!! Form::label('vehicle', 'Equipped in') !!}<span>*</span>
+                {!! Form::label('vehicle', 'Equipped in') !!}
                 <select id="vehicle" name="vehicle[]" class="select2 form-control" multiple>
                     @foreach($autos as $vehicle)
                         <option value="{{$vehicle->id}},0">{{$vehicle->make}} - {{$vehicle->name}} - AT</option>
